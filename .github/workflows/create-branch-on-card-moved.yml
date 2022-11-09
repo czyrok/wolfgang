@@ -31,7 +31,7 @@ jobs:
         uses: bodinsamuel/renovate-automatic-branch@v1
         with:
           github-token: ${{ secrets.WRITE_TOKEN }}
-          repo-owner: ${{ steps.find_repo_name_owner_name.outputs._0 }}
-          repo-name: ${{ steps.find_repo_name_owner_name.outputs._1 }}
-          branch-to-create: ${{ steps.find_and_replace.outputs.result }}
+          repo-owner: '${{ steps.find_repo_name_owner_name.outputs._0 }}'
+          repo-name: '${{ steps.find_repo_name_owner_name.outputs._1 }}'
+          branch-to-create: '${{ steps.find_and_replace.outputs.result }}'
           branch-base: develop
