@@ -36,3 +36,4 @@ jobs:
           repo-name: ${{ steps.find_repository_owner_name.outputs.repo }}
           branch-to-create: ${{ steps.find_and_replace.outputs.result }}
           branch-base: develop
+          empty-commit-msg: Nothing
