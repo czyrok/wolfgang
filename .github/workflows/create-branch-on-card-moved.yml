@@ -24,7 +24,7 @@ jobs:
         run: |
           string="${{ github.repository }}"
           IFS='/'
-          read -a stringArray <<< $string
+          read -a stringArray <<< "$string"
           echo "owner=${stringArray[0]}\nrepo=${stringArray[1]}" >> $GITHUB_OUTPUT
       
       - name: Create branch with the unified name
