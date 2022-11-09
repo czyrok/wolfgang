@@ -1,9 +1,6 @@
 name: Create branch when card is moved in ongoing story list
 
 on:
-  workflow_run:
-    branches:
-      - 'develop'
   repository_dispatch:
     types:
       - card-moved-in-ongoing-story-list
@@ -12,9 +9,25 @@ env:
   GITHUB_TOKEN: ${{ secrets.WRITE_TOKEN }}
 
 jobs:
-  create:
+  get-matrix:
+    name: Get matrix
     runs-on: ubuntu-latest
-    
+    outputs:
+      matrix_ref: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Fetch matrix
+        id: set-matrix
+        uses: cytopia/git-ref-matrix-action@v0.1.0
+        with:
+          branches: develop
+  create:
+    name: Create branch
+    needs: [get-matrix]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ref:
+          - ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - name: Unifying new-branch name
         id: find_and_replace
@@ -25,8 +38,8 @@ jobs:
           string=${string//\'/-}
           echo "result=feature/${string}" >> $GITHUB_OUTPUT
     
-      - name: Create branch
+      - name: Create branch with the unified name
         uses: peterjgrainger/action-create-branch@v2.2.0
         with:
           branch: '${{ steps.find_and_replace.outputs.result }}'
-          sha: '${{ env.GITHUB_HEAD_REF }}'
+          sha: '${{ matrix.refs }}'
