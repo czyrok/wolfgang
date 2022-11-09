@@ -18,10 +18,19 @@ jobs:
           string=${string// /-}
           string=${string//\'/-}
           echo "result=feature/${string}" >> $GITHUB_OUTPUT
-    
-      - name: Create branch with the unified name
-        uses: monoku/sync-branches-pr@0.0.1
+          
+      - name: Get the repo name and the repo owner name
+        id: find_repo_name_owner_name
+        uses: rishabhgupta/split-by@v1
         with:
-          GITHUB_TOKEN: ${{ secrets.WRITE_TOKEN }}
-          SOURCE_BRANCH: 'develop'
-          TARGET_BRANCH_STARTS_WITH: ${{ steps.find_and_replace.outputs.result }}
+          string: '${{ env.GITHUB_REPOSITORY }}'
+          split-by: '/'
+      
+      - name: Create branch with the unified name
+        uses: bodinsamuel/renovate-automatic-branch@v1
+        with:
+          github-token: ${{ secrets.WRITE_TOKEN }}
+          repo-owner: ${{ steps.find_repo_name_owner_name.outputs._0 }}
+          repo-name: ${{ steps.find_repo_name_owner_name.outputs._1 }}
+          branch-to-create: ${{ steps.find_and_replace.outputs.result }}
+          branch-base: develop
