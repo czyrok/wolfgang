@@ -24,9 +24,9 @@ jobs:
         run: |
           string="${{ github.repository }}"
           IFS='/'
-          read -ra ADDR <<< "$string"
-          echo "owner=${ADDR[0]}" >> $GITHUB_OUTPUT
-          echo "repo=${ADDR[1]}" >> $GITHUB_OUTPUT
+          read -a stringArray <<< "$string"
+          echo "owner=${stringArray[0]}" >> $GITHUB_OUTPUT
+          echo "repo=${stringArray[1]}" >> $GITHUB_OUTPUT
       
       - name: Create branch with the unified name
         uses: bodinsamuel/renovate-automatic-branch@v1
