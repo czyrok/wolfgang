@@ -13,7 +13,7 @@ jobs:
       - name: Unifying new-branch name
         id: find_and_replace
         run: |
-          string="${{github.event.client_payload.card_title}}"
+          string="${{ github.event.client_payload.card_title }}"
           string=$(echo $string | tr '[:upper:]' '[:lower:]')
           string=${string// /-}
           string=${string//\'/-}
@@ -26,12 +26,18 @@ jobs:
           string: ${{ env.GITHUB_REPOSITORY }}
           separator: /
           limit: 2
+          
+      - name: Test
+        id: test
+        run: |
+          echo "${{ steps.find_repo_name_owner_name.outputs._0 }}"
+          echo "${{ steps.find_repo_name_owner_name.outputs._1 }}"
       
       - name: Create branch with the unified name
         uses: bodinsamuel/renovate-automatic-branch@v1
         with:
           github-token: ${{ secrets.WRITE_TOKEN }}
-          repo-owner: '${{ steps.find_repo_name_owner_name.outputs._0 }}'
-          repo-name: '${{ steps.find_repo_name_owner_name.outputs._1 }}'
-          branch-to-create: '${{ steps.find_and_replace.outputs.result }}'
+          repo-owner: ${{ steps.find_repo_name_owner_name.outputs._0 }}
+          repo-name: ${{ steps.find_repo_name_owner_name.outputs._1 }}
+          branch-to-create: ${{ steps.find_and_replace.outputs.result }}
           branch-base: develop
