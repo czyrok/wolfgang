@@ -18,21 +18,12 @@ jobs:
           string=${string// /-}
           string=${string//\'/-}
           echo "result=feature/${string}" >> $GITHUB_OUTPUT
-          
-      - name: Get the repository name
-        id: find_repository_name
-        run: |
-          echo "${{ steps.find_and_replace.outputs.result }}"
-          string="${{ github.repository }}"
-          IFS='/'
-          read -a stringArray <<< "$string"
-          echo "owner=${stringArray[0]}\nrepo=${stringArray[1]}" >> $GITHUB_ENV
       
       - name: Create branch with the unified name
         uses: bodinsamuel/renovate-automatic-branch@v1
         with:
           github-token: ${{ secrets.WRITE_TOKEN }}
-          repo-owner: ${{ env.owner }}
-          repo-name: ${{ env.repo }}
+          repo-owner: czyrok
+          repo-name: wolfgang
           branch-to-create: ${{ steps.find_and_replace.outputs.result }}
           branch-base: develop
