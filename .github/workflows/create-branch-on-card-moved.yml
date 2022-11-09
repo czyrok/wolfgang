@@ -22,6 +22,7 @@ jobs:
       - name: Get the repository name
         id: find_repository_name
         run: |
+          echo "${{ steps.find_and_replace.outputs.result }}"
           string="${{ github.repository }}"
           IFS='/'
           read -a stringArray <<< "$string"
