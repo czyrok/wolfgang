@@ -17,6 +17,7 @@ jobs:
           string=$(echo $string | tr '[:upper:]' '[:lower:]')
           string=${string// /-}
           string=${string//\'/-}
+          echo $GITHUB_REPOSITORY
           echo "result=feature/${string}" >> $GITHUB_OUTPUT
           
       - name: Get the repo name and the repo owner name
