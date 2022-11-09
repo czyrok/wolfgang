@@ -22,7 +22,7 @@ jobs:
       - name: Get the repository name
         id: find_repository_name
         run: |
-          string="${{ GITHUB_REPOSITORY }}"
+          string="${{ env.GITHUB_REPOSITORY }}"
           IFS='/'
           read -ra ADDR <<< "$str"
           echo "result=${ADDR[1]}" >> $GITHUB_OUTPUT
