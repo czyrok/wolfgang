@@ -6,7 +6,7 @@ on:
       - card-moved-in-ongoing-story-list
 
 env:
-  GITHUB_TOKEN: ${{ secrets.PIPEDREAM_WEBHOOK_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.WRITE_TOKEN }}
 
 jobs:
   create:
