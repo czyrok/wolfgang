@@ -17,15 +17,15 @@ jobs:
           string=$(echo $string | tr '[:upper:]' '[:lower:]')
           string=${string// /-}
           string=${string//\'/-}
-          echo $GITHUB_REPOSITORY
           echo "result=feature/${string}" >> $GITHUB_OUTPUT
           
       - name: Get the repo name and the repo owner name
         id: find_repo_name_owner_name
-        uses: rishabhgupta/split-by@v1
+        uses: xom9ikk/split@v1
         with:
-          string: '${{ env.GITHUB_REPOSITORY }}'
-          split-by: '/'
+          string: ${{ env.GITHUB_REPOSITORY }}
+          separator: /
+          limit: 2
       
       - name: Create branch with the unified name
         uses: bodinsamuel/renovate-automatic-branch@v1
