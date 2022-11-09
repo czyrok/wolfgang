@@ -20,10 +20,8 @@ jobs:
           echo "result=feature/${string}" >> $GITHUB_OUTPUT
     
       - name: Create branch with the unified name
-        uses: bodinsamuel/renovate-automatic-branch@v1
+        uses: monoku/sync-branches-pr@0.0.1
         with:
-          github-token: ${{ secrets.WRITE_TOKEN }}
-          repo-owner: czyrok
-          repo-name: wolfgang
-          branch-to-create: ${{ steps.find_and_replace.outputs.result }}
-          branch-base: develop
+          GITHUB_TOKEN: ${{ secrets.WRITE_TOKEN }}
+          SOURCE_BRANCH: 'develop'
+          TARGET_BRANCH_STARTS_WITH: ${{ steps.find_and_replace.outputs.result }}
