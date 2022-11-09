@@ -19,15 +19,19 @@ jobs:
           string=${string//\'/-}
           echo "result=feature/${string}" >> $GITHUB_OUTPUT
           
-      - name: Get the repo name and the repo owner name
-        id: find_repo_name_owner_name
-        uses: MariachiBear/get-repo-name-action@v1.1.0
+      - name: Get the repository name
+        id: find_repository_name
+        run: |
+          string="${{ GITHUB_REPOSITORY }}"
+          IFS='/'
+          read -ra ADDR <<< "$str"
+          echo "result=${ADDR[1]}" >> $GITHUB_OUTPUT
       
       - name: Create branch with the unified name
         uses: bodinsamuel/renovate-automatic-branch@v1
         with:
           github-token: ${{ secrets.WRITE_TOKEN }}
           repo-owner: ${{ env.GITHUB_REPOSITORY_OWNER }}
-          repo-name: ${{ steps.find_repo_name_owner_name.outputs.repository-name }}
+          repo-name: ${{ steps.find_repository_name.outputs.result }}
           branch-to-create: ${{ steps.find_and_replace.outputs.result }}
           branch-base: develop
