@@ -22,7 +22,6 @@ jobs:
       - name: Get the repository name and the owner name
         id: find_repository_owner_name
         run: |
-          echo "${{ steps.find_and_replace.outputs.result }}"
           string="${{ github.repository }}"
           IFS='/'
           read -a stringArray <<< "$string"
