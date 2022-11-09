@@ -22,17 +22,17 @@ jobs:
       - name: Get the repository name
         id: find_repository_name
         run: |
-          echo "${{ github.repository }}"
-          string="${{ env.GITHUB_REPOSITORY }}"
+          string="${{ github.repository }}"
           IFS='/'
           read -ra ADDR <<< "$str"
-          echo "result=${ADDR[1]}" >> $GITHUB_OUTPUT
+          echo "owner=${ADDR[0]}" >> $GITHUB_OUTPUT
+          echo "repo=${ADDR[1]}" >> $GITHUB_OUTPUT
       
       - name: Create branch with the unified name
         uses: bodinsamuel/renovate-automatic-branch@v1
         with:
           github-token: ${{ secrets.WRITE_TOKEN }}
-          repo-owner: ${{ env.GITHUB_REPOSITORY_OWNER }}
-          repo-name: ${{ steps.find_repository_name.outputs.result }}
+          repo-owner: ${{ steps.find_repository_name.outputs.owner }}
+          repo-name: ${{ steps.find_repository_name.outputs.repo }}
           branch-to-create: ${{ steps.find_and_replace.outputs.result }}
           branch-base: develop
