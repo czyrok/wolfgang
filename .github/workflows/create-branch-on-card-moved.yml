@@ -20,10 +20,10 @@ jobs:
           echo "result=feature/${string}" >> $GITHUB_OUTPUT
     
       - name: Create branch with the unified name
-        uses: GuillaumeFalourd/create-other-repo-branch-action@v1.5
+        uses: bodinsamuel/renovate-automatic-branch@v1
         with:
-          repository_owner: czyrok
-          repository_name: wolfgang
-          new_branch_name: ${{ steps.find_and_replace.outputs.result }}
-          new_branch_ref: main
-          access_token: ${{ secrets.WRITE_TOKEN }}
+          github-token: ${{ secrets.WRITE_TOKEN }}
+          repo-owner: czyrok
+          repo-name: wolfgang
+          branch-to-create: ${{ steps.find_and_replace.outputs.result }}
+          branch-base: develop
