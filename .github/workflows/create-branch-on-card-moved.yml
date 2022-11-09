@@ -24,7 +24,7 @@ jobs:
         run: |
           string="${{ github.repository }}"
           IFS='/'
-          read -ra ADDR <<< "$str"
+          read -ra ADDR <<< "$string"
           echo "owner=${ADDR[0]}" >> $GITHUB_OUTPUT
           echo "repo=${ADDR[1]}" >> $GITHUB_OUTPUT
       
