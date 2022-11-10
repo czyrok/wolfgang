@@ -1,0 +1,32 @@
+$navWidth: 70px;
+
+.container {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    grid-auto-flow: column;
+    grid-template-areas: "a b";
+    grid-template-columns: $navWidth auto;
+    background-color: white;
+    position: fixed;
+    overflow: hidden;
+}
+
+.container .router {
+    height: 100%;
+    overflow: hidden;
+}
+
+.container ::ng-deep main {
+    position: fixed;
+    width: calc(100% - $navWidth);
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.container ::ng-deep section {
+    position: fixed;
+    width: calc(100% - $navWidth);
+    height: 100%;
+}
