@@ -1,0 +1,75 @@
+@use '../../../../../node_modules/scss-toolkit/src/function/util';
+
+$_map: (
+    zIndex: (
+        nav: 200,
+        dropDownMenu: 201,
+        balloon: 202,
+        alert: 203
+    ),
+    font: (
+        important: playfair-display,
+        regular: rubik
+    ),
+    fontSize: (
+        regular: 20px,
+        title: (
+            h1: 30px,
+            h2: 28px,
+            h3: 25px
+        ),
+        comment: 15px,
+        date: 15px,
+        entryElement: (
+            regular: 20px,
+            important: 25px,
+            action: 25px
+        )
+    ),
+    borderRadius: (
+        regular: 8px,
+        rounded: 20px
+    ),
+    transition: (
+        short: 0.12s,
+        regular: 0.2s,
+        long: 0.6s
+    ),
+    borderLimit: (
+        verySmall: 2px,
+        small: 4px,
+        regular: 8px,
+        big: 20px
+    ),
+    size: (
+        input: (
+            text: 250px,
+            underline: 3px
+        ),
+        border: 3px,
+        outline: 2px
+    ),
+    opacity: (
+        placeholder: 0.2,
+        background: 0.4,
+        disabledItem: 0.5
+    ),
+    shadow: (
+        box: (
+            regular: (
+                0px 0px 25px rgba(0, 0, 0, 0.379),
+                0px 0px 49.1px rgba(0, 0, 0, 0.335),
+                0px 0px 238px rgba(0, 0, 0, 0.3)
+            ),
+            lite: (
+                0px 0px 25px rgba(0, 0, 0, 0.379),
+                0px 0px 49.1px rgba(0, 0, 0, 0.335)
+            )
+        ),
+        text: 000 0 0 20px
+    )
+);
+
+@function get($args...) {
+    @return util.get($_map, $args...);
+}

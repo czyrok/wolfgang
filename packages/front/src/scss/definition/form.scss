@@ -1,0 +1,161 @@
+@use '../../../../../node_modules/scss-toolkit/src/mixin/element';
+@use '../../../../../node_modules/scss-toolkit/src/mixin/theme';
+@use '../../../../../node_modules/scss-toolkit/src/function/util';
+
+@use '../lib/property';
+@use '../lib/color';
+@use '../lib/definition';
+
+@include element.createElement('input') {
+    @include element.defineContent() {
+        font-size: property.get('fontSize', 'entryElement', 'regular');
+        white-space: nowrap;
+    }
+
+    @include definition.definePropertyDisabled() {
+    }
+
+    @include element.defineAttrCondition('type', 'text', 'password') {
+        @include definition.useWithAccentColor() using ($map) {
+            @include element.setAttrAccentContent() {
+                background-color: util.get($map, 'entryElement', 'background', 'regular') !important;
+                color: util.get($map, 'entryElement', 'font', 'active') !important;
+
+                @include element.defineProperty('::placeholder') {
+                    color: util.get($map, 'entryElement', 'font', 'regular') !important;
+                }
+
+                @include element.createTag('underline', '+') {
+                    @include element.defineContentWithoutAccent() {
+                        background-color: util.get($map, 'entryElement', 'background', 'regular') !important;
+                    }
+        
+                    @include element.createTag('underline', ' ') {
+                        @include element.defineContentWithoutAccent() {
+                            background-color: util.get($map, 'entryElement', 'background', 'active') !important;
+                        }
+                    }
+                }
+            }
+        }
+
+        @include element.defineContent() {
+            padding: property.get('borderLimit', 'verySmall');
+            width: property.get('size', 'input', 'text');
+
+            @include theme.themeHandler(true, entryElement) {
+                background-color: theme.get('background', 'regular');
+                color: theme.get('font', 'active');
+            }
+        }
+
+        @include element.defineWithBefore('.ng-submitted') {
+            @include element.defineProperty('.ng-invalid') {
+                @include element.createTag('underline', '+') {
+                    @include element.defineContentWithoutAccent() {
+                        height: property.get('size', 'input', 'underline');
+                    }
+
+                    @include element.createTag('underline', ' ') {
+                        @include element.defineContentWithoutAccent() {
+                            transform: scaleX(1);
+                        }
+                    }
+                }
+            }
+        }
+
+        @include element.defineProperty('.ng-invalid') {
+            @include element.createTag('underline', '+') {
+                @include element.createTag('underline', ' ') {
+                    @include element.defineContentWithoutAccent() {
+                        @include theme.themeHandler(true) {
+                            background-color: color.get(inform, red, a);
+                        }
+                    }
+                }
+            }
+        }
+
+        @include element.definePropertyFocus {
+            @include element.createTag('underline', '+') {
+                @include element.defineContentWithoutAccent() {
+                    height: property.get('size', 'input', 'underline');
+                }
+
+                @include element.createTag('underline', ' ') {
+                    @include element.defineContentWithoutAccent() {
+                        transform: scaleX(1);
+                    }
+                }
+            }
+        }
+
+        @include element.defineProperty('::placeholder') {
+            @include theme.themeHandler(true, entryElement) {
+                color: theme.get('font', 'regular');
+                opacity: property.get('opacity', 'placeholder');
+            }
+        }
+
+        @include element.createTag('underline', '+') {
+            @include element.defineContentWithoutAccent() {
+                display: block;
+                position: relative;
+                width: property.get('size', 'input', 'text') + property.get('borderLimit', 'verySmall') * 2;
+                height: 0;
+                transition: property.get('transition', 'short');
+                transition-property: height;
+                overflow: hidden;
+
+                @include theme.themeHandler(true, entryElement) {
+                    background-color: theme.get('background', 'regular');
+                }
+            }
+
+            @include element.createTag('underline', ' ') {
+                @include element.defineContentWithoutAccent() {
+                    display: block;
+                    position: relative;
+                    width: 100%;
+                    height: property.get('size', 'input', 'underline');
+                    transform: scaleX(0);
+                    transition: property.get('transition', 'long');
+                    transition-property: transform;
+
+                    @include theme.themeHandler(true, entryElement) {
+                        background-color: theme.get('background', 'active');
+                    }
+                }
+            }
+        }
+    }
+}
+
+@include element.createElement('select') {
+    @include definition.useWithAccentColor() using ($map) {
+        @include element.setAttrAccentContent() {
+            background-color: util.get($map, 'entryElement', 'background', 'regular') !important;
+            color: util.get($map, 'entryElement', 'font', 'regular') !important;
+        }
+    }
+
+    @include definition.setAttrBorderRadius() {
+    }
+
+    @include element.defineContent() {
+        font-size: property.get('fontSize', 'entryElement', 'regular');
+        padding: property.get('borderLimit', 'verySmall');
+        font-weight: bold;
+        font-family: property.get('font', 'regular');
+        appearance: menulist-button;
+
+        @include theme.themeHandler(true, 'entryElement') {
+            background-color: theme.get('background', 'regular');
+            color: theme.get('font', 'regular');
+        }
+    }
+
+    @include definition.definePropertyDisabled() {
+    }
+}

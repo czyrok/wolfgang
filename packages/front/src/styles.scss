@@ -1,1 +1,85 @@
-/* You can add global styles to this file, and also import other style files */
+@use 'scss/lib/color';
+@use 'scss/lib/property';
+
+@use '../../../node_modules/scss-toolkit/src/mixin/theme' with (
+    $_map: (
+        'same': (
+            'entryElement': (
+                'background': (
+                    'regular': color.get(accent, blue, medium),
+                    'active': color.get(accent, blue, dark)
+                ),
+                'font': (
+                    'regular': color.get(base, 40),
+                    'active': color.get(base, 50)
+                )
+            )
+        )
+    )
+);
+
+@forward 'scss/definition/button';
+@forward 'scss/definition/form';
+@forward 'scss/definition/misc';
+
+@font-face {
+    font-family: 'playfair-display';
+    src: url('./assets/font/playfair-display/playfair-display-variable-font-weight.ttf');
+    font-display: swap;
+}
+
+
+@font-face {
+    font-family: 'rubik';
+    src: url('./assets/font/rubik/rubik-variable-font-weight.ttf');
+    font-display: swap;
+}
+
+* {
+    transition: property.get('transition', 'regular');
+    transition-property: background-color, color;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+body {
+    font-family: property.get('font', 'regular');
+}
+
+button {
+    cursor: pointer;
+}
+
+button,
+select {
+    padding: 0;
+    border: none;
+    outline-style: none;
+    background-color: transparent;
+    margin: 0;
+}
+
+input {
+    margin: 0;
+    padding: 0;
+    outline-style: none;
+    border: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+ul,
+p {
+    margin: 0;
+}

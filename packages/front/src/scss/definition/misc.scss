@@ -1,0 +1,16 @@
+@use '../../../../../node_modules/scss-toolkit/src/mixin/element';
+
+@use '../lib/definition';
+
+@include element.createElement('container') {
+    @include definition.setAttrBorderRadius() {
+    }
+
+    @include element.defineContent() {
+        display: inline-block;
+        overflow: hidden;
+    }
+
+    @include definition.definePropertyDisabled() {
+    }
+}
