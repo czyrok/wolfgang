@@ -13,7 +13,7 @@ import { CardsProposalMainViewComponent } from './cards-proposal/component/cards
         MainViewComponent,
         NavMainViewComponent,
         HomeMainViewComponent,
-        GamesMainViewComponent
+        GamesMainViewComponent,
         CardsProposalMainViewComponent
     ],
     imports: [
