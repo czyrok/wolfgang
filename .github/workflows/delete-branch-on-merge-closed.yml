@@ -1,0 +1,19 @@
+name: Delete feature/** branch when is merged
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - 'feature/**'
+      
+env:
+  GITHUB_TOKEN: ${{ secrets.WRITE_TOKEN }}
+
+jobs:
+  delete:
+    name: Delete branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete
+        uses: SvanBoxel/delete-merged-branch@main
