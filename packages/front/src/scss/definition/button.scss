@@ -1,0 +1,60 @@
+@use '../../../../../node_modules/scss-toolkit/src/mixin/element';
+@use '../../../../../node_modules/scss-toolkit/src/mixin/theme';
+@use '../../../../../node_modules/scss-toolkit/src/function/util';
+
+@use '../lib/property';
+@use '../lib/definition';
+
+@include element.createElement('button') {
+    @include definition.useWithAccentColor() using ($map) {
+        @include element.setAttrAccentContent() {
+            background-color: util.get($map, 'entryElement', 'background', 'regular') !important;
+            color: util.get($map, 'entryElement', 'font', 'regular') !important;
+
+            @include element.definePropertyHover() {
+                background-color: util.get($map, 'entryElement', 'background', 'active') !important;
+            }
+
+            @include element.definePropertyActive() {
+                color: util.get($map, 'entryElement', 'font', 'active') !important;
+            }
+        }
+    }
+
+    @include definition.setAttrBorderRadius() {
+    }
+
+    @include element.defineContent() {
+        font-size: property.get('fontSize', 'entryElement', 'regular');
+        white-space: nowrap;
+    }
+
+    @include definition.definePropertyDisabled() {
+    }
+
+    @include element.createSubsection('event') {
+        @include theme.themeHandler(true, 'entryElement') {
+            @include element.defineContent() {
+                font-family: property.get('font', 'important');
+                font-weight: bold;
+                padding: property.get('borderLimit', 'small');
+                background-color: theme.get('background', 'regular');
+                color: theme.get('font', 'regular');
+            }
+
+            @include element.definePropertyHover() {
+                background-color: theme.get('background', 'active');
+            }
+
+            @include element.definePropertyActive() {
+                color: theme.get('font', 'active');
+            }
+        }
+
+        @include element.createSubsection('important') {
+            @include element.defineContent() {
+                font-size: property.get('fontSize', 'entryElement', 'important');
+            }
+        }
+    }
+}

@@ -1,0 +1,47 @@
+@use 'color';
+@use 'property';
+
+@use '../../../../../node_modules/scss-toolkit/src/function/util';
+@use '../../../../../node_modules/scss-toolkit/src/mixin/element';
+
+@mixin setAttrBorderRadius() {
+    @include element.setAttrBorderRadius(
+        (
+            'name': 'regular',
+            'value': property.get('borderRadius', 'regular'),
+            'diff': 3px
+        ),
+        (
+            'name': 'rounded',
+            'value': property.get('borderRadius', 'rounded'),
+            'diff': 3px
+        )
+    ) {
+        @content;
+    }
+}
+
+@mixin useWithAccentColor() {
+    @include element.useWith(
+        $map: (
+            'entryElement': (
+                'background': (
+                    'regular': color.get(accent, orange, medium),
+                    'active': color.get(accent, orange, dark)
+                ),
+                'font': (
+                    'regular': color.get(base, 10),
+                    'active': color.get(base, 50)
+                )
+            )
+        )
+    ) using ($map) {
+        @content ($map);
+    }
+}
+
+@mixin definePropertyDisabled() {
+    @include element.definePropertyDisabled(property.get(opacity, disabledItem)) {
+        @content;
+    }
+}

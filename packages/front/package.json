@@ -33,6 +33,7 @@
     "karma-coverage": "~2.1.0",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
+    "scss-toolkit": "github:czyrok/scss-toolkit#main",
     "typescript": "~4.5.2"
   }
 }
