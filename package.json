@@ -13,6 +13,10 @@
     "url": "https://github.com/czyrok/wolfgang.git"
   },
   "workspaces": [
-    "packages/front"
+    "packages/front",
+    "packages/back-main",
+    "packages/back-registery",
+    "packages/back-game",
+    "packages/common"
   ]
 }

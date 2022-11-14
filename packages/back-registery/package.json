@@ -1,0 +1,16 @@
+{
+  "name": "back-registery",
+  "version": "1.0.0",
+  "scripts": {
+    "clean": "rm -rf ./dist && mkdir ./dist/",
+    "start": "tsc && node --unhandled-rejections=strict ${main}"
+  },
+  "main": "./dist/app/app.js",
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.5.3",
+    "ts-socket.io-controller": "^1.0.5",
+    "typedi": "^0.10.0",
+    "validator": "^13.7.0"
+  }
+}

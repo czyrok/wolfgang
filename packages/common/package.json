@@ -1,0 +1,8 @@
+{
+  "name": "common",
+  "version": "1.0.0",
+  "dependencies": {
+    "@typegoose/typegoose": "^9.12.1",
+    "class-transformer": "^0.5.1"
+  }
+}
