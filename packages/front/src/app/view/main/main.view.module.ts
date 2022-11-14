@@ -7,6 +7,7 @@ import { NavMainViewComponent } from './nav/component/nav.main.view.component'
 import { HomeMainViewComponent } from './home/component/home.main.view.component'
 import { GamesMainViewComponent } from './games/component/games.main.view.component'
 import { CardsProposalMainViewComponent } from './cards-proposal/component/cards-proposal.main.view.component'
+import { HelpMainViewComponent } from './help/component/help.main.view.component'
 
 @NgModule({
     declarations: [
@@ -14,7 +15,8 @@ import { CardsProposalMainViewComponent } from './cards-proposal/component/cards
         NavMainViewComponent,
         HomeMainViewComponent,
         GamesMainViewComponent,
-        CardsProposalMainViewComponent
+        CardsProposalMainViewComponent,
+        HelpMainViewComponent
     ],
     imports: [
         CommonModule,
