@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { RouterModule } from '@angular/router'
 
+import { SharedModule } from 'src/app/shared/shared.module'
 import { ProfileMainViewModule } from './profile/profile.main.view.module'
 
 import { MainViewComponent } from './component/main.view.component'
@@ -23,6 +24,7 @@ import { HelpMainViewComponent } from './help/component/help.main.view.component
     imports: [
         CommonModule,
         RouterModule,
+        SharedModule,
         ProfileMainViewModule
     ],
     exports: [
