@@ -1,0 +1,58 @@
+@use '../../../../../../node_modules/scss-toolkit/src/mixin/element';
+@use '../../../../../../node_modules/scss-toolkit/src/mixin/theme';
+
+@include element.createElement('button') {
+    @include element.createSubsection('event') {
+        @include theme.themeHandler(true, 'accent', 'entryElement') {
+            @include element.setAttrAccentContent() {
+                background-color: theme.get('background', 'regular') !important;
+                color: theme.get('font', 'regular') !important;
+    
+                @include element.definePropertyHover() {
+                    background-color: theme.get('background', 'active') !important;
+                }
+    
+                @include element.definePropertyActive() {
+                    color: theme.get('font', 'active') !important;
+                }
+            }
+        }
+
+        @include theme.themeHandler(true, 'entryElement') {
+            @include element.defineContent() {
+                background-color: theme.get('background', 'regular');
+                color: theme.get('font', 'regular');
+            }
+
+            @include element.definePropertyHover() {
+                background-color: theme.get('background', 'active');
+            }
+
+            @include element.definePropertyActive() {
+                color: theme.get('font', 'active');
+            }
+        }
+
+        @include element.createTag('link', ' ') {
+            @include theme.themeHandler(true, 'accent', 'entryElement') {
+                @include element.setAttrAccentContent() {
+                    color: theme.get('font', 'regular') !important;
+
+                    @include element.definePropertyActive() {
+                        color: theme.get('font', 'active') !important;
+                    }
+                }
+            }
+
+            @include theme.themeHandler(true, 'entryElement') {
+                @include element.defineContent() {
+                    color: theme.get('font', 'regular');
+                }
+    
+                @include element.definePropertyActive() {
+                    color: theme.get('font', 'active');
+                }
+            }
+        }
+    }
+}
