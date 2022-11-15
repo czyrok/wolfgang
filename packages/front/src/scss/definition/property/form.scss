@@ -1,0 +1,115 @@
+@use '../../../../../../node_modules/scss-toolkit/src/mixin/element';
+
+@use '../../lib/property';
+@use '../../lib/color';
+@use '../../lib/definition';
+
+@include element.createElement('input') {
+    @include element.defineContent() {
+        font-size: property.get('fontSize', 'entryElement', 'regular');
+        white-space: nowrap;
+    }
+
+    @include definition.definePropertyDisabled() {
+    }
+
+    @include element.defineAttrCondition('type', 'text', 'password') {
+        @include element.setAttrAccentContent() {
+            font-family: property.get('font', 'important') !important;
+        }
+
+        @include element.defineContent() {
+            padding: property.get('borderLimit', 'verySmall');
+            width: property.get('size', 'input', 'text');
+            font-family: property.get('font', 'regular');
+        }
+
+        @include element.defineWithBefore('.ng-submitted') {
+            @include element.defineProperty('.ng-invalid') {
+                @include element.createTag('underline', '+') {
+                    @include element.defineContent() {
+                        height: property.get('size', 'input', 'underline');
+                    }
+
+                    @include element.createTag('underline', ' ') {
+                        @include element.defineContent() {
+                            transform: scaleX(1);
+                        }
+                    }
+                }
+            }
+        }
+
+        @include element.defineProperty('.ng-invalid') {
+            @include element.createTag('underline', '+') {
+                @include element.createTag('underline', ' ') {
+                    @include element.defineContent() {
+                        background-color: color.get(inform, red, a) !important;
+                    }
+                }
+            }
+        }
+
+        @include element.definePropertyFocus {
+            @include element.createTag('underline', '+') {
+                @include element.defineContent() {
+                    height: property.get('size', 'input', 'underline');
+                }
+
+                @include element.createTag('underline', ' ') {
+                    @include element.defineContent() {
+                        transform: scaleX(1);
+                    }
+                }
+            }
+        }
+
+        @include element.defineProperty('::placeholder') {
+            opacity: property.get('opacity', 'placeholder');
+        }
+
+        @include element.createTag('underline', '+') {
+            @include element.defineContent() {
+                display: block;
+                position: relative;
+                width: property.get('size', 'input', 'text') + property.get('borderLimit', 'verySmall') * 2;
+                height: 0;
+                transition: property.get('transition', 'short');
+                transition-property: height;
+                overflow: hidden;
+            }
+
+            @include element.createTag('underline', ' ') {
+                @include element.defineContent() {
+                    display: block;
+                    position: relative;
+                    width: 100%;
+                    height: property.get('size', 'input', 'underline');
+                    transform: scaleX(0);
+                    transition: property.get('transition', 'long');
+                    transition-property: transform;
+                }
+            }
+        }
+    }
+}
+
+@include element.createElement('select') {
+    @include element.setAttrAccentContent() {
+        font-family: property.get('font', 'important') !important;
+    }
+
+    @include definition.setAttrBorderRadius() {
+    }
+
+    @include element.defineContent() {
+        font-size: property.get('fontSize', 'entryElement', 'regular');
+        padding: property.get('borderLimit', 'verySmall');
+        font-weight: bold;
+        font-family: property.get('font', 'regular');
+        appearance: menulist-button;
+    }
+
+    @include definition.definePropertyDisabled() {
+    }
+}

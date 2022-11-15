@@ -21,25 +21,6 @@
     }
 }
 
-@mixin useWithAccentColor() {
-    @include element.useWith(
-        $map: (
-            'entryElement': (
-                'background': (
-                    'regular': color.get(accent, orange, medium),
-                    'active': color.get(accent, orange, dark)
-                ),
-                'font': (
-                    'regular': color.get(base, 10),
-                    'active': color.get(base, 50)
-                )
-            )
-        )
-    ) using ($map) {
-        @content ($map);
-    }
-}
-
 @mixin definePropertyDisabled() {
     @include element.definePropertyDisabled(property.get(opacity, disabledItem)) {
         @content;

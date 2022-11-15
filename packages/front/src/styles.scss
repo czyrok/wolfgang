@@ -1,26 +1,12 @@
-@use 'scss/lib/color';
 @use 'scss/lib/property';
 
-@use '../../../node_modules/scss-toolkit/src/mixin/theme' with (
-    $_map: (
-        'same': (
-            'entryElement': (
-                'background': (
-                    'regular': color.get(accent, blue, medium),
-                    'active': color.get(accent, blue, dark)
-                ),
-                'font': (
-                    'regular': color.get(base, 40),
-                    'active': color.get(base, 50)
-                )
-            )
-        )
-    )
-);
+@forward 'scss/definition/default.scss';
 
-@forward 'scss/definition/button';
-@forward 'scss/definition/form';
-@forward 'scss/definition/misc';
+@forward 'scss/definition/color/button';
+@forward 'scss/definition/property/button';
+@forward 'scss/definition/color/form';
+@forward 'scss/definition/property/form';
+@forward 'scss/definition/property/misc';
 
 @font-face {
     font-family: 'playfair-display';
@@ -50,10 +36,6 @@ body {
 
 body {
     font-family: property.get('font', 'regular');
-}
-
-button {
-    cursor: pointer;
 }
 
 button,

@@ -1,6 +1,6 @@
-@use '../../../../../node_modules/scss-toolkit/src/mixin/element';
+@use '../../../../../../node_modules/scss-toolkit/src/mixin/element';
 
-@use '../lib/definition';
+@use '../../lib/definition';
 
 @include element.createElement('container') {
     @include definition.setAttrBorderRadius() {

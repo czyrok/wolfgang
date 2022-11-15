@@ -1,0 +1,68 @@
+@use '../../../../../../node_modules/scss-toolkit/src/mixin/element';
+@use '../../../../../../node_modules/scss-toolkit/src/mixin/theme';
+
+@include element.createElement('input') {
+    @include element.defineAttrCondition('type', 'text', 'password') {
+        @include theme.themeHandler(true, 'accent', 'entryElement') {
+            @include element.setAttrAccentContent() {
+                background-color: theme.get('background', 'regular') !important;
+                color: theme.get('font', 'active') !important;
+
+                @include element.defineProperty('::placeholder') {
+                    color: theme.get('font', 'regular') !important;
+                }
+
+                @include element.createTag('underline', '+') {
+                    @include element.defineContent() {
+                        background-color: theme.get('background', 'regular') !important;
+                    }
+
+                    @include element.createTag('underline', ' ') {
+                        @include element.defineContent() {
+                            background-color: theme.get('background', 'active') !important;
+                        }
+                    }
+                }
+            }
+        }
+
+        @include theme.themeHandler(true, entryElement) {
+            @include element.defineContent() {
+                background-color: theme.get('background', 'regular');
+                color: theme.get('font', 'active');
+            }
+
+            @include element.defineProperty('::placeholder') {
+                color: theme.get('font', 'regular');
+            }
+
+            @include element.createTag('underline', '+') {
+                @include element.defineContent() {
+                    background-color: theme.get('background', 'regular');
+                }
+
+                @include element.createTag('underline', ' ') {
+                    @include element.defineContent() {
+                        background-color: theme.get('background', 'active');
+                    }
+                }
+            }
+        }
+    }
+}
+
+@include element.createElement('select') {
+    @include theme.themeHandler(true, 'accent', 'entryElement') {
+        @include element.setAttrAccentContent() {
+            background-color: theme.get('background', 'regular') !important;
+            color: theme.get('font', 'regular') !important;
+        }
+    }
+
+    @include element.defineContent() {
+        @include theme.themeHandler(true, 'entryElement') {
+            background-color: theme.get('background', 'regular');
+            color: theme.get('font', 'regular');
+        }
+    }
+}

@@ -1,0 +1,37 @@
+@use '../../../../../../node_modules/scss-toolkit/src/mixin/element';
+
+@use '../../lib/property';
+@use '../../lib/definition';
+
+@include element.createElement('button') {
+    @include definition.setAttrBorderRadius() {
+    }
+
+    @include element.defineContent() {
+        font-size: property.get('fontSize', 'entryElement', 'regular');
+        white-space: nowrap;
+        cursor: pointer;
+        font-family: property.get('font', 'regular');
+    }
+
+    @include definition.definePropertyDisabled() {
+    }
+
+    @include element.createSubsection('event') {
+        @include element.setAttrAccentContent() {
+            font-family: property.get('font', 'important') !important;
+        }
+
+        @include element.defineContent() {
+            font-family: property.get('font', 'regular');
+            font-weight: bold;
+            padding: property.get('borderLimit', 'small');
+        }
+
+        @include element.createSubsection('important') {
+            @include element.defineContent() {
+                font-size: property.get('fontSize', 'entryElement', 'important');
+            }
+        }
+    }
+}
