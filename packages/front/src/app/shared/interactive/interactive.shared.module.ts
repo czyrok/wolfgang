@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { RouterModule } from '@angular/router'
 
+import { ListInteractiveSharedModule } from './list/list.interactive.shared.module'
+
 import { ButtonInteractiveShared } from './button/component/button.interactive.shared.component'
 
 @NgModule({
@@ -12,10 +14,12 @@ import { ButtonInteractiveShared } from './button/component/button.interactive.s
     imports: [
         CommonModule,
         BrowserModule,
-        RouterModule
+        RouterModule,
+        ListInteractiveSharedModule
     ],
     exports: [
-        ButtonInteractiveShared
+        ButtonInteractiveShared,
+        ListInteractiveSharedModule
     ]
 })
 
