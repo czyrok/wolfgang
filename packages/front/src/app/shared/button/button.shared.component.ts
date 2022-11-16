@@ -7,4 +7,5 @@ import { Component, Input } from '@angular/core'
 })
 export class ButtonShared {
   @Input() text!: string
+  @Input() icofont!: string
 }

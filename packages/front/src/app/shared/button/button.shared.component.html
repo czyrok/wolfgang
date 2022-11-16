@@ -1,3 +1,6 @@
-<button data-css-button data-css-event data-css-accent data-css-border-radius="rounded">
-  {{ text }}
-</button>
+<div>
+  <button data-css-button data-css-event data-css-accent data-css-border-radius="rounded">
+    <span *ngIf="icofont != undefined" class="icofont-{{ icofont }}"></span>
+    {{ text }}
+  </button>
+</div>
