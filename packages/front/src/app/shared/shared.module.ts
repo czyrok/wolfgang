@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core'
 
 import { InteractiveSharedModule } from './interactive/interactive.shared.module'
 
-import { LabelShared } from './button/label.shared.component'
+import { LabelShared } from './label/label.shared.component'
 
 @NgModule({
     declarations: [
