@@ -8,4 +8,5 @@ import { Component, Input } from '@angular/core'
 export class ButtonInteractiveShared {
   @Input() link!: string
   @Input() text!: string
+  @Input() icofont!: string
 }
