@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core'
+import { Component, EventEmitter, Output, Input } from '@angular/core'
 
 @Component({
   selector: 'app-shared-interactive-search-bar',
@@ -9,14 +9,15 @@ export class SearchBarInteractiveShared {
   _filter = ''
 
   get filter(): string {
-    return this._filter;
+    return this._filter
   }
 
   set filter(value: string) {
-    this._filter = value;
+    this._filter = value
 
     this.event.emit(this.filter)
   }
 
+  @Input() icofont!: string
   @Output() event: EventEmitter<String> = new EventEmitter();
 }
