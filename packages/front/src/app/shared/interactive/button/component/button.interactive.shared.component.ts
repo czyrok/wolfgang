@@ -9,4 +9,6 @@ export class ButtonInteractiveShared {
   @Input() link!: string
   @Input() text!: string
   @Input() icofont!: string
+  @Input() accent: boolean = false
+  @Input() important: boolean = false
 }

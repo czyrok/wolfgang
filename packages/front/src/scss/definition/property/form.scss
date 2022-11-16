@@ -72,7 +72,7 @@
             @include element.defineContent() {
                 display: block;
                 position: relative;
-                width: property.get('size', 'input', 'text') + property.get('borderLimit', 'verySmall') * 2;
+                width: 100%;
                 height: 0;
                 transition: property.get('transition', 'short');
                 transition-property: height;
