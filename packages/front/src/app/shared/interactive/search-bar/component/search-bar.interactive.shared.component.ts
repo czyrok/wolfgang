@@ -18,6 +18,8 @@ export class SearchBarInteractiveShared {
     this.event.emit(this.filter)
   }
 
-  @Input() icofont!: string
-  @Output() event: EventEmitter<String> = new EventEmitter();
+  @Output() event: EventEmitter<string> = new EventEmitter();
+  @Input() placeholder!: string
+  @Input() accent: boolean = false
+  @Input() important: boolean = false
 }

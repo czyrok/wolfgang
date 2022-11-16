@@ -1,8 +1,7 @@
-<div>
-  <button data-css-button data-css-event data-css-accent data-css-border-radius="rounded">
-    <a [routerLink]="[link]" data-css-link data-css-accent>
-      <span *ngIf="icofont != undefined" class="icofont-{{ icofont }}" data-css-icofont></span>
-      {{ text }}
-    </a>
-  </button>
-</div>
+<button [attr.data-css-important]="important ? true : null" [attr.data-css-accent]="accent ? true : null"
+  data-css-button data-css-event data-css-important data-css-border-radius="rounded">
+  <a [attr.data-css-accent]="accent ? true : null" [routerLink]="[link]" data-css-link>
+    <span *ngIf="icofont != undefined" class="icofont-{{ icofont }}" data-css-icofont></span>
+    {{ text }}
+  </a>
+</button>

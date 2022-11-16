@@ -1,19 +1,21 @@
+import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 
 import { InteractiveSharedModule } from './interactive/interactive.shared.module'
 
-import { ButtonShared } from './button/button.shared.component'
+import { LabelShared } from './button/label.shared.component'
 
 @NgModule({
     declarations: [
-        ButtonShared
+        LabelShared
     ],
     imports: [
+        CommonModule,
         InteractiveSharedModule
     ],
     exports: [
         InteractiveSharedModule,
-        ButtonShared
+        LabelShared
     ]
 })
 
