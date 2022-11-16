@@ -30,7 +30,8 @@
               "src/asset"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/asset/icofont/icofont.min.css"
             ],
             "scripts": []
           },
@@ -97,7 +98,8 @@
               "src/asset"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/asset/icofont/icofont.min.css"
             ],
             "scripts": []
           }
