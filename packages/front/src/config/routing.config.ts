@@ -7,6 +7,7 @@ import { HelpMainViewComponent } from 'src/app/view/main/help/component/help.mai
 
 import { GamesMainViewComponent } from 'src/app/view/main/games/component/games.main.view.component'
 import { HomeGamesMainViewComponent } from 'src/app/view/main/games/home/component/home.games.main.view.component'
+import { PlayGamesMainViewComponent } from 'src/app/view/main/games/play/component/play.games.main.view.component'
 
 import { ProfileMainViewComponent } from 'src/app/view/main/profile/component/profile.main.view.component'
 import { HomeProfileMainViewComponent } from 'src/app/view/main/profile/home/component/home.profile.main.view.component'
@@ -19,6 +20,7 @@ export const routes: Routes = [
           { path: 'home', component: HomeMainViewComponent },
           { path: 'games', component: GamesMainViewComponent, children: [
             { path: '', component: HomeGamesMainViewComponent },
+            { path: 'play', component: PlayGamesMainViewComponent },
           ] },
           { path: 'cards-proposal', component: CardsProposalMainViewComponent },
           { path: 'profile', component: ProfileMainViewComponent, children: [
