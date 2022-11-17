@@ -1,0 +1,17 @@
+@use '../../../scss/definition/default.scss';
+@use '../../../scss/lib/color';
+
+@use '../../../../../../node_modules/scss-toolkit/src/mixin/theme';
+
+$exec: theme.append((
+    'light': (
+        'nav': (
+            'background': color.get(base, 50)
+        )
+    ),
+    'dark': (
+        'nav': (
+            'background': color.get(base, 10)
+        )
+    )
+))

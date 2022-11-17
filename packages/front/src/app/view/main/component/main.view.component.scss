@@ -1,4 +1,4 @@
-$navWidth: 70px;
+@use '../../../../scss/lib/property';
 
 .container {
     display: grid;
@@ -6,7 +6,7 @@ $navWidth: 70px;
     height: 100%;
     grid-auto-flow: column;
     grid-template-areas: "a b";
-    grid-template-columns: $navWidth auto;
+    grid-template-columns: property.get('size', 'nav', 'self') auto;
     background-color: white;
     position: fixed;
     overflow: hidden;
@@ -19,7 +19,7 @@ $navWidth: 70px;
 
 .container ::ng-deep main {
     position: fixed;
-    width: calc(100% - $navWidth);
+    width: calc(100% - property.get('size', 'nav', 'self'));
     height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
@@ -27,6 +27,6 @@ $navWidth: 70px;
 
 .container ::ng-deep section {
     position: fixed;
-    width: calc(100% - $navWidth);
+    width: calc(100% - property.get('size', 'nav', 'self'));
     height: 100%;
 }
