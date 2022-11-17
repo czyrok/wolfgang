@@ -12,5 +12,3 @@ UsingHelper.useSocketServer(io, {
     controllers: [],
     middlewares: []
 })
-
-console.log('slt')
