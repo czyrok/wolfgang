@@ -15,7 +15,7 @@ nav {
     padding-bottom: property.get('borderLimit', 'regular');
     box-sizing: border-box;
 
-    @include theme.themeHandler(false, 'nav') {
+    @include theme.themeHandler(false) {
         background-color: theme.get('background');
     }
 }

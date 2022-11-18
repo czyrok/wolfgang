@@ -5,7 +5,7 @@ import { Component, Input } from '@angular/core'
   templateUrl: './label.shared.component.html',
   styleUrls: ['./label.shared.component.scss']
 })
-export class LabelShared {
+export class LabelSharedComponent {
   @Input() text!: string
   @Input() icofont!: string
   @Input() accent: boolean = false

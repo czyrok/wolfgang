@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ButtonInteractiveShared } from './button.interactive.shared.component';
+import { ButtonInteractiveSharedComponent } from './button.interactive.shared.component';
 
-describe('ButtonInteractiveShared', () => {
-  let component: ButtonInteractiveShared;
-  let fixture: ComponentFixture<ButtonInteractiveShared>;
+describe('ButtonInteractiveSharedComponent', () => {
+  let component: ButtonInteractiveSharedComponent;
+  let fixture: ComponentFixture<ButtonInteractiveSharedComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ButtonInteractiveShared ]
+      declarations: [ ButtonInteractiveSharedComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ButtonInteractiveShared);
+    fixture = TestBed.createComponent(ButtonInteractiveSharedComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

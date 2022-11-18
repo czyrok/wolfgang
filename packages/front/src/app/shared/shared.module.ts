@@ -1,14 +1,16 @@
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
+import { AvatarSharedComponent } from './avatar/component/avatar.shared.component'
 
 import { InteractiveSharedModule } from './interactive/interactive.shared.module'
 import { ChatSharedModule } from './chat/chat.shared.module'
 
-import { LabelShared } from './label/label.shared.component'
+import { LabelSharedComponent } from './label/label.shared.component'
 
 @NgModule({
     declarations: [
-        LabelShared
+        AvatarSharedComponent,
+        LabelSharedComponent
     ],
     imports: [
         CommonModule,
@@ -18,7 +20,8 @@ import { LabelShared } from './label/label.shared.component'
     exports: [
         InteractiveSharedModule,
         ChatSharedModule,
-        LabelShared
+        AvatarSharedComponent,
+        LabelSharedComponent
     ]
 })
 

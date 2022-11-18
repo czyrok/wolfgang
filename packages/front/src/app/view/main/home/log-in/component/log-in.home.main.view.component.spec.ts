@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LabelSharedComponent } from './label.shared.component';
+import { LogInHomeMainViewComponent } from './log-in.home.main.view.component';
 
-describe('LabelSharedComponent', () => {
-  let component: LabelSharedComponent;
-  let fixture: ComponentFixture<LabelSharedComponent>;
+describe('LogInHomeMainViewComponent', () => {
+  let component: LogInHomeMainViewComponent;
+  let fixture: ComponentFixture<LogInHomeMainViewComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LabelSharedComponent ]
+      declarations: [ LogInHomeMainViewComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LabelSharedComponent);
+    fixture = TestBed.createComponent(LogInHomeMainViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
