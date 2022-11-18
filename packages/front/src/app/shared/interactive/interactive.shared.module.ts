@@ -6,13 +6,13 @@ import { RouterModule } from '@angular/router'
 
 import { ListInteractiveSharedModule } from './list/list.interactive.shared.module'
 
-import { ButtonInteractiveShared } from './button/component/button.interactive.shared.component'
-import { SearchBarInteractiveShared } from './search-bar/component/search-bar.interactive.shared.component'
+import { ButtonInteractiveSharedComponent } from './button/component/button.interactive.shared.component'
+import { TextBarInteractiveSharedComponent } from './text-bar/component/text-bar.interactive.shared.component'
 
 @NgModule({
     declarations: [
-        ButtonInteractiveShared,
-        SearchBarInteractiveShared
+        ButtonInteractiveSharedComponent,
+        TextBarInteractiveSharedComponent
     ],
     imports: [
         CommonModule,
@@ -22,9 +22,9 @@ import { SearchBarInteractiveShared } from './search-bar/component/search-bar.in
         ListInteractiveSharedModule
     ],
     exports: [
-        ButtonInteractiveShared,
+        ButtonInteractiveSharedComponent,
         ListInteractiveSharedModule,
-        SearchBarInteractiveShared
+        TextBarInteractiveSharedComponent
     ]
 })
 
