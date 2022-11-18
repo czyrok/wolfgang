@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core'
 import { AvatarSharedComponent } from './avatar/component/avatar.shared.component'
 
 import { InteractiveSharedModule } from './interactive/interactive.shared.module'
+import { ChatSharedModule } from './chat/chat.shared.module'
 
 import { LabelSharedComponent } from './label/label.shared.component'
 
@@ -13,10 +14,12 @@ import { LabelSharedComponent } from './label/label.shared.component'
     ],
     imports: [
         CommonModule,
-        InteractiveSharedModule
+        InteractiveSharedModule,
+        ChatSharedModule
     ],
     exports: [
         InteractiveSharedModule,
+        ChatSharedModule,
         AvatarSharedComponent,
         LabelSharedComponent
     ]

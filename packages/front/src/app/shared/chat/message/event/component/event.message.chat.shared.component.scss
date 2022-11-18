@@ -1,0 +1,29 @@
+@use '../../../chat.shared.scss';
+
+@use '../../../../../../scss/lib/property';
+@use '../../../../../../scss/lib/color';
+
+.container {
+  display: grid;
+  grid-template-areas: 'a b';
+  grid-template-columns: auto 1fr;
+}
+
+.container span {
+  font-size: 25px;
+  display: flex;
+  width: 35px;
+  aspect-ratio: 1 / 1;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  margin-right: property.get('borderLimit', 'regular');
+  background-color: color.get(inform, blue, b);
+}
+
+.container p {
+  border-radius: property.get('borderRadius', 'regular');
+  background-color: color.get(inform, blue, a);
+  padding: property.get('borderLimit', 'verySmall');
+  height: fit-content;
+}
