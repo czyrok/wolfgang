@@ -5,7 +5,7 @@ import { Component, Input } from '@angular/core'
   templateUrl: './button.interactive.shared.component.html',
   styleUrls: ['./button.interactive.shared.component.scss']
 })
-export class ButtonInteractiveShared {
+export class ButtonInteractiveSharedComponent {
   @Input() link!: string
   @Input() text!: string
   @Input() icofont!: string

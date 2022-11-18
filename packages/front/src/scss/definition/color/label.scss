@@ -1,0 +1,18 @@
+@use '../../../../../../node_modules/scss-toolkit/src/mixin/element';
+@use '../../../../../../node_modules/scss-toolkit/src/mixin/theme';
+
+@include element.createElement('label') {
+    @include theme.themeHandler(true, 'accent', 'entryElement') {
+        @include element.setAttrAccentContent() {
+            background-color: theme.get('background', 'regular') !important;
+            color: theme.get('font', 'regular') !important;
+        }
+    }
+
+    @include theme.themeHandler(true, 'entryElement') {
+        @include element.defineContent() {
+            background-color: theme.get('background', 'regular');
+            color: theme.get('font', 'regular');
+        }
+    }
+}

@@ -20,12 +20,12 @@
     @include element.createSubsection('event') {
         @include element.setAttrAccentContent() {
             font-family: property.get('font', 'important') !important;
+            font-weight: bold;
         }
 
         @include element.defineContent() {
             font-family: property.get('font', 'regular');
-            font-weight: bold;
-            padding: property.get('borderLimit', 'small');
+            padding: property.get('borderLimit', 'small') + property.get('borderLimit', 'verySmall');
         }
 
         @include element.createSubsection('important') {

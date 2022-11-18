@@ -13,9 +13,10 @@
     @include definition.definePropertyDisabled() {
     }
 
-    @include element.defineAttrCondition('type', 'text', 'password') {
+    @include element.defineAttrCondition('type', 'text', 'password', 'email') {
         @include element.setAttrAccentContent() {
             font-family: property.get('font', 'important') !important;
+            font-weight: bold;
         }
 
         @include element.defineContent() {
@@ -97,6 +98,7 @@
 @include element.createElement('select') {
     @include element.setAttrAccentContent() {
         font-family: property.get('font', 'important') !important;
+        font-weight: bold;
     }
 
     @include definition.setAttrBorderRadius() {
@@ -105,7 +107,6 @@
     @include element.defineContent() {
         font-size: property.get('fontSize', 'entryElement', 'regular');
         padding: property.get('borderLimit', 'verySmall');
-        font-weight: bold;
         font-family: property.get('font', 'regular');
         appearance: menulist-button;
     }
