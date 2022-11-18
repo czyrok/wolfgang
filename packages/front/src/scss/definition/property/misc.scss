@@ -14,3 +14,10 @@
     @include definition.definePropertyDisabled() {
     }
 }
+
+@include element.createElement('square') {
+    @include element.defineContent() {
+        display: flex;
+        aspect-ratio: 1 / 1;
+    }
+}
