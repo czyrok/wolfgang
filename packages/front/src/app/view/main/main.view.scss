@@ -5,13 +5,9 @@
 
 $exec: theme.append((
     'light': (
-        'nav': (
-            'background': color.get(base, 50)
-        )
+        'background': color.get(base, 50)
     ),
     'dark': (
-        'nav': (
-            'background': color.get(base, 10)
-        )
+        'background': color.get(base, 10)
     )
 ))
