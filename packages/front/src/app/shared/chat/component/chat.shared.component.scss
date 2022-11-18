@@ -1,0 +1,21 @@
+@use '../chat.shared.scss';
+
+@use '../../../../scss/lib/property';
+
+@use '../../../../../../../node_modules/scss-toolkit/src/mixin/theme';
+
+.container {
+  width: 100%;
+  height: 100%;
+  border-radius: property.get('borderRadius', 'rounded');
+  padding: property.get('borderLimit', 'regular');
+  box-sizing: border-box;
+
+  @include theme.themeHandler(false, 'chat') {
+    background-color: theme.get('background');
+  }
+}
+
+.container .message:not(:first-child) {
+  margin-top: property.get('borderLimit', 'verySmall');
+}
