@@ -5,19 +5,27 @@ import { HomeMainViewComponent } from 'src/app/view/main/home/component/home.mai
 import { CardsProposalMainViewComponent } from 'src/app/view/main/cards-proposal/component/cards-proposal.main.view.component'
 import { HelpMainViewComponent } from 'src/app/view/main/help/component/help.main.view.component'
 
-import { GamesMainViewComponent } from 'src/app/view/main/games/component/games.main.view.component'
 import { HomeGamesMainViewComponent } from 'src/app/view/main/games/home/component/home.games.main.view.component'
+import { DefaultHomeMainViewComponent } from 'src/app/view/main/home/default/component/default.home.main.view.component'
+import { LogInHomeMainViewComponent } from 'src/app/view/main/home/log-in/component/log-in.home.main.view.component'
+import { RegisterHomeMainViewComponent } from 'src/app/view/main/home/register/component/register.home.main.view.component'
+
+import { GamesMainViewComponent } from 'src/app/view/main/games/component/games.main.view.component'
 import { PlayGamesMainViewComponent } from 'src/app/view/main/games/play/component/play.games.main.view.component'
 
 import { ProfileMainViewComponent } from 'src/app/view/main/profile/component/profile.main.view.component'
 import { HomeProfileMainViewComponent } from 'src/app/view/main/profile/home/component/home.profile.main.view.component'
 import { SkinCustomizationProfileMainViewComponent } from 'src/app/view/main/profile/skin-customization/component/skin-customization.profile.main.view.component'
 
+
 export const routes: Routes = [
     {
         path: '', component: MainViewComponent, children: [
-          { path: '', redirectTo: 'home', pathMatch: 'full' },
-          { path: 'home', component: HomeMainViewComponent },
+          { path: '', component: HomeMainViewComponent, children: [
+            { path: '', component: DefaultHomeMainViewComponent },
+            { path: 'log-in', component: LogInHomeMainViewComponent },
+            { path: 'register', component: RegisterHomeMainViewComponent },
+          ]},
           { path: 'games', component: GamesMainViewComponent, children: [
             { path: '', component: HomeGamesMainViewComponent },
             { path: 'play', component: PlayGamesMainViewComponent },

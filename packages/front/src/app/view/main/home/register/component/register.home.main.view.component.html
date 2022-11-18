@@ -1,0 +1,41 @@
+<section>
+  <h1 data-css-h1>S'inscrire</h1>
+
+  <form action="" method="post">
+    <div class="field">
+      <label for="username" data-css-h2>Pseudo</label>
+      <div data-css-container data-css-border-radius="rounded">
+        <input type="text" name="username" data-css-input required>
+        <div data-css-underline>
+          <div data-css-underline></div>
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="field">
+      <label for="mail" data-css-h2>Adresse email</label>
+      <div data-css-container data-css-border-radius="rounded">
+        <input type="email" name="mail" data-css-input required>
+        <div data-css-underline>
+          <div data-css-underline></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="field">
+      <label for="password" data-css-h2>Mot de passe</label>
+      <div data-css-container data-css-border-radius="rounded">
+        <input type="password" name="password" data-css-input required>
+        <div data-css-underline>
+          <div data-css-underline></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="field">
+      <app-shared-interactive-button link="/" text="S'inscrire" [accent]="true" [important]="true"></app-shared-interactive-button>
+    </div>
+    
+  </form>
+</section>
