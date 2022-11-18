@@ -3,11 +3,11 @@ import { NgModule } from '@angular/core'
 
 import { InteractiveSharedModule } from './interactive/interactive.shared.module'
 
-import { LabelShared } from './label/label.shared.component'
+import { LabelSharedComponent } from './label/label.shared.component'
 
 @NgModule({
     declarations: [
-        LabelShared
+        LabelSharedComponent
     ],
     imports: [
         CommonModule,
@@ -15,7 +15,7 @@ import { LabelShared } from './label/label.shared.component'
     ],
     exports: [
         InteractiveSharedModule,
-        LabelShared
+        LabelSharedComponent
     ]
 })
 
