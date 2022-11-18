@@ -1,0 +1,18 @@
+@use '../../../../../../scss/lib/property';
+
+form {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+form .field {
+    display: flex;
+    flex-direction: column;
+}
+
+form .field:not(:first-child) {
+    margin-top: property.get('borderLimit', 'big');
+}
