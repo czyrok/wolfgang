@@ -19,6 +19,7 @@ export class TextBarInteractiveSharedComponent {
   }
 
   @Output() event: EventEmitter<string> = new EventEmitter();
+  @Input() id!: string
   @Input() placeholder!: string
   @Input() icofont!: string
   @Input() type: string = 'text'

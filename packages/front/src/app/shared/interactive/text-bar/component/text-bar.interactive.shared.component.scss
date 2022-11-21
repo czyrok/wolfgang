@@ -1,6 +1,6 @@
 @use '../../../../../scss/lib/property';
 
-.container {
+/* .container {
   display: inline-grid;
   grid-template-areas: "a b"
   "c c";
@@ -9,7 +9,7 @@
 }
 
 .container input {
-  grid-area: 1;
+  grid-area: a;
   margin-left: property.get('borderLimit', 'small');
 }
 
@@ -20,4 +20,4 @@
 .container span {
   grid-area: b;
   margin: property.get('borderLimit', 'small');
-}
+} */
