@@ -1,6 +1,6 @@
 @use 'sass:color';
 
-@use '../../../../../node_modules/scss-toolkit/src/function/util';
+@use '~scss-toolkit/src/function/util';
 
 $_map: (
     base: (
@@ -14,9 +14,9 @@ $_map: (
     ),
     accent: (
         orange: (
-            dark: #c67100,
-            medium: #ffa000,
-            light: #ffd149
+            dark: #904500,
+            medium: #c67100,
+            light: #fea03d
         ),
         blue: (
             dark: #000c2d,

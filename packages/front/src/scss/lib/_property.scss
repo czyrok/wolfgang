@@ -1,4 +1,4 @@
-@use '../../../../../node_modules/scss-toolkit/src/function/util';
+@use '~scss-toolkit/src/function/util';
 
 $_map: (
     zIndex: (
@@ -28,7 +28,7 @@ $_map: (
     ),
     borderRadius: (
         regular: 8px,
-        rounded: 22px
+        rounded: 3em
     ),
     transition: (
         short: 0.12s,

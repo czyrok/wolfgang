@@ -1,7 +1,7 @@
 @use '../../../scss/definition/default.scss';
 @use '../../../scss/lib/color';
 
-@use '../../../../../../node_modules/scss-toolkit/src/mixin/theme';
+@use '~scss-toolkit/src/mixin/theme';
 
 $exec: theme.append(
   (

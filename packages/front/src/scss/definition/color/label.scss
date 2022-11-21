@@ -1,5 +1,5 @@
-@use '../../../../../../node_modules/scss-toolkit/src/mixin/element';
-@use '../../../../../../node_modules/scss-toolkit/src/mixin/theme';
+@use '~scss-toolkit/src/mixin/element';
+@use '~scss-toolkit/src/mixin/theme';
 
 @include element.createElement('label') {
     @include theme.themeHandler(true, 'accent', 'entryElement') {

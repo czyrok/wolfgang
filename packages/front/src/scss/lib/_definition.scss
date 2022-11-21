@@ -1,8 +1,8 @@
 @use 'color';
 @use 'property';
 
-@use '../../../../../node_modules/scss-toolkit/src/function/util';
-@use '../../../../../node_modules/scss-toolkit/src/mixin/element';
+@use '~scss-toolkit/src/function/util';
+@use '~scss-toolkit/src/mixin/element';
 
 @mixin setAttrBorderRadius() {
     @include element.setAttrBorderRadius(
@@ -14,7 +14,7 @@
         (
             'name': 'rounded',
             'value': property.get('borderRadius', 'rounded'),
-            'diff': 3px
+            'diff': 0em
         )
     ) {
         @content;

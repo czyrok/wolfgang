@@ -1,8 +1,8 @@
-@use '../../../../../../node_modules/scss-toolkit/src/mixin/element';
-@use '../../../../../../node_modules/scss-toolkit/src/mixin/theme';
+@use '~scss-toolkit/src/mixin/element';
+@use '~scss-toolkit/src/mixin/theme';
 
 @include element.createElement('input') {
-    @include element.defineAttrCondition('type', 'text', 'password') {
+    @include element.defineAttrCondition('type', 'text', 'password', 'email') {
         @include theme.themeHandler(true, 'accent', 'entryElement') {
             @include element.setAttrAccentContent() {
                 background-color: theme.get('background', 'regular') !important;
