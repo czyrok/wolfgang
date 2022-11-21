@@ -1,7 +1,7 @@
 export class ItemTabListInteractiveSharedModel {
-    private _name!: string
-    private _callBack!: () => void
-    private _isDisabled!: boolean
+    private _name: string = ''
+    private _callBack: () => void = () => {}
+    private _isDisabled: boolean = true
 
     public setName(value: string): this {
         this._name = value

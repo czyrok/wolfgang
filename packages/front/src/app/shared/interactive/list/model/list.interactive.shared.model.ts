@@ -1,7 +1,7 @@
 import { TabListInteractiveSharedModel } from "../tab/model/tab.list.interactive.shared.model";
 
 export class ListInteractiveSharedModel {
-    private _tabList!: Array<TabListInteractiveSharedModel>
+    private _tabList: Array<TabListInteractiveSharedModel> = new Array()
 
     public get tabList(): Array<TabListInteractiveSharedModel> {
         return this._tabList

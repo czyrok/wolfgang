@@ -1,0 +1,31 @@
+@use '../../../../scss/definition/default.scss';
+@use '../../../../scss/lib/color';
+
+@use '~scss-toolkit/src/mixin/theme';
+
+$exec: theme.append(
+  (
+    'light': (
+      'list': (
+        'tab': (
+          'item':(
+            'hover': color.get(base, 60),
+          ),
+          'background': color.get(base, 40),
+        ),
+        'background': color.get(base, 50),
+      ),
+    ),
+    'dark': (
+      'list': (
+        'tab': (
+          'item':(
+            'hover': color.get(base, 60),
+          ),
+          'background': color.get(base, 20),
+        ),
+        'background': color.get(base, 10),
+      ),
+    ),
+  )
+);

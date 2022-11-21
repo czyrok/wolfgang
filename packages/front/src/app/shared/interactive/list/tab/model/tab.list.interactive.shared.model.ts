@@ -2,9 +2,9 @@ import { ItemTabListInteractiveSharedModel } from "../item/model/item.tab.list.i
 
 
 export class TabListInteractiveSharedModel {
-    private _title!: string
-    private _visibility!: boolean
-    private _itemList!: Array<ItemTabListInteractiveSharedModel>
+    private _title: string = ''
+    private _visibility: boolean = false
+    private _itemList: Array<ItemTabListInteractiveSharedModel> = new Array()
 
     public setTitle(value: string): this {
         this._title = value
