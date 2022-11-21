@@ -3,27 +3,36 @@
 
   <form action="" method="post">
     <div class="field">
-      <label for="mail" data-css-h2>Adresse email</label>
-      <div data-css-container data-css-border-radius="rounded">
-        <input type="email" name="mail" data-css-input required>
-        <div data-css-underline>
+      <label for="username" data-css-h2>Pseudo</label>
+
+      <div data-css-text-bar data-css-label data-css-border-radius="rounded">
+        <input id="username" type="text" placeholder="Saisissez votre pseudo" data-css-input>
+        <div class="line" data-css-underline>
           <div data-css-underline></div>
         </div>
+        <span class="icofont-user" data-css-icofont></span>
       </div>
     </div>
-    
+
     <div class="field">
       <label for="password" data-css-h2>Mot de passe</label>
-      <div data-css-container data-css-border-radius="rounded">
-        <input type="password" name="password" data-css-input required>
-        <div data-css-underline>
+
+      <div data-css-text-bar data-css-label data-css-border-radius="rounded">
+        <input id="password" type="password" placeholder="Saisissez votre mot de passe" data-css-input>
+        <div class="line" data-css-underline>
           <div data-css-underline></div>
         </div>
+        <span class="icofont-ui-password" data-css-icofont></span>
       </div>
     </div>
-    
+
     <div class="field">
-      <app-shared-interactive-button link="/" text="Se connecter" [accent]="true" [important]="true"></app-shared-interactive-button>
+      <app-shared-interactive-button link="/" text="Se connecter" [accent]="true" [important]="true">
+      </app-shared-interactive-button>
+    </div>
+
+    <div class="field">
+      <a [routerLink]="['/register']" data-css-link>S'inscrire</a>
     </div>
   </form>
 </section>
