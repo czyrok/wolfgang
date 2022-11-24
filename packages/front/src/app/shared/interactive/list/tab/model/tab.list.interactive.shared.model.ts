@@ -2,37 +2,48 @@ import { ItemTabListInteractiveSharedModel } from "../item/model/item.tab.list.i
 
 
 export class TabListInteractiveSharedModel {
-    private _title!: string
-    private _visibility!: boolean
-    private _itemList!: Array<ItemTabListInteractiveSharedModel>
+  private _title: string = ''
+  private _visibility: boolean = false
+  private _isIconOnly: boolean = false
+  private _itemList: Array<ItemTabListInteractiveSharedModel> = new Array()
 
-    public setTitle(value: string): this {
-        this._title = value
+  public setTitle(value: string): this {
+    this._title = value
 
-        return this
-    }
+    return this
+  }
 
-    public setVisibility(value: boolean): this {
-        this._visibility = value
+  public setVisibility(value: boolean): this {
+    this._visibility = value
 
-        return this
-    }
+    return this
+  }
 
-    public get title(): string {
-        return this._title
-    }
+  public setIsIconOnly(value: boolean): this {
+    this._isIconOnly = value
 
-    public get visibility(): boolean {
-        return this._visibility
-    }
+    return this
+  }
 
-    public get itemList(): Array<ItemTabListInteractiveSharedModel> {
-        return this._itemList
-    }
+  public get title(): string {
+    return this._title
+  }
 
-    public addItem(value: ItemTabListInteractiveSharedModel): this {
-        this._itemList.push(value)
+  public get visibility(): boolean {
+    return this._visibility
+  }
 
-        return this
-    }
+  public get isIconOnly(): boolean {
+    return this._isIconOnly
+  }
+
+  public get itemList(): Array<ItemTabListInteractiveSharedModel> {
+    return this._itemList
+  }
+
+  public addItem(value: ItemTabListInteractiveSharedModel): this {
+    this._itemList.push(value)
+
+    return this
+  }
 }

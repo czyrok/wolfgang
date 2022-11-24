@@ -9,7 +9,7 @@ import { TabListInteractiveSharedModel } from '../model/tab.list.interactive.sha
 export class TabListInteractiveSharedComponent {
   @Input() tab!: TabListInteractiveSharedModel;
 
-  @HostListener('click') click(): void {
+  click(): void {
     this.tab.setVisibility(!this.tab.visibility)
   }
 }

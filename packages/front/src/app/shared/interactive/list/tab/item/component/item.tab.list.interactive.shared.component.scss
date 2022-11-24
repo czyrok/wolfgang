@@ -1,0 +1,51 @@
+
+@use '../../../list.interactive.shared.scss';
+
+@use '../../../../../../../scss/lib/property';
+
+.container {
+  display: grid;
+  grid-template-areas: 'a b';
+  grid-template-columns: auto 1fr;
+  align-items: center;
+}
+
+.container.text-only {
+  grid-template-areas: 'a';
+  grid-template-columns: 1fr;
+}
+
+.container.icon-only {
+  grid-template-areas: 'a';
+  grid-template-columns: auto;
+}
+
+.container img {
+  display: flex;
+  width: property.get('size', 'icon');
+  aspect-ratio: 1 / 1;
+  justify-content: center;
+  margin-right: property.get('borderLimit', 'regular');
+}
+
+.container p {
+  border-radius: property.get('borderRadius', 'regular');
+  padding: property.get('borderLimit', 'verySmall');
+  height: fit-content;
+}
+
+.container[data-show-count=true]::after {
+  content: attr(data-count);
+  position: absolute;
+  background-color: yellow;
+  width: property.get('fontSize', 'comment');
+  height: property.get('fontSize', 'comment');
+  display: inline-flex;
+  border-radius: 50%;
+  padding: property.get('borderLimit', 'verySmall');
+  font-size: property.get('fontSize', 'comment');
+  justify-content: center;
+  align-items: center;
+  justify-self: end;
+  align-self: end;
+}

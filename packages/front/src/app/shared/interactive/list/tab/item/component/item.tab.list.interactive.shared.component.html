@@ -1,1 +1,5 @@
-<p>{{ item.name }}</p>
+<div class="container {{ item.imgURL === undefined ? 'text-only' : ''}} {{ isIconOnly ? 'icon-only' : ''}}"
+  [attr.data-show-count]="item.count > -1 ? 'true' : ''" [attr.data-count]="item.count">
+  <img *ngIf="item.imgURL !== undefined" src="{{ item.imgURL }}" alt="">
+  <p *ngIf="!isIconOnly">{{ item.name }}</p>
+</div>

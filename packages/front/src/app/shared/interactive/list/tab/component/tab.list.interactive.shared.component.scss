@@ -1,0 +1,24 @@
+@use '../../list.interactive.shared.scss';
+
+@use '../../../../../../scss/lib/property';
+
+@use '~scss-toolkit/src/mixin/theme';
+
+.container {
+  border-radius: property.get('borderRadius', 'regular');
+  padding: property.get('borderLimit', 'verySmall');
+
+  @include theme.themeHandler(false, 'list', 'tab') {
+    background-color: theme.get('background');
+  }
+}
+
+.container h1 {
+  cursor: pointer;
+}
+
+.container.icon-only .list {
+  display: flex;
+  column-gap: property.get('borderLimit', 'small');
+  row-gap: property.get('borderLimit', 'small');
+}

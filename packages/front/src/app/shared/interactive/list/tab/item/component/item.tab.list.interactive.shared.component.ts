@@ -8,6 +8,7 @@ import { ItemTabListInteractiveSharedModel } from '../model/item.tab.list.intera
 })
 export class ItemTabListInteractiveSharedComponent {
   @Input() item!: ItemTabListInteractiveSharedModel;
+  @Input() isIconOnly!: boolean
 
   @HostListener('click') click(): void {
     if (!this.item.isDisabled) this.item.callBack()

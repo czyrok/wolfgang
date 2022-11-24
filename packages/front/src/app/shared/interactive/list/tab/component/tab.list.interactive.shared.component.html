@@ -1,4 +1,8 @@
-<h1>{{ tab.title }}</h1>
-<div *ngFor="let item of tab.itemList">
-    <app-shared-interactive-list-tab-item [item]="item"></app-shared-interactive-list-tab-item>
+<div class="container {{ tab.isIconOnly ? 'icon-only' : '' }}">
+  <h1 (click)="click()">{{ tab.title }}</h1>
+  <div class="list" *ngIf="tab.visibility">
+    <div class="item" *ngFor="let item of tab.itemList">
+        <app-shared-interactive-list-tab-item [item]="item" [isIconOnly]="tab.isIconOnly"></app-shared-interactive-list-tab-item>
+    </div>
+  </div>
 </div>
