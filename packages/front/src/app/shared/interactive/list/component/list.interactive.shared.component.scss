@@ -15,3 +15,7 @@
     background-color: theme.get('background');
   }
 }
+
+.container .tab:not(:first-child) {
+  margin-top: property.get('borderLimit', 'verySmall');
+}

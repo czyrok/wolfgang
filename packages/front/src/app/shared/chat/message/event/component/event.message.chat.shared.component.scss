@@ -12,7 +12,7 @@
 .container span {
   font-size: 25px;
   display: flex;
-  width: 35px;
+  width: property.get('size', 'icon');
   aspect-ratio: 1 / 1;
   justify-content: center;
   align-items: center;

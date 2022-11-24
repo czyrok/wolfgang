@@ -12,7 +12,7 @@
 
 .container img {
   display: flex;
-  width: 35px;
+  width: property.get('size', 'icon');
   aspect-ratio: 1 / 1;
   justify-content: center;
   margin-right: property.get('borderLimit', 'regular');
