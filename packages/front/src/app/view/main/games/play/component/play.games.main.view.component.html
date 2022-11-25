@@ -1,10 +1,20 @@
 <section>
-  <app-shared-interactive-button icofont="home" link="/"></app-shared-interactive-button>
-  <app-shared-label text="00:00" icofont="hour-glass"></app-shared-label>
-  <app-shared-interactive-button text="Composition"></app-shared-interactive-button>
-  <div>Chat</div>
-  <app-shared-interactive-text-bar icofont="search-2"></app-shared-interactive-text-bar>
+  <div class="button-container">
+    <div>
+      <app-shared-interactive-button icofont="home" link="/"></app-shared-interactive-button>
 
-  <br>
-  <app-view-main-games-play-rules></app-view-main-games-play-rules>
+      <app-shared-label text="00:00" icofont="hour-glass"></app-shared-label>
+    </div>
+
+    <app-shared-interactive-button text="Composition"></app-shared-interactive-button>
+  </div>
+
+  <div class="chat-container">
+    <app-shared-chat></app-shared-chat>
+
+    <app-shared-interactive-text-bar icofont="search-2"></app-shared-interactive-text-bar>
+
+    <app-view-main-games-play-rules *ngIf="false"></app-view-main-games-play-rules>
+  </div>
+  <div></div>
 </section>

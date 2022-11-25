@@ -1,0 +1,21 @@
+section {
+    display: grid;
+    grid-template-areas: "a b"
+        "c b";
+    grid-template-columns: 1fr 400px;
+    grid-template-rows: auto 1fr;
+}
+
+.button-container {
+    display: grid;
+    grid-template-areas: "a b";
+    grid-template-columns: 1fr auto;
+}
+
+.chat-container {
+    grid-area: b;
+    display: grid;
+    grid-template-areas: "a"
+        "b";
+    grid-template-rows: 1fr auto;
+}
