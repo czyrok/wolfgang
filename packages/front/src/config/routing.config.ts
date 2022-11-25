@@ -17,6 +17,8 @@ import { ProfileMainViewComponent } from 'src/app/view/main/profile/component/pr
 import { HomeProfileMainViewComponent } from 'src/app/view/main/profile/home/component/home.profile.main.view.component'
 import { SkinCustomizationProfileMainViewComponent } from 'src/app/view/main/profile/skin-customization/component/skin-customization.profile.main.view.component'
 
+import { NotFoundHomeMainViewComponent } from 'src/app/view/main/home/not-found/component/not-found.home.main.view.component'
+
 
 export const routes: Routes = [
     {
@@ -25,6 +27,7 @@ export const routes: Routes = [
             { path: '', component: DefaultHomeMainViewComponent },
             { path: 'log-in', component: LogInHomeMainViewComponent },
             { path: 'register', component: RegisterHomeMainViewComponent },
+            { path: '404', component: NotFoundHomeMainViewComponent },
           ]},
           { path: 'games', component: GamesMainViewComponent, children: [
             { path: '', component: HomeGamesMainViewComponent },
@@ -36,8 +39,7 @@ export const routes: Routes = [
             { path: 'skin-customization', component: SkinCustomizationProfileMainViewComponent },
           ] },
           { path: 'help', component: HelpMainViewComponent },
+          { path: '**', redirectTo: '404', pathMatch: 'full' },
         ]
       },
-      //{ path: '404', component: NotFoundViewComponent },
-      //{ path: '**', redirectTo: '404', pathMatch: 'full' }
 ]
