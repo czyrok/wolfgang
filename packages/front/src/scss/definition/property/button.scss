@@ -28,6 +28,29 @@
             padding: property.get('borderLimit', 'small') + property.get('borderLimit', 'verySmall');
         }
 
+        @include element.defineProperty('::after') {
+            display: none;
+        }
+
+        @include element.createSubsection('show-after=true') {
+            @include element.defineProperty('::after') {
+                display: block;
+                position: absolute;
+                width: property.get('fontSize', 'comment');
+                height: property.get('fontSize', 'comment');
+                display: inline-flex;
+                border-radius: 50%;
+                padding: property.get('borderLimit', 'verySmall');
+                font-size: property.get('fontSize', 'comment');
+                justify-content: center;
+                align-items: center;
+                justify-self: end;
+                align-self: start;
+                margin-right: -1 * property.get('fontSize', 'comment') / 2;
+                margin-top: -1 * property.get('fontSize', 'comment') / 2;
+            }
+        }
+
         @include element.createSubsection('important') {
             @include element.defineContent() {
                 font-size: property.get('fontSize', 'entryElement', 'important');

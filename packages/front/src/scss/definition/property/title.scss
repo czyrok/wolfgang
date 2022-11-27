@@ -3,25 +3,40 @@
 @use '../../lib/property';
 
 @include element.createElement('h1') {
-    @include element.defineContent() {
-        font-family: property.get('font', 'important') !important;
-        font-weight: bold;
-        font-size: property.get('fontSize', 'title', 'h1');
+    @include element.createSubsection('font') {
+        @include element.setAttrAccentContent() {
+            text-decoration: underline;
+        }
+
+        @include element.defineContent() {
+            font-family: property.get('font', 'important') !important;
+            font-size: property.get('fontSize', 'title', 'h1');
+        }
     }
 }
 
 @include element.createElement('h2') {
-    @include element.defineContent() {
-        font-family: property.get('font', 'important') !important;
-        font-weight: bold;
-        font-size: property.get('fontSize', 'title', 'h2');
+    @include element.createSubsection('font') {
+        @include element.setAttrAccentContent() {
+            text-decoration: underline;
+        }    
+
+        @include element.defineContent() {
+            font-family: property.get('font', 'important') !important;
+            font-size: property.get('fontSize', 'title', 'h2');
+        }
     }
 }
 
 @include element.createElement('h3') {
-    @include element.defineContent() {
-        font-family: property.get('font', 'important') !important;
-        font-weight: bold;
-        font-size: property.get('fontSize', 'title', 'h3');
+    @include element.createSubsection('font') {
+        @include element.setAttrAccentContent() {
+            text-decoration: underline;
+        }
+
+        @include element.defineContent() {
+            font-family: property.get('font', 'important') !important;
+            font-size: property.get('fontSize', 'title', 'h3');
+        }
     }
 }

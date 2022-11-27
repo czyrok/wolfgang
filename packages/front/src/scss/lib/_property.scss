@@ -14,21 +14,21 @@ $_map: (
     fontSize: (
         regular: 20px,
         title: (
-            h1: 34px,
-            h2: 32px,
-            h3: 29px
+            h1: 29px,
+            h2: 27px,
+            h3: 24px
         ),
         comment: 10px,
         date: 15px,
         entryElement: (
             regular: 23px,
-            important: 30px,
+            important: 28px,
             action: 30px
         )
     ),
     borderRadius: (
         regular: 8px,
-        rounded: 3em
+        rounded: 23px
     ),
     transition: (
         short: 0.12s,
@@ -42,6 +42,7 @@ $_map: (
         big: 20px
     ),
     size: (
+        aside: 415px,
         nav: (
             self: 70px,
             logo: 50px
@@ -52,7 +53,10 @@ $_map: (
         ),
         border: 3px,
         outline: 2px,
-        icon: 35px
+        img: (
+            item: 50px,
+            icon: 35px
+        )
     ),
     opacity: (
         placeholder: 0.2,

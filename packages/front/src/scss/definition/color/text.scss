@@ -1,0 +1,122 @@
+@use '~scss-toolkit/src/mixin/element';
+@use '~scss-toolkit/src/mixin/theme';
+
+@include element.createElement('h1') {
+    @include element.createSubsection('color') {
+        @include element.setAttrAccentContent() {
+            @include theme.themeHandler(true, 'accent', 'text') {
+                color: theme.get('title');
+            }
+        }
+
+        @include element.defineContent() {
+            @include theme.themeHandler(false, 'text') {
+                color: theme.get('title');
+            }
+        }
+
+        @include element.createSubsection('light') {
+            @include element.defineContent() {
+                @include theme.themeHandler(true, 'text', 'light') {
+                    color: theme.get('title');
+                }
+            }
+        }
+
+        @include element.createSubsection('dark') {
+            @include element.defineContent() {
+                @include theme.themeHandler(true, 'text', 'dark') {
+                    color: theme.get('title');
+                }
+            }
+        }
+    }
+}
+
+@include element.createElement('h2') {
+    @include element.createSubsection('color') {
+        @include element.setAttrAccentContent() {
+            @include theme.themeHandler(true, 'accent', 'text') {
+                color: theme.get('title');
+            }
+        }
+
+        @include element.defineContent() {
+            @include theme.themeHandler(false, 'text') {
+                color: theme.get('title');
+            }
+        }
+
+        @include element.createSubsection('light') {
+            @include element.defineContent() {
+                @include theme.themeHandler(true, 'text', 'light') {
+                    color: theme.get('title');
+                }
+            }
+        }
+
+        @include element.createSubsection('dark') {
+            @include element.defineContent() {
+                @include theme.themeHandler(true, 'text', 'dark') {
+                    color: theme.get('title');
+                }
+            }
+        }
+    }
+}
+
+@include element.createElement('h3') {
+    @include element.createSubsection('color') {
+        @include element.setAttrAccentContent() {
+            @include theme.themeHandler(true, 'accent', 'text') {
+                color: theme.get('title');
+            }
+        }
+
+        @include element.defineContent() {
+            @include theme.themeHandler(false, 'text') {
+                color: theme.get('title');
+            }
+        }
+
+        @include element.createSubsection('light') {
+            @include element.defineContent() {
+                @include theme.themeHandler(true, 'text', 'light') {
+                    color: theme.get('title');
+                }
+            }
+        }
+
+        @include element.createSubsection('dark') {
+            @include element.defineContent() {
+                @include theme.themeHandler(true, 'text', 'dark') {
+                    color: theme.get('title');
+                }
+            }
+        }
+    }
+}
+
+@include element.createElement('text') {
+    @include element.defineContent() {
+        @include theme.themeHandler(false, 'text') {
+            color: theme.get('regular');
+        }
+    }
+
+    @include element.createSubsection('light') {
+        @include element.defineContent() {
+            @include theme.themeHandler(true, 'text', 'light') {
+                color: theme.get('regular');
+            }
+        }
+    }
+
+    @include element.createSubsection('dark') {
+        @include element.defineContent() {
+            @include theme.themeHandler(true, 'text', 'dark') {
+                color: theme.get('regular');
+            }
+        }
+    }
+}

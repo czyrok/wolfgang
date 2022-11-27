@@ -3,6 +3,36 @@
 @use '~scss-toolkit/src/mixin/theme' with (
     $_map: (
         'same': (
+            'force': (
+                'red': color.get(inform, red, a),
+                'blue': color.get(accent, blue, medium)
+            ),
+            'alert': (
+                'inform': (
+                    'background': color.get(inform, blue, a),
+                    'color': color.get(base, 10),
+                    'icon': (
+                        'background': color.get(inform, blue, b),
+                        'color': color.get(base, 10)
+                    )
+                ),
+                'warning': (
+                    'background': color.get(inform, yellow, a),
+                    'color': color.get(base, 10),
+                    'icon': (
+                        'background': color.get(inform, yellow, b),
+                        'color': color.get(base, 10)
+                    )
+                ),
+                'danger': (
+                    'background': color.get(inform, red, a),
+                    'color': color.get(base, 10),
+                    'icon': (
+                        'background': color.get(inform, red, b),
+                        'color': color.get(base, 10)
+                    )
+                )
+            ),
             'entryElement': (
                 'background': (
                     'regular': color.get(accent, blue, medium),
@@ -11,6 +41,17 @@
                 'font': (
                     'regular': color.get(base, 40),
                     'active': color.get(base, 50)
+                )
+            ),
+            'isolatedElement': (
+                'title': (
+                    'background': color.get(base, 00),
+                    'color': color.get(base, 50)
+                ),
+                'background': color.get(base, 10),
+                'item': (
+                    'background': color.get(base, 30),
+                    'color': color.get(base, 10)
                 )
             ),
             'accent': (
@@ -23,7 +64,38 @@
                         'regular': color.get(base, 10),
                         'active': color.get(base, 50)
                     )
+                ),
+                'text': (
+                    'title': color.get(accent, orange, medium)
                 )
+            ),
+            'text': (
+                'light': (
+                    'regular': color.get(base, 20),
+                    'title': color.get(base, 10)
+                ),
+                'dark': (
+                    'regular': color.get(base, 40),
+                    'title': color.get(base, 50)
+                )
+            )
+        ),
+        'light': (
+            'page': (
+                'background': color.get(base, 50)
+            ),
+            'text': (
+                'regular': color.get(base, 20),
+                'title': color.get(base, 10)
+            )
+        ),
+        'dark': (
+            'page': (
+                'background': color.get(accent, blue, dark)
+            ),
+            'text': (
+                'regular': color.get(base, 40),
+                'title': color.get(base, 50)
             )
         )
     )

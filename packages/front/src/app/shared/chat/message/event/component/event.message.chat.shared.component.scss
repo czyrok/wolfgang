@@ -1,7 +1,8 @@
-@use '../../../chat.shared.scss';
+@use '../../../../../app.scss';
 
 @use '../../../../../../scss/lib/property';
-@use '../../../../../../scss/lib/color';
+
+@use '~scss-toolkit/src/mixin/theme';
 
 .container {
   display: grid;
@@ -12,18 +13,26 @@
 .container span {
   font-size: 25px;
   display: flex;
-  width: property.get('size', 'icon');
+  width: property.get('size', 'img', 'icon');
   aspect-ratio: 1 / 1;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
   margin-right: property.get('borderLimit', 'regular');
-  background-color: color.get(inform, blue, b);
+
+  @include theme.themeHandler(true, 'alert', 'inform', 'icon') {
+    background-color: theme.get('background');
+    color: theme.get('color');
+  }
 }
 
 .container p {
   border-radius: property.get('borderRadius', 'regular');
-  background-color: color.get(inform, blue, a);
   padding: property.get('borderLimit', 'verySmall');
   height: fit-content;
+
+  @include theme.themeHandler(true, 'alert', 'inform') {
+    background-color: theme.get('background');
+    color: theme.get('color');
+  }
 }
