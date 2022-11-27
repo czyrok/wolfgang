@@ -82,7 +82,10 @@
         ),
         'light': (
             'page': (
-                'background': color.get(base, 50)
+                'background': (
+                    'img': url('~src/asset/img/background/light.svg'),
+                    'color': color.get(base, 50)
+                )
             ),
             'text': (
                 'regular': color.get(base, 20),
@@ -91,7 +94,10 @@
         ),
         'dark': (
             'page': (
-                'background': color.get(accent, blue, dark)
+                'background': (
+                    'img': url('~src/asset/img/background/dark.svg'),
+                    'color': color.get(accent, blue, dark)
+                )
             ),
             'text': (
                 'regular': color.get(base, 40),

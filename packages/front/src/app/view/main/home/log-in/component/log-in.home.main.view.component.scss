@@ -6,17 +6,8 @@
 
 section {
     display: flex;
-    background: url('~src/asset/img/background/light.svg') repeat-x;
-    background-position: bottom;
     justify-content: flex-end;
     align-items: center;
-}
-
-@media (prefers-color-scheme: dark) {
-    section {
-        background: url('~src/asset/img/background/dark.svg') repeat-x;
-        background-position: bottom;
-    }
 }
 
 section .wrapper {
@@ -27,6 +18,7 @@ section .wrapper {
     grid-template-areas:
         'a'
         'b';
+    box-shadow: property.get('shadow', 'box', 'regular');
 
     @include theme.themeHandler(true, 'isolatedElement') {
         background-color: theme.get('background');

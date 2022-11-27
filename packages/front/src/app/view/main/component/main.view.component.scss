@@ -28,18 +28,16 @@
     overflow-x: hidden;
     overflow-y: auto;
 
-    @include theme.themeHandler(false, 'page') {
-        background-color: theme.get('background');
+    @include theme.themeHandler(false, 'page', 'background') {
+        background: theme.get('img') repeat-x;
+        background-position: bottom;
+        background-color: theme.get('color');
     }
 }
 
 .container ::ng-deep main:not(:has(section)) {
     box-sizing: border-box;
     padding: property.get('borderLimit', 'big');
-
-    @include theme.themeHandler(false, 'page') {
-        background-color: theme.get('background');
-    }
 }
 
 .container ::ng-deep section {

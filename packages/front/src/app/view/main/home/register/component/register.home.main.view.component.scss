@@ -27,6 +27,7 @@ section .wrapper {
     grid-template-areas:
         'a'
         'b';
+    box-shadow: property.get('shadow', 'box', 'regular');
 
     @include theme.themeHandler(true, 'isolatedElement') {
         background-color: theme.get('background');
