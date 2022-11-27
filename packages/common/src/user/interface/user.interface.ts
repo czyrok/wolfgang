@@ -4,4 +4,5 @@ export interface UserInterface {
     password: string
     gamePointCount: number
     level: number
+    socketId?: string
 }

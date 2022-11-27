@@ -27,6 +27,10 @@ export class UserModel extends DocumentModel implements UserInterface {
     @Expose()
     @prop({ required: true, default: 0 })
     level!: number
+
+    @Expose()
+    @prop()
+    socketId!: string
 }
 
 export const MessageModelDocument = getModelForClass(UserModel)
