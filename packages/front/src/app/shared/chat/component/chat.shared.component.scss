@@ -1,4 +1,4 @@
-@use '../chat.shared.scss';
+@use '../../../app.scss';
 
 @use '../../../../scss/lib/property';
 
@@ -10,8 +10,9 @@
   border-radius: property.get('borderRadius', 'rounded');
   padding: property.get('borderLimit', 'regular');
   box-sizing: border-box;
+  overflow: auto;
 
-  @include theme.themeHandler(false, 'chat') {
+  @include theme.themeHandler(true, 'isolatedElement') {
     background-color: theme.get('background');
   }
 }

@@ -1,4 +1,4 @@
-@use '../../../chat.shared.scss';
+@use '../../../../../app.scss';
 
 @use '../../../../../../scss/lib/property';
 
@@ -12,7 +12,7 @@
 
 .container img {
   display: flex;
-  width: property.get('size', 'icon');
+  width: property.get('size', 'img', 'icon');
   aspect-ratio: 1 / 1;
   justify-content: center;
   margin-right: property.get('borderLimit', 'regular');
@@ -23,7 +23,8 @@
   padding: property.get('borderLimit', 'verySmall');
   height: fit-content;
 
-  @include theme.themeHandler(false, 'chat', 'message') {
+  @include theme.themeHandler(true, 'isolatedElement', 'item') {
+    color: theme.get('color');
     background-color: theme.get('background');
   }
 }

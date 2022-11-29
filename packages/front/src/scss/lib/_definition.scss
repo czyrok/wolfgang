@@ -14,7 +14,7 @@
         (
             'name': 'rounded',
             'value': property.get('borderRadius', 'rounded'),
-            'diff': 0em
+            'diff': 3px
         )
     ) {
         @content;

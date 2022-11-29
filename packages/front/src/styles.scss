@@ -8,6 +8,7 @@
 @forward 'scss/definition/property/form';
 @forward 'scss/definition/color/label';
 @forward 'scss/definition/property/label';
+@forward 'scss/definition/color/text';
 @forward 'scss/definition/property/title';
 @forward 'scss/definition/property/misc';
 
@@ -17,15 +18,19 @@
     font-display: swap;
 }
 
-
 @font-face {
     font-family: 'rubik';
     src: url('./asset/font/rubik/rubik-variable-font-weight.ttf');
     font-display: swap;
 }
 
-* {
-    transition: property.get('transition', 'regular');
+*:has(*) {
+    transition-duration: property.get('transition', 'regular');
+    transition-property: background-color, color;
+}
+
+:not(*) *:not(:has(*)) {
+    transition-duration: property.get('transition', 'regular');
     transition-property: background-color, color;
 }
 
@@ -39,6 +44,7 @@ body {
 
 body {
     font-family: property.get('font', 'regular');
+    font-size: property.get('fontSize', 'regular');
 }
 
 ul {

@@ -1,13 +1,15 @@
-
 @use '../../../list.interactive.shared.scss';
 
 @use '../../../../../../../scss/lib/property';
+
+@use '~scss-toolkit/src/mixin/theme';
 
 .container {
   display: grid;
   grid-template-areas: 'a b';
   grid-template-columns: auto 1fr;
   align-items: center;
+  position: sticky;
 }
 
 .container.text-only {
@@ -21,31 +23,10 @@
 }
 
 .container img {
-  display: flex;
-  width: property.get('size', 'icon');
-  aspect-ratio: 1 / 1;
+  width: property.get('size', 'img', 'item');
   justify-content: center;
-  margin-right: property.get('borderLimit', 'regular');
 }
 
-.container p {
-  border-radius: property.get('borderRadius', 'regular');
-  padding: property.get('borderLimit', 'verySmall');
-  height: fit-content;
-}
-
-.container[data-show-count=true]::after {
+.container::after {
   content: attr(data-count);
-  position: absolute;
-  background-color: yellow;
-  width: property.get('fontSize', 'comment');
-  height: property.get('fontSize', 'comment');
-  display: inline-flex;
-  border-radius: 50%;
-  padding: property.get('borderLimit', 'verySmall');
-  font-size: property.get('fontSize', 'comment');
-  justify-content: center;
-  align-items: center;
-  justify-self: end;
-  align-self: end;
 }

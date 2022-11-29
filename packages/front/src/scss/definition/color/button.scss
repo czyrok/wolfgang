@@ -30,6 +30,19 @@
 
             @include element.definePropertyActive() {
                 color: theme.get('font', 'active');
+
+                @include element.createSubsection('show-after=true') {
+                    @include element.defineProperty('::after') {
+                        color: theme.get('font', 'regular');
+                    }
+                }
+            }
+
+            @include element.createSubsection('show-after=true') {
+                @include element.defineProperty('::after') {
+                    color: theme.get('font', 'regular');
+                    background-color: theme.get('background', 'active');
+                }
             }
         }
 

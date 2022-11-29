@@ -5,20 +5,33 @@
 @use '~scss-toolkit/src/mixin/theme';
 
 .container {
-  border-radius: property.get('borderRadius', 'regular');
-  padding: property.get('borderLimit', 'verySmall');
+  border-radius: property.get('borderRadius', 'rounded');
+  padding: property.get('borderLimit', 'regular');
 
-  @include theme.themeHandler(false, 'list', 'tab') {
+  @include theme.themeHandler(true, 'isolatedElement', 'item') {
     background-color: theme.get('background');
   }
 }
 
-.container h1 {
+.container .top {
+  display: grid;
+  grid-template-areas: 'a b';
+  grid-template-columns: 1fr auto;
+  align-items: center;
   cursor: pointer;
+
+  @include theme.themeHandler(true, 'isolatedElement', 'item') {
+    color: theme.get('color');
+  }
 }
 
-.container.icon-only .list {
+.container:not(.icon-only) .items {
+  display: flex;
+  flex-direction: column;
+  row-gap: property.get('borderLimit', 'small');
+}
+
+.container.icon-only .items {
   display: flex;
   column-gap: property.get('borderLimit', 'small');
-  row-gap: property.get('borderLimit', 'small');
 }
