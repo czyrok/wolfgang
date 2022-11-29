@@ -6,5 +6,5 @@ import { Component, Input } from '@angular/core'
   styleUrls: ['./avatar.shared.component.scss']
 })
 export class AvatarSharedComponent {
-  @Input() username!: string
+  @Input() id!: string
 }
