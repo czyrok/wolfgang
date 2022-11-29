@@ -29,7 +29,7 @@
     overflow-y: auto;
 
     @include theme.themeHandler(false, 'page', 'background') {
-        background: theme.get('img') repeat-x;
+        background: url('../../../../asset/' + theme.get('img')) repeat-x;
         background-position: bottom;
         background-color: theme.get('color');
     }
