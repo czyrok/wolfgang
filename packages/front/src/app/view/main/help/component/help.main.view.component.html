@@ -1,16 +1,74 @@
 <main>
-  <div>
-    <div>bar de recherche</div>
-    <div>
-      <h1>carte de base</h1>
+  <section>
+
+    <div class="wrapper">
+      <h2 data-css-h2 data-css-font data-css-color data-css-accent>Aide</h2>
+      <div class="super-container">
+        <div class="container-1">
+          <div data-css-text-bar data-css-label data-css-border-radius="rounded">
+            <input type="text" placeholder="Rechercher une carte" data-css-input>
+            <div class="line" data-css-underline>
+              <div data-css-underline></div>
+            </div>
+            <span class="icofont-search-2" data-css-icofont></span>
+          </div>
+
+          <app-shared-interactive-list [list]="list"></app-shared-interactive-list>
+        </div>
+
+        <div class="container-2">
+          <img src="titre-carte.jpg" data-css-square>
+
+          <div class="title">
+            <h3 data-css-h3 data-css-font>titre carte</h3>
+          </div>
+
+          <div class="desc">
+            <p>decription carte</p>
+          </div>
+        </div>
+      </div>
     </div>
-    <div>
-      <h1>carte joueur</h1>
-    </div>
-  </div>
-  <div>
-    <img src="titre-carte.jpg">
-    <h1>titre carte</h1>
-    <p>decription carte</p>
-  </div>
+  </section>
 </main>
+
+<!-- <section>
+  <div class="wrapper">
+    <h2 data-css-h2 data-css-font data-css-color data-css-accent>Connexion</h2>
+
+    <form action="" method="post">
+      <div class="field">
+        <label for="username" data-css-h3 data-css-font>Pseudo</label>
+
+        <div data-css-text-bar data-css-label data-css-border-radius="rounded">
+          <input id="username" type="text" placeholder="Saisissez votre pseudo" data-css-input>
+          <div class="line" data-css-underline>
+            <div data-css-underline></div>
+          </div>
+          <span class="icofont-user" data-css-icofont></span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="password" data-css-h3 data-css-font>Mot de passe</label>
+
+        <div data-css-text-bar data-css-label data-css-border-radius="rounded">
+          <input id="password" type="password" placeholder="Saisissez votre mot de passe" data-css-input>
+          <div class="line" data-css-underline>
+            <div data-css-underline></div>
+          </div>
+          <span class="icofont-ui-password" data-css-icofont></span>
+        </div>
+      </div>
+
+      <div class="field">
+        <app-shared-interactive-button link="/" text="Se connecter" [accent]="true" [important]="true">
+        </app-shared-interactive-button>
+      </div>
+
+      <div class="field">
+        <a [routerLink]="['/register']" data-css-link>S'inscrire</a>
+      </div>
+    </form>
+  </div>
+</section> -->
