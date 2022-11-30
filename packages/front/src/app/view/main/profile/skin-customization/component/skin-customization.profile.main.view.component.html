@@ -1,17 +1,22 @@
 <section>
-  <div>
-    <div>
-      <p>hat</p>
+  <div class="wrapper">
+    <h2 data-css-h2 data-css-font data-css-color data-css-accent>Personnalisation du skin</h2>
+    <div class="container">
+      <div class="part-1">
+        <div class="element-1">
+          <div>
+            <app-shared-interactive-list [list]="list"></app-shared-interactive-list>
+          </div>
+        </div>
+        <div class="element-2">
+          <h1>pseudo</h1>
+          <app-shared-avatar></app-shared-avatar>
+        </div>
+      </div>
+      <div class="part-2">
+        <app-shared-interactive-button text="Annuler"></app-shared-interactive-button>
+        <app-shared-interactive-button text="Valider" [accent]="true"></app-shared-interactive-button>
+      </div>
     </div>
-    <div>
-      <p>head</p>
-    </div>
-    <div>
-      <p>body</p>
-    </div>
-  </div>
-  <div>
-    <h1>pseudo</h1>
-    <p>avatar</p>
   </div>
 </section>

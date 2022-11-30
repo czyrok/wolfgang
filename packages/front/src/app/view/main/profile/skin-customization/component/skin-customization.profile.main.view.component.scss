@@ -1,0 +1,75 @@
+@use '../../../../../app.scss';
+
+@use '../../../../../../scss/lib/property';
+
+@use '~scss-toolkit/src/mixin/theme';
+
+
+section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+section .wrapper {
+    width: property.get('size', 'page');
+    border-radius: property.get('borderRadius', 'rounded');
+    overflow: hidden;
+    display: grid;
+    grid-template-areas:
+        'a'
+        'b';
+    box-shadow: property.get('shadow', 'box', 'regular');
+
+    @include theme.themeHandler(true, 'isolatedElement') {
+        background-color: theme.get('background');
+    }
+}
+
+section .wrapper h2 {
+    padding: property.get('borderLimit', 'regular');
+    border-bottom-left-radius: property.get('borderRadius', 'rounded');
+    border-bottom-right-radius: property.get('borderRadius', 'rounded');
+    text-align: center;
+    margin-bottom: -1 * property.get('borderRadius', 'rounded');
+    z-index: 1;
+
+    @include theme.themeHandler(true, 'isolatedElement', 'title') {
+        background-color: theme.get('background');
+    }
+}
+
+section .wrapper .container {
+    display: grid;
+    grid-template-areas: 'a'
+    'b';
+    padding: property.get('borderLimit', 'regular');
+    padding-top: property.get('borderLimit', 'regular') + property.get('borderRadius', 'rounded');
+    row-gap: property.get('borderLimit', 'big');
+}
+
+section .wrapper .container .part-1 {
+    display: grid;
+    grid-template-areas: 'a b';
+    grid-template-columns: 1fr auto;
+    column-gap: property.get('borderLimit', 'big');
+}
+
+section .wrapper .container .part-1 .element-1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+section .wrapper .container .part-1 .element-2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+section .wrapper .container .part-2 {
+    display: flex;
+    justify-content: space-evenly;
+}
