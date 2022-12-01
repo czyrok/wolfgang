@@ -1,15 +1,21 @@
 <section>
-  <div>
-    <div>
-      <h1>Pseudo</h1>
-      <div>
-        <p>Avatar du personnage</p>
+  <div class="container-1">
+    <app-shared-interactive-button link="./skin-customization" text="Personnaliser son skin" [accent]="true">
+    </app-shared-interactive-button>
+  </div>
+  <div class="container-2">
+    <div class="wrapper">
+      <h2 data-css-h2 data-css-font data-css-color data-css-accent>Profil</h2>
+      <div class="sub">
+        <h3>Pseudo</h3>
+        <div>
+          <app-shared-avatar></app-shared-avatar>
+        </div>
+        <div class="element">
+          <p>level du joueur</p>
+          <p>point(s) du joueur</p>
+        </div>
       </div>
-      <p>level du joueur</p>
-      <p>point(s) du joueur</p>
-    </div>
-    <div>
-      <app-shared-interactive-button link="./skin-customization" text="Personnaliser son skin" [accent]="true"></app-shared-interactive-button>
     </div>
   </div>
 </section>
