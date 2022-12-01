@@ -1,4 +1,4 @@
-import { ComponentRef, Renderer2, ViewContainerRef } from '@angular/core'
+import { ChangeDetectorRef, ComponentRef, Renderer2, ViewContainerRef } from '@angular/core'
 
 import { AvatarSharedComponent } from 'src/app/shared/avatar/component/avatar.shared.component'
 
@@ -37,18 +37,22 @@ export class PlaceCircleAvatarPlayGamesMainViewModel {
   }
 
   public update(): void {
-    this.renderer.setStyle(this.componentRef.location.nativeElement, 'top', this.y)
-    this.renderer.setStyle(this.componentRef.location.nativeElement, 'left', this.x)
+    this.renderer.setStyle(this.componentRef.location.nativeElement, 'top', this.y + 'px')
+    this.renderer.setStyle(this.componentRef.location.nativeElement, 'left', this.x + 'px')
+    this.renderer.setStyle(this.componentRef.location.nativeElement, 'position', 'absolute')
+    this.renderer.setStyle(this.componentRef.location.nativeElement, 'transform', 'translate(-50%, -50%)')
   }
 
   public destroy(): void {
     this.componentRef.destroy()
   }
 
-  public static create(renderer: Renderer2, viewContainerRef: ViewContainerRef, id: string): PlaceCircleAvatarPlayGamesMainViewModel {
+  public static create(renderer: Renderer2, changeDetectorRef: ChangeDetectorRef, viewContainerRef: ViewContainerRef, id: string): PlaceCircleAvatarPlayGamesMainViewModel {
     let componentRef: ComponentRef<AvatarSharedComponent> = viewContainerRef.createComponent(AvatarSharedComponent)
 
     componentRef.instance.id = id
+
+    changeDetectorRef.detectChanges()
 
     return new PlaceCircleAvatarPlayGamesMainViewModel(renderer, componentRef, id)
   }

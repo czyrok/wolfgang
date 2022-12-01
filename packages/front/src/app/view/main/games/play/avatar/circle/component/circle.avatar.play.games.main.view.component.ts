@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostListener, Input, Renderer2, ViewChild, ViewContainerRef } from '@angular/core'
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, Input, Renderer2, ViewChild, ViewContainerRef } from '@angular/core'
 import { AvatarSharedComponent } from 'src/app/shared/avatar/component/avatar.shared.component'
 
 import { CircleAvatarPlayGamesMainViewModel } from '../model/circle.avatar.play.games.main.view.model'
@@ -12,24 +12,32 @@ export class CircleAvatarPlayGamesMainViewComponent implements AfterViewInit {
   avatarsCircle!: CircleAvatarPlayGamesMainViewModel
 
   constructor(
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private changeDetectorRef: ChangeDetectorRef
   ) { }
 
   ngAfterViewInit(): void {
-    this.avatarsCircle = new CircleAvatarPlayGamesMainViewModel(this.renderer, this.viewContainerRefTarget, this.elementRefTarget)
+    this.avatarsCircle = new CircleAvatarPlayGamesMainViewModel(this.renderer, this.changeDetectorRef, this.viewContainerRefTarget, this.elementRefTarget)
 
-    this.avatarsCircle.addPlayer('maxime')
-    this.avatarsCircle.addPlayer('maxime2')
-    this.avatarsCircle.addPlayer('maxime3')
-    this.avatarsCircle.addPlayer('maxime4')
+    this.avatarsCircle.setPlayers([
+      'maxime',
+      'maxime2',
+      'maxime3',
+      'maxime3',
+      'maxime3',
+      'maxime3',
+      'maxime3'
+    ])
+
+    this.avatarsCircle.update()
   }
 
   @Input() id!: string;
 
-  @ViewChild('target') viewContainerRefTarget!: ViewContainerRef
+  @ViewChild('target', { read: ViewContainerRef }) viewContainerRefTarget!: ViewContainerRef
   @ViewChild('widthTarget') elementRefTarget!: ElementRef<HTMLElement>
 
-  @HostListener('resize') resize(): void {
+  @HostListener('window:resize') resize(): void {
     this.avatarsCircle.update()
   }
 }
