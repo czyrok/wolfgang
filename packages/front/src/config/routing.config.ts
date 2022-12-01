@@ -2,8 +2,12 @@ import { Routes } from '@angular/router'
 
 import { MainViewComponent } from 'src/app/view/main/component/main.view.component'
 import { HomeMainViewComponent } from 'src/app/view/main/home/component/home.main.view.component'
-import { CardsProposalMainViewComponent } from 'src/app/view/main/cards-proposal/component/cards-proposal.main.view.component'
 import { HelpMainViewComponent } from 'src/app/view/main/help/component/help.main.view.component'
+
+import { CardsProposalMainViewComponent } from 'src/app/view/main/cards-proposal/component/cards-proposal.main.view.component'
+import { DefaultCardsProposalMainViewComponent } from 'src/app/view/main/cards-proposal/default/component/default.cards-proposal.main.view.component'
+import { ViewCardsProposalMainViewComponent } from 'src/app/view/main/cards-proposal/view/view.cards-proposal.main.view.component'
+import { AddCardsProposalMainViewComponent } from 'src/app/view/main/cards-proposal/add/component/add.cards-proposal.main.view.component'
 
 import { HomeGamesMainViewComponent } from 'src/app/view/main/games/home/component/home.games.main.view.component'
 import { DefaultHomeMainViewComponent } from 'src/app/view/main/home/default/component/default.home.main.view.component'
@@ -33,7 +37,11 @@ export const routes: Routes = [
             { path: '', component: HomeGamesMainViewComponent },
             { path: 'play', component: PlayGamesMainViewComponent },
           ] },
-          { path: 'cards-proposal', component: CardsProposalMainViewComponent },
+          { path: 'cards-proposal', component: CardsProposalMainViewComponent, children:[
+            { path: '', component: DefaultCardsProposalMainViewComponent },
+            { path: 'view', component: ViewCardsProposalMainViewComponent },
+            { path: 'add', component: AddCardsProposalMainViewComponent },
+          ]},
           { path: 'profile', component: ProfileMainViewComponent, children: [
             { path: '', component: HomeProfileMainViewComponent },
             { path: 'skin-customization', component: SkinCustomizationProfileMainViewComponent },

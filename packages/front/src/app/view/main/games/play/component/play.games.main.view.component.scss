@@ -1,9 +1,12 @@
+@use '../../../../../../scss/lib/property';
+
 section {
     display: grid;
     grid-template-areas: "a b"
         "c b";
-    grid-template-columns: 1fr 400px;
+    grid-template-columns: 1fr property.get('size', 'aside');
     grid-template-rows: auto 1fr;
+    column-gap: property.get('borderLimit', 'regular');
 }
 
 .button-container {
@@ -12,10 +15,17 @@ section {
     grid-template-columns: 1fr auto;
 }
 
+.button-container .left {
+    display: flex;
+    align-items: center;
+    column-gap: property.get('borderLimit', 'regular');
+}
+
 .chat-container {
     grid-area: b;
     display: grid;
     grid-template-areas: "a"
         "b";
-    grid-template-rows: 1fr auto;
+    grid-template-rows: minmax(0, 1fr) min-content;
+    row-gap: property.get('borderLimit', 'regular');
 }

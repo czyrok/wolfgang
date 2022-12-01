@@ -1,4 +1,4 @@
-@use '../../main.view.scss';
+@use '../../../../app.scss';
 
 @use '../../../../../scss/lib/property';
 
@@ -15,7 +15,7 @@ nav {
     padding-bottom: property.get('borderLimit', 'regular');
     box-sizing: border-box;
 
-    @include theme.themeHandler(true, 'nav') {
+    @include theme.themeHandler(true, 'isolatedElement') {
         background-color: theme.get('background');
     }
 }

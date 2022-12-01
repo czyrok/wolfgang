@@ -1,31 +1,96 @@
+@use '../../../../../../app.scss';
+
 @use '../../../../../../../scss/lib/property';
 
+@use '~scss-toolkit/src/mixin/theme';
+
 .container {
+  width: 100%;
+  height: 100%;
+  border-radius: property.get('borderRadius', 'rounded');
+  display: grid;
+  grid-template-areas: "a"
+  "b";
+  grid-template-rows: auto minmax(0, 1fr);
+  overflow: hidden;
+
+  @include theme.themeHandler(true, 'isolatedElement') {
+    background-color: theme.get('background');
+  }
+}
+
+.container h2 {
+  padding: property.get('borderLimit', 'regular');
+  border-bottom-left-radius: property.get('borderRadius', 'rounded');
+  border-bottom-right-radius: property.get('borderRadius', 'rounded');
+  text-align: center;
+  margin-bottom: -1 * property.get('borderRadius', 'rounded');
+  z-index: 1;
+
+  @include theme.themeHandler(true, 'isolatedElement', 'title') {
+    background-color: theme.get('background');
+  }
+}
+
+.container .sub {
+  width: 100%;
+  height: 100%;
   display: grid;
   grid-template-areas:
-    "a"
-    "b";
+    'a'
+    'b';
+  padding: property.get('borderLimit', 'regular');
+  padding-top: property.get('borderLimit', 'regular') + property.get('borderRadius', 'rounded');
+  box-sizing: border-box;
+  align-items: start;
+  grid-template-rows: auto 1fr;
+  row-gap: property.get('borderLimit', 'regular');
+  overflow: auto;
 }
 
-.container .top {
+.container .sub .field {
   display: flex;
   flex-direction: column;
+
+  @include theme.themeHandler(true, 'isolatedElement', 'title') {
+    color: theme.get('color');
+  }
 }
 
-.container .top .balance {
+.container .sub .top {
+  display: flex;
+  flex-direction: column;
+  row-gap: property.get('borderLimit', 'regular');
+}
+
+.container .sub .top .field .button-list {
+  display: flex;
+  column-gap: property.get('borderLimit', 'regular');
+}
+
+.container .sub .top .field .balance {
   display: flex;
   height: 20px;
   border-radius: property.get('borderRadius', 'rounded');
-  background-color: blue;
   overflow: hidden;
+
+  @include theme.themeHandler(true, 'force') {
+    background-color: theme.get('blue');
+  }
 }
 
-.container .top .balance .left {
-  background-color: red;
+.container .sub .top .field .balance .left {
+  @include theme.themeHandler(true, 'force') {
+    background-color: theme.get('red');
+  }
 }
 
-.container .top .balance .cursor {
+.container .sub .top .field .balance .cursor {
   margin-left: -5px;
   width: 10px;
-  background-color: white;
+  border-radius: 50%;
+
+  @include theme.themeHandler(true, 'isolatedElement', 'title') {
+    background-color: theme.get('color');
+  }
 }
