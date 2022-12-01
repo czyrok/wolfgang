@@ -107,5 +107,7 @@
       }
     }
   },
-  "defaultProject": "front"
+  "cli": {
+    "analytics": false
+  }
 }
