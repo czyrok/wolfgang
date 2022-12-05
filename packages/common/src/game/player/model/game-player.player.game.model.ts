@@ -1,8 +1,11 @@
+import { CardPlayerGameModel } from "../card/model/card.player.game.model"
+
 export class GamePlayerPlayerGameModel {
     private _activityDate!: Date
     private _inactivityLevel!: number
     private _isMayor: boolean = false
     private _gamePointAccumulated!: number
+    private _card!: CardPlayerGameModel
 
     public constructor(activityDate: Date, inactivityLevel: number, isMayor: boolean, gamePointAccumulated: number) {
         this._activityDate = activityDate
@@ -27,6 +30,10 @@ export class GamePlayerPlayerGameModel {
         this._gamePointAccumulated = value
     }
 
+    public set card(value: CardPlayerGameModel){
+        this._card = value
+    }
+
     public get activityDate(): Date {
         return this._activityDate
     }
@@ -41,5 +48,9 @@ export class GamePlayerPlayerGameModel {
 
     public get gamePointAccumulated(): number {
         return this._gamePointAccumulated
+    }
+
+    public get card(): CardPlayerGameModel {
+        return this._card
     }
 }
