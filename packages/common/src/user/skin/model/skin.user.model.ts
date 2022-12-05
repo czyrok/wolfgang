@@ -29,7 +29,7 @@ export class SKinUserModel extends DocumentModel implements SkinUserInterface {
 
     @Expose()
     @prop({ required: true, ref: () => CosmeticModel })
-    shoe!: Ref<CosmeticModel>
+    shoes!: Ref<CosmeticModel>
 
     @Expose()
     @prop({ required: true, default: new Date() })

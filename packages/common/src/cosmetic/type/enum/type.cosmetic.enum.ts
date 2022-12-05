@@ -3,5 +3,5 @@ export enum TypeCosmeticEnum {
     HEAD,
     TOP,
     PANTS,
-    SHOE
+    SHOES
 }
