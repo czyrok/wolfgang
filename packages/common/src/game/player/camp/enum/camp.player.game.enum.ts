@@ -1,4 +1,4 @@
-export enum EnumCampPlayerGameModel{
+export enum CampPlayerGameEnum{
     SELF,
     VILLAIN,
     VILLAGER,
