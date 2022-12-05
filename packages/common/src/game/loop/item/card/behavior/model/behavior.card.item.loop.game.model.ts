@@ -1,10 +1,13 @@
 import { CardPlayerGameModel } from '../../../../../player/card/model/card.player.game.model'
+import { ExecuteLoopGameInterface } from '../../../../execute/interface/execute.loop.game.interface'
+import { StrategyBehaviorCardPItemLoopGamesIntefrace } from '../strategy/interface/strategy.behavior.card.item.loop.game.interface'
 
-export class BehaviorCardItemLoopGameModel{
+export class BehaviorCardItemLoopGameModel implements ExecuteLoopGameInterface{
     private _key: string
     private _campHierarchy: number
     private _timer: number
     private _cardList: Array<CardPlayerGameModel>
+    private _cardStrategy: StrategyBehaviorCardPItemLoopGamesIntefrace
 
     public constructor(key: string, campHierarchy: number, timer: number) {
         this._key = key
@@ -28,6 +31,10 @@ export class BehaviorCardItemLoopGameModel{
         this._cardList = value
     }
 
+    public set cardStrategy(value: StrategyBehaviorCardPItemLoopGamesIntefrace) {
+        this._cardStrategy = value
+    }
+
     public get key(): string {
         return this._key
     }
@@ -42,5 +49,13 @@ export class BehaviorCardItemLoopGameModel{
 
     public get cardList(): Array<CardPlayerGameModel> {
         return this._cardList
+    }
+
+    public get cardStrategy(): StrategyBehaviorCardPItemLoopGamesIntefrace {
+        return this._cardStrategy
+    }
+
+    execute(): void {
+        this.cardStrategy.execute()
     }
 }
