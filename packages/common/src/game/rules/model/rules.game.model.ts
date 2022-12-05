@@ -1,7 +1,10 @@
+import { CardChoosingRulesModel } from '../card/choosing/model/card-choosing.rules.model'
+
 export class RulesGameModel {
     private _id!: string
     private _isPrivate!: boolean
     private _playerCountMax!: number
+    private _choosingcardList!: Array<CardChoosingRulesModel>
 
     public constructor(id: string, isPrivate: boolean, playerCountMax: number) {
         this._id = id
