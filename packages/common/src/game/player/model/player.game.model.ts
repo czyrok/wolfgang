@@ -1,4 +1,4 @@
-export class GamePlayerPlayerGameModel {
+export class PlayerGameModel {
     private _activityDate!: Date
     private _inactivityLevel!: number
     private _isMayor: boolean = false

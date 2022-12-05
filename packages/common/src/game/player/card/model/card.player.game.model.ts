@@ -1,8 +1,8 @@
-import { GamePlayerPlayerGameModel } from '../../model/game-player.player.game.model'
+import { PlayerGameModel } from '../../model/player.game.model'
 
 export class CardPlayerGameModel {
     private _key!: string
-    private _playerList!: Array<GamePlayerPlayerGameModel>
+    private _playerList!: Array<PlayerGameModel>
 
     public constructor(key: string) {
         this._key = key

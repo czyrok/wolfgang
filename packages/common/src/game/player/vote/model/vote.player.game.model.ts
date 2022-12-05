@@ -1,21 +1,21 @@
-import { GamePlayerPlayerGameModel } from "../../model/game-player.player.game.model"
+import { PlayerGameModel } from "../../model/player.game.model"
 
 export class VotePlayerGameModel {
-    private _votingPlayer!: GamePlayerPlayerGameModel
-    private _votedPlayer!: GamePlayerPlayerGameModel
+    private _votingPlayer!: PlayerGameModel
+    private _votedPlayer!: PlayerGameModel
     private _message!: string
 
-    public constructor(votingPlayer: GamePlayerPlayerGameModel, votedPlayer: GamePlayerPlayerGameModel, message: string) {
+    public constructor(votingPlayer: PlayerGameModel, votedPlayer: PlayerGameModel, message: string) {
         this._votingPlayer = votingPlayer
         this._votedPlayer = votedPlayer
         this._message = message
     }
 
-    public set votingPlayer(value: GamePlayerPlayerGameModel) {
+    public set votingPlayer(value: PlayerGameModel) {
         this._votingPlayer = value
     }
 
-    public set votedPlayer(value: GamePlayerPlayerGameModel) {
+    public set votedPlayer(value: PlayerGameModel) {
         this._votedPlayer = value
     }
 
@@ -23,11 +23,11 @@ export class VotePlayerGameModel {
         this._message = value
     }
 
-    public get votingplayer(): GamePlayerPlayerGameModel {
+    public get votingplayer(): PlayerGameModel {
         return this._votingPlayer
     }
 
-    public get votedPlayer(): GamePlayerPlayerGameModel {
+    public get votedPlayer(): PlayerGameModel {
         return this._votedPlayer
     }
 
