@@ -33,6 +33,6 @@ export class ToSuspectCardPlayerGameModel {
     }
 
     public get suspectedCard(): CardPlayerGameModel {
-        return this.suspectedCard
+        return this._suspectedCard
     }
 }
