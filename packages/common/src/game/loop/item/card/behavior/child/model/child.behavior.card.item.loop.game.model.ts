@@ -7,7 +7,7 @@ export class ChildBehaviorCardItemLoopGameModel extends BehaviorCardItemLoopGame
     private _timerMode!: TimerPlayerEnum
     
     public constructor(timerMode: TimerPlayerEnum, key: string, campHierarchy: number, timer: number, behaviorStrategy: StrategyBehaviorCardPItemLoopGamesIntefrace, campStrategy: StrategyCampPlayerGameInteface){
-        super(key,campHierarchy,timer,behaviorStrategy,campStrategy);
+        super(key,campHierarchy,timer,behaviorStrategy,campStrategy)
         this._timerMode = timerMode
     } 
     
