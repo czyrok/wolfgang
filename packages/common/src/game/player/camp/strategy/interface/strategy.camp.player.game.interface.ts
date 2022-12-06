@@ -1,3 +1,5 @@
+import { CardPlayerGameModel } from '../../../card/model/card.player.game.model';
+
 export interface StrategyCampPlayerGameInteface { 
-    setCampToCard(listCard: Array<Card>): void
+    setCampToCard(listCard: Array<CardPlayerGameModel>): void
 }

@@ -1,18 +1,22 @@
+import { StrategyCampPlayerGameInteface } from '../../../../../player/camp/strategy/interface/strategy.camp.player.game.interface'
 import { CardPlayerGameModel } from '../../../../../player/card/model/card.player.game.model'
 import { ExecuteLoopGameInterface } from '../../../../execute/interface/execute.loop.game.interface'
 import { StrategyBehaviorCardPItemLoopGamesIntefrace } from '../strategy/interface/strategy.behavior.card.item.loop.game.interface'
 
-export class BehaviorCardItemLoopGameModel implements ExecuteLoopGameInterface{
+export class BehaviorCardItemLoopGameModel implements ExecuteLoopGameInterface {
     private _key: string
     private _campHierarchy: number
     private _timer: number
     private _cardList: Array<CardPlayerGameModel>
-    private _cardStrategy: StrategyBehaviorCardPItemLoopGamesIntefrace
+    private _behaviorStrategy: StrategyBehaviorCardPItemLoopGamesIntefrace
+    private _campStrategy: StrategyCampPlayerGameInteface
 
-    public constructor(key: string, campHierarchy: number, timer: number) {
+    public constructor(key: string, campHierarchy: number, timer: number, behaviorStrategy: StrategyBehaviorCardPItemLoopGamesIntefrace, campStrategy: StrategyCampPlayerGameInteface) {
         this._key = key
         this._campHierarchy = campHierarchy
         this._timer = timer
+        this._behaviorStrategy = behaviorStrategy
+        this._campStrategy = campStrategy
     }
 
     public set key(value: string) {
@@ -31,8 +35,12 @@ export class BehaviorCardItemLoopGameModel implements ExecuteLoopGameInterface{
         this._cardList = value
     }
 
-    public set cardStrategy(value: StrategyBehaviorCardPItemLoopGamesIntefrace) {
-        this._cardStrategy = value
+    public set behaviorStrategy(value: StrategyBehaviorCardPItemLoopGamesIntefrace) {
+        this._behaviorStrategy = value
+    }
+
+    public set campStrategy(value: StrategyCampPlayerGameInteface) {
+        this._campStrategy = value
     }
 
     public get key(): string {
@@ -51,11 +59,15 @@ export class BehaviorCardItemLoopGameModel implements ExecuteLoopGameInterface{
         return this._cardList
     }
 
-    public get cardStrategy(): StrategyBehaviorCardPItemLoopGamesIntefrace {
-        return this._cardStrategy
+    public get behaviorStrategy(): StrategyBehaviorCardPItemLoopGamesIntefrace {
+        return this._behaviorStrategy
+    }
+
+    public get campStrategy(): StrategyCampPlayerGameInteface {
+        return this._campStrategy
     }
 
     execute(): void {
-        this.cardStrategy.execute()
+        this.behaviorStrategy.execute()
     }
 }
