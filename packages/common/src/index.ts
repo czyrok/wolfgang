@@ -35,3 +35,7 @@ export * from './report/bug/interface/bug.report.interface'
 
 export * from './report/user/model/user.report.model'
 export * from './report/user/interface/user.report.interface'
+
+export * from './report/user/basic/model/basic.user.report.model'
+export * from './report/user/basic/interface/basic.user.report.interface'
+export * from './report/user/type/enum/type.user.report.enum'
