@@ -42,3 +42,6 @@ export * from './report/user/type/enum/type.user.report.enum'
 
 export * from './report/user/other/model/other.user.report.model'
 export * from './report/user/other/interface/other.user.report.interface'
+
+export * from './game/chat/message/model/message.chat.game.model'
+export * from './game/chat/message/interface/message.chat.game.interface'
