@@ -1,15 +1,20 @@
-import { prop, getModelForClass } from '@typegoose/typegoose'
+import { prop, getModelForClass, Ref } from '@typegoose/typegoose'
 import { Exclude, Expose } from 'class-transformer'
 
 import { CollectionName } from '../../decorator/collection-name.decorator'
 
 import { DocumentModel } from '../../model/document.model'
+import { SkinUserModel } from '../skin/model/skin.user.model'
 
 import { UserInterface } from '../interface/user.interface'
 
 @Exclude()
 @CollectionName()
 export class UserModel extends DocumentModel implements UserInterface {
+    @Expose()
+    @prop({ required: true, ref: () => SkinUserModel })
+    skin!: Ref<SkinUserModel>
+
     @Expose()
     @prop({ required: true })
     username!: string

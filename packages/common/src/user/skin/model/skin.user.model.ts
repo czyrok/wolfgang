@@ -10,7 +10,7 @@ import { SkinUserInterface } from '../interface/skin.user.interface'
 
 @Exclude()
 @CollectionName()
-export class SKinUserModel extends DocumentModel implements SkinUserInterface {
+export class SkinUserModel extends DocumentModel implements SkinUserInterface {
     @Expose()
     @prop({ required: true, ref: () => CosmeticModel })
     hat!: Ref<CosmeticModel>
