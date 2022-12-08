@@ -27,8 +27,5 @@ export * from './cosmetic/type/enum/type.cosmetic.enum'
 export * from './cosmetic/purchase/model/purchase.cosmetic.model'
 export * from './cosmetic/purchase/interface/purchase.cosmetic.interface'
 
-export * from './game/player/model/player.game.model'
-export * from './game/player/interface/player.game.interface'
-
-export * from './game/player/vote/model/vote.player.game.model'
-export * from './game/player/vote/interface/vote.player.game.interface'
+export * from '../src/user/report/model/report.user.model'
+export * from '../src/user/report/interface/report.user.interface'
