@@ -14,6 +14,10 @@ export class ReportModel extends DocumentModel implements ReportInterface {
     @Expose()
     @prop({ required: true, ref: () => UserModel })
     user!: Ref<UserModel>
+
+    @Expose()
+    @prop({ required: true })
+    releaseDate!: Date
 }
 
 export const ReportModelDocument = getModelForClass(ReportModel)

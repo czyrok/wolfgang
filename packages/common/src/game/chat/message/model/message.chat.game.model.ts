@@ -8,7 +8,7 @@ import { MessageChatGameInterface } from '../interface/message.chat.game.interfa
 
 @Exclude()
 @CollectionName()
-export class MessageChateGameModel extends DocumentModel implements MessageChatGameInterface {
+export class MessageChatGameModel extends DocumentModel implements MessageChatGameInterface {
     @Expose()
     @prop({ required: true })
     text!: string
@@ -18,4 +18,4 @@ export class MessageChateGameModel extends DocumentModel implements MessageChatG
     releaseDate!: Date
 }
 
-export const MessageChateGameModelDocument = getModelForClass(MessageChateGameModel)
+export const MessageChatGameModelDocument = getModelForClass(MessageChatGameModel)

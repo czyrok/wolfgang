@@ -45,3 +45,6 @@ export * from './report/user/other/interface/other.user.report.interface'
 
 export * from './game/chat/message/model/message.chat.game.model'
 export * from './game/chat/message/interface/message.chat.game.interface'
+
+export * from './game/chat/message/user/model/user.message.chat.game.model'
+export * from './game/chat/message/user/interface/user.message.chat.game.interface'
