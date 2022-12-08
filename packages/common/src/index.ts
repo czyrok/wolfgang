@@ -48,3 +48,6 @@ export * from './game/chat/message/interface/message.chat.game.interface'
 
 export * from './game/chat/message/user/model/user.message.chat.game.model'
 export * from './game/chat/message/user/interface/user.message.chat.game.interface'
+
+export * from './game/chat/message/event/model/event.message.chat.game.model'
+export * from './game/chat/message/event/interface/event.message.chat.game.interface'
