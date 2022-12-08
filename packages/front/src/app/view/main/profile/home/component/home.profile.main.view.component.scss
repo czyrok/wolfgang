@@ -4,11 +4,11 @@
 
 @use '~scss-toolkit/src/mixin/theme';
 
-
 section {
     display: grid;
-    grid-template-areas: 'a'
-    'b';
+    grid-template-areas:
+        'a'
+        'b';
 }
 
 section .container-1 {
@@ -24,6 +24,7 @@ section .container-2 {
 }
 
 section .container-2 .wrapper {
+    width: property.get('size', 'page');
     border-radius: property.get('borderRadius', 'rounded');
     overflow: hidden;
     display: grid;

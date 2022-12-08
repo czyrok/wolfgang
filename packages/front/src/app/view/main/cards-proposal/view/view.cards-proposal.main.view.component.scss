@@ -5,23 +5,24 @@
 @use '~scss-toolkit/src/mixin/theme';
 
 section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 section .wrapper {
-    border-radius: property.get('borderRadius', 'rounded');
-    overflow: hidden;
-    display: grid;
-    grid-template-areas:
-        'a'
-        'b';
-    box-shadow: property.get('shadow', 'box', 'regular');
+  width: property.get('size', 'page');
+  border-radius: property.get('borderRadius', 'rounded');
+  overflow: hidden;
+  display: grid;
+  grid-template-areas:
+    'a'
+    'b';
+  box-shadow: property.get('shadow', 'box', 'regular');
 
-    @include theme.themeHandler(true, 'isolatedElement') {
-        background-color: theme.get('background');
-    }
+  @include theme.themeHandler(true, 'isolatedElement') {
+    background-color: theme.get('background');
+  }
 }
 
 section .wrapper h2 {
@@ -33,10 +34,9 @@ section .wrapper h2 {
   z-index: 1;
 
   @include theme.themeHandler(true, 'isolatedElement', 'title') {
-      background-color: theme.get('background');
+    background-color: theme.get('background');
   }
 }
-
 
 section .wrapper .sub {
   display: flex;
@@ -60,12 +60,13 @@ section .wrapper .sub .line .container {
   column-gap: property.get('borderLimit', 'small');
 }
 
-section .wrapper .sub .line h3, section .wrapper .sub p {
+section .wrapper .sub .line h3,
+section .wrapper .sub p {
   box-sizing: border-box;
   padding: property.get('borderLimit', 'regular');
   border-radius: property.get('borderRadius', 'rounded');
 
   @include theme.themeHandler(true, 'isolatedElement', 'item') {
-      background-color: theme.get('background');
+    background-color: theme.get('background');
   }
 }

@@ -5,6 +5,7 @@ import { AvatarSharedComponent } from 'src/app/shared/avatar/component/avatar.sh
 export class PlaceCircleAvatarPlayGamesMainViewModel {
   private _x: number = 0
   private _y: number = 0
+  private _index: number = 0
 
   constructor(
     private renderer: Renderer2,
@@ -20,6 +21,10 @@ export class PlaceCircleAvatarPlayGamesMainViewModel {
     this._y = value
   }
 
+  public set index(value: number) {
+    this._index = value
+  }
+
   public set id(value: string) {
     this._id = value
   }
@@ -32,6 +37,10 @@ export class PlaceCircleAvatarPlayGamesMainViewModel {
     return this._y
   }
 
+  public get index(): number {
+    return this._index
+  }
+
   public get id(): string {
     return this._id
   }
@@ -39,6 +48,7 @@ export class PlaceCircleAvatarPlayGamesMainViewModel {
   public update(): void {
     this.renderer.setStyle(this.componentRef.location.nativeElement, 'top', this.y + 'px')
     this.renderer.setStyle(this.componentRef.location.nativeElement, 'left', this.x + 'px')
+    this.renderer.setStyle(this.componentRef.location.nativeElement, 'z-index', this.index)
     this.renderer.setStyle(this.componentRef.location.nativeElement, 'position', 'absolute')
     this.renderer.setStyle(this.componentRef.location.nativeElement, 'transform', 'translate(-50%, -50%)')
   }

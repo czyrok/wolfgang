@@ -6,13 +6,13 @@
       <app-shared-label text="00:00" icofont="hour-glass"></app-shared-label>
     </div>
 
-    <app-shared-interactive-button text="Composition"></app-shared-interactive-button>
+    <app-shared-interactive-button text="Composition" [callback]="changeDisplayChatButtonCallback"></app-shared-interactive-button>
   </div>
 
   <div class="chat-container">
-    <app-shared-chat *ngIf="false"></app-shared-chat>
+    <app-shared-chat *ngIf="displayChat"></app-shared-chat>
 
-    <app-view-main-games-play-rules></app-view-main-games-play-rules>
+    <app-view-main-games-play-rules *ngIf="!displayChat"></app-view-main-games-play-rules>
 
     <div data-css-text-bar data-css-label data-css-border-radius="rounded">
       <input type="text" placeholder="Saisissez un message" data-css-input>

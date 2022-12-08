@@ -30,6 +30,7 @@ export class CircleAvatarPlayGamesMainViewComponent implements AfterViewInit {
     ])
 
     this.avatarsCircle.update()
+    this.avatarsCircle.update()
   }
 
   @Input() id!: string;

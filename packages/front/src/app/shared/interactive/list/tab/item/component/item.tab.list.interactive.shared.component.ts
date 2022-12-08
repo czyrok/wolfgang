@@ -11,6 +11,6 @@ export class ItemTabListInteractiveSharedComponent {
   @Input() isIconOnly!: boolean
 
   @HostListener('click') click(): void {
-    if (!this.item.isDisabled) this.item.callBack()
+    if (this.item !== undefined && !this.item.isDisabled) this.item.callBack()
   }
 }

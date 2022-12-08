@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core'
+import { CommonModule } from '@angular/common'
 import { RouterModule } from '@angular/router'
 
 import { SharedModule } from 'src/app/shared/shared.module'
@@ -15,6 +16,7 @@ import { CircleAvatarPlayGamesMainViewComponent } from './avatar/circle/componen
         CircleAvatarPlayGamesMainViewComponent
     ],
     imports: [
+        CommonModule,
         RouterModule,
         SharedModule
     ]

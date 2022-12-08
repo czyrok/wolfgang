@@ -14,15 +14,58 @@ export class CircleAvatarPlayGamesMainViewModel {
   }
 
   public update(): void {
-    let radius: number = this.elementRef.nativeElement.offsetWidth / 2
+    let radius: number = Math.min(
+      this.elementRef.nativeElement.offsetWidth,
+      this.elementRef.nativeElement.offsetHeight) / 2,
+      t: number = 2 * Math.PI / this.list.length
 
-    let t: number = 2 * Math.PI / this.list.length
+    let maxX: number = 0,
+      maxY: number = 0
+
+    let map: Map<number, Array<PlaceCircleAvatarPlayGamesMainViewModel>> = new Map()
 
     for (let i = 0; i < this.list.length; i++) {
-      this.list[i].y = (Math.cos(t * i) * radius) + radius
+      this.list[i].y = (Math.cos(t * i) * radius * 0.8) + radius
       this.list[i].x = (Math.sin(t * i) * radius) + radius
 
-      this.list[i].update()
+      if (this.list[i].x > maxX) maxX = this.list[i].x
+      if (this.list[i].y > maxY) maxY = this.list[i].y
+
+      if (map.has(this.list[i].y)) {
+        map.get(this.list[i].y)?.push(this.list[i])
+      } else {
+        map.set(this.list[i].y, [
+          this.list[i]
+        ])
+      }
+    }
+
+    map = map = new Map([...map.entries()].sort((a: [number, Array<PlaceCircleAvatarPlayGamesMainViewModel>], b: [number, Array<PlaceCircleAvatarPlayGamesMainViewModel>]) => {
+      if (a[0] < b[0]) {
+        return -1
+      } else if (a[0] > b[0]) {
+        return 1
+      } else {
+        return 0
+      }
+    }))
+
+    maxX = this.elementRef.nativeElement.offsetWidth - maxX
+    maxY = this.elementRef.nativeElement.offsetHeight - maxY
+
+    let count = 1
+
+    for (let element of map) {
+      for (let place of element[1]) {
+        place.index = count
+
+        place.x += maxX / 2
+        place.y += maxY / 2
+
+        place.update()
+      }
+
+      count++
     }
   }
 

@@ -1,6 +1,8 @@
+@use '../../../../scss/lib/property';
+
 .container {
-    width: 30px;
-    height: 30px;
+    width: property.get('size', 'avatar', 'width');
+    height: property.get('size', 'avatar', 'height');
     display: block;
     overflow: hidden;
 }

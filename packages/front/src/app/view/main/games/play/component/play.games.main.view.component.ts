@@ -6,5 +6,9 @@ import { Component } from '@angular/core'
   styleUrls: ['./play.games.main.view.component.scss']
 })
 export class PlayGamesMainViewComponent {
-
+  displayChat: boolean = true
+  
+  changeDisplayChatButtonCallback: () => void = () => {
+    this.displayChat = !this.displayChat
+  }
 }

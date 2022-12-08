@@ -11,6 +11,7 @@ section {
 }
 
 section .wrapper {
+  width: property.get('size', 'page');
   border-radius: property.get('borderRadius', 'rounded');
   overflow: hidden;
   display: grid;
