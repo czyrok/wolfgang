@@ -1,14 +1,28 @@
 import http from 'http'
+import { connect } from 'mongoose'
 import { Server } from 'socket.io'
-import { UsingHelper } from 'ts-socket.io-controller'
+import { SocketIoController } from 'ts-socket.io-controller'
 
-const server: http.Server = http.createServer()
 
-const io = new Server(server)
+async function run() {
+    await connect("mongodb://localhost:60017/wolfgang", {
+        authSource: "admin",
+        user: "admin",
+        pass: "pass"
+    })
 
-server.listen(30459)
+    const server: http.Server = http.createServer()
+    const io = new Server(server)
 
-UsingHelper.useSocketServer(io, {
-    controllers: [],
-    middlewares: []
+    server.listen(4201)
+
+    SocketIoController.useSocketIoServer(io, {
+        controllers: [],
+        middlewares: [],
+        useClassTransformer: true
+    })
+}
+
+run().catch((error: Error) => {
+    throw error
 })
