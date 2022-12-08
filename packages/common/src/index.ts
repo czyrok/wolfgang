@@ -27,8 +27,11 @@ export * from './cosmetic/type/enum/type.cosmetic.enum'
 export * from './cosmetic/purchase/model/purchase.cosmetic.model'
 export * from './cosmetic/purchase/interface/purchase.cosmetic.interface'
 
-export * from './user/report/model/report.user.model'
-export * from './user/report/interface/report.user.interface'
+export * from './report/model/report.model'
+export * from './report/interface/report.interface'
 
-export * from './user/report/bug/model/bug.report.user.model'
-export * from './user/report/bug/interface/bug.report.user.interface'
+export * from './report/bug/model/bug.report.model'
+export * from './report/bug/interface/bug.report.interface'
+
+export * from './report/user/model/user.report.model'
+export * from './report/user/interface/user.report.interface'
