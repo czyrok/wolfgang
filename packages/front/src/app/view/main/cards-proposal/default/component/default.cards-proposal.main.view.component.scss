@@ -5,25 +5,25 @@
 @use '~scss-toolkit/src/mixin/theme';
 
 
-main {
+section {
     display: grid;
     grid-template-areas: 'a'
     'b';
 }
 
-main .container-1 {
+section .container-1 {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
 }
 
-main .container-2 {
+section .container-2 {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-main .wrapper {
+section .wrapper {
     width: property.get('size', 'page');
     border-radius: property.get('borderRadius', 'rounded');
     overflow: hidden;
@@ -38,7 +38,7 @@ main .wrapper {
     }
 }
 
-main .wrapper h2 {
+section .wrapper h2 {
     padding: property.get('borderLimit', 'regular');
     border-bottom-left-radius: property.get('borderRadius', 'rounded');
     border-bottom-right-radius: property.get('borderRadius', 'rounded');
@@ -51,7 +51,7 @@ main .wrapper h2 {
     }
 }
 
-main .wrapper .sub {
+section .wrapper .sub {
     display: flex;
     flex-direction: column;
     row-gap: property.get('borderLimit', 'big');
@@ -59,7 +59,7 @@ main .wrapper .sub {
     padding-top: property.get('borderLimit', 'regular') + property.get('borderRadius', 'rounded');
 }
 
-main .wrapper .sub .line {
+section .wrapper .sub .line {
     display: grid;
     grid-template-areas: 'a b c d';
     align-items: center;
@@ -67,7 +67,7 @@ main .wrapper .sub .line {
     column-gap: property.get('borderLimit', 'big');
 }
 
-main .wrapper .sub .line p {
+section .wrapper .sub .line p {
     box-sizing: border-box;
     padding: property.get('borderLimit', 'regular');
     border-radius: property.get('borderRadius', 'rounded');

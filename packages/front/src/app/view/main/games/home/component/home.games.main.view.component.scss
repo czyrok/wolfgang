@@ -25,7 +25,7 @@ section .container-2 {
 }
 
 section .container-2 .wrapper {
-  width: 80%;
+  width: property.get('size', 'page');
   border-radius: property.get('borderRadius', 'rounded');
   overflow: hidden;
   display: grid;
