@@ -51,3 +51,6 @@ export * from './game/chat/message/user/interface/user.message.chat.game.interfa
 
 export * from './game/chat/message/event/model/event.message.chat.game.model'
 export * from './game/chat/message/event/interface/event.message.chat.game.interface'
+
+export * from './game/chat/model/chat.game.model'
+export * from './game/chat/interface/chat.game.interface'
