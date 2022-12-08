@@ -1,7 +1,8 @@
 import { EmitOnFail, EmitOnSuccess, OnConnect, OnDisconnect, OnMessage, SkipEmitOnEmptyResult, SocketController, SocketIO } from 'ts-socket.io-controller'
 
 @SocketController({
-    namespace: '/main/games'
+    namespace: '/main/games',
+    init: () => {}
 })
 export class GamesMainController {
     @OnConnect()
