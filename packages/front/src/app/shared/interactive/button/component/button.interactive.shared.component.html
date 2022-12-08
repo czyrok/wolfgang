@@ -3,10 +3,10 @@
 
   <ng-container *ngIf="link; else textTemplate">
     <a routerLinkActive="active" [attr.data-css-accent]="accent ? true : null" [routerLink]="[link]" data-css-link
-    [attr.data-css-square]="text === undefined ? true : null">
-    <span *ngIf="icofont != undefined" class="icofont-{{ icofont }}"></span>
-    {{ text }}
-  </a>
+      [attr.data-css-square]="text === undefined ? true : null">
+      <span *ngIf="icofont != undefined" class="icofont-{{ icofont }}"></span>
+      {{ text }}
+    </a>
   </ng-container>
 
   <ng-template #textTemplate>
