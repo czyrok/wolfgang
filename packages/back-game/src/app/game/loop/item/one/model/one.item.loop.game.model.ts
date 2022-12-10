@@ -1,5 +1,6 @@
 import { BehaviorCardItemLoopGameModel } from '../../card/behavior/model/behavior.card.item.loop.game.model'
 import { ItemLoopGameModel } from '../../model/item.loop.game.model'
+import { ContextParamItemLoopGameModel } from '../../param/context/model/context.param.item.loop.game.model'
 
 export class OneItemLoopGameModel extends ItemLoopGameModel {
     public constructor(
@@ -18,9 +19,9 @@ export class OneItemLoopGameModel extends ItemLoopGameModel {
         return this._cardBehavior
     }
 
-    execute(): void {
+    execute(context: ContextParamItemLoopGameModel): void {
         // adef
-        throw new Error('Method not implemented.')
+        this.cardBehavior.execute(context)
     }
 
     getCardBehavior(): Array<BehaviorCardItemLoopGameModel> {

@@ -1,13 +1,20 @@
 import { CardPlayerGameModel } from '../../../../../player/card/model/card.player.game.model'
 import { PlayerGameModel } from '../../../../../player/model/player.game.model'
+import { ContextParamItemLoopGameModel } from '../../../param/context/model/context.param.item.loop.game.model'
+import { ResultSetItemLoopGameModel } from '../../../set/result/model/result.set.item.loop.game.model'
+import { ContextParamBehaviorCardItemLoopGameModel } from '../param/context/model/context.param.behavior.card.item.loop.game.model'
 
 import { StrategyCampPlayerGameInteface } from '../../../../../player/camp/strategy/interface/strategy.camp.player.game.interface'
 import { HandlerCardPlayerGameInterface } from '../../../../../player/card/handler/interface/handler.card.player.game.interface'
 import { HandlerPlayerGameInterface } from '../../../../../player/handler/interface/handler.player.game.interface'
-import { ExecuteLoopGameInterface } from '../../../../execute/interface/execute.loop.game.interface'
 import { StrategyBehaviorCardPItemLoopGameInterface } from '../strategy/interface/strategy.behavior.card.item.loop.game.interface'
+import { StrategyItemLoopGameInterface } from '../../../strategy/interface/strategy.item.loop.game.interface'
 
-export class BehaviorCardItemLoopGameModel implements ExecuteLoopGameInterface, HandlerCardPlayerGameInterface, HandlerPlayerGameInterface {
+import { TimerModeBehaviorCardItemLoopGameEnum } from '../timer-mode/enum/timer-mode.behavior.card.item.loop.game.enum'
+import { ResultSetItemLoopGameType } from '../../../set/result/type/result.set.item.loop.game.type'
+import { CallbackContextParamItemLoopGameType } from '../../../param/context/callback/type/callback.context.param.item.loop.game.type'
+
+export abstract class BehaviorCardItemLoopGameModel implements StrategyItemLoopGameInterface<ContextParamItemLoopGameModel, ContextParamBehaviorCardItemLoopGameModel>, HandlerCardPlayerGameInterface, HandlerPlayerGameInterface {
     public constructor(
         private _key: string,
         private _campHierarchy: number,
@@ -65,8 +72,23 @@ export class BehaviorCardItemLoopGameModel implements ExecuteLoopGameInterface, 
         return this._campStrategy
     }
 
-    execute(): void {
-        this.behaviorStrategy.execute()
+    abstract execute(context: ContextParamItemLoopGameModel): void
+
+    buildContext(
+        parentContext: ContextParamItemLoopGameModel,
+        callback: CallbackContextParamItemLoopGameType,
+        result?: ResultSetItemLoopGameType
+    ): ContextParamBehaviorCardItemLoopGameModel {
+        return new ContextParamBehaviorCardItemLoopGameModel(
+            parentContext.next,
+            callback,
+            this.timer,
+            TimerModeBehaviorCardItemLoopGameEnum.BETWEEN,
+            // adef
+            [],
+            parentContext,
+            result
+        )
     }
 
     hasCard(value: CardPlayerGameModel): boolean {

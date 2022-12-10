@@ -1,5 +1,7 @@
-import { ExecuteLoopGameInterface } from '../../../../../execute/interface/execute.loop.game.interface'
+import { ContextParamBehaviorCardItemLoopGameModel } from '../../param/context/model/context.param.behavior.card.item.loop.game.model'
 
-export interface StrategyBehaviorCardPItemLoopGameInterface extends ExecuteLoopGameInterface {
+import { StrategyItemLoopGameInterface } from '../../../../strategy/interface/strategy.item.loop.game.interface'
+
+export interface StrategyBehaviorCardPItemLoopGameInterface extends StrategyItemLoopGameInterface<ContextParamBehaviorCardItemLoopGameModel, ContextParamBehaviorCardItemLoopGameModel> {
 
 }
