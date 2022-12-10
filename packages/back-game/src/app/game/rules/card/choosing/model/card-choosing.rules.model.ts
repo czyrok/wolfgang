@@ -1,13 +1,10 @@
 import { CardPlayerGameModel } from "../../../../player/card/model/card.player.game.model"
 
 export class CardChoosingRulesModel {
-    private _card: CardPlayerGameModel
-    private _count: number
-
-    public constructor(card: CardPlayerGameModel, count: number) {
-        this._card = card
-        this._count = count
-    }
+    public constructor(
+        private _card: CardPlayerGameModel,
+        private _count: number
+    ) { }
 
     public set card(value: CardPlayerGameModel) {
         this._card = value

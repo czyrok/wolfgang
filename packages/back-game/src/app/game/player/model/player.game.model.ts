@@ -1,14 +1,8 @@
 export class PlayerGameModel {
     private _activityDate!: Date
-    private _inactivityLevel!: number
+    private _inactivityLevel: number = 0
     private _isMayor: boolean = false
-    private _gamePointAccumulated!: number
-
-    public constructor() {
-        this._inactivityLevel = 0
-        this._isMayor = false
-        this._gamePointAccumulated = 0
-    }
+    private _gamePointAccumulated: number = 0
 
     public set activityDate(value: Date) {
         this._activityDate = value

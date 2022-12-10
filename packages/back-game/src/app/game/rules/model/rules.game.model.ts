@@ -1,14 +1,9 @@
 import { CardChoosingRulesModel } from '../card/choosing/model/card-choosing.rules.model'
 
 export class RulesGameModel {
-    private _isPrivate: boolean
-    private _playerCountMax: number
+    private _isPrivate: boolean = false
+    private _playerCountMax: number = 0
     private _choosingcardList: Array<CardChoosingRulesModel> = new Array()
-
-    public constructor() {
-        this._isPrivate = false
-        this._playerCountMax = 8
-    }
 
     public set isPrivate(value: boolean) {
         this._isPrivate = value

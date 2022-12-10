@@ -2,15 +2,11 @@ import { PlayerGameModel } from '../../../model/player.game.model';
 import { CardPlayerGameModel } from '../../model/card.player.game.model';
 
 export class ToSuspectCardPlayerGameModel {
-    private _suspectingPlayer: PlayerGameModel
-    private _suspectedPlayer: PlayerGameModel
-    private _suspectedCard: CardPlayerGameModel
-
-    public constructor(suspectingPlayer: PlayerGameModel, suspectedPlayer: PlayerGameModel, suspectedCard: CardPlayerGameModel) {
-        this._suspectingPlayer = suspectingPlayer
-        this._suspectedPlayer = suspectedPlayer
-        this._suspectedCard = suspectedCard
-    }
+    public constructor(
+        private _suspectingPlayer: PlayerGameModel,
+        private _suspectedPlayer: PlayerGameModel,
+        private _suspectedCard: CardPlayerGameModel
+    ) { }
 
     public set suspectingPlayer(value: PlayerGameModel) {
         this._suspectingPlayer = value

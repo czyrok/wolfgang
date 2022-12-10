@@ -1,15 +1,11 @@
 import { PlayerGameModel } from "../../model/player.game.model"
 
 export class VotePlayerGameModel {
-    private _votingPlayer: PlayerGameModel
-    private _votedPlayer: PlayerGameModel
-    private _message: string
-
-    public constructor(votingPlayer: PlayerGameModel, votedPlayer: PlayerGameModel, message: string) {
-        this._votingPlayer = votingPlayer
-        this._votedPlayer = votedPlayer
-        this._message = message
-    }
+    public constructor(
+        private _votingPlayer: PlayerGameModel,
+        private _votedPlayer: PlayerGameModel,
+        private _message: string
+    ) { }
 
     public set votingPlayer(value: PlayerGameModel) {
         this._votingPlayer = value

@@ -1,6 +1,5 @@
-import { PlayerGameModel } from "../../model/player.game.model"
+import { PlayerGameModel } from '../../model/player.game.model'
 
-export interface HandlerPlayerGameInterface{
-    addPlayer(player: PlayerGameModel): void
+export interface HandlerPlayerGameInterface {
     hasPlayer(player: PlayerGameModel): boolean
 }

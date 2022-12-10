@@ -1,19 +1,16 @@
-import { ExecuteLoopGameInterface } from '../../execute/interface/execute.loop.game.interface'
 import { BehaviorCardItemLoopGameModel } from '../card/behavior/model/behavior.card.item.loop.game.model'
-import { ItemLoopGameInterface } from '../interface/item.loop.game.interface'
 
-export class ItemLoopGameModel implements ExecuteLoopGameInterface, ItemLoopGameInterface {
-    private _atNight: boolean
-    private _nextList: Array<ItemLoopGameModel> = new Array()
-    private _cardBehavior: BehaviorCardItemLoopGameModel
+import { ExecuteLoopGameInterface } from '../../execute/interface/execute.loop.game.interface'
+import { HandlerBehaviorCardItemLoopGameInterface } from '../card/behavior/handler/interface/handler.behavior.card.item.loop.game.interface'
 
-    public constructor(atNight: boolean, cardBehavior: BehaviorCardItemLoopGameModel) {
-        this._atNight = atNight
-        this._cardBehavior = cardBehavior
-    }
+export abstract class ItemLoopGameModel implements ExecuteLoopGameInterface, HandlerBehaviorCardItemLoopGameInterface {
+    public constructor(
+        private _nextList: Array<ItemLoopGameModel>,
+        private _atNight: boolean
+    ) { }
 
     public set atNight(value: boolean) {
-        this._atNight = this.atNight
+        this._atNight = value
     }
 
     public get atNight(): boolean {
@@ -28,19 +25,6 @@ export class ItemLoopGameModel implements ExecuteLoopGameInterface, ItemLoopGame
         return this._nextList
     }
 
-    public set cardBehavior(value: BehaviorCardItemLoopGameModel) {
-        this._cardBehavior = value
-    }
-
-    public get cardBehavior(): BehaviorCardItemLoopGameModel {
-        return this._cardBehavior
-    }
-
-    execute(): void {
-        this.cardBehavior.behaviorStrategy.execute()
-    }
-
-    getCardBehavior(): Array<BehaviorCardItemLoopGameModel> {
-        return [this.cardBehavior]
-    }
+    abstract execute(): void
+    abstract getCardBehavior(): Array<BehaviorCardItemLoopGameModel>
 }

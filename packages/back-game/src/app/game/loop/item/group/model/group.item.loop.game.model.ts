@@ -3,10 +3,12 @@ import { BehaviorCardItemLoopGameModel } from '../../card/behavior/model/behavio
 import { ItemLoopGameModel } from '../../model/item.loop.game.model'
 
 export class GroupItemLoopGameModel extends ItemLoopGameModel {
-    public _childBehaviorCardList: Array<ChildBehaviorCardItemLoopGameModel> = new Array()
-
-    public constructor(atNight: boolean, cardBehavior: BehaviorCardItemLoopGameModel) {
-        super(atNight, cardBehavior)
+    public constructor(
+        nextList: Array<ItemLoopGameModel>,
+        atNight: boolean,
+        private _childBehaviorCardList: Array<ChildBehaviorCardItemLoopGameModel>
+    ) {
+        super(nextList, atNight)
     }
 
     public set childBehaviorCardList(value: Array<ChildBehaviorCardItemLoopGameModel>) {
@@ -15,5 +17,14 @@ export class GroupItemLoopGameModel extends ItemLoopGameModel {
 
     public get childBehaviorCardList(): Array<ChildBehaviorCardItemLoopGameModel> {
         return this._childBehaviorCardList
+    }
+
+    execute(): void {
+        // adef
+        throw new Error('Method not implemented.')
+    }
+
+    getCardBehavior(): Array<BehaviorCardItemLoopGameModel> {
+        return this.childBehaviorCardList
     }
 }
