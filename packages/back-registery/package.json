@@ -6,11 +6,13 @@
     "start": "tsc && node --unhandled-rejections=strict ./dist/app.js"
   },
   "dependencies": {
+    "@types/uuid": "^9.0.0",
     "common": "file:../common",
     "express": "^4.18.2",
     "socket.io": "^4.5.3",
     "ts-socket.io-controller": "^1.0.6",
     "typedi": "^0.10.0",
+    "uuid": "^9.0.0",
     "validator": "^13.7.0"
   },
   "devDependencies": {

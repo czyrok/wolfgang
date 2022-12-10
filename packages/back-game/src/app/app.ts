@@ -14,7 +14,7 @@ async function run() {
     const server: http.Server = http.createServer()
     const io = new Server(server)
 
-    server.listen(4201)
+    server.listen(5501)
 
     SocketIoController.useSocketIoServer(io, {
         controllers: [],
