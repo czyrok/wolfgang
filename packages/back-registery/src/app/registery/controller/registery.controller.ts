@@ -1,9 +1,13 @@
 import { Socket } from 'socket.io';
-import { ConnectedSocket, EmitOnFail, EmitOnSuccess, MessageBody, OnConnect, OnDisconnect, OnMessage, SkipEmitOnEmptyResult, SocketController, SocketIO } from 'ts-socket.io-controller'
-import { GameInterface } from '../../interface/game.interface';
-import { RegisterInterface } from '../../interface/register.interface';
+import { ConnectedSocket, EmitOnFail, EmitOnSuccess, MessageBody, OnConnect, OnDisconnect, OnMessage, SocketController } from 'ts-socket.io-controller'
 
-let registery: RegisterInterface
+import { RegisteryModel } from '../model/registery.model'
+
+import { ThreadGameInterface } from '../../game/thread/interface/thread.game.interface'
+
+import uuid from 'uuid'
+
+let registery: RegisteryModel
 
 @SocketController({
     namespace: '/registery',
@@ -31,7 +35,7 @@ export class RegisteryController {
     }
 
     @OnMessage()
-    update(@MessageBody() data: GameInterface, @ConnectedSocket() socket: Socket) {
+    update(@MessageBody() data: ThreadGameInterface, @ConnectedSocket() socket: Socket) {
         let instance = registery[socket.id]
 
         if (instance !== undefined) {
@@ -48,9 +52,9 @@ export class RegisteryController {
     @EmitOnSuccess()
     @EmitOnFail()
     get() {
-        let list: Array<GameInterface> = new Array()
+        let list: Array<ThreadGameInterface> = new Array()
 
-        for (let [key, instance] of registery) {
+        for (let [, instance] of registery) {
             list.push(...instance.games)
         }
 
@@ -76,14 +80,14 @@ export class RegisteryController {
         }
 
         if (minId !== undefined) {
-            // achanger
-            let gameId: string = 'id de la partie'
+            let gameId: string = uuid.v4()
 
             registery[minId].games.push({
                 id: gameId,
                 playerCount: 1
             })
 
+            // adef
             registery[minId].socket.emit('create', gameId)
         }
     }

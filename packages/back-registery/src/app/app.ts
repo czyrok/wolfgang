@@ -1,14 +1,24 @@
 import http from 'http'
 import { Server } from 'socket.io'
-import { UsingHelper } from 'ts-socket.io-controller'
+import { SocketIoController } from 'ts-socket.io-controller'
 
-const server: http.Server = http.createServer()
+import { RegisteryController } from './registery/controller/registery.controller'
 
-const io = new Server(server)
+async function run() {
+    const server: http.Server = http.createServer()
+    const io = new Server(server)
 
-server.listen(30459)
+    server.listen(4202)
 
-UsingHelper.useSocketServer(io, {
-    controllers: [],
-    middlewares: []
-})
+    SocketIoController.useSocketIoServer(io, {
+        controllers: [
+            RegisteryController
+        ],
+        middlewares: [],
+        useClassTransformer: true
+    })
+}
+
+run().catch((error: Error) => {
+    throw error
+}) 
