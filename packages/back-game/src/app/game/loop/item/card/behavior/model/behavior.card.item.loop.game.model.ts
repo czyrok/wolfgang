@@ -49,44 +49,21 @@ export abstract class BehaviorCardItemLoopGameModel implements
     public abstract doAtEnd(context: ContextParamItemLoopGameModel): void
 
     entryPoint(context: ContextParamItemLoopGameModel): void {
-        switch (context.timerMode) {
-            case TimerModeBehaviorCardItemLoopGameEnum.BEFORE:
-                let childContext1: ContextParamBehaviorCardItemLoopGameModel = this.buildContext(context)
+        let childContext1: ContextParamBehaviorCardItemLoopGameModel = this.buildContext(context)
 
-                childContext1.res.subscribeOne((result: ResultSetItemLoopGameType) => {
-                    let childContext2: ContextParamBehaviorCardItemLoopGameModel = this.buildContext(context, result)
+        childContext1.res.subscribeOne((result: ResultSetItemLoopGameType) => {
+            let childContext2: ContextParamBehaviorCardItemLoopGameModel = this.buildContext(context, result)
 
-                    childContext2.res.subscribeOne((result: ResultSetItemLoopGameType) => {
-                        context.next(result)
-                    })
+            childContext2.res.subscribeOne((result: ResultSetItemLoopGameType) => {
+                context.next(result)
+            })
 
-                    this.doAtEnd(childContext2)
-                })
+            setTimeout(() => {
+                this.doAtEnd(childContext2)
+            }, this.timer)
+        })
 
-                setTimeout(() => {
-                    this.doAtBeginning(childContext1)
-                }, context.timer)
-
-                break
-            case TimerModeBehaviorCardItemLoopGameEnum.BETWEEN:
-                let childContext11: ContextParamBehaviorCardItemLoopGameModel = this.buildContext(context)
-
-                childContext11.res.subscribeOne((result: ResultSetItemLoopGameType) => {
-                    let childContext22: ContextParamBehaviorCardItemLoopGameModel = this.buildContext(context, result)
-
-                    childContext22.res.subscribeOne((result: ResultSetItemLoopGameType) => {
-                        context.next(result)
-                    })
-
-                    setTimeout(() => {
-                        this.doAtEnd(childContext22)
-                    }, context.timer)
-                })
-
-                this.doAtBeginning(childContext11)
-
-                break
-        }
+        this.doAtBeginning(childContext1)
     }
 
     buildContext(
@@ -94,9 +71,6 @@ export abstract class BehaviorCardItemLoopGameModel implements
         preivousResult?: ResultSetItemLoopGameType
     ): ContextParamBehaviorCardItemLoopGameModel {
         return new ContextParamBehaviorCardItemLoopGameModel(
-            this.timer,
-            TimerModeBehaviorCardItemLoopGameEnum.BETWEEN,
-            this.getPlayer(),
             parentContext,
             preivousResult
         )

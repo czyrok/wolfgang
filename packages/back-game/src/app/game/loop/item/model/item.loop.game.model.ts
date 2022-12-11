@@ -7,16 +7,12 @@ import { StrategyItemLoopGameInterface } from '../strategy/interface/strategy.it
 import { ResultSetItemLoopGameType } from '../set/result/type/result.set.item.loop.game.type'
 
 export abstract class ItemLoopGameModel implements StrategyItemLoopGameInterface<ContextParamItemLoopGameModel, ContextParamItemLoopGameModel>, HandlerBehaviorCardItemLoopGameInterface {
-    private _nextList: Array<ItemLoopGameModel> = new Array
     private _nextIndex: number = 0
+    protected _nextList: Array<ItemLoopGameModel> = new Array
 
     public constructor(
         private _atNight: boolean
     ) { }
-
-    private get nextList(): Array<ItemLoopGameModel> {
-        return this._nextList
-    }
 
     private get nextIndex(): number {
         return this._nextIndex
@@ -26,16 +22,20 @@ export abstract class ItemLoopGameModel implements StrategyItemLoopGameInterface
         this._nextIndex = value
     }
 
+    protected get nextList(): Array<ItemLoopGameModel> {
+        return this._nextList
+    }
+
     public get atNight(): boolean {
         return this._atNight
     }
 
-    protected goNext(currentContext: ContextParamItemLoopGameModel, result?: ResultSetItemLoopGameType): void {
+    public get nextItem(): ItemLoopGameModel {
         this.nextIndex++
 
         if (this.nextIndex == this.nextList.length) this.nextIndex = 0
 
-        this.nextList[this.nextIndex].entryPoint(this.buildContext(currentContext, result))
+        return this.nextList[this.nextIndex]
     }
 
     public abstract objectBuildingEnd(): void

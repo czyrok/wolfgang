@@ -38,4 +38,4 @@ export class UserModel extends DocumentModel implements UserInterface {
     socketId!: string
 }
 
-export const MessageModelDocument = getModelForClass(UserModel)
+export const UserModelDocument = getModelForClass(UserModel)

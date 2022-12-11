@@ -1,3 +1,5 @@
+export * from './chained-list/iterator/interface/iterator.chained-list.interface'
+
 export * from './user/model/user.model'
 export * from './user/interface/user.interface'
 

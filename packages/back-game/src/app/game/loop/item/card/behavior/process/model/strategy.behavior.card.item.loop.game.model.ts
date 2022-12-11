@@ -12,9 +12,6 @@ export abstract class ProcessBehaviorCardPItemLoopGameModel implements ProcessBe
         preivousResult?: ResultSetItemLoopGameType
     ): ContextParamBehaviorCardItemLoopGameModel {
         return new ContextParamBehaviorCardItemLoopGameModel(
-            parentContext.timer,
-            parentContext.timerMode,
-            parentContext.players,
             parentContext,
             preivousResult
         )

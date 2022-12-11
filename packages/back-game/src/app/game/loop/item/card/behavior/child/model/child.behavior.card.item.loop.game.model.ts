@@ -25,16 +25,44 @@ export abstract class ChildBehaviorCardItemLoopGameModel extends BehaviorCardIte
         return this._timerMode
     }
 
-    override buildContext(
-        parentContext: ContextParamItemLoopGameModel,
-        preivousResult?: ResultSetItemLoopGameType
-    ): ContextParamBehaviorCardItemLoopGameModel {
-        return new ContextParamBehaviorCardItemLoopGameModel(
-            this.timer,
-            this.timerMode,
-            this.getPlayer(),
-            parentContext,
-            preivousResult
-        )
+    override entryPoint(context: ContextParamItemLoopGameModel): void {
+        switch (this.timerMode) {
+            case TimerModeBehaviorCardItemLoopGameEnum.BEFORE:
+                let childContext1: ContextParamBehaviorCardItemLoopGameModel = this.buildContext(context)
+
+                childContext1.res.subscribeOne((result: ResultSetItemLoopGameType) => {
+                    let childContext2: ContextParamBehaviorCardItemLoopGameModel = this.buildContext(context, result)
+
+                    childContext2.res.subscribeOne((result: ResultSetItemLoopGameType) => {
+                        context.next(result)
+                    })
+
+                    this.doAtEnd(childContext2)
+                })
+
+                setTimeout(() => {
+                    this.doAtBeginning(childContext1)
+                }, this.timer)
+
+                break
+            case TimerModeBehaviorCardItemLoopGameEnum.BETWEEN:
+                let childContext11: ContextParamBehaviorCardItemLoopGameModel = this.buildContext(context)
+
+                childContext11.res.subscribeOne((result: ResultSetItemLoopGameType) => {
+                    let childContext22: ContextParamBehaviorCardItemLoopGameModel = this.buildContext(context, result)
+
+                    childContext22.res.subscribeOne((result: ResultSetItemLoopGameType) => {
+                        context.next(result)
+                    })
+
+                    setTimeout(() => {
+                        this.doAtEnd(childContext22)
+                    }, this.timer)
+                })
+
+                this.doAtBeginning(childContext11)
+
+                break
+        }
     }
 }

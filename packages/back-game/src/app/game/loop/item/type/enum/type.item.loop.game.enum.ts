@@ -1,3 +1,5 @@
 export enum TypeItemLoopGameEnum {
-   TEST
+    DEFAULT,
+    VILLAGER,
+    WEREWOLF
 }

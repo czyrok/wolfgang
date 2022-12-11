@@ -36,4 +36,4 @@ export class SkinUserModel extends DocumentModel implements SkinUserInterface {
     lastReleaseDate!: Date
 }
 
-export const SKinUserModelDocument = getModelForClass(SKinUserModel)
+export const SKinUserModelDocument = getModelForClass(SkinUserModel)

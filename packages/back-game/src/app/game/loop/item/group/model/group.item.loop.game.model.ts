@@ -43,7 +43,7 @@ export abstract class GroupItemLoopGameModel extends ItemLoopGameModel {
             let waiting: WaitingResContextParamItemLoopGameModel = new WaitingResContextParamItemLoopGameModel
             waiting.wait(childContexts)
             waiting.res.subscribeOne((result: ResultSetItemLoopGameType) => {
-                this.goNext(context, result)
+                context.next(result)
             })
 
             for (let i = 0; i < this.childBehaviorCardList.length; i++) {
@@ -56,7 +56,7 @@ export abstract class GroupItemLoopGameModel extends ItemLoopGameModel {
                 }).context)
             }
         } else {
-            this.goNext(context)
+            context.next()
         }
     }
 

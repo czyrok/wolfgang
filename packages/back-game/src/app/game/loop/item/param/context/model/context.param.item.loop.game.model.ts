@@ -21,7 +21,7 @@ export class ContextParamItemLoopGameModel extends MapParamModel<any> {
         if (parentContext !== undefined) this.setHeritage(parentContext)
     }
 
-    public get next(): (result: ResultSetItemLoopGameType) => void {
+    public get next(): (result?: ResultSetItemLoopGameType) => void {
         return this._next
     }
 

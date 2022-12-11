@@ -1,3 +1,4 @@
 export enum TypeBehaviorCardItemLoopGameEnum {
-    TEST
- }
+    VILLAGER,
+    WEREWOLF
+}

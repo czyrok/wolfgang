@@ -9,7 +9,7 @@ import { TypeCardPlayerGameEnum } from './game/player/card/type/enum/type.card.p
 
 export class TestItemLoop extends OneItemLoopGameModel {
     public constructor() {
-        super(true, FactoryCardBehaviorItemLoopGameUtil.get(TypeBehaviorCardItemLoopGameEnum.TEST))
+        super(true, FactoryCardBehaviorItemLoopGameUtil.get(TypeBehaviorCardItemLoopGameEnum.VILLAGER))
     }
 
     public objectBuildingEnd(): void {
