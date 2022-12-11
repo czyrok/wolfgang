@@ -2,26 +2,30 @@ import { BehaviorCardItemLoopGameModel } from '../../card/behavior/model/behavio
 import { ItemLoopGameModel } from '../../model/item.loop.game.model'
 import { ContextParamItemLoopGameModel } from '../../param/context/model/context.param.item.loop.game.model'
 
-export class OneItemLoopGameModel extends ItemLoopGameModel {
+import { ResultSetItemLoopGameType } from '../../set/result/type/result.set.item.loop.game.type'
+
+export abstract class OneItemLoopGameModel extends ItemLoopGameModel {
     public constructor(
-        nextList: Array<ItemLoopGameModel>,
         atNight: boolean,
         private _cardBehavior: BehaviorCardItemLoopGameModel
     ) {
-        super(nextList, atNight)
-    }
-
-    public set cardBehavior(value: BehaviorCardItemLoopGameModel) {
-        this._cardBehavior = value
+        super(atNight)
     }
 
     public get cardBehavior(): BehaviorCardItemLoopGameModel {
         return this._cardBehavior
     }
 
-    execute(context: ContextParamItemLoopGameModel): void {
-        // adef
-        this.cardBehavior.execute(context)
+    entryPoint(context: ContextParamItemLoopGameModel): void {
+        let childContext: ContextParamItemLoopGameModel = this.buildContext(context, context.result)
+
+        if (!this.cardBehavior.validCondition(childContext)) return context.next(undefined)
+        
+        childContext.res.subscribeOne((result: ResultSetItemLoopGameType) => {
+            context.next(result)
+        })
+
+        this.cardBehavior.entryPoint(childContext)
     }
 
     getCardBehavior(): Array<BehaviorCardItemLoopGameModel> {

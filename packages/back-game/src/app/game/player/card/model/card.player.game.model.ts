@@ -2,17 +2,9 @@ import { HandlerPlayerGameInterface } from '../../handler/interface/handler.play
 import { PlayerGameModel } from '../../model/player.game.model'
 
 export class CardPlayerGameModel implements HandlerPlayerGameInterface {
-    private _playerList: Array<PlayerGameModel> = new Array()
+    private _playerList: Array<PlayerGameModel> = new Array
 
     public constructor(private _key: string) { }
-
-    public set key(value: string) {
-        this._key = value
-    }
-
-    public set playerList(value: Array<PlayerGameModel>) {
-        this._playerList = value
-    }
 
     public get key(): string {
         return this._key
@@ -27,10 +19,14 @@ export class CardPlayerGameModel implements HandlerPlayerGameInterface {
     }
 
     hasPlayer(value: PlayerGameModel): boolean {
-        for (let player of this.playerList) {
+        for (const player of this.playerList) {
             if (player == value) return true
         }
 
         return false
+    }
+
+    getPlayer(): Array<PlayerGameModel> {
+        return this.playerList
     }
 }

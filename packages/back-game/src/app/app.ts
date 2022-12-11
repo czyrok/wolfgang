@@ -3,7 +3,6 @@ import { connect } from 'mongoose'
 import { Server } from 'socket.io'
 import { SocketIoController } from 'ts-socket.io-controller'
 
-
 async function run() {
     await connect("mongodb://localhost:60017/wolfgang", {
         authSource: "admin",

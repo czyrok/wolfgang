@@ -6,10 +6,6 @@ export class CardChoosingRulesModel {
         private _count: number
     ) { }
 
-    public set card(value: CardPlayerGameModel) {
-        this._card = value
-    }
-
     public set count(value: number) {
         this._count = value
     }

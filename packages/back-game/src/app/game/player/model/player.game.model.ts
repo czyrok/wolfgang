@@ -37,6 +37,6 @@ export class PlayerGameModel {
     }
 
     public updateActivityDate(): void {
-        this.activityDate = new Date()
+        this.activityDate = new Date
     }
 }

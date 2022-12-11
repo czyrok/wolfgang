@@ -3,10 +3,20 @@ import { KeyNotFoundMapParamError } from '../key-not-found/error/key-not-found.m
 export class MapParamModel {
     [key: string]: any
 
+    *[Symbol.iterator](): IterableIterator<[string, any]> {
+        const keys: Array<string> = Object.keys(this)
+
+        if (keys.length > 0) {
+            for (let i = 0; i < keys.length; i++) {
+                yield [keys[i], this[keys[i]]]
+            }
+        }
+    }
+
     public has(...keys: Array<string>): void {
         const currentKeys: Array<string> = Object.keys(this)
 
-        for (let key of keys) {
+        for (const key of keys) {
             if (currentKeys.indexOf(key) == -1) {
                 throw new KeyNotFoundMapParamError(key)
             }
@@ -14,10 +24,11 @@ export class MapParamModel {
     }
 
     public setHeritage(parent: MapParamModel) {
-        const parentKeys: Array<string> = Object.keys(parent)
+        const currentKeys: Array<string> = Object.keys(this),
+            parentKeys: Array<string> = Object.keys(parent)
 
-        for (let key of parentKeys) {
-            this[key] = parent[key]
+        for (const key of parentKeys) {
+            if (currentKeys.indexOf(key) == -1) this[key] = parent[key]
         }
     }
 }

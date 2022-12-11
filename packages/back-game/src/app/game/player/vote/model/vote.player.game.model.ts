@@ -7,18 +7,6 @@ export class VotePlayerGameModel {
         private _message: string
     ) { }
 
-    public set votingPlayer(value: PlayerGameModel) {
-        this._votingPlayer = value
-    }
-
-    public set votedPlayer(value: PlayerGameModel) {
-        this._votedPlayer = value
-    }
-
-    public set message(value: string) {
-        this._message = value
-    }
-
     public get votingplayer(): PlayerGameModel {
         return this._votingPlayer
     }
