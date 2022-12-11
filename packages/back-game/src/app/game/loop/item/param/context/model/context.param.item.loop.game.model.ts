@@ -4,7 +4,7 @@ import { NextContextParamItemLoopGameType } from '../next/type/next.context.para
 import { ResultSetItemLoopGameType } from '../../../set/result/type/result.set.item.loop.game.type'
 import { ResContextParamItemLoopGameModel } from '../res/model/res.context.param.item.loop.game.model'
 
-export class ContextParamItemLoopGameModel extends MapParamModel {
+export class ContextParamItemLoopGameModel extends MapParamModel<any> {
     private _next: NextContextParamItemLoopGameType
     private _res: ResContextParamItemLoopGameModel = new ResContextParamItemLoopGameModel
 

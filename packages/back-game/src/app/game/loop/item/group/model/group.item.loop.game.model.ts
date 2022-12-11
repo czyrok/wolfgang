@@ -20,7 +20,10 @@ export abstract class GroupItemLoopGameModel extends ItemLoopGameModel {
     }
 
     entryPoint(context: ContextParamItemLoopGameModel): void {
-        let childs: MapParamModel = new MapParamModel,
+        let childs: MapParamModel<{
+            context: ContextParamItemLoopGameModel,
+            self: ChildBehaviorCardItemLoopGameModel
+        }> = new MapParamModel,
             childContexts: Array<ContextParamItemLoopGameModel> = new Array
 
         for (let i = 0; i < this.childBehaviorCardList.length; i++) {
@@ -40,14 +43,20 @@ export abstract class GroupItemLoopGameModel extends ItemLoopGameModel {
             let waiting: WaitingResContextParamItemLoopGameModel = new WaitingResContextParamItemLoopGameModel
             waiting.wait(childContexts)
             waiting.res.subscribeOne((result: ResultSetItemLoopGameType) => {
-                context.next(result)
+                this.goNext(context, result)
             })
 
             for (let i = 0; i < this.childBehaviorCardList.length; i++) {
-                if (childs[i] !== undefined) childs[i].self.entryPoint(childs[i].context)
+                if (childs[i] !== undefined) ((childs[i] as {
+                    context: ContextParamItemLoopGameModel,
+                    self: ChildBehaviorCardItemLoopGameModel
+                }).self).entryPoint((childs[i] as {
+                    context: ContextParamItemLoopGameModel,
+                    self: ChildBehaviorCardItemLoopGameModel
+                }).context)
             }
         } else {
-            context.next(undefined)
+            this.goNext(context)
         }
     }
 

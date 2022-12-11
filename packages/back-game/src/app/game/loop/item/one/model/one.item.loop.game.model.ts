@@ -22,7 +22,7 @@ export abstract class OneItemLoopGameModel extends ItemLoopGameModel {
         if (!this.cardBehavior.validCondition(childContext)) return context.next(undefined)
         
         childContext.res.subscribeOne((result: ResultSetItemLoopGameType) => {
-            context.next(result)
+            this.goNext(context, result)
         })
 
         this.cardBehavior.entryPoint(childContext)

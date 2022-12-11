@@ -6,14 +6,14 @@ import { ContextParamBehaviorCardItemLoopGameModel } from '../param/context/mode
 import { StrategyCampPlayerGameInteface } from '../../../../../player/camp/strategy/interface/strategy.camp.player.game.interface'
 import { HandlerCardPlayerGameInterface } from '../../../../../player/card/handler/interface/handler.card.player.game.interface'
 import { HandlerPlayerGameInterface } from '../../../../../player/handler/interface/handler.player.game.interface'
-import { StrategyBehaviorCardPItemLoopGameInterface } from '../strategy/interface/strategy.behavior.card.item.loop.game.interface'
 
 import { TimerModeBehaviorCardItemLoopGameEnum } from '../timer-mode/enum/timer-mode.behavior.card.item.loop.game.enum'
 
 import { ResultSetItemLoopGameType } from '../../../set/result/type/result.set.item.loop.game.type'
+import { StrategyItemLoopGameInterface } from '../../../strategy/interface/strategy.item.loop.game.interface'
 
 export abstract class BehaviorCardItemLoopGameModel implements
-    StrategyBehaviorCardPItemLoopGameInterface<ContextParamItemLoopGameModel>,
+    StrategyItemLoopGameInterface<ContextParamItemLoopGameModel, ContextParamBehaviorCardItemLoopGameModel>,
     HandlerCardPlayerGameInterface,
     HandlerPlayerGameInterface {
     public constructor(

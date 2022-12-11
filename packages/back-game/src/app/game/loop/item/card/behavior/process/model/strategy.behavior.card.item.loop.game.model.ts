@@ -1,11 +1,11 @@
 import { ContextParamBehaviorCardItemLoopGameModel } from '../../param/context/model/context.param.behavior.card.item.loop.game.model'
 
-import { StrategyBehaviorCardPItemLoopGameInterface } from '../interface/strategy.behavior.card.item.loop.game.interface'
+import { ProcessBehaviorCardPItemLoopGameInterface } from '../interface/process.behavior.card.item.loop.game.interface'
 
 import { ResultSetItemLoopGameType } from '../../../../set/result/type/result.set.item.loop.game.type'
 
-export abstract class StrategyBehaviorCardPItemLoopGameModel implements StrategyBehaviorCardPItemLoopGameInterface<ContextParamBehaviorCardItemLoopGameModel> {
-    abstract entryPoint(context: ContextParamBehaviorCardItemLoopGameModel): void
+export abstract class ProcessBehaviorCardPItemLoopGameModel implements ProcessBehaviorCardPItemLoopGameInterface<ContextParamBehaviorCardItemLoopGameModel> {
+    abstract execute(context: ContextParamBehaviorCardItemLoopGameModel): ResultSetItemLoopGameType
 
     buildContext(
         parentContext: ContextParamBehaviorCardItemLoopGameModel,

@@ -8,17 +8,34 @@ import { ResultSetItemLoopGameType } from '../set/result/type/result.set.item.lo
 
 export abstract class ItemLoopGameModel implements StrategyItemLoopGameInterface<ContextParamItemLoopGameModel, ContextParamItemLoopGameModel>, HandlerBehaviorCardItemLoopGameInterface {
     private _nextList: Array<ItemLoopGameModel> = new Array
+    private _nextIndex: number = 0
 
     public constructor(
         private _atNight: boolean
     ) { }
 
+    private get nextList(): Array<ItemLoopGameModel> {
+        return this._nextList
+    }
+
+    private get nextIndex(): number {
+        return this._nextIndex
+    }
+
+    private set nextIndex(value: number) {
+        this._nextIndex = value
+    }
+
     public get atNight(): boolean {
         return this._atNight
     }
 
-    public get nextList(): Array<ItemLoopGameModel> {
-        return this._nextList
+    protected goNext(currentContext: ContextParamItemLoopGameModel, result?: ResultSetItemLoopGameType): void {
+        this.nextIndex++
+
+        if (this.nextIndex == this.nextList.length) this.nextIndex = 0
+
+        this.nextList[this.nextIndex].entryPoint(this.buildContext(currentContext, result))
     }
 
     public abstract objectBuildingEnd(): void
