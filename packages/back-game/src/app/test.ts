@@ -24,7 +24,7 @@ export class TestBehaviorCardItemLoop extends BehaviorCardItemLoopGameModel {
             5,
             5,
             [
-                FactoryCardPlayerGameUtil.get(TypeCardPlayerGameEnum.TEST)
+                FactoryCardPlayerGameUtil.get(TypeCardPlayerGameEnum.VILLAGER)
             ],
             {
                 setCampToCard(listCard) {

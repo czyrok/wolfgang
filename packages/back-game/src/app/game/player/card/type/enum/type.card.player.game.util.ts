@@ -1,3 +1,4 @@
 export enum TypeCardPlayerGameEnum {
-    TEST
+    GREY_WEREWOLF,
+    VILLAGER
  }
