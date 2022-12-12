@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core'
 export class UserSharedService {
     private _pseudo: string = ''
 
-    public set pseudo(value:string) {
+    public set pseudo(value: string) {
         this._pseudo = value
     }
 
