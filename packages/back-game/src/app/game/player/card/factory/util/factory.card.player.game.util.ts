@@ -3,7 +3,7 @@ import { CardPlayerGameModel } from '../../model/card.player.game.model'
 import { GreyWerewolfImplementationCardPlayerGameModel } from '../../implementation/werewolf/grey/model/grey.werewolf.implementation.card.player.game.model'
 import { VillagerImplementationCardPlayerGameModel } from '../../implementation/villager/model/villager.implementation.card.player.game.model'
 
-import { TypeCardPlayerGameEnum } from '../../type/enum/type.card.player.game.util'
+import { TypeCardPlayerGameEnum } from '../../type/enum/type.card.player.game.enum'
 
 export class FactoryCardPlayerGameUtil {
     private static _storage: MapParamModel<CardPlayerGameModel> = new MapParamModel

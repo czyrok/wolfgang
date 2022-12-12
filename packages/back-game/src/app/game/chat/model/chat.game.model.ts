@@ -1,5 +1,4 @@
-import { prop, getModelForClass, Ref, ReturnModelType, plugin } from '@typegoose/typegoose'
-import * as findOrCreate from 'mongoose-findorcreate'
+import { prop, getModelForClass, Ref, ReturnModelType } from '@typegoose/typegoose'
 import { Exclude, Expose } from 'class-transformer'
 import { DocumentModel, CollectionName } from 'common'
 
@@ -10,7 +9,6 @@ import { ChatGameInterface } from '../interface/chat.game.interface'
 import { TypeChatGameEnum } from '../type/enum/type.chat.game.enum'
 
 @Exclude()
-@plugin(findOrCreate)
 @CollectionName()
 export class ChatGameModel extends DocumentModel implements ChatGameInterface {
     @Expose()
@@ -25,14 +23,26 @@ export class ChatGameModel extends DocumentModel implements ChatGameInterface {
     @prop({ ref: () => MessageChatGameModel, default: new Array })
     message!: Array<Ref<MessageChatGameModel>>
 
-    public static async getChat(this: ReturnModelType<typeof ChatGameModelDocument>, type: TypeChatGameEnum, gameId: string): Promise<any> {
-        return await this.findOrCreate({
-            type: type,
-            gameId: gameId
+    public static async getChat(this: ReturnModelType<typeof ChatGameModelDocument>, gameId: string, type: TypeChatGameEnum): Promise<any> {
+        let chat: any = this.findOne({
+            gameId: gameId,
+            type: type
         }).exec()
+
+        if (chat === null) {
+            chat = new ChatGameModelDocument({
+                gameId: gameId,
+                type: type
+            })
+
+            chat.save()
+        }
+
+        return chat
     }
 
     public static async addMessage(this: ReturnModelType<typeof ChatGameModelDocument>, chat: any, message: MessageChatGameModel) {
+        // #averif
         chat.message.push(new MessageChatGameModelDocument(message))
 
         chat.save()

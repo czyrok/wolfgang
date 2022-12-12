@@ -3,6 +3,8 @@ import { connect } from 'mongoose'
 import { Server } from 'socket.io'
 import { SocketIoController } from 'ts-socket.io-controller'
 
+import { ChatGameModel } from './game/chat/model/chat.game.model'
+
 async function run() {
     await connect("mongodb://localhost:60017/wolfgang", {
         authSource: "admin",
