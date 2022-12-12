@@ -9,11 +9,13 @@ import { DefaultHomeMainViewComponent } from './default/component/default.home.m
 import { LogInHomeMainViewComponent } from './log-in/component/log-in.home.main.view.component'
 import { NotFoundHomeMainViewComponent } from './not-found/component/not-found.home.main.view.component'
 import { RegisterHomeMainViewComponent } from './register/component/register.home.main.view.component'
+import { UsernameHomeMainViewComponent } from './username/component/username.home.main.view.component'
 
 @NgModule({
     declarations: [
         HomeMainViewComponent,
         DefaultHomeMainViewComponent,
+        UsernameHomeMainViewComponent,
         LogInHomeMainViewComponent,
         RegisterHomeMainViewComponent,
         NotFoundHomeMainViewComponent

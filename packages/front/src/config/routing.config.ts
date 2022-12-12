@@ -11,6 +11,7 @@ import { AddCardsProposalMainViewComponent } from 'src/app/view/main/cards-propo
 
 import { HomeGamesMainViewComponent } from 'src/app/view/main/games/home/component/home.games.main.view.component'
 import { DefaultHomeMainViewComponent } from 'src/app/view/main/home/default/component/default.home.main.view.component'
+import { UsernameHomeMainViewComponent } from 'src/app/view/main/home/username/component/username.home.main.view.component'
 import { LogInHomeMainViewComponent } from 'src/app/view/main/home/log-in/component/log-in.home.main.view.component'
 import { RegisterHomeMainViewComponent } from 'src/app/view/main/home/register/component/register.home.main.view.component'
 
@@ -29,6 +30,7 @@ export const routes: Routes = [
         path: '', component: MainViewComponent, children: [
           { path: '', component: HomeMainViewComponent, children: [
             { path: '', component: DefaultHomeMainViewComponent },
+            { path: 'username', component: UsernameHomeMainViewComponent },
             { path: 'log-in', component: LogInHomeMainViewComponent },
             { path: 'register', component: RegisterHomeMainViewComponent },
             { path: '404', component: NotFoundHomeMainViewComponent },
