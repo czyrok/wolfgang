@@ -3,6 +3,7 @@ import { ContextParamItemLoopGameModel } from '../../../../../param/context/mode
 import { PlayerGameModel } from '../../../../../../../player/model/player.game.model'
 
 import { TypeProcessBehaviorCardPItemLoopGameEnum } from '../../../process/type/enum/type.process.behavior.card.item.loop.game.enum'
+import { TypeChatGameEnum } from '../../../../../../../chat/type/enum/type.chat.game.enum'
 
 export class DeathImplementationBehaviorCardItemLoop extends BehaviorCardItemLoopGameModel {
     public constructor() {
@@ -11,7 +12,8 @@ export class DeathImplementationBehaviorCardItemLoop extends BehaviorCardItemLoo
             // #achan
             -1,
             0,
-            []
+            [],
+            TypeChatGameEnum.DEATH
         )
     }
 
