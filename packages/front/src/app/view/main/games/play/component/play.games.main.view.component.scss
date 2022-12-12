@@ -6,6 +6,7 @@ section {
         "c b";
     grid-template-columns: 1fr property.get('size', 'aside');
     grid-template-rows: auto 1fr;
+    row-gap: property.get('borderLimit', 'regular');
     column-gap: property.get('borderLimit', 'regular');
 }
 
