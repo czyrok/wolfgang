@@ -6,14 +6,15 @@ import { OneItemLoopGameModel } from '../../../one/model/one.item.loop.game.mode
 import { TypeBehaviorCardItemLoopGameEnum } from '../../../card/behavior/type/enum/type.behavior.card.item.loop.game.enum'
 import { TypeItemLoopGameEnum } from '../../../type/enum/type.item.loop.game.enum'
 
-export class WerewolfImplementationItemLoopGameModel extends OneItemLoopGameModel {
+export class DeathImplementationItemLoopGameModel extends OneItemLoopGameModel {
     public constructor() {
-        super(true, FactoryCardBehaviorItemLoopGameUtil.get(TypeBehaviorCardItemLoopGameEnum.WEREWOLF))
+        super(false, FactoryCardBehaviorItemLoopGameUtil.get(TypeBehaviorCardItemLoopGameEnum.DEATH))
     }
 
     public objectBuildingEnd(): void {
         this.nextList.push(
-            FactoryItemLoopGameUtil.get(TypeItemLoopGameEnum.DEATH)
+            FactoryItemLoopGameUtil.get(TypeItemLoopGameEnum.VILLAGER),
+            FactoryItemLoopGameUtil.get(TypeItemLoopGameEnum.WEREWOLF)
         )
     }
 }

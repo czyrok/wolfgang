@@ -13,6 +13,8 @@ export abstract class GroupItemLoopGameModel extends ItemLoopGameModel {
         private _childBehaviorCardList: Array<ChildBehaviorCardItemLoopGameModel>
     ) {
         super(atNight)
+
+        for (let cardBehavior of this.childBehaviorCardList) cardBehavior.setupPlayers()
     }
 
     public get childBehaviorCardList(): Array<ChildBehaviorCardItemLoopGameModel> {

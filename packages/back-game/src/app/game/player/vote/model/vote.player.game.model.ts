@@ -1,13 +1,16 @@
-import { PlayerGameModel } from "../../model/player.game.model"
+import { PlayerGameModel } from '../../model/player.game.model'
+
+import { TypeVotePlayerGameEnum } from '../type/enum/type.vote.player.game.enum'
 
 export class VotePlayerGameModel {
     public constructor(
         private _votingPlayer: PlayerGameModel,
         private _votedPlayer: PlayerGameModel,
-        private _message: string
+        private _message: string,
+        private _type: TypeVotePlayerGameEnum
     ) { }
 
-    public get votingplayer(): PlayerGameModel {
+    public get votingPlayer(): PlayerGameModel {
         return this._votingPlayer
     }
 
@@ -17,5 +20,9 @@ export class VotePlayerGameModel {
 
     public get message(): string {
         return this._message
+    }
+
+    public get type(): TypeVotePlayerGameEnum {
+        return this._type
     }
 }

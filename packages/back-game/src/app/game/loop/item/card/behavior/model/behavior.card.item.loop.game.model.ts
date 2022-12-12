@@ -6,22 +6,24 @@ import { ContextParamBehaviorCardItemLoopGameModel } from '../param/context/mode
 import { StrategyCampPlayerGameInteface } from '../../../../../player/camp/strategy/interface/strategy.camp.player.game.interface'
 import { HandlerCardPlayerGameInterface } from '../../../../../player/card/handler/interface/handler.card.player.game.interface'
 import { HandlerPlayerGameInterface } from '../../../../../player/handler/interface/handler.player.game.interface'
-
-import { TimerModeBehaviorCardItemLoopGameEnum } from '../timer-mode/enum/timer-mode.behavior.card.item.loop.game.enum'
+import { StrategyItemLoopGameInterface } from '../../../strategy/interface/strategy.item.loop.game.interface'
 
 import { ResultSetItemLoopGameType } from '../../../set/result/type/result.set.item.loop.game.type'
-import { StrategyItemLoopGameInterface } from '../../../strategy/interface/strategy.item.loop.game.interface'
+import { TypeChatGameEnum } from '../../../../../chat/type/enum/type.chat.game.enum'
 
 export abstract class BehaviorCardItemLoopGameModel implements
     StrategyItemLoopGameInterface<ContextParamItemLoopGameModel, ContextParamBehaviorCardItemLoopGameModel>,
     HandlerCardPlayerGameInterface,
     HandlerPlayerGameInterface {
+    private _players!: Array<PlayerGameModel>
+
     public constructor(
         private _key: string,
         private _campHierarchy: number,
         private _timer: number,
         private _cardList: Array<CardPlayerGameModel>,
-        private _campStrategy: StrategyCampPlayerGameInteface
+        private _chat?: TypeChatGameEnum,
+        private _campStrategy?: StrategyCampPlayerGameInteface,
     ) { }
 
     public get key(): string {
@@ -40,8 +42,24 @@ export abstract class BehaviorCardItemLoopGameModel implements
         return this._cardList
     }
 
-    public get campStrategy(): StrategyCampPlayerGameInteface {
+    public get chat(): TypeChatGameEnum | undefined {
+        return this._chat
+    }
+
+    public get campStrategy(): StrategyCampPlayerGameInteface | undefined {
         return this._campStrategy
+    }
+
+    public get players(): Array<PlayerGameModel> {
+        return this._players
+    }
+
+    private set players(value: Array<PlayerGameModel>) {
+        this._players = value
+    }
+
+    public setupPlayers(): void {
+        for (const card of this.cardList) this.players.push(...card.getPlayer())
     }
 
     public abstract validCondition(context: ContextParamItemLoopGameModel): boolean
@@ -89,22 +107,14 @@ export abstract class BehaviorCardItemLoopGameModel implements
     }
 
     hasPlayer(player: PlayerGameModel): boolean {
-        let result: boolean = false
-
-        for (const card of this.cardList) {
-            result = card.hasPlayer(player)
-
-            if (result === true) break
+        for (let currentPlayer of this.players) {
+            if (player == currentPlayer) return true
         }
 
-        return result
+        return false
     }
 
     getPlayer(): Array<PlayerGameModel> {
-        let list: Array<PlayerGameModel> = new Array
-
-        for (const card of this.cardList) list.push(...card.getPlayer())
-
-        return list
+        return this.players
     }
 }

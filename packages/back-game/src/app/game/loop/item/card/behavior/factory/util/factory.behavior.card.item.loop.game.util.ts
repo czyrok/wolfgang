@@ -2,6 +2,7 @@ import { MapParamModel } from '../../../../../../../param/map/model/map.param.mo
 import { BehaviorCardItemLoopGameModel } from '../../model/behavior.card.item.loop.game.model'
 import { WerewolfImplementationBehaviorCardItemLoop } from '../../implementation/werewolf/model/werewolf.implementation.behavior.card.item.loop.game.model'
 import { VillagerImplementationBehaviorCardItemLoop } from '../../implementation/villager/model/villager.implementation.behavior.card.item.loop.game.model'
+import { DeathImplementationBehaviorCardItemLoop } from '../../implementation/death/model/death.implementation.behavior.card.item.loop.game.model'
 
 import { TypeBehaviorCardItemLoopGameEnum } from '../../type/enum/type.behavior.card.item.loop.game.enum'
 
@@ -21,6 +22,10 @@ export class FactoryCardBehaviorItemLoopGameUtil {
                     break
                 case TypeBehaviorCardItemLoopGameEnum.VILLAGER:
                     this.storage[type] = new VillagerImplementationBehaviorCardItemLoop()
+
+                    break
+                case TypeBehaviorCardItemLoopGameEnum.DEATH:
+                    this.storage[type] = new DeathImplementationBehaviorCardItemLoop()
 
                     break
             }

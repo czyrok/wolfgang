@@ -13,7 +13,7 @@ export class VillagerImplementationItemLoopGameModel extends OneItemLoopGameMode
 
     public objectBuildingEnd(): void {
         this.nextList.push(
-            FactoryItemLoopGameUtil.get(TypeItemLoopGameEnum.WEREWOLF)
+            FactoryItemLoopGameUtil.get(TypeItemLoopGameEnum.DEATH)
         )
     }
 }

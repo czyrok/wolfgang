@@ -14,8 +14,10 @@ export class CardPlayerGameModel implements HandlerPlayerGameInterface {
         return this._playerList
     }
 
-    public addPlayer(value: PlayerGameModel): void {
-        this.playerList.push(value)
+    public addPlayer(player: PlayerGameModel): void {
+        player.card = this
+
+        this.playerList.push(player)
     }
 
     hasPlayer(value: PlayerGameModel): boolean {

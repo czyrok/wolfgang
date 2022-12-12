@@ -1,3 +1,5 @@
+export * from './model/document.model'
+export * from './decorator/collection-name.decorator'
 export * from './chained-list/iterator/interface/iterator.chained-list.interface'
 
 export * from './user/model/user.model'
@@ -44,15 +46,3 @@ export * from './report/user/type/enum/type.user.report.enum'
 
 export * from './report/user/other/model/other.user.report.model'
 export * from './report/user/other/interface/other.user.report.interface'
-
-export * from './game/chat/message/model/message.chat.game.model'
-export * from './game/chat/message/interface/message.chat.game.interface'
-
-export * from './game/chat/message/user/model/user.message.chat.game.model'
-export * from './game/chat/message/user/interface/user.message.chat.game.interface'
-
-export * from './game/chat/message/event/model/event.message.chat.game.model'
-export * from './game/chat/message/event/interface/event.message.chat.game.interface'
-
-export * from './game/chat/model/chat.game.model'
-export * from './game/chat/interface/chat.game.interface'

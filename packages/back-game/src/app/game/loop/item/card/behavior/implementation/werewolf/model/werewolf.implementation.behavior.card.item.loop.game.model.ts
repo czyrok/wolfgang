@@ -1,9 +1,15 @@
 import { FactoryCardPlayerGameUtil } from '../../../../../../../player/card/factory/util/factory.card.player.game.util'
 
 import { BehaviorCardItemLoopGameModel } from '../../../model/behavior.card.item.loop.game.model'
-import { ContextParamItemLoopGameModel } from '../../../../../param/context/model/context.param.item.loop.game.model';
+import { ContextParamItemLoopGameModel } from '../../../../../param/context/model/context.param.item.loop.game.model'
+import { ResultSetItemLoopGameModel } from '../../../../../set/result/model/result.set.item.loop.game.model'
+import { HandlerVotePlayerGameModel } from '../../../../../../../player/vote/handler/model/handler.vote.player.game.model'
+import { PlayerGameModel } from '../../../../../../../player/model/player.game.model'
+import { VillainImplementationStrategyCampPlayerGameModel } from '../../../../../../../player/camp/strategy/implementation/villain/model/villain.implementation.strategy.camp.player.game.model'
 
-import { TypeCardPlayerGameEnum } from '../../../../../../../player/card/type/enum/type.card.player.game.util'
+import { TypeCardPlayerGameEnum } from '../../../../../../../player/card/type/enum/type.card.player.game.enum'
+import { TypeProcessBehaviorCardPItemLoopGameEnum } from '../../../process/type/enum/type.process.behavior.card.item.loop.game.enum'
+import { TypeChatGameEnum } from '../../../../../../../chat/type/enum/type.chat.game.enum'
 
 export class WerewolfImplementationBehaviorCardItemLoop extends BehaviorCardItemLoopGameModel {
     public constructor() {
@@ -14,12 +20,8 @@ export class WerewolfImplementationBehaviorCardItemLoop extends BehaviorCardItem
             [
                 FactoryCardPlayerGameUtil.get(TypeCardPlayerGameEnum.GREY_WEREWOLF)
             ],
-            // #achan
-            {
-                setCampToCard(listCard) {
-
-                },
-            }
+            TypeChatGameEnum.WEREWOLF,
+            new VillainImplementationStrategyCampPlayerGameModel
         )
     }
 
@@ -33,11 +35,22 @@ export class WerewolfImplementationBehaviorCardItemLoop extends BehaviorCardItem
 
     public doAtBeginning(context: ContextParamItemLoopGameModel): void {
         // #achan
-        throw new Error('Method not implemented.');
+        
     }
 
     public doAtEnd(context: ContextParamItemLoopGameModel): void {
         // #achan
-        throw new Error('Method not implemented.');
+
+        let handler: HandlerVotePlayerGameModel = HandlerVotePlayerGameModel.instance,
+            player: PlayerGameModel | null = handler.mostVotedOfPlayersGroup(this.getPlayer())
+
+        if (player !== null) {
+            let result: ResultSetItemLoopGameModel = new ResultSetItemLoopGameModel
+            result[TypeProcessBehaviorCardPItemLoopGameEnum.KILL] = [player]
+
+            context.next(result)
+        } else {
+            context.next()
+        }
     }
 }

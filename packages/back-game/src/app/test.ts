@@ -5,7 +5,7 @@ import { FactoryCardBehaviorItemLoopGameUtil } from './game/loop/item/card/behav
 import { TypeBehaviorCardItemLoopGameEnum } from './game/loop/item/card/behavior/type/enum/type.behavior.card.item.loop.game.enum';
 import { CardPlayerGameModel } from './game/player/card/model/card.player.game.model';
 import { FactoryCardPlayerGameUtil } from './game/player/card/factory/util/factory.card.player.game.util'
-import { TypeCardPlayerGameEnum } from './game/player/card/type/enum/type.card.player.game.util'
+import { TypeCardPlayerGameEnum } from './game/player/card/type/enum/type.card.player.game.enum'
 
 export class TestItemLoop extends OneItemLoopGameModel {
     public constructor() {
@@ -25,12 +25,7 @@ export class TestBehaviorCardItemLoop extends BehaviorCardItemLoopGameModel {
             5,
             [
                 FactoryCardPlayerGameUtil.get(TypeCardPlayerGameEnum.VILLAGER)
-            ],
-            {
-                setCampToCard(listCard) {
-
-                },
-            }
+            ]
         )
     }
 

@@ -10,6 +10,8 @@ export abstract class OneItemLoopGameModel extends ItemLoopGameModel {
         private _cardBehavior: BehaviorCardItemLoopGameModel
     ) {
         super(atNight)
+
+        this.cardBehavior.setupPlayers()
     }
 
     public get cardBehavior(): BehaviorCardItemLoopGameModel {

@@ -1,8 +1,15 @@
+import { CardPlayerGameModel } from '../card/model/card.player.game.model'
+
+import { CampPlayerGameEnum } from '../camp/enum/camp.player.game.enum'
+
 export class PlayerGameModel {
     private _activityDate!: Date
     private _inactivityLevel: number = 0
     private _isMayor: boolean = false
     private _gamePointAccumulated: number = 0
+    private _isDead: boolean = false
+    private _camp: CampPlayerGameEnum = CampPlayerGameEnum.UNDEFINED
+    private _card!: CardPlayerGameModel
 
     public set activityDate(value: Date) {
         this._activityDate = value
@@ -20,6 +27,18 @@ export class PlayerGameModel {
         this._gamePointAccumulated = value
     }
 
+    public set isDead(value: boolean) {
+        this._isDead = value
+    }
+
+    public set camp(value: CampPlayerGameEnum) {
+        this._camp = value
+    }
+
+    public set card(value: CardPlayerGameModel) {
+        this._card = value
+    }
+
     public get activityDate(): Date {
         return this._activityDate
     }
@@ -34,6 +53,18 @@ export class PlayerGameModel {
 
     public get gamePointAccumulated(): number {
         return this._gamePointAccumulated
+    }
+
+    public get isDead(): boolean {
+        return this._isDead
+    }
+
+    public get camp(): CampPlayerGameEnum {
+        return this._camp
+    }
+
+    public get card(): CardPlayerGameModel {
+        return this._card
     }
 
     public updateActivityDate(): void {
