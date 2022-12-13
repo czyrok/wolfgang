@@ -23,6 +23,7 @@ export class ChatGameModel extends DocumentModel implements ChatGameInterface {
     @prop({ ref: () => MessageChatGameModel, default: new Array })
     message!: Array<Ref<MessageChatGameModel>>
 
+    // #achan
     public static async getChat(this: ReturnModelType<typeof ChatGameModelDocument>, gameId: string, type: TypeChatGameEnum): Promise<any> {
         let chat: any = this.findOne({
             gameId: gameId,
@@ -41,6 +42,7 @@ export class ChatGameModel extends DocumentModel implements ChatGameInterface {
         return chat
     }
 
+    // #achan
     public static async addMessage(this: ReturnModelType<typeof ChatGameModelDocument>, chat: any, message: MessageChatGameModel) {
         // #averif
         chat.message.push(new MessageChatGameModelDocument(message))

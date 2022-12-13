@@ -12,7 +12,7 @@ export class MessageChatGameModel extends DocumentModel implements MessageChatGa
     text!: string
 
     @Expose()
-    @prop({ required: true })
+    @prop({ required: true, default: new Date() })
     releaseDate!: Date
 }
 

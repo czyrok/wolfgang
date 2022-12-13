@@ -1,11 +1,17 @@
+import { Subject, Subscription } from 'rxjs'
+
 import { FactoryCardPlayerGameUtil } from '../player/card/factory/util/factory.card.player.game.util'
 
 import { PlayerGameModel } from '../player/model/player.game.model'
 import { RulesGameModel } from '../rules/model/rules.game.model'
+import { StateGameModel } from '../state/model/state.game.model'
+import { IteratorItemLoopGameModel } from '../loop/item/iterator/model/iterator.item.loop.game.model'
+import { ItemLoopGameModel } from '../loop/item/model/item.loop.game.model'
+import { ContextParamItemLoopGameModel } from '../loop/item/param/context/model/context.param.item.loop.game.model'
 
 import { TypeCardPlayerGameEnum } from '../player/card/type/enum/type.card.player.game.enum'
-import { StateGameModel } from '../state/model/state.game.model'
-import { Subject, Subscription } from 'rxjs'
+
+import { ResultSetItemLoopGameType } from '../loop/item/set/result/type/result.set.item.loop.game.type'
 
 export class GameModel {
     private static _instance: GameModel = new GameModel
@@ -22,7 +28,7 @@ export class GameModel {
     public static get instance(): GameModel {
         return this._instance
     }
-    
+
     private get stateChange(): Subject<StateGameModel> {
         return this._stateChange
     }
@@ -50,10 +56,38 @@ export class GameModel {
     public async start(): Promise<void> {
         // #achan
         this.isStarted = true
-        
+
         FactoryCardPlayerGameUtil.get(TypeCardPlayerGameEnum.VILLAGER).addPlayer(this.players[0])
         FactoryCardPlayerGameUtil.get(TypeCardPlayerGameEnum.VILLAGER).addPlayer(this.players[1])
         FactoryCardPlayerGameUtil.get(TypeCardPlayerGameEnum.GREY_WEREWOLF).addPlayer(this.players[2])
+
+        let ite: IteratorItemLoopGameModel = new IteratorItemLoopGameModel
+        let previousResult: ResultSetItemLoopGameType = undefined
+
+        for (let item of ite) {
+            // #achan
+            previousResult = this.next(item, previousResult)
+        }
+    }
+
+    public next(current: ItemLoopGameModel, previousResult?: ResultSetItemLoopGameType): ResultSetItemLoopGameType {
+        // #achan
+        let context: ContextParamItemLoopGameModel = new ContextParamItemLoopGameModel(undefined, previousResult)
+
+        let isFinished: boolean = false
+        let currentResult: ResultSetItemLoopGameType = undefined
+
+        context.res.subscribeOne((result) => {
+            currentResult = result
+
+            isFinished = true
+        })
+
+        current.entryPoint(context)
+
+        while (!isFinished) { }
+
+        return currentResult
     }
 
     public async addPlayer(username: string, socketId: string): Promise<boolean> {
