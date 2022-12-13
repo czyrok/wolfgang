@@ -1,6 +1,6 @@
 export enum TypeChatGameEnum {
-    ALIVE,
-    WEREWOLF,
-    DEATH,
-    COUPLE
+    ALIVE = 'AliveGameChatType',
+    WEREWOLF = 'WerewolfGameChatType',
+    DEATH = 'DeathGameChatType',
+    COUPLE = 'CoupleGameChatType'
 }

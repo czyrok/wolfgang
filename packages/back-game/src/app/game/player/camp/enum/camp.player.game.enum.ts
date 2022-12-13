@@ -1,6 +1,6 @@
 export enum CampPlayerGameEnum {
-    SELF,
-    VILLAIN,
-    VILLAGER,
-    UNDEFINED
+    SELF = 'SelfGamePlayerCamp',
+    VILLAIN = 'VillainGamePlayerCamp',
+    VILLAGER = 'VillagerGamePlayerCamp',
+    UNDEFINED = 'UnefinedGamePlayerCamp'
 }

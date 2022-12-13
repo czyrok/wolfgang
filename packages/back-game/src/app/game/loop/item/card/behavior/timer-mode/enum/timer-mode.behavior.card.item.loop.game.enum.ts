@@ -1,4 +1,4 @@
 export enum TimerModeBehaviorCardItemLoopGameEnum {
-    BEFORE,
-    BETWEEN
+    BEFORE = 'BeforeGameLoopItemCardBehaviorTimeMode',
+    BETWEEN = 'BetweenGameLoopItemCardBehaviorTimeMode'
 }

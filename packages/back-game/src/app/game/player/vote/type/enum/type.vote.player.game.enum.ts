@@ -1,4 +1,4 @@
 export enum TypeVotePlayerGameEnum {
-    DEFAULT,
-    SAVE
+    DEFAULT = 'DefaultGamePlayerVoteType',
+    SAVE = 'SaveGamePlayerVoteType',
 }
