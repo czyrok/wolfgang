@@ -1,3 +1,3 @@
-export enum TypeProcessBehaviorCardPItemLoopGameEnum {
-    KILL = 'kill'
+export enum TypeProcessBehaviorCardItemLoopGameEnum {
+    KILL = 'KillGameLoopItemCardBehaviorProcessType'
 }

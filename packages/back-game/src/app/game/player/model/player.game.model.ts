@@ -11,6 +11,8 @@ export class PlayerGameModel {
     private _camp: CampPlayerGameEnum = CampPlayerGameEnum.UNDEFINED
     private _card!: CardPlayerGameModel
 
+    constructor(private _username: string, private _socketId: string) { }
+
     public set activityDate(value: Date) {
         this._activityDate = value
     }
@@ -37,6 +39,14 @@ export class PlayerGameModel {
 
     public set card(value: CardPlayerGameModel) {
         this._card = value
+    }
+
+    public get username(): string {
+        return this._username
+    }
+
+    public get socketId(): string {
+        return this._socketId
     }
 
     public get activityDate(): Date {

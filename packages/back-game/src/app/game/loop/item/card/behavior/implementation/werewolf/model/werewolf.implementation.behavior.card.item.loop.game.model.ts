@@ -8,7 +8,7 @@ import { PlayerGameModel } from '../../../../../../../player/model/player.game.m
 import { VillainImplementationStrategyCampPlayerGameModel } from '../../../../../../../player/camp/strategy/implementation/villain/model/villain.implementation.strategy.camp.player.game.model'
 
 import { TypeCardPlayerGameEnum } from '../../../../../../../player/card/type/enum/type.card.player.game.enum'
-import { TypeProcessBehaviorCardPItemLoopGameEnum } from '../../../process/type/enum/type.process.behavior.card.item.loop.game.enum'
+import { TypeProcessBehaviorCardItemLoopGameEnum } from '../../../process/type/enum/type.process.behavior.card.item.loop.game.enum'
 import { TypeChatGameEnum } from '../../../../../../../chat/type/enum/type.chat.game.enum'
 
 export class WerewolfImplementationBehaviorCardItemLoop extends BehaviorCardItemLoopGameModel {
@@ -46,7 +46,7 @@ export class WerewolfImplementationBehaviorCardItemLoop extends BehaviorCardItem
 
         if (player !== null) {
             let result: ResultSetItemLoopGameModel = new ResultSetItemLoopGameModel
-            result[TypeProcessBehaviorCardPItemLoopGameEnum.KILL] = [player]
+            result[TypeProcessBehaviorCardItemLoopGameEnum.KILL] = [player]
 
             context.next(result)
         } else {

@@ -6,6 +6,7 @@ import { ContextParamBehaviorCardItemLoopGameModel } from '../../param/context/m
 import { StrategyCampPlayerGameInteface } from '../../../../../../player/camp/strategy/interface/strategy.camp.player.game.interface'
 
 import { TimerModeBehaviorCardItemLoopGameEnum } from '../../timer-mode/enum/timer-mode.behavior.card.item.loop.game.enum'
+import { TypeChatGameEnum } from '../../../../../../chat/type/enum/type.chat.game.enum'
 
 import { ResultSetItemLoopGameType } from '../../../../set/result/type/result.set.item.loop.game.type'
 
@@ -15,10 +16,11 @@ export abstract class ChildBehaviorCardItemLoopGameModel extends BehaviorCardIte
         campHierarchy: number,
         timer: number,
         cardList: Array<CardPlayerGameModel>,
-        campStrategy: StrategyCampPlayerGameInteface,
-        private _timerMode: TimerModeBehaviorCardItemLoopGameEnum
+        private _timerMode: TimerModeBehaviorCardItemLoopGameEnum,
+        chat?: TypeChatGameEnum,
+        campStrategy?: StrategyCampPlayerGameInteface
     ) {
-        super(key, campHierarchy, timer, cardList, campStrategy)
+        super(key, campHierarchy, timer, cardList, chat, campStrategy)
     }
 
     public get timerMode(): TimerModeBehaviorCardItemLoopGameEnum {

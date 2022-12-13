@@ -1,4 +1,4 @@
 export enum TypeCardPlayerGameEnum {
-    GREY_WEREWOLF,
-    VILLAGER
+    GREY_WEREWOLF = 'GreyWerewolfGamePlayerCardType',
+    VILLAGER = 'VillagerGamePlayerCardType'
  }

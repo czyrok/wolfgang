@@ -1,5 +1,5 @@
 export enum TypeBehaviorCardItemLoopGameEnum {
-    VILLAGER,
-    WEREWOLF,
-    DEATH
+    VILLAGER = 'VillagerGameLoopItemCardBehaviorType',
+    WEREWOLF = 'WerewolfGameLoopItemCardBehaviorType',
+    DEATH = 'DeathGameLoopItemCardBehaviorType'
 }
