@@ -67,7 +67,7 @@ export class GameModel {
         return true
     }
 
-    public onStateChange(callback: (state: StateGameModel) => {}): Subscription {
+    public onStateChange(callback: (state: StateGameModel) => void): Subscription {
         return this.stateChange.subscribe(callback)
     }
 }
