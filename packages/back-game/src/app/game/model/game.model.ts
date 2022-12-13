@@ -6,10 +6,18 @@ import { RulesGameModel } from '../rules/model/rules.game.model'
 import { TypeCardPlayerGameEnum } from '../player/card/type/enum/type.card.player.game.enum'
 
 export class GameModel {
+    private static _instance: GameModel = new GameModel
+
     private _isStarted: boolean = false
 
     private _rules: RulesGameModel = new RulesGameModel
     private _players: Array<PlayerGameModel> = new Array
+
+    private constructor() { }
+
+    public static get instance(): GameModel {
+        return this._instance
+    }
 
     public get players(): Array<PlayerGameModel> {
         return this._players
