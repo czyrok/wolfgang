@@ -37,12 +37,14 @@ export class GameModel {
 
     public async start(): Promise<void> {
         // #achan
+        this.isStarted = true
+        
         FactoryCardPlayerGameUtil.get(TypeCardPlayerGameEnum.VILLAGER).addPlayer(this.players[0])
         FactoryCardPlayerGameUtil.get(TypeCardPlayerGameEnum.VILLAGER).addPlayer(this.players[1])
         FactoryCardPlayerGameUtil.get(TypeCardPlayerGameEnum.GREY_WEREWOLF).addPlayer(this.players[2])
     }
 
-    public async addPlayer(username: string, socketId: number): Promise<boolean> {
+    public async addPlayer(username: string, socketId: string): Promise<boolean> {
         // #achan
         if (this.rules.playerCountMax == this.players.length) return false
 
