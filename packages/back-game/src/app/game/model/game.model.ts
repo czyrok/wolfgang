@@ -22,17 +22,17 @@ export class GameModel {
     public static get instance(): GameModel {
         return this._instance
     }
+    
+    private get stateChange(): Subject<StateGameModel> {
+        return this._stateChange
+    }
 
     public get isStarted(): boolean {
         return this._isStarted
     }
 
-    private get state(): StateGameModel {
+    public get state(): StateGameModel {
         return this._state
-    }
-
-    private get stateChange(): Subject<StateGameModel> {
-        return this._stateChange
     }
 
     public get players(): Array<PlayerGameModel> {
