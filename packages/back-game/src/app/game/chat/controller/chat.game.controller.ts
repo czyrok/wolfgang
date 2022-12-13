@@ -1,19 +1,12 @@
-import { EmitOnFail, EmitOnSuccess, MessageBody, OnConnect, OnDisconnect, OnMessage, SkipEmitOnEmptyResult, SocketController, SocketIO, EmitNamespaceBroadcastOnSuccess } from 'ts-socket.io-controller'
-
-import { CosmeticModelDocument, TypeCosmeticEnum, UserModelDocument, PurchaseCosmeticModelDocument, SkinUserModelDocument, CosmeticModel } from 'common'
+import { EmitOnSuccess, MessageBody, OnConnect, OnMessage, SocketController, EmitNamespaceBroadcastOnSuccess } from 'ts-socket.io-controller'
 
 import { MessageChatGameModel, MessageChatGameModelDocument } from '../message/model/message.chat.game.model'
-
-import { ChatGameModelDocument, ChatGameModel } from '../model/chat.game.model'
+import { ChatGameModelDocument } from '../model/chat.game.model'
 
 import { TypeChatGameEnum } from '../type/enum/type.chat.game.enum'
 
-import * as mongoose from "mongoose";
-
-import { Ref } from '@typegoose/typegoose'
-
 @SocketController({
-    namespace: '/main/profile/Skin-customization',
+    namespace: '/game/chat',
     init: () => { }
 })
 export class ChatGameController {
