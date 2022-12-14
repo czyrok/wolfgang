@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core'
 
 @Injectable()
 export class UserSharedService {
-    private _pseudo: string = ''
+    private _username!: string
 
-    public set pseudo(value: string) {
-        this._pseudo = value
+    public set username(value: string) {
+        this._username = value
     }
 
-    public get pseudo(): string {
-        return this._pseudo
+    public get username(): string {
+        return this._username
     }
 }
