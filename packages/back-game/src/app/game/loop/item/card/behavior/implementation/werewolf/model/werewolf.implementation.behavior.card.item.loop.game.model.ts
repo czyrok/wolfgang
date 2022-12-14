@@ -1,4 +1,4 @@
-import { PlayerGameModel } from 'common'
+import { PlayerGameModel, TypeChatGameEnum } from 'common'
 
 import { FactoryCardPlayerGameUtil } from '../../../../../../../player/card/factory/util/factory.card.player.game.util'
 
@@ -10,7 +10,6 @@ import { VillainImplementationStrategyCampPlayerGameModel } from '../../../../..
 
 import { TypeCardPlayerGameEnum } from '../../../../../../../player/card/type/enum/type.card.player.game.enum'
 import { TypeProcessBehaviorCardItemLoopGameEnum } from '../../../process/type/enum/type.process.behavior.card.item.loop.game.enum'
-import { TypeChatGameEnum } from '../../../../../../../chat/type/enum/type.chat.game.enum'
 
 export class WerewolfImplementationBehaviorCardItemLoop extends BehaviorCardItemLoopGameModel {
     public constructor() {
@@ -36,7 +35,7 @@ export class WerewolfImplementationBehaviorCardItemLoop extends BehaviorCardItem
 
     public doAtBeginning(context: ContextParamItemLoopGameModel): void {
         // #achan
-        
+        context.next()
     }
 
     public doAtEnd(context: ContextParamItemLoopGameModel): void {

@@ -2,6 +2,7 @@ import { MapParamModel } from '../../../../../param/map/model/map.param.model'
 import { ItemLoopGameModel } from '../../model/item.loop.game.model'
 import { VillagerImplementationItemLoopGameModel } from '../../implementation/villager/model/villager.implementation.item.loop.game.model'
 import { WerewolfImplementationItemLoopGameModel } from '../../implementation/werewolf/model/werewolf.implementation.item.loop.game.model'
+import { DeathImplementationItemLoopGameModel } from '../../implementation/death/model/death.implementation.item.loop.game.model'
 
 import { TypeItemLoopGameEnum } from '../../type/enum/type.item.loop.game.enum'
 
@@ -23,6 +24,10 @@ export class FactoryItemLoopGameUtil {
                     break
                 case TypeItemLoopGameEnum.VILLAGER:
                     this.storage[type] = new VillagerImplementationItemLoopGameModel()
+
+                    break
+                case TypeItemLoopGameEnum.DEATH:
+                    this.storage[type] = new DeathImplementationItemLoopGameModel()
 
                     break
             }

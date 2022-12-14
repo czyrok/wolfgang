@@ -54,6 +54,8 @@ export class GameModel {
     }
 
     public async start(): Promise<void> {
+        console.log('START67')
+
         // #achan
         this.isStarted = true
 
@@ -61,36 +63,35 @@ export class GameModel {
         FactoryCardPlayerGameUtil.get(TypeCardPlayerGameEnum.VILLAGER).addPlayer(this.players[1])
         FactoryCardPlayerGameUtil.get(TypeCardPlayerGameEnum.GREY_WEREWOLF).addPlayer(this.players[2])
 
-        let ite: IteratorItemLoopGameModel = new IteratorItemLoopGameModel
-        let previousResult: ResultSetItemLoopGameType = undefined
+        let ite1: IteratorItemLoopGameModel = new IteratorItemLoopGameModel
 
-        for (let item of ite) {
-            // #achan
-            previousResult = this.next(item, previousResult)
+        for (let item of ite1) {
+            item.objectBuildingEnd()
         }
+
+        let ite2: IteratorItemLoopGameModel = new IteratorItemLoopGameModel
+
+        this.turn(ite2)
     }
 
-    public next(current: ItemLoopGameModel, previousResult?: ResultSetItemLoopGameType): ResultSetItemLoopGameType {
+    private turn(ite: IteratorItemLoopGameModel, previousResult?: ResultSetItemLoopGameType): void {
+        console.log('TURN79')
+
         // #achan
+
         let context: ContextParamItemLoopGameModel = new ContextParamItemLoopGameModel(undefined, previousResult)
 
-        let isFinished: boolean = false
-        let currentResult: ResultSetItemLoopGameType = undefined
-
         context.res.subscribeOne((result) => {
-            currentResult = result
-
-            isFinished = true
+            this.turn(ite, result)
         })
 
-        current.entryPoint(context)
-
-        while (!isFinished) { }
-
-        return currentResult
+        ite.current.entryPoint(context)
+        ite.next()
     }
 
     public async addPlayer(username: string, socketId: string): Promise<boolean> {
+        console.log('ADD_PLAYER91')
+
         // #achan
         if (this.rules.playerCountMax == this.players.length) return false
 

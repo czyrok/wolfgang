@@ -1,7 +1,8 @@
 import { prop, getModelForClass, Ref, ReturnModelType } from '@typegoose/typegoose'
 import { Exclude, Expose } from 'class-transformer'
-import { DocumentModel, CollectionName } from 'common'
+import { CollectionName } from '../../../decorator/collection-name.decorator'
 
+import { DocumentModel } from '../../../model/document.model'
 import { MessageChatGameModel, MessageChatGameModelDocument } from '../message/model/message.chat.game.model'
 
 import { ChatGameInterface } from '../interface/chat.game.interface'

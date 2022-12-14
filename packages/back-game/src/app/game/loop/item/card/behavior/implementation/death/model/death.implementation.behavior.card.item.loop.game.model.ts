@@ -1,10 +1,9 @@
-import { PlayerGameModel } from 'common'
+import { PlayerGameModel, TypeChatGameEnum } from 'common'
 
 import { BehaviorCardItemLoopGameModel } from '../../../model/behavior.card.item.loop.game.model'
 import { ContextParamItemLoopGameModel } from '../../../../../param/context/model/context.param.item.loop.game.model'
 
 import { TypeProcessBehaviorCardItemLoopGameEnum } from '../../../process/type/enum/type.process.behavior.card.item.loop.game.enum'
-import { TypeChatGameEnum } from '../../../../../../../chat/type/enum/type.chat.game.enum'
 
 export class DeathImplementationBehaviorCardItemLoop extends BehaviorCardItemLoopGameModel {
     public constructor() {
@@ -39,5 +38,7 @@ export class DeathImplementationBehaviorCardItemLoop extends BehaviorCardItemLoo
         context.next()
     }
 
-    public doAtEnd(context: ContextParamItemLoopGameModel): void { }
+    public doAtEnd(context: ContextParamItemLoopGameModel): void {
+        context.next()
+    }
 }

@@ -1,4 +1,4 @@
-import { CardPlayerGameModel } from '../../../../model/card.player.game.model'
+import { CardPlayerGameModel } from 'common'
 
 export class GreyWerewolfImplementationCardPlayerGameModel extends CardPlayerGameModel {
     public constructor() {

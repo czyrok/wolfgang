@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, HostListener, AfterViewInit, OnDestroy } from '@angular/core'
 
-import { VotePlayerGameModel, TypeVotePlayerGameEnum } from 'common'
+// #nsm
+import { VotePlayerGameModel, /* TypeVotePlayerGameEnum */ } from 'common'
 import { Subscription } from 'rxjs'
 
-import { UserService } from 'src/app/user/service/user.service'
+import { UserSharedService } from '../../user/service/user.shared.service'
 
 @Component({
   selector: 'app-shared-avatar',
@@ -15,7 +16,7 @@ export class AvatarSharedComponent implements AfterViewInit, OnDestroy {
   sub!: Subscription
 
   constructor(
-    private userService: UserService
+    private userSharedService: UserSharedService
   ) { }
 
   ngAfterViewInit(): void {
@@ -44,8 +45,8 @@ export class AvatarSharedComponent implements AfterViewInit, OnDestroy {
   @Input() eventPlayerVote!: EventEmitter<VotePlayerGameModel>
 
   @HostListener('click') click(): void {
-    if (this.eventPlayerVote !== undefined && this.userService.username !== undefined) this.eventPlayerVote.emit(
-      new VotePlayerGameModel(this.userService.username, this.id, '', TypeVotePlayerGameEnum.DEFAULT)
-    )
+    /* if (this.eventPlayerVote !== undefined && this.userSharedService.username !== undefined) this.eventPlayerVote.emit(
+      new VotePlayerGameModel(this.userSharedService.username, this.id, '', TypeVotePlayerGameEnum.DEFAULT)
+    ) */
   }
 }

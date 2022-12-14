@@ -1,4 +1,4 @@
-import { PlayerGameModel } from 'common'
+import { PlayerGameModel, TypeChatGameEnum } from 'common'
 
 import { FactoryCardPlayerGameUtil } from '../../../../../../../player/card/factory/util/factory.card.player.game.util'
 
@@ -10,7 +10,6 @@ import { ResultSetItemLoopGameModel } from '../../../../../set/result/model/resu
 
 import { TypeCardPlayerGameEnum } from '../../../../../../../player/card/type/enum/type.card.player.game.enum'
 import { TypeProcessBehaviorCardItemLoopGameEnum } from '../../../process/type/enum/type.process.behavior.card.item.loop.game.enum'
-import { TypeChatGameEnum } from '../../../../../../../chat/type/enum/type.chat.game.enum'
 
 export class VillagerImplementationBehaviorCardItemLoop extends BehaviorCardItemLoopGameModel {
     public constructor() {

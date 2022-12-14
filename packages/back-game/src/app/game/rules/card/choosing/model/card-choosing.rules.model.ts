@@ -1,4 +1,4 @@
-import { CardPlayerGameModel } from "../../../../player/card/model/card.player.game.model"
+import { CardPlayerGameModel } from 'common'
 
 export class CardChoosingRulesModel {
     public constructor(

@@ -3,6 +3,8 @@ import { connect } from 'mongoose'
 import { Server } from 'socket.io'
 import { SocketIoController } from 'ts-socket.io-controller'
 
+import { GameController } from './game/controller/game.controller'
+
 async function run() {
     await connect("mongodb://localhost:60017/wolfgang", {
         authSource: "admin",
@@ -16,7 +18,9 @@ async function run() {
     server.listen(5501)
 
     SocketIoController.useSocketIoServer(io, {
-        controllers: [],
+        controllers: [
+            GameController
+        ],
         middlewares: [],
         useClassTransformer: true
     })

@@ -16,7 +16,8 @@ export class CardPlayerGameModel implements HandlerPlayerGameInterface {
     }
 
     public addPlayer(player: PlayerGameModel): void {
-        player.card = this
+        // #nsm
+        //player.card = this
 
         this.playerList.push(player)
     }

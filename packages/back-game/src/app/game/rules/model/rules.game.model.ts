@@ -3,7 +3,7 @@ import { CardChoosingRulesModel } from '../card/choosing/model/card-choosing.rul
 export class RulesGameModel {
     private _isPrivate: boolean = false
     // #achan
-    private _playerCountMax: number = 3
+    private _playerCountMax: number = 1
     private _choosingcardList: Array<CardChoosingRulesModel> = new Array
 
     public set isPrivate(value: boolean) {

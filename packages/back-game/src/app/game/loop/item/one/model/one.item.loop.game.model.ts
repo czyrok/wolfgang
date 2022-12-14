@@ -19,6 +19,8 @@ export abstract class OneItemLoopGameModel extends ItemLoopGameModel {
     }
 
     entryPoint(context: ContextParamItemLoopGameModel): void {
+        console.log('ITEM_ENTRYPOINT32')
+
         let childContext: ContextParamItemLoopGameModel = this.buildContext(context, context.result)
 
         if (!this.cardBehavior.validCondition(childContext)) return context.next(undefined)

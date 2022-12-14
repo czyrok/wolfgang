@@ -6,7 +6,7 @@ import { FactoryCardPlayerGameUtil } from './game/player/card/factory/util/facto
 import { BehaviorCardItemLoopGameModel } from './game/loop/item/card/behavior/model/behavior.card.item.loop.game.model'
 import { OneItemLoopGameModel } from './game/loop/item/one/model/one.item.loop.game.model'
 import { ContextParamItemLoopGameModel } from './game/loop/item/param/context/model/context.param.item.loop.game.model'
-import { CardPlayerGameModel } from './game/player/card/model/card.player.game.model'
+import { CardPlayerGameModel } from 'common'
 
 import { TypeCardPlayerGameEnum } from './game/player/card/type/enum/type.card.player.game.enum'
 

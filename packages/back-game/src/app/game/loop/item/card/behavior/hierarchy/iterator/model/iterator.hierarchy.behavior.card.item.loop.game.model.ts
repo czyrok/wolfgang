@@ -25,7 +25,9 @@ export class IteratorHierarchyBehaviorCardItemLoopGameModel implements IteratorC
 
             if (this.currentIndex <= lastIndex) break
 
-            yield this.next()
+            yield this.current
+            
+            this.next()
         }
     }
 

@@ -1,22 +1,19 @@
-import { PlayerGameModel } from 'common'
+import { PlayerGameModel, HandlerPlayerGameInterface, CardPlayerGameModel, TypeChatGameEnum } from 'common'
 
-import { CardPlayerGameModel } from '../../../../../player/card/model/card.player.game.model'
 import { ContextParamItemLoopGameModel } from '../../../param/context/model/context.param.item.loop.game.model'
 import { ContextParamBehaviorCardItemLoopGameModel } from '../param/context/model/context.param.behavior.card.item.loop.game.model'
 
 import { StrategyCampPlayerGameInteface } from '../../../../../player/camp/strategy/interface/strategy.camp.player.game.interface'
 import { HandlerCardPlayerGameInterface } from '../../../../../player/card/handler/interface/handler.card.player.game.interface'
-import { HandlerPlayerGameInterface } from '../../../../../player/handler/interface/handler.player.game.interface'
 import { StrategyItemLoopGameInterface } from '../../../strategy/interface/strategy.item.loop.game.interface'
 
 import { ResultSetItemLoopGameType } from '../../../set/result/type/result.set.item.loop.game.type'
-import { TypeChatGameEnum } from '../../../../../chat/type/enum/type.chat.game.enum'
 
 export abstract class BehaviorCardItemLoopGameModel implements
     StrategyItemLoopGameInterface<ContextParamItemLoopGameModel, ContextParamBehaviorCardItemLoopGameModel>,
     HandlerCardPlayerGameInterface,
     HandlerPlayerGameInterface {
-    private _players!: Array<PlayerGameModel>
+    private _players: Array<PlayerGameModel> = new Array
 
     public constructor(
         private _key: string,
@@ -68,18 +65,23 @@ export abstract class BehaviorCardItemLoopGameModel implements
     public abstract doAtEnd(context: ContextParamItemLoopGameModel): void
 
     entryPoint(context: ContextParamItemLoopGameModel): void {
+        console.log('BEHAVAIOR_ENTRYPOINT83')
+
         let childContext1: ContextParamBehaviorCardItemLoopGameModel = this.buildContext(context)
 
         childContext1.res.subscribeOne((result: ResultSetItemLoopGameType) => {
             let childContext2: ContextParamBehaviorCardItemLoopGameModel = this.buildContext(context, result)
 
             childContext2.res.subscribeOne((result: ResultSetItemLoopGameType) => {
+                console.log('BEHAVIOR_TIMER76')
                 context.next(result)
             })
 
             setTimeout(() => {
                 this.doAtEnd(childContext2)
-            }, this.timer)
+            }, this.timer * 1000)
+
+            console.log('BEHAVIOR_TIMER83')
         })
 
         this.doAtBeginning(childContext1)
