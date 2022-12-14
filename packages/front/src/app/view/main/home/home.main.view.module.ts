@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
+import { ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 
 import { SharedModule } from 'src/app/shared/shared.module'
@@ -9,11 +10,13 @@ import { DefaultHomeMainViewComponent } from './default/component/default.home.m
 import { LogInHomeMainViewComponent } from './log-in/component/log-in.home.main.view.component'
 import { NotFoundHomeMainViewComponent } from './not-found/component/not-found.home.main.view.component'
 import { RegisterHomeMainViewComponent } from './register/component/register.home.main.view.component'
+import { UsernameHomeMainViewComponent } from './username/component/username.home.main.view.component'
 
 @NgModule({
     declarations: [
         HomeMainViewComponent,
         DefaultHomeMainViewComponent,
+        UsernameHomeMainViewComponent,
         LogInHomeMainViewComponent,
         RegisterHomeMainViewComponent,
         NotFoundHomeMainViewComponent
@@ -21,6 +24,7 @@ import { RegisterHomeMainViewComponent } from './register/component/register.hom
     imports: [
         CommonModule,
         RouterModule,
+        ReactiveFormsModule,
         SharedModule
     ]
 })

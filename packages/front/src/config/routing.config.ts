@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router'
 
+import { PlayGamesMainViewGuard } from 'src/app/view/main/games/play/guard/play.games.main.view.guard'
+
 import { MainViewComponent } from 'src/app/view/main/component/main.view.component'
 import { HomeMainViewComponent } from 'src/app/view/main/home/component/home.main.view.component'
 import { HelpMainViewComponent } from 'src/app/view/main/help/component/help.main.view.component'
@@ -11,6 +13,7 @@ import { AddCardsProposalMainViewComponent } from 'src/app/view/main/cards-propo
 
 import { HomeGamesMainViewComponent } from 'src/app/view/main/games/home/component/home.games.main.view.component'
 import { DefaultHomeMainViewComponent } from 'src/app/view/main/home/default/component/default.home.main.view.component'
+import { UsernameHomeMainViewComponent } from 'src/app/view/main/home/username/component/username.home.main.view.component'
 import { LogInHomeMainViewComponent } from 'src/app/view/main/home/log-in/component/log-in.home.main.view.component'
 import { RegisterHomeMainViewComponent } from 'src/app/view/main/home/register/component/register.home.main.view.component'
 
@@ -25,29 +28,38 @@ import { NotFoundHomeMainViewComponent } from 'src/app/view/main/home/not-found/
 
 
 export const routes: Routes = [
-    {
-        path: '', component: MainViewComponent, children: [
-          { path: '', component: HomeMainViewComponent, children: [
-            { path: '', component: DefaultHomeMainViewComponent },
-            { path: 'log-in', component: LogInHomeMainViewComponent },
-            { path: 'register', component: RegisterHomeMainViewComponent },
-            { path: '404', component: NotFoundHomeMainViewComponent },
-          ]},
-          { path: 'games', component: GamesMainViewComponent, children: [
-            { path: '', component: HomeGamesMainViewComponent },
-            { path: 'play', component: PlayGamesMainViewComponent },
-          ] },
-          { path: 'cards-proposal', component: CardsProposalMainViewComponent, children:[
-            { path: '', component: DefaultCardsProposalMainViewComponent },
-            { path: 'view', component: ViewCardsProposalMainViewComponent },
-            { path: 'add', component: AddCardsProposalMainViewComponent },
-          ]},
-          { path: 'profile', component: ProfileMainViewComponent, children: [
-            { path: '', component: HomeProfileMainViewComponent },
-            { path: 'skin-customization', component: SkinCustomizationProfileMainViewComponent },
-          ] },
-          { path: 'help', component: HelpMainViewComponent },
-          { path: '**', redirectTo: '404', pathMatch: 'full' },
+  {
+    path: '', component: MainViewComponent, children: [
+      {
+        path: '', component: HomeMainViewComponent, children: [
+          { path: '', component: DefaultHomeMainViewComponent },
+          { path: 'username', component: UsernameHomeMainViewComponent },
+          { path: 'log-in', component: LogInHomeMainViewComponent },
+          { path: 'register', component: RegisterHomeMainViewComponent },
+          { path: '404', component: NotFoundHomeMainViewComponent },
         ]
       },
+      {
+        path: 'games', component: GamesMainViewComponent, children: [
+          { path: '', component: HomeGamesMainViewComponent },
+          { path: 'play', component: PlayGamesMainViewComponent, canActivate: [PlayGamesMainViewGuard] },
+        ]
+      },
+      {
+        path: 'cards-proposal', component: CardsProposalMainViewComponent, children: [
+          { path: '', component: DefaultCardsProposalMainViewComponent },
+          { path: 'view', component: ViewCardsProposalMainViewComponent },
+          { path: 'add', component: AddCardsProposalMainViewComponent },
+        ]
+      },
+      {
+        path: 'profile', component: ProfileMainViewComponent, children: [
+          { path: '', component: HomeProfileMainViewComponent },
+          { path: 'skin-customization', component: SkinCustomizationProfileMainViewComponent },
+        ]
+      },
+      { path: 'help', component: HelpMainViewComponent },
+      { path: '**', redirectTo: '404', pathMatch: 'full' },
+    ]
+  },
 ]

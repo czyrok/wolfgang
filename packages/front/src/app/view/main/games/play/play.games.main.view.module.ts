@@ -4,6 +4,8 @@ import { RouterModule } from '@angular/router'
 
 import { SharedModule } from 'src/app/shared/shared.module'
 
+import { PlayGamesMainViewGuard } from './guard/play.games.main.view.guard'
+
 import { PlayGamesMainViewComponent } from './component/play.games.main.view.component'
 import { RulesPlayGamesMainViewComponent } from './rules/component/rules.play.games.main.view.component'
 import { CircleAvatarPlayGamesMainViewComponent } from './avatar/circle/component/circle.avatar.play.games.main.view.component'
@@ -19,6 +21,9 @@ import { CircleAvatarPlayGamesMainViewComponent } from './avatar/circle/componen
         CommonModule,
         RouterModule,
         SharedModule
+    ],
+    providers: [
+        PlayGamesMainViewGuard
     ]
 })
 
