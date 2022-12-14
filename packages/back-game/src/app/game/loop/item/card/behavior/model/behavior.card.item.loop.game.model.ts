@@ -1,5 +1,6 @@
+import { PlayerGameModel } from 'common'
+
 import { CardPlayerGameModel } from '../../../../../player/card/model/card.player.game.model'
-import { PlayerGameModel } from '../../../../../player/model/player.game.model'
 import { ContextParamItemLoopGameModel } from '../../../param/context/model/context.param.item.loop.game.model'
 import { ContextParamBehaviorCardItemLoopGameModel } from '../param/context/model/context.param.behavior.card.item.loop.game.model'
 

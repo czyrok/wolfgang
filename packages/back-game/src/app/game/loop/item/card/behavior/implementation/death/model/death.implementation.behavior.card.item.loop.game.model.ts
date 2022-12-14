@@ -1,6 +1,7 @@
+import { PlayerGameModel } from 'common'
+
 import { BehaviorCardItemLoopGameModel } from '../../../model/behavior.card.item.loop.game.model'
 import { ContextParamItemLoopGameModel } from '../../../../../param/context/model/context.param.item.loop.game.model'
-import { PlayerGameModel } from '../../../../../../../player/model/player.game.model'
 
 import { TypeProcessBehaviorCardItemLoopGameEnum } from '../../../process/type/enum/type.process.behavior.card.item.loop.game.enum'
 import { TypeChatGameEnum } from '../../../../../../../chat/type/enum/type.chat.game.enum'

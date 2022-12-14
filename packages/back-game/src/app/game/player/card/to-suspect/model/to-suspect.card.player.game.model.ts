@@ -1,5 +1,6 @@
-import { PlayerGameModel } from '../../../model/player.game.model';
-import { CardPlayerGameModel } from '../../model/card.player.game.model';
+import { PlayerGameModel } from 'common'
+
+import { CardPlayerGameModel } from '../../model/card.player.game.model'
 
 export class ToSuspectCardPlayerGameModel {
     public constructor(

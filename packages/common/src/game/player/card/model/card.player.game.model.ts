@@ -1,5 +1,6 @@
-import { HandlerPlayerGameInterface } from '../../handler/interface/handler.player.game.interface'
 import { PlayerGameModel } from '../../model/player.game.model'
+
+import { HandlerPlayerGameInterface } from '../../handler/interface/handler.player.game.interface'
 
 export class CardPlayerGameModel implements HandlerPlayerGameInterface {
     private _playerList: Array<PlayerGameModel> = new Array

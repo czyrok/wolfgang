@@ -1,10 +1,13 @@
-import { ChangeDetectorRef, ElementRef, Renderer2, ViewContainerRef } from "@angular/core";
-import { PlaceCircleAvatarPlayGamesMainViewModel } from "../place/model/place.circle.avatar.play.games.main.view.model";
+import { ChangeDetectorRef, ElementRef, Renderer2, ViewContainerRef, EventEmitter } from '@angular/core'
+import { VotePlayerGameModel } from 'common'
+
+import { PlaceCircleAvatarPlayGamesMainViewModel } from '../place/model/place.circle.avatar.play.games.main.view.model'
 
 export class CircleAvatarPlayGamesMainViewModel {
   private list: Array<PlaceCircleAvatarPlayGamesMainViewModel> = new Array()
 
   constructor(
+    private voteEventEmitter: EventEmitter<VotePlayerGameModel>,
     private renderer: Renderer2,
     private changeDetectorRef: ChangeDetectorRef,
     private viewContainerRef: ViewContainerRef,
@@ -73,12 +76,12 @@ export class CircleAvatarPlayGamesMainViewModel {
     this.list.splice(0, this.list.length)
 
     for (let id of idList) {
-      this.list.push(PlaceCircleAvatarPlayGamesMainViewModel.create(this.renderer, this.changeDetectorRef, this.viewContainerRef, id))
+      this.list.push(PlaceCircleAvatarPlayGamesMainViewModel.create(this.voteEventEmitter, this.renderer, this.changeDetectorRef, this.viewContainerRef, id))
     }
   }
 
   public addPlayer(id: string): void {
-    this.list.push(PlaceCircleAvatarPlayGamesMainViewModel.create(this.renderer, this.changeDetectorRef, this.viewContainerRef, id))
+    this.list.push(PlaceCircleAvatarPlayGamesMainViewModel.create(this.voteEventEmitter, this.renderer, this.changeDetectorRef, this.viewContainerRef, id))
 
     this.update()
   }

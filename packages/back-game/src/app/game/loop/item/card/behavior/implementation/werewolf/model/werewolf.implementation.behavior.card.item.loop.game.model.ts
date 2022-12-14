@@ -1,10 +1,11 @@
+import { PlayerGameModel } from 'common'
+
 import { FactoryCardPlayerGameUtil } from '../../../../../../../player/card/factory/util/factory.card.player.game.util'
 
 import { BehaviorCardItemLoopGameModel } from '../../../model/behavior.card.item.loop.game.model'
 import { ContextParamItemLoopGameModel } from '../../../../../param/context/model/context.param.item.loop.game.model'
 import { ResultSetItemLoopGameModel } from '../../../../../set/result/model/result.set.item.loop.game.model'
 import { HandlerVotePlayerGameModel } from '../../../../../../../player/vote/handler/model/handler.vote.player.game.model'
-import { PlayerGameModel } from '../../../../../../../player/model/player.game.model'
 import { VillainImplementationStrategyCampPlayerGameModel } from '../../../../../../../player/camp/strategy/implementation/villain/model/villain.implementation.strategy.camp.player.game.model'
 
 import { TypeCardPlayerGameEnum } from '../../../../../../../player/card/type/enum/type.card.player.game.enum'

@@ -7,7 +7,7 @@ import { Component } from '@angular/core'
 })
 export class PlayGamesMainViewComponent {
   displayChat: boolean = true
-  
+
   changeDisplayChatButtonCallback: () => void = () => {
     this.displayChat = !this.displayChat
   }

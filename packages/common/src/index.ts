@@ -46,3 +46,12 @@ export * from './report/user/type/enum/type.user.report.enum'
 
 export * from './report/user/other/model/other.user.report.model'
 export * from './report/user/other/interface/other.user.report.interface'
+
+export * from './game/player/model/player.game.model'
+export * from './game/player/vote/model/vote.player.game.model'
+export * from './game/player/vote/type/enum/type.vote.player.game.enum'
+export * from './game/player/camp/enum/camp.player.game.enum'
+export * from './game/player/card/model/card.player.game.model'
+export * from './game/player/handler/interface/handler.player.game.interface'
+export * from './game/state/model/state.game.model'
+export * from './game/loop/item/card/behavior/type/enum/type.behavior.card.item.loop.game.enum'

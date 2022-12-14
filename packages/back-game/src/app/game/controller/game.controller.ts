@@ -1,8 +1,8 @@
 import { Socket, Namespace } from 'socket.io'
 import { OnMessage, EmitOnSuccess, MessageBody, SocketController } from 'ts-socket.io-controller'
+import { StateGameModel } from 'common'
 
 import { GameModel } from '../model/game.model'
-import { StateGameModel } from '../state/model/state.game.model'
 
 @SocketController({
     namespace: '/game',

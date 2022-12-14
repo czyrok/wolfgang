@@ -1,9 +1,7 @@
 import { OnConnect, OnMessage, EmitOnSuccess, MessageBody, EmitNamespaceBroadcastOnSuccess, SocketController } from 'ts-socket.io-controller'
+import { VotePlayerGameModel } from 'common'
 
 import { HandlerVotePlayerGameModel } from '../handler/model/handler.vote.player.game.model'
-import { VotePlayerGameModel } from '../model/vote.player.game.model'
-
-
 
 @SocketController({
     namespace: '/game/player/vote',
@@ -13,9 +11,9 @@ export class VotePlayerGameController {
     @OnConnect()
     @EmitOnSuccess('get')
     get() {
-        let handlervote: HandlerVotePlayerGameModel =  HandlerVotePlayerGameModel.instance
+        let handler: HandlerVotePlayerGameModel =  HandlerVotePlayerGameModel.instance
         
-        return handlervote.vote
+        return handler.vote
     }
 
     @EmitNamespaceBroadcastOnSuccess('get')
@@ -24,6 +22,6 @@ export class VotePlayerGameController {
         let handlervote: HandlerVotePlayerGameModel =  HandlerVotePlayerGameModel.instance
         handlervote.toVote(vote)
 
-        return vote
+        return [vote]
     }
 }

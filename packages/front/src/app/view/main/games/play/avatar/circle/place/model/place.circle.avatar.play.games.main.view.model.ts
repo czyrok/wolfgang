@@ -1,4 +1,5 @@
-import { ChangeDetectorRef, ComponentRef, Renderer2, ViewContainerRef } from '@angular/core'
+import { ChangeDetectorRef, ComponentRef, Renderer2, ViewContainerRef, EventEmitter } from '@angular/core'
+import { VotePlayerGameModel } from 'common'
 
 import { AvatarSharedComponent } from 'src/app/shared/avatar/component/avatar.shared.component'
 
@@ -57,10 +58,11 @@ export class PlaceCircleAvatarPlayGamesMainViewModel {
     this.componentRef.destroy()
   }
 
-  public static create(renderer: Renderer2, changeDetectorRef: ChangeDetectorRef, viewContainerRef: ViewContainerRef, id: string): PlaceCircleAvatarPlayGamesMainViewModel {
+  public static create(voteEventEmitter: EventEmitter<VotePlayerGameModel>,renderer: Renderer2, changeDetectorRef: ChangeDetectorRef, viewContainerRef: ViewContainerRef, id: string): PlaceCircleAvatarPlayGamesMainViewModel {
     let componentRef: ComponentRef<AvatarSharedComponent> = viewContainerRef.createComponent(AvatarSharedComponent)
 
     componentRef.instance.id = id
+    componentRef.instance.eventPlayerVote = voteEventEmitter
 
     changeDetectorRef.detectChanges()
 

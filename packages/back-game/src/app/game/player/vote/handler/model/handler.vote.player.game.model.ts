@@ -1,5 +1,6 @@
-import { PlayerGameModel } from '../../../model/player.game.model'
-import { VotePlayerGameModel } from '../../model/vote.player.game.model'
+import { PlayerGameModel, VotePlayerGameModel } from 'common'
+
+import { HandlerPlayerGameModel } from '../../../handler/model/handler.player.game.model'
 
 export class HandlerVotePlayerGameModel {
     private static _instance: HandlerVotePlayerGameModel = new HandlerVotePlayerGameModel
@@ -18,7 +19,7 @@ export class HandlerVotePlayerGameModel {
 
     public removeVoteOfPlayer(player: PlayerGameModel): void {
         for (let i = 0; i < this.vote.length; i++) {
-            if (this.vote[i].votingPlayer == player) {
+            if (this.vote[i].votingUser == player.userId) {
                 this.vote.splice(i, 1)
 
                 break
@@ -27,22 +28,33 @@ export class HandlerVotePlayerGameModel {
     }
 
     public toVote(newVote: VotePlayerGameModel): void {
-        this.removeVoteOfPlayer(newVote.votingPlayer)
+        let playerHandler: HandlerPlayerGameModel = HandlerPlayerGameModel.instance,
+            player: PlayerGameModel | undefined = playerHandler.getPlayer(newVote.votingUser)
 
-        this.vote.push(newVote)
+        if (player !== undefined) {
+            this.removeVoteOfPlayer(player)
+
+            this.vote.push(newVote)
+        }
     }
 
     public mostVotedOfPlayersGroup(players: Array<PlayerGameModel>): PlayerGameModel | null {
-        let votedPlayers: Array<[PlayerGameModel, number]> = new Array
+        let playerHandler: HandlerPlayerGameModel = HandlerPlayerGameModel.instance,
+            votedPlayers: Array<[PlayerGameModel, number]> = new Array
 
         for (let vote of this.vote) {
-            if (players.indexOf(vote.votingPlayer) != -1) {
-                let votedPlayer: [PlayerGameModel, number] | undefined = votedPlayers.find(([a,]: [PlayerGameModel, number]) => a == vote.votedPlayer)
+            for (let player of players) {
+                if (vote.votingUser == player.userId) {
+                    let votedPlayer: [PlayerGameModel, number] | undefined = votedPlayers.find(([a,]: [PlayerGameModel, number]) => a.userId == vote.votedUser)
 
-                if (votedPlayer !== undefined) {
-                    votedPlayer[1]++
-                } else {
-                    votedPlayers.push([vote.votedPlayer, 1])
+                    if (votedPlayer !== undefined) {
+                        votedPlayer[1]++
+                    } else {
+                        let player: PlayerGameModel | undefined = playerHandler.getPlayer(vote.votedUser)
+                        if (player !== undefined) votedPlayers.push([player, 1])
+                    }
+
+                    break
                 }
             }
         }
@@ -54,7 +66,7 @@ export class HandlerVotePlayerGameModel {
             if (votedPlayer[1] > max) {
                 max = votedPlayer[1]
                 mostVotedPlayer = votedPlayer[0]
-            } else if(votedPlayer[1] == max) {
+            } else if (votedPlayer[1] == max) {
                 mostVotedPlayer = null
             }
         }

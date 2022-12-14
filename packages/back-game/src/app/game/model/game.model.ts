@@ -1,13 +1,13 @@
 import { Subject, Subscription } from 'rxjs'
+import { PlayerGameModel, StateGameModel } from 'common'
 
 import { FactoryCardPlayerGameUtil } from '../player/card/factory/util/factory.card.player.game.util'
 
-import { PlayerGameModel } from '../player/model/player.game.model'
 import { RulesGameModel } from '../rules/model/rules.game.model'
-import { StateGameModel } from '../state/model/state.game.model'
 import { IteratorItemLoopGameModel } from '../loop/item/iterator/model/iterator.item.loop.game.model'
 import { ItemLoopGameModel } from '../loop/item/model/item.loop.game.model'
 import { ContextParamItemLoopGameModel } from '../loop/item/param/context/model/context.param.item.loop.game.model'
+import { HandlerPlayerGameModel } from '../player/handler/model/handler.player.game.model'
 
 import { TypeCardPlayerGameEnum } from '../player/card/type/enum/type.card.player.game.enum'
 
@@ -94,7 +94,13 @@ export class GameModel {
         // #achan
         if (this.rules.playerCountMax == this.players.length) return false
 
-        this.players.push(new PlayerGameModel(username, socketId))
+        let player: PlayerGameModel = new PlayerGameModel(username, socketId)
+
+        // #achan
+        this.players.push(player)
+        HandlerPlayerGameModel.instance.addPlayer(player)
+        this.state.players = this.players
+        this.stateChange.next(this.state)
 
         if (this.rules.playerCountMax == this.players.length) this.start()
 
