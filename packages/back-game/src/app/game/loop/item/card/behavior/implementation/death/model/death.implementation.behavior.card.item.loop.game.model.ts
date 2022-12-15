@@ -19,8 +19,10 @@ export class DeathImplementationBehaviorCardItemLoop extends BehaviorCardItemLoo
 
     public validCondition(context: ContextParamItemLoopGameModel): boolean {
         if (context[TypeProcessBehaviorCardItemLoopGameEnum.KILL] !== undefined) {
+            console.log('DEATH22')
             return true
         } else {
+            console.log('DEATH25')
             return false
         }
     }

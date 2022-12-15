@@ -31,11 +31,9 @@ export abstract class ItemLoopGameModel implements StrategyItemLoopGameInterface
     }
 
     public get nextItem(): ItemLoopGameModel {
-        this.nextIndex++
-
         if (this.nextIndex == this.nextList.length) this.nextIndex = 0
 
-        return this.nextList[this.nextIndex]
+        return this.nextList[this.nextIndex++]
     }
 
     public abstract objectBuildingEnd(): void

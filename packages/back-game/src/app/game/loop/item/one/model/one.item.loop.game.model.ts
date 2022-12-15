@@ -23,7 +23,7 @@ export abstract class OneItemLoopGameModel extends ItemLoopGameModel {
 
         let childContext: ContextParamItemLoopGameModel = this.buildContext(context, context.result)
 
-        if (!this.cardBehavior.validCondition(childContext)) return context.next(undefined)
+        if (!this.cardBehavior.validCondition(childContext)) return context.next()
         
         childContext.res.subscribeOne((result: ResultSetItemLoopGameType) => {
             context.next(result)

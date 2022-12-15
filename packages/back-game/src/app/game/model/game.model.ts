@@ -82,9 +82,11 @@ export class GameModel {
         let context: ContextParamItemLoopGameModel = new ContextParamItemLoopGameModel(undefined, previousResult)
 
         context.res.subscribeOne((result) => {
-            this.turn(ite, result)
+            setTimeout(() => {
+                this.turn(ite, result)
+            }, 500)
         })
-
+        console.log(ite.current)
         ite.current.entryPoint(context)
         ite.next()
     }

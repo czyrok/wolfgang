@@ -25,8 +25,12 @@ export class IteratorItemLoopGameModel implements IteratorChainedListInterface<I
             if (!first && this.default == this.current) break
             first = false
 
+            //console.log('------')
+            //console.log(this.current)
+
             yield this.current
 
+            //console.log(this.next())
             this.next()
         }
     }
