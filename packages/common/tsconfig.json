@@ -7,10 +7,12 @@
         "module": "commonjs",
         "outDir": "./dist",
         "strict": true,
+        "declaration": true,
         "esModuleInterop": true,
         "inlineSourceMap": true,
         "resolveJsonModule": true,
         "experimentalDecorators": true,
-        "emitDecoratorMetadata": true
+        "emitDecoratorMetadata": true,
+        "moduleResolution": "node"
     }
 }

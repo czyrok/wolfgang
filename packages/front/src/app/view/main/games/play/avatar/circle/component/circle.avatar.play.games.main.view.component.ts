@@ -1,5 +1,5 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, Input, Renderer2, ViewChild, ViewContainerRef } from '@angular/core'
-import { AvatarSharedComponent } from 'src/app/shared/avatar/component/avatar.shared.component'
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, Renderer2, ViewChild, ViewContainerRef } from '@angular/core'
+import { PlayerGameModel, StateGameModel, VotePlayerGameModel } from 'common'
 
 import { CircleAvatarPlayGamesMainViewModel } from '../model/circle.avatar.play.games.main.view.model'
 
@@ -17,23 +17,16 @@ export class CircleAvatarPlayGamesMainViewComponent implements AfterViewInit {
   ) { }
 
   ngAfterViewInit(): void {
-    this.avatarsCircle = new CircleAvatarPlayGamesMainViewModel(this.renderer, this.changeDetectorRef, this.viewContainerRefTarget, this.elementRefTarget)
+    this.avatarsCircle = new CircleAvatarPlayGamesMainViewModel(this.eventPlayerVote, this.renderer, this.changeDetectorRef, this.viewContainerRefTarget, this.elementRefTarget)
 
-    this.avatarsCircle.setPlayers([
-      'maxime',
-      'maxime2',
-      'maxime3',
-      'maxime3',
-      'maxime3',
-      'maxime3',
-      'maxime3'
-    ])
-
-    this.avatarsCircle.update()
-    this.avatarsCircle.update()
+    if (this.eventGameState !== undefined) this.eventGameState.subscribe((data: StateGameModel) => {
+      this.avatarsCircle.setPlayers((data as any)._players.map((player: PlayerGameModel) => player.userId))
+      this.avatarsCircle.update()
+    })
   }
 
-  @Input() id!: string;
+  @Input() eventPlayerVote!: EventEmitter<VotePlayerGameModel>
+  @Input() eventGameState!: EventEmitter<StateGameModel>
 
   @ViewChild('target', { read: ViewContainerRef }) viewContainerRefTarget!: ViewContainerRef
   @ViewChild('widthTarget') elementRefTarget!: ElementRef<HTMLElement>

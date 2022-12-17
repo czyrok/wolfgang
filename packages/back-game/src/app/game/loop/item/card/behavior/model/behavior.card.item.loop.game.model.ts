@@ -1,45 +1,28 @@
-import { CardPlayerGameModel } from '../../../../../player/card/model/card.player.game.model'
-import { PlayerGameModel } from '../../../../../player/model/player.game.model'
+import { PlayerGameModel, HandlerPlayerGameInterface, CardPlayerGameModel, TypeChatGameEnum } from 'common'
+
+import { ContextParamItemLoopGameModel } from '../../../param/context/model/context.param.item.loop.game.model'
+import { ContextParamBehaviorCardItemLoopGameModel } from '../param/context/model/context.param.behavior.card.item.loop.game.model'
 
 import { StrategyCampPlayerGameInteface } from '../../../../../player/camp/strategy/interface/strategy.camp.player.game.interface'
 import { HandlerCardPlayerGameInterface } from '../../../../../player/card/handler/interface/handler.card.player.game.interface'
-import { HandlerPlayerGameInterface } from '../../../../../player/handler/interface/handler.player.game.interface'
-import { ExecuteLoopGameInterface } from '../../../../execute/interface/execute.loop.game.interface'
-import { StrategyBehaviorCardPItemLoopGameInterface } from '../strategy/interface/strategy.behavior.card.item.loop.game.interface'
+import { StrategyItemLoopGameInterface } from '../../../strategy/interface/strategy.item.loop.game.interface'
 
-export class BehaviorCardItemLoopGameModel implements ExecuteLoopGameInterface, HandlerCardPlayerGameInterface, HandlerPlayerGameInterface {
+import { ResultSetItemLoopGameType } from '../../../set/result/type/result.set.item.loop.game.type'
+
+export abstract class BehaviorCardItemLoopGameModel implements
+    StrategyItemLoopGameInterface<ContextParamItemLoopGameModel, ContextParamBehaviorCardItemLoopGameModel>,
+    HandlerCardPlayerGameInterface,
+    HandlerPlayerGameInterface {
+    private _players: Array<PlayerGameModel> = new Array
+
     public constructor(
         private _key: string,
         private _campHierarchy: number,
         private _timer: number,
         private _cardList: Array<CardPlayerGameModel>,
-        private _behaviorStrategy: StrategyBehaviorCardPItemLoopGameInterface,
-        private _campStrategy: StrategyCampPlayerGameInteface
+        private _chat?: TypeChatGameEnum,
+        private _campStrategy?: StrategyCampPlayerGameInteface,
     ) { }
-
-    public set key(value: string) {
-        this._key = value
-    }
-
-    public set campHierarchy(value: number) {
-        this._campHierarchy = value
-    }
-
-    public set timer(value: number) {
-        this._timer = this.timer
-    }
-
-    public set cardList(value: Array<CardPlayerGameModel>) {
-        this._cardList = value
-    }
-
-    public set behaviorStrategy(value: StrategyBehaviorCardPItemLoopGameInterface) {
-        this._behaviorStrategy = value
-    }
-
-    public set campStrategy(value: StrategyCampPlayerGameInteface) {
-        this._campStrategy = value
-    }
 
     public get key(): string {
         return this._key
@@ -57,35 +40,84 @@ export class BehaviorCardItemLoopGameModel implements ExecuteLoopGameInterface, 
         return this._cardList
     }
 
-    public get behaviorStrategy(): StrategyBehaviorCardPItemLoopGameInterface {
-        return this._behaviorStrategy
+    public get chat(): TypeChatGameEnum | undefined {
+        return this._chat
     }
 
-    public get campStrategy(): StrategyCampPlayerGameInteface {
+    public get campStrategy(): StrategyCampPlayerGameInteface | undefined {
         return this._campStrategy
     }
 
-    execute(): void {
-        this.behaviorStrategy.execute()
+    public get players(): Array<PlayerGameModel> {
+        return this._players
+    }
+
+    private set players(value: Array<PlayerGameModel>) {
+        this._players = value
+    }
+
+    public setupPlayers(): void {
+        for (const card of this.cardList) this.players.push(...card.getPlayer())
+    }
+
+    public abstract validCondition(context: ContextParamItemLoopGameModel): boolean
+    public abstract doAtBeginning(context: ContextParamItemLoopGameModel): void
+    public abstract doAtEnd(context: ContextParamItemLoopGameModel): void
+
+    entryPoint(context: ContextParamItemLoopGameModel): void {
+        console.log('BEHAVAIOR_ENTRYPOINT83')
+
+        let childContext1: ContextParamBehaviorCardItemLoopGameModel = this.buildContext(context)
+
+        childContext1.res.subscribeOne((result: ResultSetItemLoopGameType) => {
+            let childContext2: ContextParamBehaviorCardItemLoopGameModel = this.buildContext(context, result)
+
+            childContext2.res.subscribeOne((result: ResultSetItemLoopGameType) => {
+                console.log('BEHAVIOR_TIMER76')
+                context.next(result)
+            })
+
+            setTimeout(() => {
+                this.doAtEnd(childContext2)
+            }, this.timer * 1000)
+
+            console.log('BEHAVIOR_TIMER83')
+        })
+
+        this.doAtBeginning(childContext1)
+    }
+
+    buildContext(
+        parentContext: ContextParamItemLoopGameModel,
+        preivousResult?: ResultSetItemLoopGameType
+    ): ContextParamBehaviorCardItemLoopGameModel {
+        return new ContextParamBehaviorCardItemLoopGameModel(
+            parentContext,
+            preivousResult
+        )
     }
 
     hasCard(value: CardPlayerGameModel): boolean {
-        for (let card of this.cardList) {
+        for (const card of this.cardList) {
             if (card == value) return true
         }
 
         return false
     }
 
+    getCard(): Array<CardPlayerGameModel> {
+        return this.cardList
+    }
+
     hasPlayer(player: PlayerGameModel): boolean {
-        let result: boolean = false
-
-        for (let card of this.cardList) {
-            result = card.hasPlayer(player)
-
-            if (result === true) break
+        for (let currentPlayer of this.players) {
+            if (player == currentPlayer) return true
         }
 
-        return result
+        return false
+    }
+
+    getPlayer(): Array<PlayerGameModel> {
+        return this.players
     }
 }

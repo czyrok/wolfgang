@@ -1,6 +1,5 @@
-import { EmitOnFail, EmitOnSuccess, MessageBody, OnConnect, OnDisconnect, OnMessage, SkipEmitOnEmptyResult, SocketController, SocketIO } from 'ts-socket.io-controller'
-
-import { CosmeticModelDocument, TypeCosmeticEnum, UserModelDocument, PurchaseCosmeticModelDocument, SkinUserModelDocument, CosmeticModel } from 'common'
+import { EmitOnFail, EmitOnSuccess, MessageBody, OnConnect, OnDisconnect, OnMessage, SkipEmitOnEmptyResult, SocketController } from 'ts-socket.io-controller'
+import { CosmeticModelDocument, TypeCosmeticEnum, UserModelDocument, PurchaseCosmeticModelDocument, CosmeticModel } from 'common'
 
 import { ListSkinCustomizationProfileMainModel } from '../list/model/list.skin-customization.profile.main.model'
 
@@ -50,7 +49,7 @@ export class SkinCustomizationProfileMainController {
     @OnMessage()
     @EmitOnFail()
     purchase(@MessageBody() data: CosmeticModel) {
-        let cosmetic = new CosmeticModelDocument(data)
+        /* let cosmetic = new CosmeticModelDocument(data)
         //recuperer un user
         let user = UserModelDocument.findOne({ id: 1 }).exec()
         //verifie si le chapeu est deja acheter
@@ -68,7 +67,7 @@ export class SkinCustomizationProfileMainController {
             } else {
                 throw new NotEnoughGamePointSkinCustomizationProfileMainError()
             }
-        }
+        } */
     }
 }
 

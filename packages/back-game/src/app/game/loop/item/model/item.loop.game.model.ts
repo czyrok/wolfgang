@@ -1,30 +1,54 @@
 import { BehaviorCardItemLoopGameModel } from '../card/behavior/model/behavior.card.item.loop.game.model'
+import { ContextParamItemLoopGameModel } from '../param/context/model/context.param.item.loop.game.model'
 
-import { ExecuteLoopGameInterface } from '../../execute/interface/execute.loop.game.interface'
 import { HandlerBehaviorCardItemLoopGameInterface } from '../card/behavior/handler/interface/handler.behavior.card.item.loop.game.interface'
+import { StrategyItemLoopGameInterface } from '../strategy/interface/strategy.item.loop.game.interface'
 
-export abstract class ItemLoopGameModel implements ExecuteLoopGameInterface, HandlerBehaviorCardItemLoopGameInterface {
+import { ResultSetItemLoopGameType } from '../set/result/type/result.set.item.loop.game.type'
+
+export abstract class ItemLoopGameModel implements StrategyItemLoopGameInterface<ContextParamItemLoopGameModel, ContextParamItemLoopGameModel>, HandlerBehaviorCardItemLoopGameInterface {
+    private _nextIndex: number = 0
+    protected _nextList: Array<ItemLoopGameModel> = new Array
+
     public constructor(
-        private _nextList: Array<ItemLoopGameModel>,
         private _atNight: boolean
     ) { }
 
-    public set atNight(value: boolean) {
-        this._atNight = value
+    private get nextIndex(): number {
+        return this._nextIndex
+    }
+
+    private set nextIndex(value: number) {
+        this._nextIndex = value
+    }
+
+    protected get nextList(): Array<ItemLoopGameModel> {
+        return this._nextList
     }
 
     public get atNight(): boolean {
         return this._atNight
     }
 
-    public set nextList(value: Array<ItemLoopGameModel>) {
-        this._nextList = value
+    public get nextItem(): ItemLoopGameModel {
+        if (this.nextIndex == this.nextList.length) this.nextIndex = 0
+
+        return this.nextList[this.nextIndex++]
     }
 
-    public get nextList(): Array<ItemLoopGameModel> {
-        return this._nextList
+    public abstract objectBuildingEnd(): void
+
+    abstract entryPoint(context: ContextParamItemLoopGameModel): void
+
+    buildContext(
+        parentContext: ContextParamItemLoopGameModel,
+        preivousResult?: ResultSetItemLoopGameType
+    ): ContextParamItemLoopGameModel {
+        return new ContextParamItemLoopGameModel(
+            parentContext,
+            preivousResult
+        )
     }
 
-    abstract execute(): void
     abstract getCardBehavior(): Array<BehaviorCardItemLoopGameModel>
 }

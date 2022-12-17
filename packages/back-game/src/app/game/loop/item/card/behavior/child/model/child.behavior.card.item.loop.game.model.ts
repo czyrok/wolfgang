@@ -1,29 +1,70 @@
+import { CardPlayerGameModel, TypeChatGameEnum } from 'common'
+
 import { BehaviorCardItemLoopGameModel } from '../../model/behavior.card.item.loop.game.model'
-import { CardPlayerGameModel } from '../../../../../../player/card/model/card.player.game.model'
+import { ContextParamItemLoopGameModel } from '../../../../param/context/model/context.param.item.loop.game.model'
+import { ContextParamBehaviorCardItemLoopGameModel } from '../../param/context/model/context.param.behavior.card.item.loop.game.model'
 
 import { StrategyCampPlayerGameInteface } from '../../../../../../player/camp/strategy/interface/strategy.camp.player.game.interface'
-import { StrategyBehaviorCardPItemLoopGameInterface } from '../../strategy/interface/strategy.behavior.card.item.loop.game.interface'
 
-import { TimerPlayerEnum } from '../../../../../../timer/enum/timer.player.enum'
+import { TimerModeBehaviorCardItemLoopGameEnum } from '../../timer-mode/enum/timer-mode.behavior.card.item.loop.game.enum'
 
-export class ChildBehaviorCardItemLoopGameModel extends BehaviorCardItemLoopGameModel {
+import { ResultSetItemLoopGameType } from '../../../../set/result/type/result.set.item.loop.game.type'
+
+export abstract class ChildBehaviorCardItemLoopGameModel extends BehaviorCardItemLoopGameModel {
     public constructor(
         key: string,
         campHierarchy: number,
         timer: number,
         cardList: Array<CardPlayerGameModel>,
-        behaviorStrategy: StrategyBehaviorCardPItemLoopGameInterface,
-        campStrategy: StrategyCampPlayerGameInteface,
-        private _timerMode: TimerPlayerEnum
+        private _timerMode: TimerModeBehaviorCardItemLoopGameEnum,
+        chat?: TypeChatGameEnum,
+        campStrategy?: StrategyCampPlayerGameInteface
     ) {
-        super(key, campHierarchy, timer, cardList, behaviorStrategy, campStrategy)
+        super(key, campHierarchy, timer, cardList, chat, campStrategy)
     }
 
-    public set timerMode(value: TimerPlayerEnum) {
-        this._timerMode = value
-    }
-
-    public get timerMode(): TimerPlayerEnum {
+    public get timerMode(): TimerModeBehaviorCardItemLoopGameEnum {
         return this._timerMode
+    }
+
+    override entryPoint(context: ContextParamItemLoopGameModel): void {
+        switch (this.timerMode) {
+            case TimerModeBehaviorCardItemLoopGameEnum.BEFORE:
+                let childContext1: ContextParamBehaviorCardItemLoopGameModel = this.buildContext(context)
+
+                childContext1.res.subscribeOne((result: ResultSetItemLoopGameType) => {
+                    let childContext2: ContextParamBehaviorCardItemLoopGameModel = this.buildContext(context, result)
+
+                    childContext2.res.subscribeOne((result: ResultSetItemLoopGameType) => {
+                        context.next(result)
+                    })
+
+                    this.doAtEnd(childContext2)
+                })
+
+                setTimeout(() => {
+                    this.doAtBeginning(childContext1)
+                }, this.timer * 1000)
+
+                break
+            case TimerModeBehaviorCardItemLoopGameEnum.BETWEEN:
+                let childContext11: ContextParamBehaviorCardItemLoopGameModel = this.buildContext(context)
+
+                childContext11.res.subscribeOne((result: ResultSetItemLoopGameType) => {
+                    let childContext22: ContextParamBehaviorCardItemLoopGameModel = this.buildContext(context, result)
+
+                    childContext22.res.subscribeOne((result: ResultSetItemLoopGameType) => {
+                        context.next(result)
+                    })
+
+                    setTimeout(() => {
+                        this.doAtEnd(childContext22)
+                    }, this.timer * 1000)
+                })
+
+                this.doAtBeginning(childContext11)
+
+                break
+        }
     }
 }

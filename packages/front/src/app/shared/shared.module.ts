@@ -5,6 +5,8 @@ import { AvatarSharedComponent } from './avatar/component/avatar.shared.componen
 import { InteractiveSharedModule } from './interactive/interactive.shared.module'
 import { ChatSharedModule } from './chat/chat.shared.module'
 
+import { UserSharedService } from './user/service/user.shared.service'
+
 import { LabelSharedComponent } from './label/label.shared.component'
 
 @NgModule({
@@ -22,6 +24,9 @@ import { LabelSharedComponent } from './label/label.shared.component'
         ChatSharedModule,
         AvatarSharedComponent,
         LabelSharedComponent
+    ],
+    providers: [
+        UserSharedService
     ]
 })
 

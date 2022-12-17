@@ -1,3 +1,6 @@
+import { TypeChatGameEnum } from '../type/enum/type.chat.game.enum'
+
 export interface ChatGameInterface {
-    key: string
+    gameId: string
+    type: TypeChatGameEnum
 }

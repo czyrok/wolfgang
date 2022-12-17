@@ -2,8 +2,10 @@ import { prop, getModelForClass, Ref } from '@typegoose/typegoose'
 import { Exclude, Expose } from 'class-transformer'
 
 import { CollectionName } from '../../../../../decorator/collection-name.decorator'
+
 import { UserModel } from '../../../../../user/model/user.model'
 import { MessageChatGameModel } from '../../model/message.chat.game.model'
+
 import { UserMessageChatGameInterface } from '../interface/user.message.chat.game.interface'
 
 @Exclude()

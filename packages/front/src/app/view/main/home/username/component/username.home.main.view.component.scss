@@ -1,0 +1,62 @@
+@use '../../../../../app.scss';
+
+@use '../../../../../../scss/lib/property';
+
+@use '~scss-toolkit/src/mixin/theme';
+
+section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+section .wrapper {
+    width: property.get('size', 'aside');
+    border-radius: property.get('borderRadius', 'rounded');
+    overflow: hidden;
+    display: grid;
+    grid-template-areas:
+        'a'
+        'b';
+    box-shadow: property.get('shadow', 'box', 'regular');
+
+    @include theme.themeHandler(true, 'isolatedElement') {
+        background-color: theme.get('background');
+    }
+}
+
+section .wrapper h2 {
+    padding: property.get('borderLimit', 'regular');
+    border-bottom-left-radius: property.get('borderRadius', 'rounded');
+    border-bottom-right-radius: property.get('borderRadius', 'rounded');
+    text-align: center;
+    margin-bottom: -1 * property.get('borderRadius', 'rounded');
+    z-index: 1;
+
+    @include theme.themeHandler(true, 'isolatedElement', 'title') {
+        background-color: theme.get('background');
+    }
+}
+
+section .wrapper form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: property.get('borderLimit', 'regular');
+    padding-top: property.get('borderLimit', 'regular') + property.get('borderRadius', 'rounded');
+    box-sizing: border-box;
+}
+
+section .wrapper form .field {
+    display: flex;
+    flex-direction: column;
+
+    @include theme.themeHandler(true, 'isolatedElement', 'title') {
+        color: theme.get('color');
+    }
+}
+
+section .wrapper form .field:not(:first-child) {
+    margin-top: property.get('borderLimit', 'big');
+}
