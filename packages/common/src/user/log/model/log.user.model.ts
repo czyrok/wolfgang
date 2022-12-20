@@ -1,7 +1,5 @@
-import { prop, getModelForClass, Ref } from '@typegoose/typegoose'
+import { prop, getModelForClass, Ref, modelOptions } from '@typegoose/typegoose'
 import { Exclude, Expose } from 'class-transformer'
-
-import { CollectionName } from '../../../decorator/collection-name.decorator'
 
 import { DocumentModel } from '../../../model/document.model'
 import { UserModel } from '../../model/user.model'
@@ -11,7 +9,7 @@ import { LogUserInterface } from '../interface/log.user.interface'
 import { TypeLogUserEnum } from '../type/enum/type.log.user.enum'
 
 @Exclude()
-@CollectionName()
+@modelOptions({ schemaOptions: { collection: "log_user" } })
 export class LogUserModel extends DocumentModel implements LogUserInterface {
     @Expose()
     @prop({ required: true, ref: () => UserModel })

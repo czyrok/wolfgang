@@ -1,7 +1,5 @@
-import { prop, getModelForClass, Ref } from '@typegoose/typegoose'
+import { prop, getModelForClass, Ref, modelOptions } from '@typegoose/typegoose'
 import { Exclude, Expose } from 'class-transformer'
-
-import { CollectionName } from '../../../decorator/collection-name.decorator'
 
 import { DocumentModel } from '../../../model/document.model'
 import { UserModel } from '../../../user/model/user.model'
@@ -9,7 +7,7 @@ import { UserModel } from '../../../user/model/user.model'
 import { MessageUserInterface } from '../interface/message.user.interface'
 
 @Exclude()
-@CollectionName()
+@modelOptions({ schemaOptions: { collection: "message_user" } })
 export class MessageUserModel extends DocumentModel implements MessageUserInterface {
     @Expose()
     @prop({ required: true, ref: () => UserModel })
