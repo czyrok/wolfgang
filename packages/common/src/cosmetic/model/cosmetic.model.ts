@@ -8,7 +8,7 @@ import { CosmeticInterface } from '../interface/cosmetic.interface'
 import { TypeCosmeticEnum } from '../type/enum/type.cosmetic.enum'
 
 @Exclude()
-@modelOptions({ schemaOptions: { collection: "cosmetic" } })
+@modelOptions({ schemaOptions: { collection: "cosmetic" }})
 export class CosmeticModel extends DocumentModel implements CosmeticInterface {
     @Expose()
     @prop({ required: true })
