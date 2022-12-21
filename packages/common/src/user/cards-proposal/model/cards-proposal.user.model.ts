@@ -1,7 +1,5 @@
-import { prop, getModelForClass, Ref } from '@typegoose/typegoose'
+import { prop, getModelForClass, Ref, modelOptions } from '@typegoose/typegoose'
 import { Exclude, Expose } from 'class-transformer'
-
-import { CollectionName } from '../../../decorator/collection-name.decorator'
 
 import { DocumentModel } from '../../../model/document.model'
 import { UserModel } from '../../model/user.model'
@@ -9,7 +7,7 @@ import { UserModel } from '../../model/user.model'
 import { CardsProposalUserInterface } from '../interface/cards-proposal.user.interface'
 
 @Exclude()
-@CollectionName()
+@modelOptions({ schemaOptions: { collection: "cards_proposal_user" } })
 export class CardsProposalUserModel extends DocumentModel implements CardsProposalUserInterface {
     @Expose()
     @prop({ required: true, ref: () => UserModel })

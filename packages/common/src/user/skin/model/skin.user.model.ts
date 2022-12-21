@@ -1,7 +1,5 @@
-import { prop, getModelForClass, Ref } from '@typegoose/typegoose'
+import { prop, getModelForClass, Ref, modelOptions } from '@typegoose/typegoose'
 import { Exclude, Expose } from 'class-transformer'
-
-import { CollectionName } from '../../../decorator/collection-name.decorator'
 
 import { DocumentModel } from '../../../model/document.model'
 import { CosmeticModel } from '../../../cosmetic/model/cosmetic.model'
@@ -9,7 +7,7 @@ import { CosmeticModel } from '../../../cosmetic/model/cosmetic.model'
 import { SkinUserInterface } from '../interface/skin.user.interface'
 
 @Exclude()
-@CollectionName()
+@modelOptions({ schemaOptions: { collection: "skin_user" } })
 export class SkinUserModel extends DocumentModel implements SkinUserInterface {
     @Expose()
     @prop({ required: true, ref: () => CosmeticModel })

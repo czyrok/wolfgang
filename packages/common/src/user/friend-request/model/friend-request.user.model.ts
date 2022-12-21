@@ -1,7 +1,5 @@
-import { prop, getModelForClass, Ref } from '@typegoose/typegoose'
+import { prop, getModelForClass, Ref, modelOptions } from '@typegoose/typegoose'
 import { Exclude, Expose } from 'class-transformer'
-
-import { CollectionName } from '../../../decorator/collection-name.decorator'
 
 import { DocumentModel } from '../../../model/document.model'
 import { UserModel } from '../../../user/model/user.model'
@@ -11,7 +9,7 @@ import { FriendRequestUserInterface } from '../interface/friend-request.user.int
 import { AcceptationTypeFriendRequestUserEnum } from '../acceptation-type/enum/acceptation-type.friend-request.user.enum'
 
 @Exclude()
-@CollectionName()
+@modelOptions({ schemaOptions: { collection: "friend_request_user" } })
 export class FriendRequestUserModel extends DocumentModel implements FriendRequestUserInterface {
     @Expose()
     @prop({ required: true, ref: () => UserModel })
