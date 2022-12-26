@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, ViewContainerRef, ComponentRef, HostListener } from '@angular/core'
+import { Component, ViewChild, ViewContainerRef, ComponentRef, HostListener } from '@angular/core'
 import { ElementAlertComponent } from '../element/component/element.alert.component'
 
 @Component({
@@ -7,19 +7,28 @@ import { ElementAlertComponent } from '../element/component/element.alert.compon
   styleUrls: ['./alert.component.scss']
 })
 export class AlertComponent {
-  timeoutID!: ReturnType<typeof setTimeout>
+  timeOut!: ReturnType<typeof setTimeout> | undefined
 
-  
+  constructor(
+    private componentRef: ComponentRef<AlertComponent>
+  ) { }
+
   ngAfterViewInit(): void {
-    
-    let alert = ElementAlertComponent
-    this.viewContainerRefTarget.createComponent(alert)
-    this.timeoutID = setTimeout(_=>this.clic(), 30000)
+    //let alert = ElementAlertComponent
+    //this.viewContainerRefTarget.createComponent(alert)
+
+    this.timeOut = setTimeout(_ => {
+      this.timeOut = undefined
+
+      this.clic()
+    }, 30000)
   }
 
   @ViewChild('target', { read: ViewContainerRef }) viewContainerRefTarget!: ViewContainerRef
+
   @HostListener('target') clic(): void {
-    this.viewContainerRefTarget = ComponentRef.destroy()
-    clearTimeout(this.timeoutID);
+    this.componentRef.destroy()
+
+    if (this.timeOut !== undefined) clearTimeout(this.timeOut)
   }
 }
