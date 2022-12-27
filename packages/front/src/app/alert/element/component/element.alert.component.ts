@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { Component, ComponentRef, HostListener } from '@angular/core'
 
 @Component({
   selector: 'element-alert',
@@ -6,5 +6,11 @@ import { Component } from '@angular/core'
   styleUrls: ['./element.alert.component.scss']
 })
 export class ElementAlertComponent {
+  constructor(
+    private componentRef: ComponentRef<ElementAlertComponent>
+  ) { }
 
+  @HostListener('target') clic(): void {
+    this.componentRef.destroy()
+  }
 }

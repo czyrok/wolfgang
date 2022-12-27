@@ -33,7 +33,6 @@ export class AlertComponent {
   @ViewChild('target', { read: ViewContainerRef }) viewContainerRefTarget!: ViewContainerRef
   @HostListener('target') clic(alertList: Array<ElementAlertComponent>): void {
     this.componentRef.destroy()
-    alertList = new Array()
     if (this.timeOut !== undefined) clearTimeout(this.timeOut)
   }
 }
