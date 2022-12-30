@@ -1,6 +1,5 @@
-import { TypeBehaviorCardItemLoopGameEnum } from 'common'
+import { TypeBehaviorCardItemLoopGameEnum, MapParamModel } from 'common'
 
-import { MapParamModel } from '../../../../../../../param/map/model/map.param.model'
 import { BehaviorCardItemLoopGameModel } from '../../model/behavior.card.item.loop.game.model'
 import { WerewolfImplementationBehaviorCardItemLoopGameModel } from '../../implementation/werewolf/model/werewolf.implementation.behavior.card.item.loop.game.model'
 import { VillagerImplementationBehaviorCardItemLoopGameModel } from '../../implementation/villager/model/villager.implementation.behavior.card.item.loop.game.model'

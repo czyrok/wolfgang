@@ -1,4 +1,5 @@
-import { MapParamModel } from '../../../../../param/map/model/map.param.model'
+import { MapParamModel } from 'common'
+
 import { ItemLoopGameModel } from '../../model/item.loop.game.model'
 import { VillagerImplementationItemLoopGameModel } from '../../implementation/villager/model/villager.implementation.item.loop.game.model'
 import { WerewolfImplementationItemLoopGameModel } from '../../implementation/werewolf/model/werewolf.implementation.item.loop.game.model'

@@ -1,6 +1,5 @@
-import { CardPlayerGameModel } from 'common'
+import { CardPlayerGameModel, MapParamModel } from 'common'
 
-import { MapParamModel } from '../../../../../param/map/model/map.param.model'
 import { GreyWerewolfImplementationCardPlayerGameModel } from '../../implementation/werewolf/grey/model/grey.werewolf.implementation.card.player.game.model'
 import { VillagerImplementationCardPlayerGameModel } from '../../implementation/villager/model/villager.implementation.card.player.game.model'
 

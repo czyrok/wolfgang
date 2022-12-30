@@ -1,4 +1,4 @@
-import { MapParamModel } from '../../../param/map/model/map.param.model'
+import { MapParamModel } from 'common'
 
 import { NextContextGameType } from '../next/type/next.context.game.type'
 import { ResultSetGameType } from '../../set/result/type/result.set.game.type'

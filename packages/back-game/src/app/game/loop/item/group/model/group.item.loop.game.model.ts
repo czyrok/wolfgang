@@ -1,4 +1,5 @@
-import { MapParamModel } from '../../../../../param/map/model/map.param.model'
+import { MapParamModel } from 'common'
+
 import { ChildBehaviorCardItemLoopGameModel } from '../../card/behavior/child/model/child.behavior.card.item.loop.game.model'
 import { BehaviorCardItemLoopGameModel } from '../../card/behavior/model/behavior.card.item.loop.game.model'
 import { ItemLoopGameModel } from '../../model/item.loop.game.model'

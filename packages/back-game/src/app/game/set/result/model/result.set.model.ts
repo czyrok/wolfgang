@@ -1,4 +1,4 @@
-import { MapParamModel } from '../../../../param/map/model/map.param.model'
+import { MapParamModel } from 'common'
 
 export class ResultSetGameModel extends MapParamModel<any> {
     
