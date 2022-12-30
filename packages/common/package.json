@@ -8,7 +8,8 @@
     "build": "tsc"
   },
   "dependencies": {
-    "class-transformer": "^0.5.1"
+    "class-transformer": "^0.5.1",
+    "log4js": "^6.7.1"
   },
   "devDependencies": {
     "@typegoose/typegoose": "^9.12.1",

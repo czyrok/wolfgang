@@ -65,3 +65,8 @@ export * from './game/chat/message/event/model/event.message.chat.game.model'
 export * from './game/chat/message/model/message.chat.game.model'
 export * from './game/chat/message/user/interface/user.message.chat.game.interface'
 export * from './game/chat/message/user/model/user.message.chat.game.model'
+
+export * from './log/util/log.util'
+export * from './log/helper/log.helper'
+
+export * from './param/map/model/map.param.model'
