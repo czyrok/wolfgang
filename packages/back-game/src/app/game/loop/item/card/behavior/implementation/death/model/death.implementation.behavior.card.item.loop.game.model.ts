@@ -1,11 +1,11 @@
 import { PlayerGameModel, TypeChatGameEnum } from 'common'
 
 import { BehaviorCardItemLoopGameModel } from '../../../model/behavior.card.item.loop.game.model'
-import { ContextParamItemLoopGameModel } from '../../../../../param/context/model/context.param.item.loop.game.model'
+import { ContextGameModel } from '../../../../../../../context/model/context.game.model'
 
 import { TypeProcessBehaviorCardItemLoopGameEnum } from '../../../process/type/enum/type.process.behavior.card.item.loop.game.enum'
 
-export class DeathImplementationBehaviorCardItemLoop extends BehaviorCardItemLoopGameModel {
+export class DeathImplementationBehaviorCardItemLoopGameModel extends BehaviorCardItemLoopGameModel {
     public constructor() {
         super(
             '#adef',
@@ -17,7 +17,7 @@ export class DeathImplementationBehaviorCardItemLoop extends BehaviorCardItemLoo
         )
     }
 
-    public validCondition(context: ContextParamItemLoopGameModel): boolean {
+    public validCondition(context: ContextGameModel): boolean {
         if (context[TypeProcessBehaviorCardItemLoopGameEnum.KILL] !== undefined) {
             console.log('DEATH22')
             return true
@@ -27,7 +27,7 @@ export class DeathImplementationBehaviorCardItemLoop extends BehaviorCardItemLoo
         }
     }
 
-    public doAtBeginning(context: ContextParamItemLoopGameModel): void {
+    public doAtBeginning(context: ContextGameModel): void {
         // #achan afficher un message
         let players: Array<PlayerGameModel> = context[TypeProcessBehaviorCardItemLoopGameEnum.KILL]
 
@@ -40,7 +40,7 @@ export class DeathImplementationBehaviorCardItemLoop extends BehaviorCardItemLoo
         context.next()
     }
 
-    public doAtEnd(context: ContextParamItemLoopGameModel): void {
+    public doAtEnd(context: ContextGameModel): void {
         context.next()
     }
 }

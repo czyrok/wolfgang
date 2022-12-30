@@ -5,13 +5,12 @@ import { FactoryCardPlayerGameUtil } from '../player/card/factory/util/factory.c
 
 import { RulesGameModel } from '../rules/model/rules.game.model'
 import { IteratorItemLoopGameModel } from '../loop/item/iterator/model/iterator.item.loop.game.model'
-import { ItemLoopGameModel } from '../loop/item/model/item.loop.game.model'
-import { ContextParamItemLoopGameModel } from '../loop/item/param/context/model/context.param.item.loop.game.model'
+import { ContextGameModel } from '../context/model/context.game.model' 
 import { HandlerPlayerGameModel } from '../player/handler/model/handler.player.game.model'
 
 import { TypeCardPlayerGameEnum } from '../player/card/type/enum/type.card.player.game.enum'
 
-import { ResultSetItemLoopGameType } from '../loop/item/set/result/type/result.set.item.loop.game.type'
+import { ResultSetGameType } from '../set/result/type/result.set.game.type'
 
 export class GameModel {
     private static _instance: GameModel = new GameModel
@@ -74,12 +73,12 @@ export class GameModel {
         this.turn(ite2)
     }
 
-    private turn(ite: IteratorItemLoopGameModel, previousResult?: ResultSetItemLoopGameType): void {
+    private turn(ite: IteratorItemLoopGameModel, previousResult?: ResultSetGameType): void {
         console.log('TURN79')
 
         // #achan
 
-        let context: ContextParamItemLoopGameModel = new ContextParamItemLoopGameModel(undefined, previousResult)
+        let context: ContextGameModel = ContextGameModel.buildContext(undefined, previousResult)
 
         context.res.subscribeOne((result) => {
             setTimeout(() => {

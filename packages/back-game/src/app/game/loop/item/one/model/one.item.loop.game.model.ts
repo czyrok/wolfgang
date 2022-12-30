@@ -1,8 +1,8 @@
 import { BehaviorCardItemLoopGameModel } from '../../card/behavior/model/behavior.card.item.loop.game.model'
 import { ItemLoopGameModel } from '../../model/item.loop.game.model'
-import { ContextParamItemLoopGameModel } from '../../param/context/model/context.param.item.loop.game.model'
+import { ContextGameModel } from '../../../../context/model/context.game.model'
 
-import { ResultSetItemLoopGameType } from '../../set/result/type/result.set.item.loop.game.type'
+import { ResultSetGameType } from '../../../../set/result/type/result.set.game.type'
 
 export abstract class OneItemLoopGameModel extends ItemLoopGameModel {
     public constructor(
@@ -18,14 +18,14 @@ export abstract class OneItemLoopGameModel extends ItemLoopGameModel {
         return this._cardBehavior
     }
 
-    entryPoint(context: ContextParamItemLoopGameModel): void {
+    entryPoint(context: ContextGameModel): void {
         console.log('ITEM_ENTRYPOINT32')
 
-        let childContext: ContextParamItemLoopGameModel = this.buildContext(context, context.result)
+        let childContext: ContextGameModel = ContextGameModel.buildContext(context, context.result)
 
         if (!this.cardBehavior.validCondition(childContext)) return context.next()
         
-        childContext.res.subscribeOne((result: ResultSetItemLoopGameType) => {
+        childContext.res.subscribeOne((result: ResultSetGameType) => {
             context.next(result)
         })
 

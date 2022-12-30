@@ -1,7 +1,5 @@
-import { ContextParamItemLoopGameModel } from '../../../param/context/model/context.param.item.loop.game.model'
+import { ContextGameModel } from '../../../../../context/model/context.game.model'
 
-export interface EntryPointStrategyItemLoopGameInterface<
-    T extends ContextParamItemLoopGameModel,
-> {
-    entryPoint(context: T): void
+export interface EntryPointStrategyItemLoopGameInterface {
+    entryPoint(context: ContextGameModel): void
 }

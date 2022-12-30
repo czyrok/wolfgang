@@ -13,7 +13,7 @@ export class DeathImplementationItemLoopGameModel extends OneItemLoopGameModel {
     }
 
     public objectBuildingEnd(): void {
-        this.nextList.push(
+        if (!this.isInitialized) this.nextList.push(
             FactoryItemLoopGameUtil.get(TypeItemLoopGameEnum.VILLAGER),
             FactoryItemLoopGameUtil.get(TypeItemLoopGameEnum.WEREWOLF)
         )

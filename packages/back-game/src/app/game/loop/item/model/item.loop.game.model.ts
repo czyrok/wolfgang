@@ -1,12 +1,11 @@
 import { BehaviorCardItemLoopGameModel } from '../card/behavior/model/behavior.card.item.loop.game.model'
-import { ContextParamItemLoopGameModel } from '../param/context/model/context.param.item.loop.game.model'
+import { ContextGameModel } from '../../../context/model/context.game.model'
 
 import { HandlerBehaviorCardItemLoopGameInterface } from '../card/behavior/handler/interface/handler.behavior.card.item.loop.game.interface'
 import { StrategyItemLoopGameInterface } from '../strategy/interface/strategy.item.loop.game.interface'
 
-import { ResultSetItemLoopGameType } from '../set/result/type/result.set.item.loop.game.type'
-
-export abstract class ItemLoopGameModel implements StrategyItemLoopGameInterface<ContextParamItemLoopGameModel, ContextParamItemLoopGameModel>, HandlerBehaviorCardItemLoopGameInterface {
+export abstract class ItemLoopGameModel implements StrategyItemLoopGameInterface, HandlerBehaviorCardItemLoopGameInterface {
+    private _isInitialized: boolean = false
     private _nextIndex: number = 0
     protected _nextList: Array<ItemLoopGameModel> = new Array
 
@@ -14,7 +13,15 @@ export abstract class ItemLoopGameModel implements StrategyItemLoopGameInterface
         private _atNight: boolean
     ) { }
 
-    private get nextIndex(): number {
+    protected get isInitialized(): boolean {
+        let temp: boolean = this._isInitialized
+
+        this._isInitialized = true
+
+        return temp
+    }
+
+    public get nextIndex(): number {
         return this._nextIndex
     }
 
@@ -38,17 +45,7 @@ export abstract class ItemLoopGameModel implements StrategyItemLoopGameInterface
 
     public abstract objectBuildingEnd(): void
 
-    abstract entryPoint(context: ContextParamItemLoopGameModel): void
-
-    buildContext(
-        parentContext: ContextParamItemLoopGameModel,
-        preivousResult?: ResultSetItemLoopGameType
-    ): ContextParamItemLoopGameModel {
-        return new ContextParamItemLoopGameModel(
-            parentContext,
-            preivousResult
-        )
-    }
+    abstract entryPoint(context: ContextGameModel): void
 
     abstract getCardBehavior(): Array<BehaviorCardItemLoopGameModel>
 }

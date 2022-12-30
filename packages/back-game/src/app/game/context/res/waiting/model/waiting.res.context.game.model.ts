@@ -1,14 +1,14 @@
-import { ContextParamItemLoopGameModel } from '../../../model/context.param.item.loop.game.model'
-import { ResContextParamItemLoopGameModel } from '../../model/res.context.param.item.loop.game.model'
+import { ContextGameModel } from '../../../model/context.game.model'
+import { ResContextGameModel } from '../../model/res.context.game.model'
 
-import { ResultSetItemLoopGameType } from '../../../../../set/result/type/result.set.item.loop.game.type'
+import { ResultSetGameType } from '../../../../set/result/type/result.set.game.type'
 
-export class WaitingResContextParamItemLoopGameModel {
-    private _res: ResContextParamItemLoopGameModel = new ResContextParamItemLoopGameModel
+export class WaitingResContextGameModel {
+    private _res: ResContextGameModel = new ResContextGameModel
     private _waitCount: number = 0
-    private _resultStorage: Array<ResultSetItemLoopGameType> = new Array
+    private _resultStorage: Array<ResultSetGameType> = new Array
 
-    public get res(): ResContextParamItemLoopGameModel {
+    public get res(): ResContextGameModel {
         return this._res
     }
 
@@ -20,13 +20,13 @@ export class WaitingResContextParamItemLoopGameModel {
         return this._waitCount
     }
 
-    private get resultStorage(): Array<ResultSetItemLoopGameType> {
+    private get resultStorage(): Array<ResultSetGameType> {
         return this._resultStorage
     }
 
     private end(): void {
         if (this.waitCount === 0) {
-            let returnedResult: ResultSetItemLoopGameType = undefined
+            let returnedResult: ResultSetGameType = undefined
 
             while (returnedResult === undefined && this.resultStorage.length > 0) {
                 returnedResult = this.resultStorage.pop()
@@ -42,11 +42,11 @@ export class WaitingResContextParamItemLoopGameModel {
         }
     }
 
-    public wait(contexts: Array<ContextParamItemLoopGameModel>): void {
+    public wait(contexts: Array<ContextGameModel>): void {
         this.waitCount += contexts.length
 
         for (const context of contexts) {
-            context.res.subscribeOne((result: ResultSetItemLoopGameType) => {
+            context.res.subscribeOne((result: ResultSetGameType) => {
                 this.resultStorage.push(result)
 
                 this.waitCount -= 1

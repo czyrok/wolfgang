@@ -2,10 +2,10 @@ import { MapParamModel } from '../../../../../param/map/model/map.param.model'
 import { ChildBehaviorCardItemLoopGameModel } from '../../card/behavior/child/model/child.behavior.card.item.loop.game.model'
 import { BehaviorCardItemLoopGameModel } from '../../card/behavior/model/behavior.card.item.loop.game.model'
 import { ItemLoopGameModel } from '../../model/item.loop.game.model'
-import { ContextParamItemLoopGameModel } from '../../param/context/model/context.param.item.loop.game.model'
-import { WaitingResContextParamItemLoopGameModel } from '../../param/context/res/waiting/model/waiting.res.context.param.item.loop.game.model'
+import { ContextGameModel } from '../../../../context/model/context.game.model'
+import { WaitingResContextGameModel } from '../../../../context/res/waiting/model/waiting.res.context.game.model'
 
-import { ResultSetItemLoopGameType } from '../../set/result/type/result.set.item.loop.game.type'
+import { ResultSetGameType } from '../../../../set/result/type/result.set.game.type'
 
 export abstract class GroupItemLoopGameModel extends ItemLoopGameModel {
     public constructor(
@@ -21,15 +21,15 @@ export abstract class GroupItemLoopGameModel extends ItemLoopGameModel {
         return this._childBehaviorCardList
     }
 
-    entryPoint(context: ContextParamItemLoopGameModel): void {
+    entryPoint(context: ContextGameModel): void {
         let childs: MapParamModel<{
-            context: ContextParamItemLoopGameModel,
+            context: ContextGameModel,
             self: ChildBehaviorCardItemLoopGameModel
         }> = new MapParamModel,
-            childContexts: Array<ContextParamItemLoopGameModel> = new Array
+            childContexts: Array<ContextGameModel> = new Array
 
         for (let i = 0; i < this.childBehaviorCardList.length; i++) {
-            let childContext: ContextParamItemLoopGameModel = this.buildContext(context, context.result)
+            let childContext: ContextGameModel = ContextGameModel.buildContext(context, context.result)
 
             if (this.childBehaviorCardList[i].validCondition(childContext)) {
                 childs[i] = {
@@ -42,18 +42,18 @@ export abstract class GroupItemLoopGameModel extends ItemLoopGameModel {
         }
 
         if (childContexts.length > 0) {
-            let waiting: WaitingResContextParamItemLoopGameModel = new WaitingResContextParamItemLoopGameModel
+            let waiting: WaitingResContextGameModel = new WaitingResContextGameModel
             waiting.wait(childContexts)
-            waiting.res.subscribeOne((result: ResultSetItemLoopGameType) => {
+            waiting.res.subscribeOne((result: ResultSetGameType) => {
                 context.next(result)
             })
 
             for (let i = 0; i < this.childBehaviorCardList.length; i++) {
                 if (childs[i] !== undefined) ((childs[i] as {
-                    context: ContextParamItemLoopGameModel,
+                    context: ContextGameModel,
                     self: ChildBehaviorCardItemLoopGameModel
                 }).self).entryPoint((childs[i] as {
-                    context: ContextParamItemLoopGameModel,
+                    context: ContextGameModel,
                     self: ChildBehaviorCardItemLoopGameModel
                 }).context)
             }

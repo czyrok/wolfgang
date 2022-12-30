@@ -2,9 +2,9 @@ import { TypeBehaviorCardItemLoopGameEnum } from 'common'
 
 import { MapParamModel } from '../../../../../../../param/map/model/map.param.model'
 import { BehaviorCardItemLoopGameModel } from '../../model/behavior.card.item.loop.game.model'
-import { WerewolfImplementationBehaviorCardItemLoop } from '../../implementation/werewolf/model/werewolf.implementation.behavior.card.item.loop.game.model'
-import { VillagerImplementationBehaviorCardItemLoop } from '../../implementation/villager/model/villager.implementation.behavior.card.item.loop.game.model'
-import { DeathImplementationBehaviorCardItemLoop } from '../../implementation/death/model/death.implementation.behavior.card.item.loop.game.model'
+import { WerewolfImplementationBehaviorCardItemLoopGameModel } from '../../implementation/werewolf/model/werewolf.implementation.behavior.card.item.loop.game.model'
+import { VillagerImplementationBehaviorCardItemLoopGameModel } from '../../implementation/villager/model/villager.implementation.behavior.card.item.loop.game.model'
+import { DeathImplementationBehaviorCardItemLoopGameModel } from '../../implementation/death/model/death.implementation.behavior.card.item.loop.game.model'
 
 export class FactoryCardBehaviorItemLoopGameUtil {
     private static _storage: MapParamModel<BehaviorCardItemLoopGameModel> = new MapParamModel
@@ -17,15 +17,15 @@ export class FactoryCardBehaviorItemLoopGameUtil {
         if (this.storage[type] === undefined) {
             switch (type) {
                 case TypeBehaviorCardItemLoopGameEnum.WEREWOLF:
-                    this.storage[type] = new WerewolfImplementationBehaviorCardItemLoop()
+                    this.storage[type] = new WerewolfImplementationBehaviorCardItemLoopGameModel()
 
                     break
                 case TypeBehaviorCardItemLoopGameEnum.VILLAGER:
-                    this.storage[type] = new VillagerImplementationBehaviorCardItemLoop()
+                    this.storage[type] = new VillagerImplementationBehaviorCardItemLoopGameModel()
 
                     break
                 case TypeBehaviorCardItemLoopGameEnum.DEATH:
-                    this.storage[type] = new DeathImplementationBehaviorCardItemLoop()
+                    this.storage[type] = new DeathImplementationBehaviorCardItemLoopGameModel()
 
                     break
             }

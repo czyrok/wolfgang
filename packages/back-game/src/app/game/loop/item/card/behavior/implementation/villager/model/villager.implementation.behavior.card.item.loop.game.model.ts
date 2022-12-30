@@ -3,15 +3,15 @@ import { PlayerGameModel, TypeChatGameEnum } from 'common'
 import { FactoryCardPlayerGameUtil } from '../../../../../../../player/card/factory/util/factory.card.player.game.util'
 
 import { BehaviorCardItemLoopGameModel } from '../../../model/behavior.card.item.loop.game.model'
-import { ContextParamItemLoopGameModel } from '../../../../../param/context/model/context.param.item.loop.game.model'
+import { ContextGameModel } from '../../../../../../../context/model/context.game.model'
 import { HandlerVotePlayerGameModel } from '../../../../../../../player/vote/handler/model/handler.vote.player.game.model'
 import { VillagerImplementationStrategyCampPlayerGameModel } from '../../../../../../../player/camp/strategy/implementation/villager/model/villager.implementation.strategy.camp.player.game.model'
-import { ResultSetItemLoopGameModel } from '../../../../../set/result/model/result.set.item.loop.game.model'
+import { ResultSetGameModel } from '../../../../../../../set/result/model/result.set.model'
 
 import { TypeCardPlayerGameEnum } from '../../../../../../../player/card/type/enum/type.card.player.game.enum'
 import { TypeProcessBehaviorCardItemLoopGameEnum } from '../../../process/type/enum/type.process.behavior.card.item.loop.game.enum'
 
-export class VillagerImplementationBehaviorCardItemLoop extends BehaviorCardItemLoopGameModel {
+export class VillagerImplementationBehaviorCardItemLoopGameModel extends BehaviorCardItemLoopGameModel {
     public constructor() {
         super(
             '#adef',
@@ -26,7 +26,7 @@ export class VillagerImplementationBehaviorCardItemLoop extends BehaviorCardItem
         )
     }
 
-    public validCondition(context: ContextParamItemLoopGameModel): boolean {
+    public validCondition(context: ContextGameModel): boolean {
         if (this.getPlayer().length > 0) {
             return true
         } else {
@@ -34,18 +34,18 @@ export class VillagerImplementationBehaviorCardItemLoop extends BehaviorCardItem
         }
     }
 
-    public doAtBeginning(context: ContextParamItemLoopGameModel): void {
+    public doAtBeginning(context: ContextGameModel): void {
         // #achan afficher un message
         context.next()
     }
 
-    public doAtEnd(context: ContextParamItemLoopGameModel): void {
+    public doAtEnd(context: ContextGameModel): void {
         // #achan afficher un message
         let handler: HandlerVotePlayerGameModel = HandlerVotePlayerGameModel.instance,
             player: PlayerGameModel | null = handler.mostVotedOfPlayersGroup(this.getPlayer())
 
         if (player !== null) {
-            let result: ResultSetItemLoopGameModel = new ResultSetItemLoopGameModel
+            let result: ResultSetGameModel = new ResultSetGameModel
             result[TypeProcessBehaviorCardItemLoopGameEnum.KILL] = [player]
 
             context.next(result)

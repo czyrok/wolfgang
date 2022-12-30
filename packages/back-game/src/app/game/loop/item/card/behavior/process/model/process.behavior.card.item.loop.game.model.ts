@@ -1,19 +1,9 @@
-import { ContextParamBehaviorCardItemLoopGameModel } from '../../param/context/model/context.param.behavior.card.item.loop.game.model'
+import { ContextGameModel } from '../../../../../../context/model/context.game.model'
 
 import { ProcessBehaviorCardPItemLoopGameInterface } from '../interface/process.behavior.card.item.loop.game.interface'
 
-import { ResultSetItemLoopGameType } from '../../../../set/result/type/result.set.item.loop.game.type'
+import { ResultSetGameType } from '../../../../../../set/result/type/result.set.game.type'
 
-export abstract class ProcessBehaviorCardPItemLoopGameModel implements ProcessBehaviorCardPItemLoopGameInterface<ContextParamBehaviorCardItemLoopGameModel> {
-    abstract execute(context: ContextParamBehaviorCardItemLoopGameModel): ResultSetItemLoopGameType
-
-    buildContext(
-        parentContext: ContextParamBehaviorCardItemLoopGameModel,
-        preivousResult?: ResultSetItemLoopGameType
-    ): ContextParamBehaviorCardItemLoopGameModel {
-        return new ContextParamBehaviorCardItemLoopGameModel(
-            parentContext,
-            preivousResult
-        )
-    }
+export abstract class ProcessBehaviorCardPItemLoopGameModel implements ProcessBehaviorCardPItemLoopGameInterface {
+    abstract execute(context: ContextGameModel): ResultSetGameType
 }

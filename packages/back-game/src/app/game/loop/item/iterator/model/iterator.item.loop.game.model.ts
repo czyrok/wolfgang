@@ -8,7 +8,9 @@ import { TypeItemLoopGameEnum } from '../../type/enum/type.item.loop.game.enum'
 
 export class IteratorItemLoopGameModel implements IteratorChainedListInterface<ItemLoopGameModel> {
     private _default: ItemLoopGameModel = FactoryItemLoopGameUtil.get(TypeItemLoopGameEnum.DEFAULT)
+    
     private _current: ItemLoopGameModel = this.default
+    private _nextIndexCurrent: number = 0
 
     private set current(value: ItemLoopGameModel) {
         this._current = value
@@ -18,19 +20,23 @@ export class IteratorItemLoopGameModel implements IteratorChainedListInterface<I
         return this._default
     }
 
+    private set nextIndexCurrent(value: number) {
+        this._nextIndexCurrent = value
+    }
+
+    private get nextIndexCurrent(): number {
+        return this._nextIndexCurrent
+    }
+
     *[Symbol.iterator](): IterableIterator<ItemLoopGameModel> {
         let first: boolean = true
 
         while (true) {
-            if (!first && this.default == this.current) break
+            if (!first && this.default == this.current && this.nextIndexCurrent == 0) break
             first = false
-
-            //console.log('------')
-            //console.log(this.current)
 
             yield this.current
 
-            //console.log(this.next())
             this.next()
         }
     }
@@ -40,6 +46,7 @@ export class IteratorItemLoopGameModel implements IteratorChainedListInterface<I
     }
 
     next(): ItemLoopGameModel {
+        this.nextIndexCurrent = this.current.nextIndex
         this.current = this.current.nextItem
 
         return this.current

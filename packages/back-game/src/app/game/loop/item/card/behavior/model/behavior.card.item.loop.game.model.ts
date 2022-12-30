@@ -1,16 +1,15 @@
 import { PlayerGameModel, HandlerPlayerGameInterface, CardPlayerGameModel, TypeChatGameEnum } from 'common'
 
-import { ContextParamItemLoopGameModel } from '../../../param/context/model/context.param.item.loop.game.model'
-import { ContextParamBehaviorCardItemLoopGameModel } from '../param/context/model/context.param.behavior.card.item.loop.game.model'
+import { ContextGameModel } from '../../../../../context/model/context.game.model'
 
 import { StrategyCampPlayerGameInteface } from '../../../../../player/camp/strategy/interface/strategy.camp.player.game.interface'
 import { HandlerCardPlayerGameInterface } from '../../../../../player/card/handler/interface/handler.card.player.game.interface'
 import { StrategyItemLoopGameInterface } from '../../../strategy/interface/strategy.item.loop.game.interface'
 
-import { ResultSetItemLoopGameType } from '../../../set/result/type/result.set.item.loop.game.type'
+import { ResultSetGameType } from '../../../../../set/result/type/result.set.game.type'
 
 export abstract class BehaviorCardItemLoopGameModel implements
-    StrategyItemLoopGameInterface<ContextParamItemLoopGameModel, ContextParamBehaviorCardItemLoopGameModel>,
+    StrategyItemLoopGameInterface,
     HandlerCardPlayerGameInterface,
     HandlerPlayerGameInterface {
     private _players: Array<PlayerGameModel> = new Array
@@ -40,7 +39,7 @@ export abstract class BehaviorCardItemLoopGameModel implements
         return this._cardList
     }
 
-    public get chat(): TypeChatGameEnum | undefined {
+    public get chat(): TypeChatGameEnum | undefined {
         return this._chat
     }
 
@@ -60,19 +59,19 @@ export abstract class BehaviorCardItemLoopGameModel implements
         for (const card of this.cardList) this.players.push(...card.getPlayer())
     }
 
-    public abstract validCondition(context: ContextParamItemLoopGameModel): boolean
-    public abstract doAtBeginning(context: ContextParamItemLoopGameModel): void
-    public abstract doAtEnd(context: ContextParamItemLoopGameModel): void
+    public abstract validCondition(context: ContextGameModel): boolean
+    public abstract doAtBeginning(context: ContextGameModel): void
+    public abstract doAtEnd(context: ContextGameModel): void
 
-    entryPoint(context: ContextParamItemLoopGameModel): void {
+    entryPoint(context: ContextGameModel): void {
         console.log('BEHAVAIOR_ENTRYPOINT83')
 
-        let childContext1: ContextParamBehaviorCardItemLoopGameModel = this.buildContext(context)
+        let childContext1: ContextGameModel = ContextGameModel.buildContext(context)
 
-        childContext1.res.subscribeOne((result: ResultSetItemLoopGameType) => {
-            let childContext2: ContextParamBehaviorCardItemLoopGameModel = this.buildContext(context, result)
+        childContext1.res.subscribeOne((result: ResultSetGameType) => {
+            let childContext2: ContextGameModel = ContextGameModel.buildContext(context, result)
 
-            childContext2.res.subscribeOne((result: ResultSetItemLoopGameType) => {
+            childContext2.res.subscribeOne((result: ResultSetGameType) => {
                 console.log('BEHAVIOR_TIMER76')
                 context.next(result)
             })
@@ -85,16 +84,6 @@ export abstract class BehaviorCardItemLoopGameModel implements
         })
 
         this.doAtBeginning(childContext1)
-    }
-
-    buildContext(
-        parentContext: ContextParamItemLoopGameModel,
-        preivousResult?: ResultSetItemLoopGameType
-    ): ContextParamBehaviorCardItemLoopGameModel {
-        return new ContextParamBehaviorCardItemLoopGameModel(
-            parentContext,
-            preivousResult
-        )
     }
 
     hasCard(value: CardPlayerGameModel): boolean {

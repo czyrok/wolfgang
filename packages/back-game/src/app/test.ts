@@ -5,7 +5,7 @@ import { FactoryCardPlayerGameUtil } from './game/player/card/factory/util/facto
 
 import { BehaviorCardItemLoopGameModel } from './game/loop/item/card/behavior/model/behavior.card.item.loop.game.model'
 import { OneItemLoopGameModel } from './game/loop/item/one/model/one.item.loop.game.model'
-import { ContextParamItemLoopGameModel } from './game/loop/item/param/context/model/context.param.item.loop.game.model'
+import { ContextGameModel } from './game/context/model/context.game.model'
 import { CardPlayerGameModel } from 'common'
 
 import { TypeCardPlayerGameEnum } from './game/player/card/type/enum/type.card.player.game.enum'
@@ -32,13 +32,13 @@ export class TestBehaviorCardItemLoop extends BehaviorCardItemLoopGameModel {
         )
     }
 
-    public validCondition(context: ContextParamItemLoopGameModel): boolean {
+    public validCondition(context: ContextGameModel): boolean {
         throw new Error('Method not implemented.');
     }
-    public doAtBeginning(context: ContextParamItemLoopGameModel): void {
+    public doAtBeginning(context: ContextGameModel): void {
         throw new Error('Method not implemented.');
     }
-    public doAtEnd(context: ContextParamItemLoopGameModel): void {
+    public doAtEnd(context: ContextGameModel): void {
         throw new Error('Method not implemented.');
     }
 }
