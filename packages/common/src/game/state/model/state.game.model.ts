@@ -1,11 +1,14 @@
-import { TypeBehaviorCardItemLoopGameEnum } from '../../loop/item/card/behavior/type/enum/type.behavior.card.item.loop.game.enum'
 import { PlayerGameModel } from '../../player/model/player.game.model'
+import { RulesGameModel } from '../../rules/model/rules.game.model'
+
+import { TypeBehaviorCardItemLoopGameEnum } from '../../loop/item/card/behavior/type/enum/type.behavior.card.item.loop.game.enum'
 
 // #amet
 export class StateGameModel {
     private _currentCardBehaviorType: Array<TypeBehaviorCardItemLoopGameEnum> = new Array
     private _isNight: boolean = false
     private _players: Array<PlayerGameModel> = new Array
+    private _rules: RulesGameModel = new RulesGameModel
 
     public set isNight(value: boolean) {
         this._isNight = value
@@ -29,5 +32,9 @@ export class StateGameModel {
 
     public get players(): Array<PlayerGameModel> {
         return this._players
+    }
+
+    public get rules(): RulesGameModel {
+        return this._rules
     }
 }

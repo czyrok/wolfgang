@@ -3,11 +3,11 @@ import { connect } from 'mongoose'
 import { Server } from 'socket.io'
 import { SocketIoController } from 'ts-socket.io-controller'
 import { config } from 'dotenv'
-import { LogUtil, LogHelper } from 'common'
+import { LogUtil, LogHelper, TypeLogEnum } from 'common'
 
 import { GameController } from './game/controller/game.controller'
-
-import { TypeLogEnum } from './log/type/enum/type.log.enum'
+import { ChatGameController } from './game/chat/controller/chat.game.controller'
+import { VotePlayerGameController } from './game/player/vote/controller/vote.player.game.controller'
 
 async function run(): Promise<void> {
     LogUtil.config = LogHelper.getConfig(
@@ -40,7 +40,9 @@ async function run(): Promise<void> {
 
     SocketIoController.useSocketIoServer(io, {
         controllers: [
-            GameController
+            GameController,
+            ChatGameController,
+            VotePlayerGameController
         ],
         middlewares: [],
         useClassTransformer: true

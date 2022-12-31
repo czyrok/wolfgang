@@ -1,6 +1,6 @@
 import { Exclude, Expose } from 'class-transformer'
 
-import { CardPlayerGameModel } from '../card/model/card.player.game.model'
+import { CardGameModel } from '../../card/model/card.game.model'
 
 import { CampPlayerGameEnum } from '../camp/enum/camp.player.game.enum'
 
@@ -15,7 +15,7 @@ export class PlayerGameModel {
     private _gamePointAccumulated: number = 0
     private _isDead: boolean = false
     private _camp: CampPlayerGameEnum = CampPlayerGameEnum.UNDEFINED
-    private _card!: CardPlayerGameModel
+    private _card!: CardGameModel
 
     constructor(userId: string, private _socketId: string) {
         this._userId = userId
@@ -45,7 +45,7 @@ export class PlayerGameModel {
         this._camp = value
     }
 
-    public set card(value: CardPlayerGameModel) {
+    public set card(value: CardGameModel) {
         this._card = value
     }
 
@@ -81,7 +81,7 @@ export class PlayerGameModel {
         return this._camp
     }
 
-    public get card(): CardPlayerGameModel {
+    public get card(): CardGameModel {
         return this._card
     }
 

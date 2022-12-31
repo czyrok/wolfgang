@@ -1,5 +1,6 @@
 import { prop, getModelForClass, Ref, modelOptions } from '@typegoose/typegoose'
 import { Exclude, Expose } from 'class-transformer'
+import { Schema } from 'mongoose'
 
 import { DocumentModel } from '../../../model/document.model'
 import { UserModel } from '../../model/user.model'
@@ -20,7 +21,7 @@ export class LogUserModel extends DocumentModel implements LogUserInterface {
     releaseDate!: Date
 
     @Expose()
-    @prop({ default: {} })
+    @prop({ type: Schema.Types.Mixed, default: {} })
     data!: any
 
     @Expose()
