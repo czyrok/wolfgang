@@ -3,6 +3,7 @@ import { Component, ViewChild, ViewContainerRef, ComponentRef, HostListener, Inp
 import { ElementAlertComponent } from '../element/component/element.alert.component'
 import { AlertService } from '../service/alert.service'
 
+import { TypeAlertEnum } from '../type/enum/type.alert.enum'
 @Component({
   selector: 'alert',
   templateUrl: './alert.component.html',
@@ -19,10 +20,8 @@ export class AlertComponent {
   ) { }
   
   ngAfterViewInit(): void {
-    let alert = new Array<ElementAlertComponent>(this.nbAlert)
-    alert.forEach( (value) =>{
-      value = this.viewContainerRefTarget.createComponent(ElementAlertComponent)
-    })
+    this.viewContainerRefTarget.createComponent(ElementAlertComponent)
+    this.alertService.alert.emit({ type: this.typeEnum, text: this.message })
     
     this.timeOut = setTimeout(_ => {
       this.timeOut = undefined
@@ -30,9 +29,10 @@ export class AlertComponent {
       this.clic()
     }, 30000)
   }
-  
-  @Input() nbAlert!: number
 
+  @Input() typeEnum!: TypeAlertEnum
+  @Input() message!: string
+  
   @ViewChild('target', { read: ViewContainerRef }) viewContainerRefTarget!: ViewContainerRef
   @HostListener('target') clic(): void {
     this.componentRef.destroy()
