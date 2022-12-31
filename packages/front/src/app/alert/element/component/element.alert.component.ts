@@ -1,4 +1,6 @@
-import { Component, ComponentRef, HostListener } from '@angular/core'
+import { Component, ComponentRef, Input } from '@angular/core'
+
+import { AlertInterface } from '../../interface/alert.interface'
 
 @Component({
   selector: 'element-alert',
@@ -11,16 +13,20 @@ export class ElementAlertComponent {
   constructor(
     private componentRef: ComponentRef<ElementAlertComponent>
   ) { }
+
   ngAfterViewInit(): void {
     this.timeOut = setTimeout(_ => {
       this.timeOut = undefined
 
-      this.clic()
+      this.click()
     }, 30000)
   }
 
-  @HostListener('target') clic(): void {
-    this.componentRef.destroy()
+  click(): void {
     if (this.timeOut !== undefined) clearTimeout(this.timeOut)
+
+    this.componentRef.destroy()
   }
+
+  @Input() alert!: AlertInterface
 }

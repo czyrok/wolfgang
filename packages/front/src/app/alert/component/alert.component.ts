@@ -1,41 +1,32 @@
-import { Component, ViewChild, ViewContainerRef, ComponentRef, HostListener, Input } from '@angular/core'
+import { Component, ViewChild, ViewContainerRef, ComponentRef, AfterViewInit, ChangeDetectorRef } from '@angular/core'
 
-import { ElementAlertComponent } from '../element/component/element.alert.component'
 import { AlertService } from '../service/alert.service'
 
-import { TypeAlertEnum } from '../type/enum/type.alert.enum'
+import { ElementAlertComponent } from '../element/component/element.alert.component'
+
+import { AlertInterface } from '../interface/alert.interface'
+
 @Component({
   selector: 'alert',
   templateUrl: './alert.component.html',
   styleUrls: ['./alert.component.scss'],
   providers: [AlertService]
 })
-export class AlertComponent {
-
-  timeOut!: ReturnType<typeof setTimeout> | undefined
-  
+export class AlertComponent implements AfterViewInit {
   constructor(
-    private componentRef: ComponentRef<AlertComponent>,
+    private changeDetectorRef: ChangeDetectorRef,
     private alertService: AlertService
   ) { }
-  
+
   ngAfterViewInit(): void {
-    this.viewContainerRefTarget.createComponent(ElementAlertComponent)
-    this.alertService.alert.emit({ type: this.typeEnum, text: this.message })
-    
-    this.timeOut = setTimeout(_ => {
-      this.timeOut = undefined
+    this.alertService.alertEvent.subscribe((alert: AlertInterface) => {
+      let component: ComponentRef<ElementAlertComponent> = this.targetRef.createComponent(ElementAlertComponent)
 
-      this.clic()
-    }, 30000)
+      component.instance.alert = alert
+
+      this.changeDetectorRef.detectChanges()
+    })
   }
 
-  @Input() typeEnum!: TypeAlertEnum
-  @Input() message!: string
-  
-  @ViewChild('target', { read: ViewContainerRef }) viewContainerRefTarget!: ViewContainerRef
-  @HostListener('target') clic(): void {
-    this.componentRef.destroy()
-    if (this.timeOut !== undefined) clearTimeout(this.timeOut)
-  }
+  @ViewChild('target', { read: ViewContainerRef }) targetRef!: ViewContainerRef
 }
