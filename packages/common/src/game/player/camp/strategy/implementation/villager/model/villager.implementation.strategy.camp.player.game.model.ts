@@ -1,10 +1,10 @@
 import { PlayerGameModel } from '../../../../../model/player.game.model'
 
-import { StrategyCampPlayerGameInteface } from '../../../interface/strategy.camp.player.game.interface'
+import { StrategyCampPlayerGameInterface } from '../../../interface/strategy.camp.player.game.interface'
 
 import { CampPlayerGameEnum } from '../../../../enum/camp.player.game.enum'
 
-export class VillagerImplementationStrategyCampPlayerGameModel implements StrategyCampPlayerGameInteface {
+export class VillagerImplementationStrategyCampPlayerGameModel implements StrategyCampPlayerGameInterface {
     setCampToPlayer(list: Array<PlayerGameModel>): void {
         for (let player of list) {
             if (player.camp != CampPlayerGameEnum.UNDEFINED)

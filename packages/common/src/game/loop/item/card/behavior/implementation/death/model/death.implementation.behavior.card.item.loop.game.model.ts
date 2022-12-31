@@ -4,11 +4,12 @@ import { ContextGameModel } from '../../../../../../../context/model/context.gam
 
 import { TypeChatGameEnum } from '../../../../../../../chat/type/enum/type.chat.game.enum'
 import { TypeProcessBehaviorCardItemLoopGameEnum } from '../../../process/type/enum/type.process.behavior.card.item.loop.game.enum'
+import { TypeBehaviorCardItemLoopGameEnum } from '../../../type/enum/type.behavior.card.item.loop.game.enum'
 
 export class DeathImplementationBehaviorCardItemLoopGameModel extends BehaviorCardItemLoopGameModel {
     public constructor() {
         super(
-            '#adef',
+            TypeBehaviorCardItemLoopGameEnum.DEATH,
             // #achan
             -1,
             0,
@@ -19,10 +20,8 @@ export class DeathImplementationBehaviorCardItemLoopGameModel extends BehaviorCa
 
     public validCondition(context: ContextGameModel): boolean {
         if (context[TypeProcessBehaviorCardItemLoopGameEnum.KILL] !== undefined) {
-            console.log('DEATH22')
             return true
         } else {
-            console.log('DEATH25')
             return false
         }
     }

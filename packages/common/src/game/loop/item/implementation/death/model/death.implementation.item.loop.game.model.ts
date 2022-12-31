@@ -8,7 +8,7 @@ import { TypeBehaviorCardItemLoopGameEnum } from '../../../card/behavior/type/en
 
 export class DeathImplementationItemLoopGameModel extends OneItemLoopGameModel {
     public constructor() {
-        super(false, FactoryCardBehaviorItemLoopGameUtil.get(TypeBehaviorCardItemLoopGameEnum.DEATH))
+        super(TypeItemLoopGameEnum.DEATH, false, FactoryCardBehaviorItemLoopGameUtil.get(TypeBehaviorCardItemLoopGameEnum.DEATH))
     }
 
     public objectBuildEnding(): void {

@@ -1,5 +1,5 @@
 import { PlayerGameModel } from '../../../model/player.game.model'
 
-export interface StrategyCampPlayerGameInteface {
+export interface StrategyCampPlayerGameInterface {
     setCampToPlayer(list: Array<PlayerGameModel>): void
 }

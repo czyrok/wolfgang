@@ -8,7 +8,7 @@ import { TypeBehaviorCardItemLoopGameEnum } from '../../../card/behavior/type/en
 
 export class WerewolfImplementationItemLoopGameModel extends OneItemLoopGameModel {
     public constructor() {
-        super(true, FactoryCardBehaviorItemLoopGameUtil.get(TypeBehaviorCardItemLoopGameEnum.WEREWOLF))
+        super(TypeItemLoopGameEnum.WEREWOLF, true, FactoryCardBehaviorItemLoopGameUtil.get(TypeBehaviorCardItemLoopGameEnum.WEREWOLF))
     }
 
     public objectBuildEnding(): void {

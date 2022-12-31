@@ -2,24 +2,25 @@ import { CardGameModel } from '../../../../../../card/model/card.game.model'
 import { BehaviorCardItemLoopGameModel } from '../../model/behavior.card.item.loop.game.model'
 import { ContextGameModel } from '../../../../../../context/model/context.game.model'
 
-import { StrategyCampPlayerGameInteface } from '../../../../../../player/camp/strategy/interface/strategy.camp.player.game.interface'
+import { StrategyCampPlayerGameInterface } from '../../../../../../player/camp/strategy/interface/strategy.camp.player.game.interface'
 
 import { TypeChatGameEnum } from '../../../../../../chat/type/enum/type.chat.game.enum'
 import { TimerModeBehaviorCardItemLoopGameEnum } from '../../timer-mode/enum/timer-mode.behavior.card.item.loop.game.enum'
 
 import { ResultSetGameType } from '../../../../../../set/result/type/result.set.game.type'
+import { TypeBehaviorCardItemLoopGameEnum } from '../../type/enum/type.behavior.card.item.loop.game.enum'
 
 export abstract class ChildBehaviorCardItemLoopGameModel extends BehaviorCardItemLoopGameModel {
     public constructor(
-        key: string,
+        type: TypeBehaviorCardItemLoopGameEnum,
         campHierarchy: number,
         timer: number,
         cardList: Array<CardGameModel>,
         private _timerMode: TimerModeBehaviorCardItemLoopGameEnum,
         chat?: TypeChatGameEnum,
-        campStrategy?: StrategyCampPlayerGameInteface
+        campStrategy?: StrategyCampPlayerGameInterface
     ) {
-        super(key, campHierarchy, timer, cardList, chat, campStrategy)
+        super(type, campHierarchy, timer, cardList, chat, campStrategy)
     }
 
     public get timerMode(): TimerModeBehaviorCardItemLoopGameEnum {

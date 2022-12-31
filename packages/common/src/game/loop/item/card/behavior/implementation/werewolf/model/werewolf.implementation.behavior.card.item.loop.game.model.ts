@@ -10,11 +10,12 @@ import { VillainImplementationStrategyCampPlayerGameModel } from '../../../../..
 import { TypeChatGameEnum } from '../../../../../../../chat/type/enum/type.chat.game.enum'
 import { TypeCardGameEnum } from '../../../../../../../card/type/enum/type.card.game.enum'
 import { TypeProcessBehaviorCardItemLoopGameEnum } from '../../../process/type/enum/type.process.behavior.card.item.loop.game.enum'
+import { TypeBehaviorCardItemLoopGameEnum } from '../../../type/enum/type.behavior.card.item.loop.game.enum'
 
 export class WerewolfImplementationBehaviorCardItemLoopGameModel extends BehaviorCardItemLoopGameModel {
     public constructor() {
         super(
-            '#adef',
+            TypeBehaviorCardItemLoopGameEnum.WEREWOLF,
             1,
             90,
             [

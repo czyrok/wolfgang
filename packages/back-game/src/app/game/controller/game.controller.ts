@@ -1,4 +1,5 @@
 import { Socket, Namespace } from 'socket.io'
+import { instanceToPlain } from 'class-transformer'
 import { OnMessage, EmitOnSuccess, MessageBody, SocketController, ConnectedSocket } from 'ts-socket.io-controller'
 import { StateGameModel, GameModel } from 'common'
 
@@ -8,7 +9,7 @@ import { StateGameModel, GameModel } from 'common'
         let game: GameModel = GameModel.instance
 
         game.onStateChange((state: StateGameModel) => {
-            io.emit('state', state)
+            io.emit('state', instanceToPlain(state))
         })
     }
 })
@@ -18,17 +19,13 @@ export class GameController {
     state() {
         let game: GameModel = GameModel.instance
 
-        console.log('STATE_23')
-
         return game.state
     }
 
     @OnMessage()
-    join(@MessageBody() player: string, @ConnectedSocket() socket: Socket) {
-        console.log('JOIN_32')
-        
+    join(@MessageBody() player: string, @ConnectedSocket() socket: Socket) {        
         let game: GameModel = GameModel.instance
 
-        game.addPlayer(player, socket.id)
+        game.newPlayer(player, socket.id)
     }
 }

@@ -1,3 +1,5 @@
+import { LogUtil } from '../../../../../log/util/log.util'
+
 import { MapParamModel } from '../../../../../param/map/model/map.param.model'
 import { ChildBehaviorCardItemLoopGameModel } from '../../card/behavior/child/model/child.behavior.card.item.loop.game.model'
 import { BehaviorCardItemLoopGameModel } from '../../card/behavior/model/behavior.card.item.loop.game.model'
@@ -5,8 +7,10 @@ import { ItemLoopGameModel } from '../../model/item.loop.game.model'
 import { ContextGameModel } from '../../../../context/model/context.game.model'
 import { WaitingResContextGameModel } from '../../../../context/res/waiting/model/waiting.res.context.game.model'
 
-import { ResultSetGameType } from '../../../../set/result/type/result.set.game.type'
+import { TypeLogEnum } from '../../../../../log/type/enum/type.log.enum'
 import { TypeItemLoopGameEnum } from '../../type/enum/type.item.loop.game.enum'
+
+import { ResultSetGameType } from '../../../../set/result/type/result.set.game.type'
 
 export abstract class GroupItemLoopGameModel extends ItemLoopGameModel {
     public constructor(
@@ -24,6 +28,8 @@ export abstract class GroupItemLoopGameModel extends ItemLoopGameModel {
     }
 
     entryPoint(context: ContextGameModel): void {
+        LogUtil.logger(TypeLogEnum.GAME).info(`${this.type} loop item entrypoint triggered`)
+
         let childs: MapParamModel<{
             context: ContextGameModel,
             self: ChildBehaviorCardItemLoopGameModel

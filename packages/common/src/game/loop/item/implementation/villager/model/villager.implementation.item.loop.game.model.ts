@@ -8,7 +8,7 @@ import { TypeBehaviorCardItemLoopGameEnum } from '../../../card/behavior/type/en
 
 export class VillagerImplementationItemLoopGameModel extends OneItemLoopGameModel {
     public constructor() {
-        super(false, FactoryCardBehaviorItemLoopGameUtil.get(TypeBehaviorCardItemLoopGameEnum.VILLAGER))
+        super(TypeItemLoopGameEnum.VILLAGER, false, FactoryCardBehaviorItemLoopGameUtil.get(TypeBehaviorCardItemLoopGameEnum.VILLAGER))
     }
 
     public objectBuildEnding(): void {

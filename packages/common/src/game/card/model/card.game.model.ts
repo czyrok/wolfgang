@@ -2,13 +2,15 @@ import { PlayerGameModel } from '../../player/model/player.game.model'
 
 import { HandlerPlayerGameInterface } from '../../player/handler/interface/handler.player.game.interface'
 
+import { TypeCardGameEnum } from '../type/enum/type.card.game.enum'
+
 export class CardGameModel implements HandlerPlayerGameInterface {
     private _playerList: Array<PlayerGameModel> = new Array
 
-    public constructor(private _key: string) { }
+    public constructor(private _type: TypeCardGameEnum) { }
 
-    public get key(): string {
-        return this._key
+    public get type(): TypeCardGameEnum {
+        return this._type
     }
 
     public get playerList(): Array<PlayerGameModel> {
@@ -16,9 +18,6 @@ export class CardGameModel implements HandlerPlayerGameInterface {
     }
 
     public addPlayer(player: PlayerGameModel): void {
-        // #nsm
-        //player.card = this
-
         this.playerList.push(player)
     }
 
