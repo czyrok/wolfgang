@@ -1,0 +1,22 @@
+@use '../list.interactive.shared.scss';
+
+@use '../../../../../scss/lib/property';
+@use '../../../../../scss/lib/color';
+
+@use '~scss-toolkit/src/mixin/theme';
+
+.container {
+  width: 100%;
+  height: 100%;
+  border-radius: property.get('borderRadius', 'regular');
+  padding: property.get('borderLimit', 'regular');
+  box-sizing: border-box;
+
+  @include theme.themeHandler(true, 'isolatedElement') {
+    background-color: theme.get('background');
+  }
+}
+
+.container .tab:not(:first-child) {
+  margin-top: property.get('borderLimit', 'regular');
+}

@@ -1,0 +1,15 @@
+@use '../../../app.scss';
+
+@use '../../../../scss/lib/color';
+
+@use '~scss-toolkit/src/mixin/theme';
+
+$exec: theme.append(
+  (
+    'same': (
+      'isolatedElement': (
+        'background': color.get(base, 20)
+      )
+    )
+  )
+);
