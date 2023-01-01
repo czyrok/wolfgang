@@ -1,0 +1,28 @@
+<section>
+  <ng-template #buttonTemplate>
+    <app-shared-interactive-button link="./skin-customization" text="Personnaliser le skin" [accent]="true"
+      [important]="true">
+    </app-shared-interactive-button>
+  </ng-template>
+
+  <ng-template #contentTemplate>
+    <div class="wrapper">
+      <div class="grid">
+        <div class="area-a">
+          <app-shared-user-avatar-all></app-shared-user-avatar-all>
+        </div>
+        
+        <div class="area-b">
+          <app-shared-user-label-level></app-shared-user-label-level>
+        </div>
+
+        <div class="area-c">
+          <app-shared-user-label-point></app-shared-user-label-point>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <app-view-page-block title="Profil" [buttonTemplate]="buttonTemplate"
+    [contentTemplate]="contentTemplate"></app-view-page-block>
+</section>

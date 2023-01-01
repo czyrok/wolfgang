@@ -1,30 +1,31 @@
-import { prop, getModelForClass, Ref, ReturnModelType, modelOptions } from '@typegoose/typegoose'
+import { Ref, ReturnModelType } from '@typegoose/typegoose'
 import { Exclude, Expose } from 'class-transformer'
 
+import { Prop, getModelForClass } from '../../../fix/typegoose.fix'
+
 import { DocumentModel } from '../../../model/document.model'
-import { MessageChatGameModel, MessageChatGameModelDocument } from '../message/model/message.chat.game.model'
+import { MessageChatGameModel, /* MessageChatGameModelDocument */ } from '../message/model/message.chat.game.model'
 
 import { ChatGameInterface } from '../interface/chat.game.interface'
 
 import { TypeChatGameEnum } from '../type/enum/type.chat.game.enum'
 
 @Exclude()
-@modelOptions({ schemaOptions: { collection: "chat_game" } })
 export class ChatGameModel extends DocumentModel implements ChatGameInterface {
     @Expose()
-    @prop({ required: true })
+    @Prop({ required: true })
     gameId!: string
 
     @Expose()
-    @prop({ required: true })
+    @Prop({ required: true })
     type!: TypeChatGameEnum
 
     @Expose()
-    @prop({ ref: () => MessageChatGameModel, default: new Array })
+    @Prop({ ref: () => MessageChatGameModel, default: new Array })
     message!: Array<Ref<MessageChatGameModel>>
 
     // #achan
-    public static async getChat(this: ReturnModelType<typeof ChatGameModelDocument>, gameId: string, type: TypeChatGameEnum): Promise<any> {
+    /* public static async getChat(this: ReturnModelType<typeof ChatGameModelDocument>, gameId: string, type: TypeChatGameEnum): Promise<any> {
         let chat: any = this.findOne({
             gameId: gameId,
             type: type
@@ -48,7 +49,7 @@ export class ChatGameModel extends DocumentModel implements ChatGameInterface {
         chat.message.push(new MessageChatGameModelDocument(message))
 
         chat.save()
-    }
+    } */
 }
 
-export const ChatGameModelDocument = getModelForClass(ChatGameModel)
+export const ChatGameModelDocument = getModelForClass(ChatGameModel, { schemaOptions: { collection: 'chat_game' } })

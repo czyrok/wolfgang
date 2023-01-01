@@ -2,37 +2,37 @@
 
 @use '../../../../../../scss/lib/property';
 
-@use '~scss-toolkit/src/mixin/theme';
+@use 'scss-toolkit/src/mixin/theme';
 
 .container {
   display: grid;
   grid-template-areas: 'a b';
   grid-template-columns: auto 1fr;
+  column-gap: property.get('borderLimit', 'regular');
 }
 
 .container span {
-  font-size: 25px;
   display: flex;
-  width: property.get('size', 'img', 'icon');
-  aspect-ratio: 1 / 1;
+  font-size: property.get('fontSize', 'chat', 'icon');
+  width: property.get('size', 'chat', 'icon');
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  margin-right: property.get('borderLimit', 'regular');
 
-  @include theme.themeHandler(true, 'alert', 'inform', 'icon') {
-    background-color: theme.get('background');
+  @include theme.themeHandler(true, 'alert') {
+    background-color: theme.get('inform', 'icon');
     color: theme.get('color');
   }
 }
 
 .container p {
-  border-radius: property.get('borderRadius', 'regular');
+  border-top-left-radius: property.get('borderRadius', 'rounded');
+  border-bottom-left-radius: property.get('borderRadius', 'rounded');
   padding: property.get('borderLimit', 'verySmall');
   height: fit-content;
 
-  @include theme.themeHandler(true, 'alert', 'inform') {
-    background-color: theme.get('background');
+  @include theme.themeHandler(true, 'alert') {
+    background-color: theme.get('inform', 'background');
     color: theme.get('color');
   }
 }

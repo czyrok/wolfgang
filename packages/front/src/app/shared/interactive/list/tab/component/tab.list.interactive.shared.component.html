@@ -1,5 +1,5 @@
 <div class="container {{ tab.isIconOnly ? 'icon-only' : '' }}">
-  <h3 class="top" data-css-h3 data-css-font (click)="click()">{{ tab.title }}<span class="icofont-{{ tab.visibility ? 'rounded-up' : 'rounded-down' }}"
+  <h3 class="top" data-css-h3 data-css-font data-css-color (click)="click()">{{ tab.title }}<span class="icofont-{{ tab.visibility ? 'rounded-up' : 'rounded-down' }}"
       data-css-icofont></span></h3>
 
   <div class="items" *ngIf="tab.visibility">

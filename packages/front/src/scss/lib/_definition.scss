@@ -1,8 +1,8 @@
 @use 'color';
 @use 'property';
 
-@use '~scss-toolkit/src/function/util';
-@use '~scss-toolkit/src/mixin/element';
+@use 'scss-toolkit/src/function/util';
+@use 'scss-toolkit/src/mixin/element';
 
 @mixin setAttrBorderRadius() {
     @include element.setAttrBorderRadius(

@@ -1,5 +1,7 @@
-import { prop, getModelForClass, Ref, modelOptions } from '@typegoose/typegoose'
+import { Ref } from '@typegoose/typegoose'
 import { Exclude, Expose } from 'class-transformer'
+
+import { Prop, getModelForClass } from '../../fix/typegoose.fix'
 
 import { DocumentModel } from '../../model/document.model'
 import { SkinUserModel } from '../skin/model/skin.user.model'
@@ -7,33 +9,32 @@ import { SkinUserModel } from '../skin/model/skin.user.model'
 import { UserInterface } from '../interface/user.interface'
 
 @Exclude()
-@modelOptions({ schemaOptions: { collection: "user" } })
 export class UserModel extends DocumentModel implements UserInterface {
     @Expose()
-    @prop({ required: true, ref: () => SkinUserModel })
+    @Prop({ required: true, ref: () => SkinUserModel })
     skin!: Ref<SkinUserModel>
 
     @Expose()
-    @prop({ required: true })
+    @Prop({ required: true })
     username!: string
 
-    @prop({ required: true })
+    @Prop({ required: true })
     email!: string
 
-    @prop({ required: true })
+    @Prop({ required: true })
     password!: string
 
     @Expose()
-    @prop({ required: true, default: 0 })
+    @Prop({ required: true, default: 0 })
     gamePointCount!: number
 
     @Expose()
-    @prop({ required: true, default: 0 })
+    @Prop({ required: true, default: 0 })
     level!: number
 
     @Expose()
-    @prop()
+    @Prop()
     socketId!: string
 }
 
-export const UserModelDocument = getModelForClass(UserModel)
+export const UserModelDocument = getModelForClass(UserModel, { schemaOptions: { collection: 'user' } })

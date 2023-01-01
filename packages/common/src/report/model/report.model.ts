@@ -1,5 +1,7 @@
-import { prop, getModelForClass, Ref, modelOptions } from '@typegoose/typegoose'
+import { Ref } from '@typegoose/typegoose'
 import { Exclude, Expose } from 'class-transformer'
+
+import { Prop, getModelForClass } from '../../fix/typegoose.fix'
 
 import { DocumentModel } from '../../model/document.model'
 import { UserModel } from '../../user/model/user.model'
@@ -7,16 +9,15 @@ import { UserModel } from '../../user/model/user.model'
 import { ReportInterface } from '../interface/report.interface'
 
 @Exclude()
-@modelOptions({ schemaOptions: { collection: "report" } })
 export class ReportModel extends DocumentModel implements ReportInterface {
     @Expose()
-    @prop({ required: true, ref: () => UserModel })
+    @Prop({ required: true, ref: () => UserModel })
     user!: Ref<UserModel>
 
     @Expose()
-    @prop({ required: true })
+    @Prop({ required: true })
     releaseDate!: Date
 }
 
-export const ReportModelDocument = getModelForClass(ReportModel)
+export const ReportModelDocument = getModelForClass(ReportModel, { schemaOptions: { collection: 'report' } })
 

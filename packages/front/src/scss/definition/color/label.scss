@@ -1,15 +1,15 @@
-@use '~scss-toolkit/src/mixin/element';
-@use '~scss-toolkit/src/mixin/theme';
+@use 'scss-toolkit/src/mixin/element';
+@use 'scss-toolkit/src/mixin/theme';
 
 @include element.createElement('label') {
-    @include theme.themeHandler(true, 'accent', 'entryElement') {
+    @include theme.themeHandler(true, 'accent', 'sideElement') {
         @include element.setAttrAccentContent() {
             background-color: theme.get('background', 'regular') !important;
             color: theme.get('font', 'regular') !important;
         }
     }
 
-    @include theme.themeHandler(true, 'entryElement') {
+    @include theme.themeHandler(true, 'sideElement') {
         @include element.defineContent() {
             background-color: theme.get('background', 'regular');
             color: theme.get('font', 'regular');
