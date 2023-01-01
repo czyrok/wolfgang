@@ -2,8 +2,8 @@ import { BehaviorNotDefinedOneItemLoopGameError } from '../error/behavior-not-de
 
 import { LogUtil } from '../../../../../log/util/log.util'
 
-import { FactoryCardBehaviorItemLoopGameModel } from '../../card/behavior/factory/model/factory.behavior.card.item.loop.game.model'
-import { BehaviorCardItemLoopGameModel } from '../../card/behavior/model/behavior.card.item.loop.game.model'
+import { FactoryBehaviorItemLoopGameModel } from '../../behavior/factory/model/factory.behavior.item.loop.game.model'
+import { BehaviorItemLoopGameModel } from '../../behavior/model/behavior.item.loop.game.model'
 import { ItemLoopGameModel } from '../../model/item.loop.game.model'
 import { ContextGameModel } from '../../../../context/model/context.game.model'
 
@@ -14,20 +14,20 @@ import { TypeLogEnum } from '../../../../../log/type/enum/type.log.enum'
 import { ResultSetGameType } from '../../../../set/result/type/result.set.game.type'
 
 export abstract class OneItemLoopGameModel extends ItemLoopGameModel {
-    private _cardBehavior: BehaviorCardItemLoopGameModel
+    private _behavior: BehaviorItemLoopGameModel
 
     public constructor(config: ConfigItemLoopGameInterface) {
         super(config)
 
-        let behavior = FactoryCardBehaviorItemLoopGameModel.instance.get(config.behaviorTypeList[0])
+        let behavior = FactoryBehaviorItemLoopGameModel.instance.get(config.behaviorTypeList[0])
 
         if (behavior === undefined) throw new BehaviorNotDefinedOneItemLoopGameError(this.config.type)
 
-        this._cardBehavior = behavior
+        this._behavior = behavior
     }
 
-    public get cardBehavior(): BehaviorCardItemLoopGameModel {
-        return this._cardBehavior
+    public get behavior(): BehaviorItemLoopGameModel {
+        return this._behavior
     }
 
     entryPoint(context: ContextGameModel): void {
@@ -35,20 +35,20 @@ export abstract class OneItemLoopGameModel extends ItemLoopGameModel {
 
         let childContext: ContextGameModel = ContextGameModel.buildContext(context, context.result)
 
-        if (!this.cardBehavior.validCondition(childContext)) return context.next()
+        if (!this.behavior.validCondition(childContext)) return context.next()
 
         childContext.res.subscribeOne((result: ResultSetGameType) => {
             context.next(result)
         })
 
-        this.cardBehavior.entryPoint(childContext)
+        this.behavior.entryPoint(childContext)
     }
 
-    getCardBehavior(): Array<BehaviorCardItemLoopGameModel> {
-        return [this.cardBehavior]
+    getBehavior(): Array<BehaviorItemLoopGameModel> {
+        return [this.behavior]
     }
 
     setup(): void {
-        this.cardBehavior.setup()
+        this.behavior.setup()
     }
 }

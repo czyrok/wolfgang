@@ -6,13 +6,13 @@ import { RulesGameModel } from '../../rules/model/rules.game.model'
 
 import { ChangeInterface } from '../../change/interface/change.interface'
 
-import { TypeBehaviorCardItemLoopGameEnum } from '../../loop/item/card/behavior/type/enum/type.behavior.card.item.loop.game.enum'
+import { TypeBehaviorItemLoopGameEnum } from '../../loop/item/behavior/type/enum/type.behavior.item.loop.game.enum'
 import { Exclude, Expose } from 'class-transformer'
 
 @Exclude()
 export class StateGameModel implements ChangeInterface<StateGameModel> {
     @Expose()
-    private _currentCardBehaviorType: Array<TypeBehaviorCardItemLoopGameEnum> = new Array
+    private _currentBehaviorType: Array<TypeBehaviorItemLoopGameEnum> = new Array
 
     @Expose()
     private _isNight: boolean = false
@@ -37,8 +37,8 @@ export class StateGameModel implements ChangeInterface<StateGameModel> {
         this.stateChange.next(this)
     }
 
-    public set currentCardBehaviorType(value: Array<TypeBehaviorCardItemLoopGameEnum>) {
-        this._currentCardBehaviorType = value
+    public set currentBehaviorType(value: Array<TypeBehaviorItemLoopGameEnum>) {
+        this._currentBehaviorType = value
 
         this.stateChange.next(this)
     }
@@ -53,8 +53,8 @@ export class StateGameModel implements ChangeInterface<StateGameModel> {
         return this._isNight
     }
 
-    public get currentCardBehaviorType(): Array<TypeBehaviorCardItemLoopGameEnum> {
-        return this._currentCardBehaviorType
+    public get currentBehaviorType(): Array<TypeBehaviorItemLoopGameEnum> {
+        return this._currentBehaviorType
     }
 
     public get players(): Array<PlayerGameModel> {

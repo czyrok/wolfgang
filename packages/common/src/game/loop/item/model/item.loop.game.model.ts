@@ -1,15 +1,15 @@
 import { FactoryItemLoopGameModel } from '../factory/model/factory.item.loop.game.model'
-import { BehaviorCardItemLoopGameModel } from '../card/behavior/model/behavior.card.item.loop.game.model'
+import { BehaviorItemLoopGameModel } from '../behavior/model/behavior.item.loop.game.model'
 import { ContextGameModel } from '../../../context/model/context.game.model'
 
-import { HandlerBehaviorCardItemLoopGameInterface } from '../card/behavior/handler/interface/handler.behavior.card.item.loop.game.interface'
+import { HandlerBehaviorItemLoopGameInterface } from '../behavior/handler/interface/handler.behavior.item.loop.game.interface'
 import { StrategyItemLoopGameInterface } from '../strategy/interface/strategy.item.loop.game.interface'
 import { SetupDistributionGameInterface } from '../../../distribution/setup/interface/setup.distribution.game.interface'
 import { ConfigItemLoopGameInterface } from '../config/interface/config.item.loop.game.interface'
 
 export abstract class ItemLoopGameModel implements
     StrategyItemLoopGameInterface,
-    HandlerBehaviorCardItemLoopGameInterface,
+    HandlerBehaviorItemLoopGameInterface,
     SetupDistributionGameInterface {
     private _isInitialized: boolean = false
     private _nextIndex: number = 0
@@ -63,7 +63,7 @@ export abstract class ItemLoopGameModel implements
 
     abstract entryPoint(context: ContextGameModel): void
 
-    abstract getCardBehavior(): Array<BehaviorCardItemLoopGameModel>
+    abstract getBehavior(): Array<BehaviorItemLoopGameModel>
 
     abstract setup(): void
 }

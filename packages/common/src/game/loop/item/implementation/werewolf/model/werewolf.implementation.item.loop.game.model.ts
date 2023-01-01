@@ -3,7 +3,7 @@ import { InitFactoryRegistering } from '../../../../../factory/decorator/factory
 import { OneItemLoopGameModel } from '../../../one/model/one.item.loop.game.model'
 
 import { TypeItemLoopGameEnum } from '../../../type/enum/type.item.loop.game.enum'
-import { TypeBehaviorCardItemLoopGameEnum } from '../../../card/behavior/type/enum/type.behavior.card.item.loop.game.enum'
+import { TypeBehaviorItemLoopGameEnum } from '../../../behavior/type/enum/type.behavior.item.loop.game.enum'
 
 @InitFactoryRegistering()
 export class WerewolfImplementationItemLoopGameModel extends OneItemLoopGameModel {
@@ -12,7 +12,7 @@ export class WerewolfImplementationItemLoopGameModel extends OneItemLoopGameMode
             type: TypeItemLoopGameEnum.WEREWOLF,
             atNight: true,
             behaviorTypeList: [
-                TypeBehaviorCardItemLoopGameEnum.WEREWOLF
+                TypeBehaviorItemLoopGameEnum.WEREWOLF
             ],
             next: [
                 TypeItemLoopGameEnum.DEATH

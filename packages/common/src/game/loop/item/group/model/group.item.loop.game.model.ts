@@ -1,9 +1,9 @@
 import { LogUtil } from '../../../../../log/util/log.util'
 
 import { MapParamModel } from '../../../../../param/map/model/map.param.model'
-import { FactoryCardBehaviorItemLoopGameModel } from '../../card/behavior/factory/model/factory.behavior.card.item.loop.game.model'
-import { ChildBehaviorCardItemLoopGameModel } from '../../card/behavior/child/model/child.behavior.card.item.loop.game.model'
-import { BehaviorCardItemLoopGameModel } from '../../card/behavior/model/behavior.card.item.loop.game.model'
+import { FactoryBehaviorItemLoopGameModel } from '../../behavior/factory/model/factory.behavior.item.loop.game.model'
+import { ChildBehaviorItemLoopGameModel } from '../../behavior/child/model/child.behavior.item.loop.game.model'
+import { BehaviorItemLoopGameModel } from '../../behavior/model/behavior.item.loop.game.model'
 import { ItemLoopGameModel } from '../../model/item.loop.game.model'
 import { ContextGameModel } from '../../../../context/model/context.game.model'
 import { WaitingResContextGameModel } from '../../../../context/res/waiting/model/waiting.res.context.game.model'
@@ -15,18 +15,18 @@ import { TypeLogEnum } from '../../../../../log/type/enum/type.log.enum'
 import { ResultSetGameType } from '../../../../set/result/type/result.set.game.type'
 
 export abstract class GroupItemLoopGameModel extends ItemLoopGameModel {
-    private _childBehaviorCardList: Array<ChildBehaviorCardItemLoopGameModel> = new Array
+    private _childBehaviorList: Array<ChildBehaviorItemLoopGameModel> = new Array
 
     public constructor(config: ConfigItemLoopGameInterface) {
         super(config)
 
         for (let behaviorType of config.behaviorTypeList) {
-            this._childBehaviorCardList.push(FactoryCardBehaviorItemLoopGameModel.instance.get(behaviorType))
+            this._childBehaviorList.push(FactoryBehaviorItemLoopGameModel.instance.get(behaviorType))
         }
     }
 
-    public get childBehaviorCardList(): Array<ChildBehaviorCardItemLoopGameModel> {
-        return this._childBehaviorCardList
+    public get childBehaviorList(): Array<ChildBehaviorItemLoopGameModel> {
+        return this._childBehaviorList
     }
 
     entryPoint(context: ContextGameModel): void {
@@ -34,17 +34,17 @@ export abstract class GroupItemLoopGameModel extends ItemLoopGameModel {
 
         let childs: MapParamModel<{
             context: ContextGameModel,
-            self: ChildBehaviorCardItemLoopGameModel
+            self: ChildBehaviorItemLoopGameModel
         }> = new MapParamModel,
             childContexts: Array<ContextGameModel> = new Array
 
-        for (let i = 0; i < this.childBehaviorCardList.length; i++) {
+        for (let i = 0; i < this.childBehaviorList.length; i++) {
             let childContext: ContextGameModel = ContextGameModel.buildContext(context, context.result)
 
-            if (this.childBehaviorCardList[i].validCondition(childContext)) {
+            if (this.childBehaviorList[i].validCondition(childContext)) {
                 childs[i] = {
                     context: childContext,
-                    self: this.childBehaviorCardList[i]
+                    self: this.childBehaviorList[i]
                 }
 
                 childContexts.push(childContext)
@@ -58,13 +58,13 @@ export abstract class GroupItemLoopGameModel extends ItemLoopGameModel {
                 context.next(result)
             })
 
-            for (let i = 0; i < this.childBehaviorCardList.length; i++) {
+            for (let i = 0; i < this.childBehaviorList.length; i++) {
                 if (childs[i] !== undefined) ((childs[i] as {
                     context: ContextGameModel,
-                    self: ChildBehaviorCardItemLoopGameModel
+                    self: ChildBehaviorItemLoopGameModel
                 }).self).entryPoint((childs[i] as {
                     context: ContextGameModel,
-                    self: ChildBehaviorCardItemLoopGameModel
+                    self: ChildBehaviorItemLoopGameModel
                 }).context)
             }
         } else {
@@ -72,11 +72,11 @@ export abstract class GroupItemLoopGameModel extends ItemLoopGameModel {
         }
     }
 
-    getCardBehavior(): Array<BehaviorCardItemLoopGameModel> {
-        return this.childBehaviorCardList
+    getBehavior(): Array<BehaviorItemLoopGameModel> {
+        return this.childBehaviorList
     }
 
     setup(): void {
-        for (const behavior of this.childBehaviorCardList) behavior.setup()
+        for (const behavior of this.childBehaviorList) behavior.setup()
     }
 }
