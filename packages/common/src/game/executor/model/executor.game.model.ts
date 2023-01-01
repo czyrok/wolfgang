@@ -8,6 +8,7 @@ import { RandomDistributionGameModel } from '../../distribution/random/model/ran
 import { StateGameModel } from '../../state/model/state.game.model'
 
 import { TypeLogEnum } from '../../../log/type/enum/type.log.enum'
+import { TypeItemLoopGameEnum } from '../../loop/item/type/enum/type.item.loop.game.enum'
 
 import { ResultSetGameType } from '../../set/result/type/result.set.game.type'
 
@@ -45,17 +46,18 @@ export class ExecutorGameModel {
 
     private turn(ite: IteratorLoopGameModel, previousResult?: ResultSetGameType): void {
         LogUtil.logger(TypeLogEnum.GAME).info(`${ite.current.config.type} turn started`)
-        
-        let context: ContextGameModel = ContextGameModel.buildContext(undefined, previousResult)
+
+        let context: ContextGameModel = ContextGameModel.buildContext(undefined, previousResult),
+            currentType: TypeItemLoopGameEnum = ite.current.config.type
 
         context.res.subscribeOne((result: ResultSetGameType) => {
             setTimeout(() => {
-                LogUtil.logger(TypeLogEnum.GAME).info(`${ite.current.config.type} turn ending`)
+                LogUtil.logger(TypeLogEnum.GAME).info(`${currentType} turn ending`)
 
                 this.turn(ite, result)
             }, 500)
         })
-        
+
         ite.current.entryPoint(context)
 
         ite.next()
