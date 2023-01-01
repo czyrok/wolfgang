@@ -1,0 +1,5 @@
+<button [attr.data-css-important]="important ? true : null" [attr.data-css-accent]="accent ? true : null" data-css-label
+  data-css-border-radius="rounded" [attr.data-css-square]="text === undefined ? true : null">
+  <span *ngIf="icofont != undefined" class="icofont-{{ icofont }}" data-css-icofont></span>
+  {{ text }}
+</button>

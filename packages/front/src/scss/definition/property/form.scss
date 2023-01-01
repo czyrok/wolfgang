@@ -1,10 +1,18 @@
-@use '~scss-toolkit/src/mixin/element';
+@use 'scss-toolkit/src/mixin/element';
 
 @use '../../lib/property';
 @use '../../lib/color';
 @use '../../lib/definition';
 
 @include element.createElement('text-bar') {
+    @include element.setAttrAccentContent() {
+        font-family: property.get('font', 'important') !important;
+        font-weight: bold;
+    }
+
+    @include definition.setAttrBorderRadius() {
+    }
+        
     @include element.defineContent() {
         display: inline-grid;
         grid-template-areas:
@@ -13,6 +21,10 @@
         grid-template-columns: 1fr auto;
         align-items: center;
         overflow: hidden;
+        font-size: property.get('fontSize', 'sideElement', 'text');
+        white-space: nowrap;
+        font-family: property.get('font', 'regular');
+        padding: property.get('borderLimit', 'small') + property.get('borderLimit', 'verySmall');
     }
 
     @include definition.definePropertyDisabled() {
@@ -34,14 +46,26 @@
     @include element.createTag('icofont', ' ') {
         @include element.defineContent() {
             grid-area: b;
-            margin: property.get('borderLimit', 'small');
+            font-size: property.get('fontSize', 'sideElement', 'icofont');
+        }
+    }
+
+    @include element.createSubsection('important') {
+        @include element.defineContent() {
+            font-size: property.get('fontSize', 'sideElement', 'important', 'text');
+        }
+
+        @include element.createTag('icofont', ' ') {
+            @include element.defineContent() {
+                font-size: property.get('fontSize', 'sideElement', 'important', 'icofont');
+            }
         }
     }
 }
 
 @include element.createElement('input') {
     @include element.defineContent() {
-        font-size: property.get('fontSize', 'entryElement', 'regular');
+        font-size: property.get('fontSize', 'sideElement', 'text');
         white-space: nowrap;
     }
 
@@ -80,7 +104,7 @@
             @include element.createTag('underline', '+') {
                 @include element.createTag('underline', ' ') {
                     @include element.defineContent() {
-                        background-color: color.get(inform, red, a) !important;
+                        background-color: color.get(alert, red, a) !important;
                     }
                 }
             }
@@ -102,6 +126,12 @@
 
         @include element.defineProperty('::placeholder') {
             opacity: property.get('opacity', 'placeholder');
+        }
+
+        @include element.createSubsection('important') {
+            @include element.defineContent() {
+                font-size: property.get('fontSize', 'sideElement', 'important', 'text');
+            }
         }
 
         @include element.createTag('underline', '+') {
@@ -140,7 +170,7 @@
     }
 
     @include element.defineContent() {
-        font-size: property.get('fontSize', 'entryElement', 'regular');
+        font-size: property.get('fontSize', 'sideElement', 'text');
         padding: property.get('borderLimit', 'verySmall');
         font-family: property.get('font', 'regular');
         appearance: menulist-button;

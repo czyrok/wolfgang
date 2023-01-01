@@ -10,6 +10,7 @@ export class ButtonInteractiveSharedComponent {
   @Input() callback!: () => void
   @Input() text!: string
   @Input() icofont!: string
+  @Input() active: boolean = false
   @Input() accent: boolean = false
   @Input() important: boolean = false
 

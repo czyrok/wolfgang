@@ -1,0 +1,17 @@
+@use '../../../../app.scss';
+
+@use '../../../../../scss/lib/property';
+
+@use 'scss-toolkit/src/mixin/theme';
+
+.container {
+    display: inline-flex;
+    border-radius: property.get('borderRadius', 'rounded');
+    padding: property.get('borderLimit', 'verySmall') * 2;
+    column-gap: property.get('borderLimit', 'verySmall') * 2;
+    align-items: center;
+
+    @include theme.themeHandler(false, 'containerElement2') {
+        background-color: adjust-color(theme.get('background'), $alpha: -1 + property.get('opacity', 'float'));
+    }
+}

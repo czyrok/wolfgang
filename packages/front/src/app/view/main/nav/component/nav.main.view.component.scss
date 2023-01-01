@@ -2,7 +2,7 @@
 
 @use '../../../../../scss/lib/property';
 
-@use '~scss-toolkit/src/mixin/theme';
+@use 'scss-toolkit/src/mixin/theme';
 
 nav {
     display: grid;
@@ -15,7 +15,7 @@ nav {
     padding-bottom: property.get('borderLimit', 'regular');
     box-sizing: border-box;
 
-    @include theme.themeHandler(true, 'isolatedElement') {
+    @include theme.themeHandler(false, 'nav') {
         background-color: theme.get('background');
     }
 }

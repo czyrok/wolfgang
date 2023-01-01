@@ -1,5 +1,6 @@
-import { prop, getModelForClass, modelOptions } from '@typegoose/typegoose'
 import { Exclude, Expose } from 'class-transformer'
+
+import { Prop, getModelForClass } from '../../fix/typegoose.fix'
 
 import { DocumentModel } from '../../model/document.model'
 
@@ -8,23 +9,22 @@ import { CosmeticInterface } from '../interface/cosmetic.interface'
 import { TypeCosmeticEnum } from '../type/enum/type.cosmetic.enum'
 
 @Exclude()
-@modelOptions({ schemaOptions: { collection: "cosmetic" }})
 export class CosmeticModel extends DocumentModel implements CosmeticInterface {
     @Expose()
-    @prop({ required: true })
+    @Prop({ required: true })
     translateName!: string
 
     @Expose()
-    @prop({ required: true })
+    @Prop({ required: true })
     gamePointPrice!: string
 
     @Expose()
-    @prop({ required: true })
+    @Prop({ required: true })
     imageUrl!: string
 
     @Expose()
-    @prop({ required: true })
+    @Prop({ required: true })
     type!: TypeCosmeticEnum
 }
 
-export const CosmeticModelDocument = getModelForClass(CosmeticModel)
+export const CosmeticModelDocument = getModelForClass(CosmeticModel, { schemaOptions: { collection: 'cosmetic' } })

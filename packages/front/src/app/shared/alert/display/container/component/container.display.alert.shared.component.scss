@@ -1,0 +1,15 @@
+@use '../../../../../../scss/lib/property';
+
+.container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    padding: property.get('borderLimit', 'regular');
+    row-gap: property.get('borderLimit', 'regular');
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: property.get('zIndex', 'alert');
+}
