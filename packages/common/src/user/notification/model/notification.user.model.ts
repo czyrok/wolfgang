@@ -1,5 +1,6 @@
 import { Ref } from '@typegoose/typegoose'
 import { Exclude, Expose } from 'class-transformer'
+import { Schema } from 'mongoose'
 
 import { Prop, getModelForClass } from '../../../fix/typegoose.fix'
 
@@ -25,7 +26,7 @@ export class NotificationUserModel extends DocumentModel implements Notification
     translate!: string
 
     @Expose()
-    @Prop({ default: {} })
+    @Prop({ type: Schema.Types.Mixed, default: {} })
     data!: any
 
     @Expose()

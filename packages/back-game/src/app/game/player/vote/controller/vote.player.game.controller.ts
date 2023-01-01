@@ -1,7 +1,5 @@
 import { OnConnect, OnMessage, EmitOnSuccess, MessageBody, EmitNamespaceBroadcastOnSuccess, SocketController } from 'ts-socket.io-controller'
-import { VotePlayerGameModel } from 'common'
-
-import { HandlerVotePlayerGameModel } from '../handler/model/handler.vote.player.game.model'
+import { VotePlayerGameModel, HandlerVotePlayerGameModel } from 'common'
 
 @SocketController({
     namespace: '/game/player/vote',
