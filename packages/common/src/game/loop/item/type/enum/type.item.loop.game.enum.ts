@@ -1,6 +1,7 @@
 export enum TypeItemLoopGameEnum {
-    DEFAULT = 'DefaultGameLoopItemType',
+    DEFAULT = 'WerewolfGameLoopItemType',
     VILLAGER = 'VillagerGameLoopItemType',
     WEREWOLF = 'WerewolfGameLoopItemType',
     DEATH = 'DeathGameLoopItemType'
 }
+

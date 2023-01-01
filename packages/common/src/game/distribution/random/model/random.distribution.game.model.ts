@@ -1,16 +1,17 @@
-import { CountRandomDistributionGameError } from '../error/count.random-distribution.game.error'
+import { CountRandomDistributionGameError } from '../error/count.random.distribution.game.error'
 
-import { LogUtil } from '../../../log/util/log.util'
-import { FactoryCardGameUtil } from '../../card/factory/util/factory.card.game.util'
+import { LogUtil } from '../../../../log/util/log.util'
 
-import { RandomHelper } from '../../../random/helper/random.helper'
+import { RandomHelper } from '../../../../random/helper/random.helper'
 
-import { PlayerGameModel } from '../../player/model/player.game.model'
-import { CardChoosingRulesModel } from '../../rules/card/choosing/model/card-choosing.rules.model'
-import { CardGameModel } from '../../card/model/card.game.model'
+import { FactoryCardGameModel } from '../../../card/factory/model/factory.card.game.model'
+import { IteratorLoopGameModel } from '../../../loop/iterator/model/iterator.loop.game.model'
+import { PlayerGameModel } from '../../../player/model/player.game.model'
+import { CardChoosingRulesModel } from '../../../rules/card/choosing/model/card-choosing.rules.model'
+import { CardGameModel } from '../../../card/model/card.game.model'
 
-import { TypeLogEnum } from '../../../log/type/enum/type.log.enum'
-import { TypeCardGameEnum } from '../../card/type/enum/type.card.game.enum'
+import { TypeLogEnum } from '../../../../log/type/enum/type.log.enum'
+import { TypeCardGameEnum } from '../../../card/type/enum/type.card.game.enum'
 
 export class RandomDistributionGameModel {
     public async processing(choices: Array<CardChoosingRulesModel>, players: Array<PlayerGameModel>): Promise<void> {
@@ -26,13 +27,18 @@ export class RandomDistributionGameModel {
 
             if (cardtype === undefined) throw new CountRandomDistributionGameError
 
-            let card: CardGameModel = FactoryCardGameUtil.get(cardtype)
+            let card: CardGameModel = FactoryCardGameModel.instance.get(cardtype)
 
             card.addPlayer(player)
             player.card = card
         }
 
         LogUtil.logger(TypeLogEnum.GAME).trace('Card player defined')
+
+        let ite: IteratorLoopGameModel = new IteratorLoopGameModel
+        for (let item of ite) item.setup()
+
+        LogUtil.logger(TypeLogEnum.GAME).trace('Behavior players defined')
     }
 
     private async verifyCount(choices: Array<CardChoosingRulesModel>, players: Array<PlayerGameModel>): Promise<void> {
@@ -48,7 +54,7 @@ export class RandomDistributionGameModel {
 
         for (let choice of choices) {
             for (let i = 0; i < choice.count; i++) {
-                cardTypes.push(choice.card.type)
+                cardTypes.push(choice.card.config.type)
             }
         }
 

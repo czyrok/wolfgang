@@ -1,16 +1,20 @@
+import { FactoryCardGameModel } from '../factory/model/factory.card.game.model'
 import { PlayerGameModel } from '../../player/model/player.game.model'
 
+import { ConfigCardGameInterface } from '../config/interface/config.card.game.interface'
 import { HandlerPlayerGameInterface } from '../../player/handler/interface/handler.player.game.interface'
-
-import { TypeCardGameEnum } from '../type/enum/type.card.game.enum'
 
 export class CardGameModel implements HandlerPlayerGameInterface {
     private _playerList: Array<PlayerGameModel> = new Array
 
-    public constructor(private _type: TypeCardGameEnum) { }
+    public constructor(
+        private readonly _config: ConfigCardGameInterface
+    ) {
+        FactoryCardGameModel.instance.register(this.config.type, this)
+    }
 
-    public get type(): TypeCardGameEnum {
-        return this._type
+    public get config(): ConfigCardGameInterface {
+        return this._config
     }
 
     public get playerList(): Array<PlayerGameModel> {

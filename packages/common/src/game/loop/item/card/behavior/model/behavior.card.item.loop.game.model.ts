@@ -1,57 +1,36 @@
 import { LogUtil } from '../../../../../../log/util/log.util'
 
+import { FactoryCardBehaviorItemLoopGameModel } from '../factory/model/factory.behavior.card.item.loop.game.model'
 import { ContextGameModel } from '../../../../../context/model/context.game.model'
 import { PlayerGameModel } from '../../../../../player/model/player.game.model'
 import { CardGameModel } from '../../../../../card/model/card.game.model'
 
+import { ConfigBehaviorCardItemLoopGameInterface } from '../config/interface/config.behavior.card.item.loop.game.interface'
+import { SetupDistributionGameInterface } from '../../../../../distribution/setup/interface/setup.distribution.game.interface'
 import { HandlerPlayerGameInterface } from '../../../../../player/handler/interface/handler.player.game.interface'
-import { StrategyCampPlayerGameInterface } from '../../../../../player/camp/strategy/interface/strategy.camp.player.game.interface'
 import { HandlerCardGameInterface } from '../../../../../card/handler/interface/handler.card.game.interface'
 import { StrategyItemLoopGameInterface } from '../../../strategy/interface/strategy.item.loop.game.interface'
 
 import { TypeLogEnum } from '../../../../../../log/type/enum/type.log.enum'
-import { TypeBehaviorCardItemLoopGameEnum } from '../type/enum/type.behavior.card.item.loop.game.enum'
-import { TypeChatGameEnum } from '../../../../../chat/type/enum/type.chat.game.enum'
 
 import { ResultSetGameType } from '../../../../../set/result/type/result.set.game.type'
+import { FactoryCardGameModel } from '../../../../../card/factory/model/factory.card.game.model'
 
 export abstract class BehaviorCardItemLoopGameModel implements
     StrategyItemLoopGameInterface,
     HandlerCardGameInterface,
-    HandlerPlayerGameInterface {
+    HandlerPlayerGameInterface,
+    SetupDistributionGameInterface {
     private _players: Array<PlayerGameModel> = new Array
 
     public constructor(
-        private _type: TypeBehaviorCardItemLoopGameEnum,
-        private _campHierarchy: number,
-        private _timer: number,
-        private _cardList: Array<CardGameModel>,
-        private _chat?: TypeChatGameEnum,
-        private _campStrategy?: StrategyCampPlayerGameInterface,
-    ) { }
-
-    public get type(): TypeBehaviorCardItemLoopGameEnum {
-        return this._type
+        private readonly _config: ConfigBehaviorCardItemLoopGameInterface
+    ) {
+        FactoryCardBehaviorItemLoopGameModel.instance.register(this.config.type, this)
     }
 
-    public get campHierarchy(): number {
-        return this._campHierarchy
-    }
-
-    public get timer(): number {
-        return this._timer
-    }
-
-    public get cardList(): Array<CardGameModel> {
-        return this._cardList
-    }
-
-    public get chat(): TypeChatGameEnum | undefined {
-        return this._chat
-    }
-
-    public get campStrategy(): StrategyCampPlayerGameInterface | undefined {
-        return this._campStrategy
+    public get config(): ConfigBehaviorCardItemLoopGameInterface {
+        return this._config
     }
 
     public get players(): Array<PlayerGameModel> {
@@ -62,16 +41,12 @@ export abstract class BehaviorCardItemLoopGameModel implements
         this._players = value
     }
 
-    public setupPlayers(): void {
-        for (const card of this.cardList) this.players.push(...card.getPlayer())
-    }
-
     public abstract validCondition(context: ContextGameModel): boolean
     public abstract doAtBeginning(context: ContextGameModel): void
     public abstract doAtEnd(context: ContextGameModel): void
 
     entryPoint(context: ContextGameModel): void {
-        LogUtil.logger(TypeLogEnum.GAME).info(`${this.type} behavior entrypoint triggered`)
+        LogUtil.logger(TypeLogEnum.GAME).info(`${this.config.type} behavior entrypoint triggered`)
 
         let childContext1: ContextGameModel = ContextGameModel.buildContext(context)
 
@@ -79,29 +54,29 @@ export abstract class BehaviorCardItemLoopGameModel implements
             let childContext2: ContextGameModel = ContextGameModel.buildContext(context, result)
 
             childContext2.res.subscribeOne((result: ResultSetGameType) => {
-                LogUtil.logger(TypeLogEnum.GAME).info(`${this.type} behavior ending`)
+                LogUtil.logger(TypeLogEnum.GAME).info(`${this.config.type} behavior ending`)
 
                 context.next(result)
             })
 
             setTimeout(() => {
                 this.doAtEnd(childContext2)
-            }, this.timer * 1000)
+            }, this.config.timer * 1000)
         })
 
         this.doAtBeginning(childContext1)
     }
 
     hasCard(value: CardGameModel): boolean {
-        for (const card of this.cardList) {
-            if (card == value) return true
+        for (let cardType of this.config.cardTypeList) {
+            if (cardType == value.config.type) return true
         }
 
         return false
     }
 
     getCard(): Array<CardGameModel> {
-        return this.cardList
+        return FactoryCardGameModel.instance.getList(this.config.cardTypeList)
     }
 
     hasPlayer(player: PlayerGameModel): boolean {
@@ -114,5 +89,9 @@ export abstract class BehaviorCardItemLoopGameModel implements
 
     getPlayer(): Array<PlayerGameModel> {
         return this.players
+    }
+
+    setup(): void {
+        for (const card of FactoryCardGameModel.instance.getList(this.config.cardTypeList)) this.players.push(...card.getPlayer())
     }
 }

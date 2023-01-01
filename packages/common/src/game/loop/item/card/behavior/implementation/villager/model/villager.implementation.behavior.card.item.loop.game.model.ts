@@ -1,4 +1,4 @@
-import { FactoryCardGameUtil } from '../../../../../../../card/factory/util/factory.card.game.util'
+import { InitFactoryRegistering } from '../../../../../../../factory/decorator/factory.game.decorator'
 
 import { PlayerGameModel } from '../../../../../../../player/model/player.game.model'
 import { BehaviorCardItemLoopGameModel } from '../../../model/behavior.card.item.loop.game.model'
@@ -12,19 +12,20 @@ import { TypeCardGameEnum } from '../../../../../../../card/type/enum/type.card.
 import { TypeProcessBehaviorCardItemLoopGameEnum } from '../../../process/type/enum/type.process.behavior.card.item.loop.game.enum'
 import { TypeBehaviorCardItemLoopGameEnum } from '../../../type/enum/type.behavior.card.item.loop.game.enum'
 
+@InitFactoryRegistering()
 export class VillagerImplementationBehaviorCardItemLoopGameModel extends BehaviorCardItemLoopGameModel {
     public constructor() {
-        super(
-            TypeBehaviorCardItemLoopGameEnum.VILLAGER,
-            2,
-            90,
-            [
-                FactoryCardGameUtil.get(TypeCardGameEnum.GREY_WEREWOLF),
-                FactoryCardGameUtil.get(TypeCardGameEnum.VILLAGER)
+        super({
+            type: TypeBehaviorCardItemLoopGameEnum.VILLAGER,
+            timer: 90,
+            cardTypeList: [
+                TypeCardGameEnum.GREY_WEREWOLF,
+                TypeCardGameEnum.VILLAGER
             ],
-            TypeChatGameEnum.ALIVE,
-            new VillagerImplementationStrategyCampPlayerGameModel
-        )
+            chat: TypeChatGameEnum.ALIVE,
+            campHierarchy: 2,
+            campStrategy: new VillagerImplementationStrategyCampPlayerGameModel
+        })
     }
 
     public validCondition(context: ContextGameModel): boolean {

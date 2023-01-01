@@ -1,34 +1,22 @@
-import { CardGameModel } from '../../../../../../card/model/card.game.model'
+import { TimerModeNotDefinedBehaviorCardItemLoopGameError } from '../../error/time-mode-not-defined.behavior.card.item.loop.game.error'
+
 import { BehaviorCardItemLoopGameModel } from '../../model/behavior.card.item.loop.game.model'
 import { ContextGameModel } from '../../../../../../context/model/context.game.model'
 
-import { StrategyCampPlayerGameInterface } from '../../../../../../player/camp/strategy/interface/strategy.camp.player.game.interface'
-
-import { TypeChatGameEnum } from '../../../../../../chat/type/enum/type.chat.game.enum'
 import { TimerModeBehaviorCardItemLoopGameEnum } from '../../timer-mode/enum/timer-mode.behavior.card.item.loop.game.enum'
 
 import { ResultSetGameType } from '../../../../../../set/result/type/result.set.game.type'
-import { TypeBehaviorCardItemLoopGameEnum } from '../../type/enum/type.behavior.card.item.loop.game.enum'
+import { ConfigBehaviorCardItemLoopGameInterface } from '../../config/interface/config.behavior.card.item.loop.game.interface'
 
 export abstract class ChildBehaviorCardItemLoopGameModel extends BehaviorCardItemLoopGameModel {
-    public constructor(
-        type: TypeBehaviorCardItemLoopGameEnum,
-        campHierarchy: number,
-        timer: number,
-        cardList: Array<CardGameModel>,
-        private _timerMode: TimerModeBehaviorCardItemLoopGameEnum,
-        chat?: TypeChatGameEnum,
-        campStrategy?: StrategyCampPlayerGameInterface
-    ) {
-        super(type, campHierarchy, timer, cardList, chat, campStrategy)
-    }
-
-    public get timerMode(): TimerModeBehaviorCardItemLoopGameEnum {
-        return this._timerMode
+    public constructor(config: ConfigBehaviorCardItemLoopGameInterface) {
+        super(config)
     }
 
     override entryPoint(context: ContextGameModel): void {
-        switch (this.timerMode) {
+        if (this.config.timerMode === undefined) throw new TimerModeNotDefinedBehaviorCardItemLoopGameError(this.config.type)
+
+        switch (this.config.timerMode) {
             case TimerModeBehaviorCardItemLoopGameEnum.BEFORE:
                 let childContext1: ContextGameModel = ContextGameModel.buildContext(context)
 
@@ -44,7 +32,7 @@ export abstract class ChildBehaviorCardItemLoopGameModel extends BehaviorCardIte
 
                 setTimeout(() => {
                     this.doAtBeginning(childContext1)
-                }, this.timer * 1000)
+                }, this.config.timer * 1000)
 
                 break
             case TimerModeBehaviorCardItemLoopGameEnum.BETWEEN:
@@ -59,7 +47,7 @@ export abstract class ChildBehaviorCardItemLoopGameModel extends BehaviorCardIte
 
                     setTimeout(() => {
                         this.doAtEnd(childContext22)
-                    }, this.timer * 1000)
+                    }, this.config.timer * 1000)
                 })
 
                 this.doAtBeginning(childContext11)

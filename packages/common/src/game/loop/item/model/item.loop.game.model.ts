@@ -1,20 +1,25 @@
+import { FactoryItemLoopGameModel } from '../factory/model/factory.item.loop.game.model'
 import { BehaviorCardItemLoopGameModel } from '../card/behavior/model/behavior.card.item.loop.game.model'
 import { ContextGameModel } from '../../../context/model/context.game.model'
 
 import { HandlerBehaviorCardItemLoopGameInterface } from '../card/behavior/handler/interface/handler.behavior.card.item.loop.game.interface'
 import { StrategyItemLoopGameInterface } from '../strategy/interface/strategy.item.loop.game.interface'
+import { SetupDistributionGameInterface } from '../../../distribution/setup/interface/setup.distribution.game.interface'
+import { ConfigItemLoopGameInterface } from '../config/interface/config.item.loop.game.interface'
 
-import { TypeItemLoopGameEnum } from '../type/enum/type.item.loop.game.enum'
-
-export abstract class ItemLoopGameModel implements StrategyItemLoopGameInterface, HandlerBehaviorCardItemLoopGameInterface {
+export abstract class ItemLoopGameModel implements
+    StrategyItemLoopGameInterface,
+    HandlerBehaviorCardItemLoopGameInterface,
+    SetupDistributionGameInterface {
     private _isInitialized: boolean = false
     private _nextIndex: number = 0
     protected _nextList: Array<ItemLoopGameModel> = new Array
 
     public constructor(
-        private _type: TypeItemLoopGameEnum,
-        private _atNight: boolean
-    ) { }
+        private readonly _config: ConfigItemLoopGameInterface
+    ) {
+        FactoryItemLoopGameModel.instance.register(this.config.type, this)
+    }
 
     public get isInitialized(): boolean {
         return this._isInitialized
@@ -36,12 +41,8 @@ export abstract class ItemLoopGameModel implements StrategyItemLoopGameInterface
         return this._nextList
     }
 
-    public get type(): TypeItemLoopGameEnum {
-        return this._type
-    }
-
-    public get atNight(): boolean {
-        return this._atNight
+    public get config(): ConfigItemLoopGameInterface {
+        return this._config
     }
 
     public get nextItem(): ItemLoopGameModel {
@@ -50,9 +51,19 @@ export abstract class ItemLoopGameModel implements StrategyItemLoopGameInterface
         return this.nextList[this.nextIndex++]
     }
 
-    public abstract objectBuildEnding(): void
+    public objectBuildEnding(): void {
+        if (!this.isInitialized) {
+            for (let nextType of this.config.next) {
+                this.nextList.push(FactoryItemLoopGameModel.instance.get(nextType))
+            }
+
+            this.isInitialized = true
+        }
+    }
 
     abstract entryPoint(context: ContextGameModel): void
 
     abstract getCardBehavior(): Array<BehaviorCardItemLoopGameModel>
+
+    abstract setup(): void
 }

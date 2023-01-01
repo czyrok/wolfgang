@@ -1,26 +1,28 @@
 import { LogUtil } from '../../../../../log/util/log.util'
 
 import { MapParamModel } from '../../../../../param/map/model/map.param.model'
+import { FactoryCardBehaviorItemLoopGameModel } from '../../card/behavior/factory/model/factory.behavior.card.item.loop.game.model'
 import { ChildBehaviorCardItemLoopGameModel } from '../../card/behavior/child/model/child.behavior.card.item.loop.game.model'
 import { BehaviorCardItemLoopGameModel } from '../../card/behavior/model/behavior.card.item.loop.game.model'
 import { ItemLoopGameModel } from '../../model/item.loop.game.model'
 import { ContextGameModel } from '../../../../context/model/context.game.model'
 import { WaitingResContextGameModel } from '../../../../context/res/waiting/model/waiting.res.context.game.model'
 
+import { ConfigItemLoopGameInterface } from '../../config/interface/config.item.loop.game.interface'
+
 import { TypeLogEnum } from '../../../../../log/type/enum/type.log.enum'
-import { TypeItemLoopGameEnum } from '../../type/enum/type.item.loop.game.enum'
 
 import { ResultSetGameType } from '../../../../set/result/type/result.set.game.type'
 
 export abstract class GroupItemLoopGameModel extends ItemLoopGameModel {
-    public constructor(
-        type: TypeItemLoopGameEnum,
-        atNight: boolean,
-        private _childBehaviorCardList: Array<ChildBehaviorCardItemLoopGameModel>
-    ) {
-        super(type, atNight)
+    private _childBehaviorCardList: Array<ChildBehaviorCardItemLoopGameModel> = new Array
 
-        for (let cardBehavior of this.childBehaviorCardList) cardBehavior.setupPlayers()
+    public constructor(config: ConfigItemLoopGameInterface) {
+        super(config)
+
+        for (let behaviorType of config.behaviorTypeList) {
+            this._childBehaviorCardList.push(FactoryCardBehaviorItemLoopGameModel.instance.get(behaviorType))
+        }
     }
 
     public get childBehaviorCardList(): Array<ChildBehaviorCardItemLoopGameModel> {
@@ -28,7 +30,7 @@ export abstract class GroupItemLoopGameModel extends ItemLoopGameModel {
     }
 
     entryPoint(context: ContextGameModel): void {
-        LogUtil.logger(TypeLogEnum.GAME).info(`${this.type} loop item entrypoint triggered`)
+        LogUtil.logger(TypeLogEnum.GAME).info(`${this.config.type} loop item entrypoint triggered`)
 
         let childs: MapParamModel<{
             context: ContextGameModel,
@@ -72,5 +74,9 @@ export abstract class GroupItemLoopGameModel extends ItemLoopGameModel {
 
     getCardBehavior(): Array<BehaviorCardItemLoopGameModel> {
         return this.childBehaviorCardList
+    }
+
+    setup(): void {
+        for (const behavior of this.childBehaviorCardList) behavior.setup()
     }
 }

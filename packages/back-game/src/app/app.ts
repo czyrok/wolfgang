@@ -52,5 +52,5 @@ async function run(): Promise<void> {
 }
 
 run().catch((error: Error) => {
-    LogUtil.logger(TypeLogEnum.APP).error(error.message)
+    LogUtil.logger(TypeLogEnum.APP).fatal(error.message)
 })

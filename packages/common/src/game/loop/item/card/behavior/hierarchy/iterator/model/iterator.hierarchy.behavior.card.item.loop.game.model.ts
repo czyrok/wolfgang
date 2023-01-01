@@ -1,4 +1,4 @@
-import { IteratorItemLoopGameModel } from '../../../../../iterator/model/iterator.item.loop.game.model'
+import { IteratorLoopGameModel } from '../../../../../../iterator/model/iterator.loop.game.model'
 import { BehaviorCardItemLoopGameModel } from '../../../model/behavior.card.item.loop.game.model'
 
 import { IteratorChainedListInterface } from '../../../../../../../../chained-list/iterator/interface/iterator.chained-list.interface'
@@ -8,11 +8,11 @@ export class IteratorHierarchyBehaviorCardItemLoopGameModel implements IteratorC
     private _currentIndex: number = 0
 
     public constructor() {
-        let ite = new IteratorItemLoopGameModel
+        let ite = new IteratorLoopGameModel
 
         loop : for (let item of ite) {
             for (let behavior of item.getCardBehavior()) {
-                if (behavior.campHierarchy == this._currentIndex) {
+                if (behavior.config.campHierarchy == this._currentIndex) {
                     this._current = behavior
 
                     break loop
@@ -50,11 +50,11 @@ export class IteratorHierarchyBehaviorCardItemLoopGameModel implements IteratorC
     }
 
     next(): BehaviorCardItemLoopGameModel {
-        let iterator: IteratorItemLoopGameModel = new IteratorItemLoopGameModel
+        let iterator: IteratorLoopGameModel = new IteratorLoopGameModel
 
         loop: for (let item of iterator) {
             for (let cardBehavior of item.getCardBehavior()) {
-                if (cardBehavior.campHierarchy == this.currentIndex + 1) {
+                if (cardBehavior.config.campHierarchy == this.currentIndex + 1) {
                     this.currentIndex++
 
                     this.current = cardBehavior

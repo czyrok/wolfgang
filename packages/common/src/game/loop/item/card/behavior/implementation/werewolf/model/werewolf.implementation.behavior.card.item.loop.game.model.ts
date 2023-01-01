@@ -1,4 +1,4 @@
-import { FactoryCardGameUtil } from '../../../../../../../card/factory/util/factory.card.game.util'
+import { InitFactoryRegistering } from '../../../../../../../factory/decorator/factory.game.decorator'
 
 import { ContextGameModel } from '../../../../../../../context/model/context.game.model'
 import { PlayerGameModel } from '../../../../../../../player/model/player.game.model'
@@ -12,18 +12,19 @@ import { TypeCardGameEnum } from '../../../../../../../card/type/enum/type.card.
 import { TypeProcessBehaviorCardItemLoopGameEnum } from '../../../process/type/enum/type.process.behavior.card.item.loop.game.enum'
 import { TypeBehaviorCardItemLoopGameEnum } from '../../../type/enum/type.behavior.card.item.loop.game.enum'
 
+@InitFactoryRegistering()
 export class WerewolfImplementationBehaviorCardItemLoopGameModel extends BehaviorCardItemLoopGameModel {
     public constructor() {
-        super(
-            TypeBehaviorCardItemLoopGameEnum.WEREWOLF,
-            1,
-            90,
-            [
-                FactoryCardGameUtil.get(TypeCardGameEnum.GREY_WEREWOLF)
+        super({
+            type: TypeBehaviorCardItemLoopGameEnum.WEREWOLF,
+            timer: 90,
+            cardTypeList: [
+                TypeCardGameEnum.GREY_WEREWOLF
             ],
-            TypeChatGameEnum.WEREWOLF,
-            new VillainImplementationStrategyCampPlayerGameModel
-        )
+            chat: TypeChatGameEnum.WEREWOLF,
+            campHierarchy: 1,
+            campStrategy: new VillainImplementationStrategyCampPlayerGameModel
+        })
     }
 
     public validCondition(context: ContextGameModel): boolean {

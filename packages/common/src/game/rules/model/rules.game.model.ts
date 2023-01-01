@@ -1,7 +1,9 @@
 import { Exclude, Expose } from 'class-transformer'
-import { FactoryCardGameUtil } from '../../card/factory/util/factory.card.game.util'
-import { TypeCardGameEnum } from '../../card/type/enum/type.card.game.enum'
+
+import { FactoryCardGameModel } from '../../card/factory/model/factory.card.game.model'
 import { CardChoosingRulesModel } from '../card/choosing/model/card-choosing.rules.model'
+
+import { TypeCardGameEnum } from '../../card/type/enum/type.card.game.enum'
 
 @Exclude()
 export class RulesGameModel {
@@ -10,15 +12,15 @@ export class RulesGameModel {
 
     @Expose()
     // #achan
-    private _playerCountMax: number = 3
+    private _playerCountMax: number = 1
 
     @Expose()
     private _choosingcardList: Array<CardChoosingRulesModel> = new Array
 
     public constructor() {
         // #achan
-        this.choosingcardList.push(new CardChoosingRulesModel(FactoryCardGameUtil.get(TypeCardGameEnum.VILLAGER), 2))
-        this.choosingcardList.push(new CardChoosingRulesModel(FactoryCardGameUtil.get(TypeCardGameEnum.GREY_WEREWOLF), 1))
+        //this.choosingcardList.push(new CardChoosingRulesModel(FactoryCardGameModel.instance.get(TypeCardGameEnum.VILLAGER), 2))
+        this.choosingcardList.push(new CardChoosingRulesModel(FactoryCardGameModel.instance.get(TypeCardGameEnum.GREY_WEREWOLF), 1))
     }
 
     public set isPrivate(value: boolean) {

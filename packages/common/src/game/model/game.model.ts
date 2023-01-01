@@ -1,4 +1,4 @@
-import { Subject, Subscription } from 'rxjs'
+import { Subscription } from 'rxjs'
 
 import { LogUtil } from '../../log/util/log.util'
 

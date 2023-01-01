@@ -1,3 +1,5 @@
+import { InitFactoryRegistering } from '../../../../../../../factory/decorator/factory.game.decorator'
+
 import { PlayerGameModel } from '../../../../../../../player/model/player.game.model'
 import { BehaviorCardItemLoopGameModel } from '../../../model/behavior.card.item.loop.game.model'
 import { ContextGameModel } from '../../../../../../../context/model/context.game.model'
@@ -6,16 +8,16 @@ import { TypeChatGameEnum } from '../../../../../../../chat/type/enum/type.chat.
 import { TypeProcessBehaviorCardItemLoopGameEnum } from '../../../process/type/enum/type.process.behavior.card.item.loop.game.enum'
 import { TypeBehaviorCardItemLoopGameEnum } from '../../../type/enum/type.behavior.card.item.loop.game.enum'
 
+@InitFactoryRegistering()
 export class DeathImplementationBehaviorCardItemLoopGameModel extends BehaviorCardItemLoopGameModel {
     public constructor() {
-        super(
-            TypeBehaviorCardItemLoopGameEnum.DEATH,
+        super({
+            type: TypeBehaviorCardItemLoopGameEnum.DEATH,
             // #achan
-            -1,
-            0,
-            [],
-            TypeChatGameEnum.DEATH
-        )
+            timer: 0,
+            cardTypeList: [],
+            chat: TypeChatGameEnum.DEATH
+        })
     }
 
     public validCondition(context: ContextGameModel): boolean {

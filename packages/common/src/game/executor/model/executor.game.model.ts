@@ -1,10 +1,10 @@
-import { CountRandomDistributionGameError } from '../../random-distribution/error/count.random-distribution.game.error'
+import { CountRandomDistributionGameError } from '../../distribution/random/error/count.random.distribution.game.error'
 
 import { LogUtil } from '../../../log/util/log.util'
 
 import { ContextGameModel } from '../../context/model/context.game.model'
-import { IteratorItemLoopGameModel } from '../../loop/item/iterator/model/iterator.item.loop.game.model'
-import { RandomDistributionGameModel } from '../../random-distribution/model/random-distribution.game.model'
+import { IteratorLoopGameModel } from '../../loop/iterator/model/iterator.loop.game.model'
+import { RandomDistributionGameModel } from '../../distribution/random/model/random.distribution.game.model'
 import { StateGameModel } from '../../state/model/state.game.model'
 
 import { TypeLogEnum } from '../../../log/type/enum/type.log.enum'
@@ -40,17 +40,17 @@ export class ExecutorGameModel {
 
         LogUtil.logger(TypeLogEnum.GAME).trace('Game started')
 
-        this.turn(new IteratorItemLoopGameModel)
+        this.turn(new IteratorLoopGameModel)
     }
 
-    private turn(ite: IteratorItemLoopGameModel, previousResult?: ResultSetGameType): void {
-        LogUtil.logger(TypeLogEnum.GAME).info(`${ite.current.type} turn started`)
+    private turn(ite: IteratorLoopGameModel, previousResult?: ResultSetGameType): void {
+        LogUtil.logger(TypeLogEnum.GAME).info(`${ite.current.config.type} turn started`)
         
         let context: ContextGameModel = ContextGameModel.buildContext(undefined, previousResult)
 
         context.res.subscribeOne((result: ResultSetGameType) => {
             setTimeout(() => {
-                LogUtil.logger(TypeLogEnum.GAME).info(`${ite.current.type} turn ending`)
+                LogUtil.logger(TypeLogEnum.GAME).info(`${ite.current.config.type} turn ending`)
 
                 this.turn(ite, result)
             }, 500)
