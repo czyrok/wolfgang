@@ -1,4 +1,4 @@
-@use '~scss-toolkit/src/mixin/element';
+@use 'scss-toolkit/src/mixin/element';
 
 @use '../../lib/definition';
 
@@ -19,5 +19,30 @@
     @include element.defineContent() {
         display: flex;
         aspect-ratio: 1 / 1;
+    }
+}
+
+@include element.createElement('fix-aspect-ratio') {
+    @include element.defineContent() {
+        /* Sert à forcer la maj de la width avec le aspect-ratio au redimensionnement de la page */
+        width: max(0vh, 100%);
+        /* Sert à forcer la maj de la width avec le aspect-ratio au chargement de la page */
+        animation: element.getAnimation('fix') 0.01s linear 0.01s forwards;
+    }
+
+    @include element.defineAnimation('fix') {
+        from {
+            width: max(0vh, 100%);
+        }
+        to {
+            width: max(0vh, 100%);
+        }
+    }
+}
+
+@include element.createElement('icofont') {
+    @include element.defineContent() {
+        display: inline-flex;
+        align-items: center;
     }
 }

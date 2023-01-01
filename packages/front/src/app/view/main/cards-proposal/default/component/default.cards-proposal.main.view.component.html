@@ -1,11 +1,11 @@
-<section>
+<!-- <section>
   <div class="container-1">
     <app-shared-interactive-button text="Proposer une carte" link="./add" [accent]="true" [important]="true">
     </app-shared-interactive-button>
   </div>
   <div class="container-2">
     <div class="wrapper">
-      <h2 data-css-h2 data-css-font data-css-color data-css-accent>Cartes proposées</h2>
+      <h2 data-css-h2 data-css-font data-css-color data-css-dark data-css-accent>Cartes proposées</h2>
       <div class="sub">
         <div class="line">
           <p>
@@ -34,4 +34,37 @@
       </div>
     </div>
   </div>
+</section>
+ -->
+
+<ng-template #buttonTemplate>
+  <app-shared-interactive-button text="Proposer une carte" link="./add" [accent]="true" [important]="true">
+  </app-shared-interactive-button>
+</ng-template>
+
+<ng-template #contentTemplate>
+  <ng-template #contentTemplateLine>
+    <div class="field">
+      <app-shared-user-avatar-head></app-shared-user-avatar-head>
+      <p data-css-text data-css-color data-css-font>Czyrok</p>
+    </div>
+
+    <div class="field">
+      <h2 data-css-h2 data-css-color data-css-font>Carte du détective</h2>
+    </div>
+
+    <div class="field">
+      <app-shared-label text="10" icofont="thumbs-up"></app-shared-label>
+      <app-shared-label text="3" icofont="thumbs-down"></app-shared-label>
+    </div>
+  </ng-template>
+
+  <app-shared-item-line link="./view" [contentTemplate]="contentTemplateLine"></app-shared-item-line>
+  <app-shared-item-line link="./view" [contentTemplate]="contentTemplateLine"></app-shared-item-line>
+  <app-shared-item-line link="./view" [contentTemplate]="contentTemplateLine"></app-shared-item-line>
+</ng-template>
+
+<section>
+  <app-view-page-list title="Liste des parties" [buttonTemplate]="buttonTemplate"
+    [contentTemplate]="contentTemplate"></app-view-page-list>
 </section>

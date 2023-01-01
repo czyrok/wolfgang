@@ -1,0 +1,10 @@
+@use '../../../../../scss/lib/property';
+
+.wrapper {
+    display: grid;
+    grid-template-areas:
+        'a'
+        'b';
+    grid-template-rows: auto 1fr;
+    min-height: 100%;
+}

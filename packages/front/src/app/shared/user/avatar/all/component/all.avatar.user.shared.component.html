@@ -1,0 +1,19 @@
+<div class="container {{ reduced ? 'reduced' : '' }}" (click)="click()" data-css-fix-aspect-ratio>
+    <ng-template #contentTemplateVote>
+        <p data-css-text data-css-color data-css-font>{{ playerVotingList.length }}</p>
+    </ng-template>
+
+    <app-shared-item-bubble *ngIf="playerVotingList.length != 0"
+        [contentTemplate]="contentTemplateVote"></app-shared-item-bubble>
+
+    <app-shared-user-bubble-username [id]="id" [detailed]="detailed"></app-shared-user-bubble-username>
+
+    <div class="img" >
+        <img src="asset/img/user.svg" alt="a enlever">
+        <!-- <img src="" alt="chapeau">
+                    <img src="" alt="tete">
+                    <img src="" alt="je sais pas">
+                    <img src="" alt="je sais pas">
+                    <img src="" alt="je sais pas"> -->
+    </div>
+</div>

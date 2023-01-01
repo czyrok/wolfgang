@@ -29,6 +29,11 @@
             "assets": [
               "src/asset"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "./node_modules"
+              ]
+            },
             "styles": [
               "src/styles.scss",
               "src/asset/icofont/icofont.min.css"
@@ -97,6 +102,11 @@
             "assets": [
               "src/asset"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "./node_modules"
+              ]
+            },
             "styles": [
               "src/styles.scss",
               "src/asset/icofont/icofont.min.css"

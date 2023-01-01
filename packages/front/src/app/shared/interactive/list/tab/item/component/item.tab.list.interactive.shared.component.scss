@@ -1,8 +1,8 @@
-@use '../../../list.interactive.shared.scss';
+@use '../../../../../../app.scss';
 
 @use '../../../../../../../scss/lib/property';
 
-@use '~scss-toolkit/src/mixin/theme';
+@use 'scss-toolkit/src/mixin/theme';
 
 .container {
   display: grid;

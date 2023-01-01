@@ -1,0 +1,36 @@
+@use '../../../../../../scss/lib/property';
+
+section {
+    height: 100%;
+}
+
+.wrapper {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.wrapper .grid {
+    height: 100%;
+    display: grid;
+    grid-template-areas:
+        'a a'
+        'b c';
+    grid-template-rows: minmax(0px, 1fr) auto;
+    justify-items: center;
+    row-gap: property.get('borderLimit', 'big');
+    column-gap: property.get('borderLimit', 'big');
+}
+
+.wrapper .grid .area-a {
+    grid-area: a;
+}
+
+.wrapper .grid .area-b {
+    grid-area: b;
+}
+
+.wrapper .grid .area-c {
+    grid-area: c;
+}
