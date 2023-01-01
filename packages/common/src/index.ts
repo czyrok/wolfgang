@@ -42,7 +42,6 @@ export * from './game/loop/item/card/behavior/child/model/child.behavior.card.it
 export * from './game/loop/item/card/behavior/config/interface/config.behavior.card.item.loop.game.interface'
 export * from './game/loop/item/card/behavior/error/time-mode-not-defined.behavior.card.item.loop.game.error'
 export * from './game/loop/item/card/behavior/factory/model/factory.behavior.card.item.loop.game.model'
-export * from './game/loop/item/card/behavior/factory/util/factory.behavior.card.item.loop.game.util'
 export * from './game/loop/item/card/behavior/handler/interface/handler.behavior.card.item.loop.game.interface'
 export * from './game/loop/item/card/behavior/hierarchy/iterator/model/iterator.hierarchy.behavior.card.item.loop.game.model'
 export * from './game/loop/item/card/behavior/implementation/death/model/death.implementation.behavior.card.item.loop.game.model'
