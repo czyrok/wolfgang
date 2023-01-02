@@ -1,11 +1,5 @@
-<div class="container {{ tab.isIconOnly ? 'icon-only' : '' }}">
-  <h3 class="top" data-css-h3 data-css-font (click)="click()">{{ tab.title }}<span class="icofont-{{ tab.visibility ? 'rounded-up' : 'rounded-down' }}"
-      data-css-icofont></span></h3>
-
-  <div class="items" *ngIf="tab.visibility">
-    <div class="item" *ngFor="let subTab of tab.subTabList">
-      <app-shared-interactive-list-detailed-tab-sub-tab [subTab]="subTab" [isIconOnly]="tab.isIconOnly">
-      </app-shared-interactive-list-detailed-tab-sub-tab>
-    </div>
+<div class="container">
+  <div class="tab" *ngFor="let subtab of tab.subTabList">
+    <app-shared-interactive-list-detailed-tab-sub-tab [subtab]="subtab"></app-shared-interactive-list-detailed-tab-sub-tab>
   </div>
 </div>

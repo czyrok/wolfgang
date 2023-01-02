@@ -25,13 +25,13 @@
   }
 }
 
-.container:not(.icon-only) .items {
+.container:not(.icon-only) .subTabs {
   display: flex;
   flex-direction: column;
   row-gap: property.get('borderLimit', 'small');
 }
 
-.container.icon-only .items {
+.container.icon-only .subTabs {
   display: flex;
   column-gap: property.get('borderLimit', 'small');
 }

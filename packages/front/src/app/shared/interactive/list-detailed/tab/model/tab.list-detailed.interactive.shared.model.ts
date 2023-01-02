@@ -41,7 +41,7 @@ export class TabListDetailedInteractiveSharedModel {
     return this._subTabList
   }
 
-  public addItem(value: SubTabTabListDetailedInteractiveSharedModel): this {
+  public addSubTab(value: SubTabTabListDetailedInteractiveSharedModel): this {
     this._subTabList.push(value)
 
     return this
