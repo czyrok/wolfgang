@@ -1,4 +1,4 @@
-@use '~scss-toolkit/src/function/util';
+@use 'scss-toolkit/src/function/util';
 
 $_map: (
     zIndex: (
@@ -20,19 +20,25 @@ $_map: (
         ),
         comment: 10px,
         date: 15px,
-        entryElement: (
-            regular: 23px,
-            important: 28px,
-            action: 30px
+        sideElement: (
+            text: 23px,
+            icofont: 26px,
+            important: (
+                text: 28px,
+                icofont: 31px
+            )
+        ),
+        chat: (
+            icon: 25px
         )
     ),
     borderRadius: (
         regular: 8px,
-        rounded: 23px
+        rounded: 25px
     ),
     transition: (
         short: 0.12s,
-        regular: 0.2s,
+        regular: 0.3s,
         long: 0.6s
     ),
     borderLimit: (
@@ -42,8 +48,13 @@ $_map: (
         big: 20px
     ),
     size: (
+        avatar: (
+            width: 50px,
+            height: 150px
+        ),
         page: 80%,
         aside: 415px,
+        balance: 25px,
         nav: (
             self: 70px,
             logo: 50px
@@ -53,28 +64,31 @@ $_map: (
             underline: 3px
         ),
         border: 3px,
-        outline: 2px,
+        outline: 4px,
         img: (
-            item: 50px,
+            item: 50px
+        ),
+        chat: (
             icon: 35px
         )
+    ),
+    blur: (
+        regular: 3px
     ),
     opacity: (
         placeholder: 0.2,
         background: 0.4,
-        disabledItem: 0.5
+        disabledItem: 0.5,
+        float: 0.85
     ),
     shadow: (
         box: (
             regular: (
-                0px 0px 25px rgba(0, 0, 0, 0.379),
-                0px 0px 49.1px rgba(0, 0, 0, 0.335),
-                0px 0px 238px rgba(0, 0, 0, 0.3)
+                0px 6.7px 5.3px rgba(0, 0, 0, 0.057),
+                0px 22.3px 17.9px rgba(0, 0, 0, 0.083),
+                0px 100px 80px rgba(0, 0, 0, 0.14)
             ),
-            lite: (
-                0px 0px 25px rgba(0, 0, 0, 0.379),
-                0px 0px 49.1px rgba(0, 0, 0, 0.335)
-            )
+            lite: 0 2px 4px rgb(34 36 43 / 16%)
         ),
         text: 000 0 0 20px
     )

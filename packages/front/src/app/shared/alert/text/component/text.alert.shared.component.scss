@@ -1,0 +1,87 @@
+@use '../../../../app.scss';
+
+@use '../../../../../scss/lib/property';
+
+@use 'scss-toolkit/src/mixin/theme';
+
+.container {
+    display: inline-grid;
+    align-items: center;
+    grid-template-areas: 'a b';
+    grid-template-columns: auto 1fr;
+    border-radius: property.get('borderRadius', 'rounded');
+    padding: property.get('borderLimit', 'small');
+    column-gap: property.get('borderLimit', 'small');
+}
+
+.container[type='SuccessAlertType'] {
+    @include theme.themeHandler(true, 'alert') {
+        background-color: theme.get('success', 'background');
+        color: theme.get('color');
+    }
+}
+
+.container[type='InformAlertType'] {
+    @include theme.themeHandler(true, 'alert') {
+        background-color: theme.get('inform', 'background');
+        color: theme.get('color');
+    }
+}
+
+.container[type='WarningAlertType'] {
+    @include theme.themeHandler(true, 'alert') {
+        background-color: theme.get('warning', 'background');
+        color: theme.get('color');
+    }
+}
+
+.container[type='DangerAlertType'] {
+    @include theme.themeHandler(true, 'alert') {
+        background-color: theme.get('danger', 'background');
+        color: theme.get('color');
+    }
+}
+
+.container .icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    padding: property.get('borderLimit', 'verySmall') * 2;
+}
+
+.container[type='SuccessAlertType'] .icon {
+    @include theme.themeHandler(true, 'alert') {
+        background-color: theme.get('success', 'icon');
+        color: theme.get('color');
+    }
+}
+
+.container[type='InformAlertType'] .icon {
+    @include theme.themeHandler(true, 'alert') {
+        background-color: theme.get('inform', 'icon');
+        color: theme.get('color');
+    }
+}
+
+.container[type='WarningAlertType'] .icon {
+    @include theme.themeHandler(true, 'alert') {
+        background-color: theme.get('warning', 'icon');
+        color: theme.get('color');
+    }
+}
+
+.container[type='DangerAlertType'] .icon {
+    @include theme.themeHandler(true, 'alert') {
+        background-color: theme.get('danger', 'icon');
+        color: theme.get('color');
+    }
+}
+
+.container.detailed .text {
+    text-align: justify;
+}
+
+.container:not(.detailed) .text {
+    white-space: nowrap;
+}

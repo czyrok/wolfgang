@@ -1,28 +1,30 @@
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
-import { AvatarSharedComponent } from './avatar/component/avatar.shared.component'
 
 import { InteractiveSharedModule } from './interactive/interactive.shared.module'
 import { ChatSharedModule } from './chat/chat.shared.module'
-
-import { LabelSharedComponent } from './label/label.shared.component'
+import { ItemSharedModule } from './item/item.shared.module'
+import { AlertSharedModule } from './alert/alert.shared.module'
+import { UserSharedModule } from './user/user.shared.module'
+import { LabelSharedModule } from './label/label.shared.module'
 
 @NgModule({
-    declarations: [
-        AvatarSharedComponent,
-        LabelSharedComponent
-    ],
     imports: [
         CommonModule,
         InteractiveSharedModule,
-        ChatSharedModule
+        ChatSharedModule,
+        ItemSharedModule,
+        AlertSharedModule,
+        UserSharedModule,
+        LabelSharedModule
     ],
     exports: [
         InteractiveSharedModule,
         ChatSharedModule,
-        AvatarSharedComponent,
-        LabelSharedComponent
+        ItemSharedModule,
+        AlertSharedModule,
+        UserSharedModule,
+        LabelSharedModule
     ]
 })
-
 export class SharedModule { }

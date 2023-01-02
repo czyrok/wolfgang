@@ -1,0 +1,14 @@
+<ng-template #contentTemplateProfile>
+    <div class="field">
+        <app-shared-user-avatar-head></app-shared-user-avatar-head>
+
+        <p data-css-text data-css-color data-css-font>Czyrok</p>
+    </div>
+
+    <div class="field">
+        <app-shared-user-label-level></app-shared-user-label-level>
+        <app-shared-user-label-point></app-shared-user-label-point>
+    </div>
+</ng-template>
+
+<app-shared-item-line link="/game/profile" [contentTemplate]="contentTemplateProfile"></app-shared-item-line>

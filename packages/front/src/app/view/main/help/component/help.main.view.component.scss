@@ -2,86 +2,29 @@
 
 @use '../../../../../scss/lib/property';
 
-@use '~scss-toolkit/src/mixin/theme';
+@use 'scss-toolkit/src/mixin/theme';
 
 section {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  height: 100%;
 }
 
-section .wrapper {
-  border-radius: property.get('borderRadius', 'rounded');
-  overflow: hidden;
-  display: grid;
-  grid-template-areas:
-    'a'
-    'b';
-  box-shadow: property.get('shadow', 'box', 'regular');
-
-  @include theme.themeHandler(true, 'isolatedElement') {
-    background-color: theme.get('background');
-  }
-}
-
-section .wrapper h2 {
-  padding: property.get('borderLimit', 'regular');
-  border-bottom-left-radius: property.get('borderRadius', 'rounded');
-  border-bottom-right-radius: property.get('borderRadius', 'rounded');
-  text-align: center;
-  margin-bottom: -1 * property.get('borderRadius', 'rounded');
-  z-index: 1;
-
-  @include theme.themeHandler(true, 'isolatedElement', 'title') {
-    background-color: theme.get('background');
-  }
-}
-
-section .wrapper .super-container {
+section .box .grid {
+  height: 100%;
   display: grid;
   grid-template-areas: 'a b';
-  grid-template-columns: auto auto;
-  column-gap: property.get('borderLimit', 'big');
-  padding: property.get('borderLimit', 'regular');
-  padding-top: property.get('borderLimit', 'regular') + property.get('borderRadius', 'rounded');
-}
-
-section .wrapper .super-container .container-1 {
-  display: grid;
-  row-gap: property.get('borderLimit', 'big');
-}
-
-section .wrapper .super-container .container-2 {
-  display: grid;
-  grid-template-areas:
-    'a b'
-    'c c';
-  grid-template-columns: auto 1fr;
-  grid-template-rows: auto 1fr;
+  grid-template-columns: 1fr 1fr;
   row-gap: property.get('borderLimit', 'big');
   column-gap: property.get('borderLimit', 'big');
-
-  @include theme.themeHandler(true, 'isolatedElement', 'title') {
-    color: theme.get('color');
-  }
 }
 
-section .wrapper .super-container .container-2 img {
-  width: property.get('size', 'img', 'item');
+section .box .grid .area-a {
+  grid-area: a;
 }
 
-section .wrapper .super-container .container-2 .title {
-  display: flex;
-  align-items: center;
+section .box .grid .area-b {
+  grid-area: b;
 }
 
-section .wrapper .super-container .container-2 .desc {
-  grid-area: c;
-  border-radius: property.get('borderRadius', 'rounded');
-  padding: property.get('borderLimit', 'regular');
-
-  @include theme.themeHandler(true, 'isolatedElement', 'item') {
-    background-color: theme.get('background');
-    color: theme.get('color');
-  }
+section .box .grid .area-b .text {
+  text-align: justify;
 }

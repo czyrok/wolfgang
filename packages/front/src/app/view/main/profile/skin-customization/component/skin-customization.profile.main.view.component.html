@@ -1,22 +1,26 @@
 <section>
-  <div class="wrapper">
-    <h2 data-css-h2 data-css-font data-css-color data-css-accent>Personnalisation du skin</h2>
-    <div class="container">
-      <div class="part-1">
-        <div class="element-1">
-          <div>
-            <app-shared-interactive-list [list]="list"></app-shared-interactive-list>
-          </div>
-        </div>
-        <div class="element-2">
-          <h1>pseudo</h1>
-          <app-shared-avatar></app-shared-avatar>
-        </div>
+  <ng-template #buttonTemplate>
+    <app-shared-interactive-button text="Annuler" link="../" [important]="true"></app-shared-interactive-button>
+    <app-shared-interactive-button text="Valider" link="../" [accent]="true"
+      [important]="true"></app-shared-interactive-button>
+  </ng-template>
+
+  <ng-template #contentTemplate>
+    <div class="grid">
+      <div class="area-a">
+        <app-shared-user-label-point></app-shared-user-label-point>
       </div>
-      <div class="part-2">
-        <app-shared-interactive-button text="Annuler"></app-shared-interactive-button>
-        <app-shared-interactive-button text="Valider" [accent]="true"></app-shared-interactive-button>
+
+      <div class="area-b">
+ 
+      </div>
+
+      <div class="area-c">
+        <app-shared-user-avatar-all></app-shared-user-avatar-all>
       </div>
     </div>
-  </div>
+  </ng-template>
+
+  <app-view-page-block title="Personnalisation du skin" [buttonTemplate]="buttonTemplate"
+    [contentTemplate]="contentTemplate"></app-view-page-block>
 </section>

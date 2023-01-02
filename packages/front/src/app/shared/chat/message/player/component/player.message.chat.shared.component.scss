@@ -2,29 +2,40 @@
 
 @use '../../../../../../scss/lib/property';
 
-@use '~scss-toolkit/src/mixin/theme';
+@use 'scss-toolkit/src/mixin/theme';
 
 .container {
   display: grid;
   grid-template-areas: 'a b';
   grid-template-columns: auto 1fr;
+  column-gap: property.get('borderLimit', 'regular');
+}
+
+.container.self {
+  grid-template-areas: 'b a';
+  grid-template-columns: 1fr auto;
 }
 
 .container img {
+  grid-area: a;
   display: flex;
-  width: property.get('size', 'img', 'icon');
+  width: property.get('size', 'chat', 'icon');
   aspect-ratio: 1 / 1;
   justify-content: center;
-  margin-right: property.get('borderLimit', 'regular');
 }
 
 .container p {
-  border-radius: property.get('borderRadius', 'regular');
+  grid-area: b;
+  border-top-left-radius: property.get('borderRadius', 'rounded');
+  border-bottom-left-radius: property.get('borderRadius', 'rounded');
   padding: property.get('borderLimit', 'verySmall');
   height: fit-content;
 
-  @include theme.themeHandler(true, 'isolatedElement', 'item') {
-    color: theme.get('color');
+  @include theme.themeHandler(false, 'containerElement2', 'item') {
     background-color: theme.get('background');
   }
+}
+
+.container.self p {
+  border-radius: property.get('borderRadius', 'rounded');
 }

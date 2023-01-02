@@ -1,0 +1,24 @@
+@use '../../../../../../scss/lib/property';
+
+.container {
+    display: grid;
+    justify-items: center;
+    grid-template-rows: auto 1fr;
+}
+
+
+.container:not(.reduced) {
+    height: 100%;
+}
+
+.container .img {
+    display: flex;
+    aspect-ratio: 1 / 1.45;
+    height: max(0vh, 100%);
+    overflow: hidden;
+}
+
+.container.reduced .img {
+    //width: property.get('size', 'avatar', 'width');
+    height: property.get('size', 'avatar', 'height');
+}
