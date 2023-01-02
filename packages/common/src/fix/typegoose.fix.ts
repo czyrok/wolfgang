@@ -1,7 +1,7 @@
 type DecoratorFnType = (body?: unknown) => (target: unknown, key: string, descriptor?: PropertyDescriptor) => void
 type GetModelForClassFnType = (element?: unknown, options?: unknown) => unknown
 
-type TypegooseDecoratorType = {
+type TypegooseType = {
     prop: DecoratorFnType
     mapProp: DecoratorFnType
     arrayProp: DecoratorFnType
@@ -14,7 +14,7 @@ type TypegooseDecoratorType = {
     [key: string]: unknown
 }
 
-let typegoose: TypegooseDecoratorType
+let typegoose: TypegooseType
 
 if (typeof process === 'undefined' || typeof window === 'object') {
     // eslint-disable-next-line @typescript-eslint/no-empty-function

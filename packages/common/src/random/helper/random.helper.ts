@@ -1,11 +1,11 @@
-const crypto = require('crypto')
+import { getRandomValues } from '../../fix/crypto.fix'
 
 export class RandomHelper {
     public static getRandomNumber(range?: number): number {
         if (range !== undefined)
-            return crypto.getRandomValues(new Uint32Array(1))[0] % range
+            return getRandomValues(new Uint32Array(1))[0] % range
 
-        return crypto.getRandomValues(new Uint32Array(1))[0]
+        return getRandomValues(new Uint32Array(1))[0]
     }
 
     public static shuffle<T>(array: Array<T>): void {

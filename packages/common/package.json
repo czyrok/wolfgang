@@ -4,11 +4,12 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "clean": "rm -rf ./dist && mkdir ./dist/",
+    "clean": "rm -rf ./dist",
     "build": "tsc"
   },
   "dependencies": {
     "class-transformer": "^0.5.1",
+    "crypto-random": "^2.0.1",
     "log4js": "^6.7.1",
     "rxjs": "^7.8.0"
   },

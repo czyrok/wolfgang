@@ -1,11 +1,13 @@
 // Behavior must be loaded before loop item 
 // @index('./**/*.ts', f => `export * from '${f.path}'`)
+export * from './alert/type/enum/type.alert.enum'
 export * from './chained-list/iterator/interface/iterator.chained-list.interface'
 export * from './cosmetic/interface/cosmetic.interface'
 export * from './cosmetic/model/cosmetic.model'
 export * from './cosmetic/purchase/interface/purchase.cosmetic.interface'
 export * from './cosmetic/purchase/model/purchase.cosmetic.model'
 export * from './cosmetic/type/enum/type.cosmetic.enum'
+export * from './fix/typegoose.fix'
 export * from './game/card/config/interface/config.card.game.interface'
 export * from './game/card/factory/model/factory.card.game.model'
 export * from './game/card/handler/interface/handler.card.game.interface'
