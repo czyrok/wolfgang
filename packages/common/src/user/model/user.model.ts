@@ -1,4 +1,4 @@
-import { Ref } from '@typegoose/typegoose'
+import { DocumentType, Ref, ReturnModelType } from '@typegoose/typegoose'
 import { Exclude, Expose } from 'class-transformer'
 
 import { Prop, getModelForClass } from '../../fix/typegoose.fix'
@@ -35,6 +35,16 @@ export class UserModel extends DocumentModel implements UserInterface {
     @Expose()
     @Prop()
     socketId!: string
+
+    public async verifyPassword(this: DocumentType<UserModel>, password: string): Promise<boolean> {
+        if (this.password === password) return true
+
+        return true
+    }
+
+    public static async getUserByToken(this: ReturnModelType<typeof UserModel>, tokenId: string): Promise<DocumentType<UserModel> | null> {
+        return await this.findById(tokenId).populate('user').exec()
+    }
 }
 
 export const UserModelDocument = getModelForClass(UserModel, { schemaOptions: { collection: 'user' } })
