@@ -7,8 +7,16 @@ export class DocumentModel {
 
         return '???'
     })
-    public _id!: string
+    protected _id!: string
 
     @Expose()
-    public __v!: number
+    protected __v!: number
+
+    public get id(): string {
+        return this._id
+    }
+
+    public get v(): number {
+        return this.__v
+    }
 }
