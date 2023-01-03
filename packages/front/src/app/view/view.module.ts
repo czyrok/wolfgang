@@ -14,6 +14,7 @@ import { ViewComponent } from './component/view.component'
                 path: '', component: ViewComponent, children: [
                     { path: '', loadChildren: () => import('./home/home.view.module').then(m => m.HomeViewModule) },
                     { path: 'game', loadChildren: () => import('./main/main.view.module').then(m => m.MainViewModule) },
+                    { path: 'managing', loadChildren: () => import('./managing/managing.view.module').then(m => m.ManagingViewModule) },
                     { path: 'play', loadChildren: () => import('./play/play.view.module').then(m => m.PlayViewModule) }
                 ]
             },
