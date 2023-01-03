@@ -8,9 +8,9 @@
     display: grid;
     grid-auto-flow: column;
     grid-template-areas: 'a b';
-    grid-template-columns: property.get('size', 'nav', 'self') auto;
+    grid-template-columns: 0px auto;
 }
 
 .container ::ng-deep main {
-    width: calc(100% - property.get('size', 'nav', 'self'));
+    width: calc(100% - 0px);
 }

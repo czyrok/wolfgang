@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, HostListener, AfterViewInit, OnDestroy } from '@angular/core'
 
 // #nsm
-import { VotePlayerGameModel, /* TypeVotePlayerGameEnum */ } from 'common'
+import { VotePlayerGameModel /*, TypeVotePlayerGameEnum */ } from 'common'
 import { Subscription } from 'rxjs'
 
 import { UserService } from 'src/app/user/service/user.service'
@@ -20,7 +20,7 @@ export class AllAvatarUserSharedComponent implements AfterViewInit, OnDestroy {
   ) { }
 
   ngAfterViewInit(): void {
-    if (this.eventPlayerVote !== undefined) this.sub = this.eventPlayerVote.subscribe((value: VotePlayerGameModel) => {
+    /* if (this.eventPlayerVote !== undefined) this.sub = this.eventPlayerVote.subscribe((value: VotePlayerGameModel) => {
       if (value.votedUser == this.id) {
         let index = this.playerVotingList.indexOf(value.votingUser)
 
@@ -34,7 +34,7 @@ export class AllAvatarUserSharedComponent implements AfterViewInit, OnDestroy {
           this.playerVotingList.splice(index, 1)
         }
       }
-    })
+    }) */
   }
 
   ngOnDestroy(): void {
