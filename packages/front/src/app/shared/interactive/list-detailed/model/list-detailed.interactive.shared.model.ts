@@ -1,7 +1,11 @@
+
+import { EventEmitter } from "@angular/core";
 import { TabListDetailedInteractiveSharedModel } from "../tab/model/tab.list-detailed.interactive.shared.model";
 
 export class ListDetailedInteractiveSharedModel {
     private _tabList: Array<TabListDetailedInteractiveSharedModel> = new Array()
+    private _visibilityEvent: EventEmitter<string> = new EventEmitter
+    private _currentTab: string = ''
 
     public get tabList(): Array<TabListDetailedInteractiveSharedModel> {
         return this._tabList
@@ -9,7 +13,14 @@ export class ListDetailedInteractiveSharedModel {
 
     public addTab(value: TabListDetailedInteractiveSharedModel): this {
         this._tabList.push(value)
+        
+        value.visibilityEvent = this.visibilityEvent
 
         return this
     }
+
+    public get visibilityEvent(): EventEmitter<string> {
+        return this._visibilityEvent
+    }
+
 }

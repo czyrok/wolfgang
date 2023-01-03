@@ -8,7 +8,11 @@ import { ListDetailedInteractiveSharedModel } from '../model/list-detailed.inter
 })
 export class ListDetailedInteractiveSharedComponent implements AfterViewInit {
   ngAfterViewInit(): void {
-    console.log(this.list)
+    this.changeTab(this.list.tabList[0].title)
+  }
+
+  changeTab(title: string): void {
+    this.list.visibilityEvent.emit(title)
   }
 
   @Input() list!: ListDetailedInteractiveSharedModel;

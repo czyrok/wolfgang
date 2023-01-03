@@ -1,16 +1,11 @@
-@use '../../list.interactive.shared.scss';
+@use '../../../list-detailed.interactive.shared.scss';
 
-@use '../../../../../../scss/lib/property';
+@use '../../../../../../../scss/lib/property';
 
 @use '~scss-toolkit/src/mixin/theme';
 
 .container {
-  border-radius: property.get('borderRadius', 'rounded');
   padding: property.get('borderLimit', 'regular');
-
-  @include theme.themeHandler(true, 'isolatedElement', 'item') {
-    background-color: theme.get('background');
-  }
 }
 
 .container .top {
@@ -19,10 +14,6 @@
   grid-template-columns: 1fr auto;
   align-items: center;
   cursor: pointer;
-
-  @include theme.themeHandler(true, 'isolatedElement', 'item') {
-    color: theme.get('color');
-  }
 }
 
 .container:not(.icon-only) .items {

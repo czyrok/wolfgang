@@ -7,9 +7,9 @@ import { SubTabTabListDetailedInteractiveSharedModel } from '../model/sub-tab.ta
   styleUrls: ['./sub-tab.tab.list-detailed.interactive.shared.component.scss']
 })
 export class SubTabTabListDetailedInteractiveSharedComponent {
-  @Input() tab!: SubTabTabListDetailedInteractiveSharedModel;
+  @Input() subTab!: SubTabTabListDetailedInteractiveSharedModel;
 
   click(): void {
-    this.tab.setVisibility(!this.tab.visibility)
+    this.subTab.setVisibility(!this.subTab.visibility)
   }
 }

@@ -1,4 +1,4 @@
-@use '../list.interactive.shared.scss';
+@use '../list-detailed.interactive.shared.scss';
 
 @use '../../../../../scss/lib/property';
 @use '../../../../../scss/lib/color';
@@ -11,12 +11,16 @@
   border-radius: property.get('borderRadius', 'regular');
   padding: property.get('borderLimit', 'regular');
   box-sizing: border-box;
+  display: grid;
+  grid-template-areas: 'a'
+    'b';
 
   @include theme.themeHandler(true, 'isolatedElement') {
     background-color: theme.get('background');
   }
 }
 
-.container .tab:not(:first-child) {
-  margin-top: property.get('borderLimit', 'regular');
+.container .tab {
+  display: flex;
+  justify-content: space-between;
 }

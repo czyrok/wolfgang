@@ -1,5 +1,12 @@
 <div class="container">
-  <div class="tab" *ngFor="let tab of list.tabList">
-    <app-shared-interactive-list-detailed-tab [tab]="tab"></app-shared-interactive-list-detailed-tab>
+  <div class="tab">
+    <div *ngFor="let tab of list.tabList">
+      <h3 (click)="changeTab(tab.title)">{{ tab.title }}</h3>
+    </div>
+  </div>
+  <div>
+    <div *ngFor="let tab of list.tabList">
+      <app-shared-interactive-list-detailed-tab [tab]="tab"></app-shared-interactive-list-detailed-tab>
+    </div>
   </div>
 </div>
