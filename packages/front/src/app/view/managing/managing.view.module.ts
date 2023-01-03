@@ -13,7 +13,8 @@ import { ManagingViewComponent } from './component/managing.view.component'
         RouterModule.forChild([
             {
                 path: '', component: ManagingViewComponent, children: [
-                    { path: '', redirectTo: 'currently', pathMatch: 'full' }
+                  { path: 'report', loadChildren: () => import('./report/report.managing.view.module').then(m => m.ReportManagingViewModule) },
+                  { path: '', redirectTo: 'report', pathMatch: 'full' }
                 ]
             }
         ]),
