@@ -1,5 +1,5 @@
 type DecoratorFnType = (body?: unknown) => (target: unknown, key: string, descriptor?: PropertyDescriptor) => void
-type GetModelForClassFnType = (element?: unknown, options?: unknown) => unknown
+type GetModelForClassFnType = (element?: unknown, options?: unknown) => any
 
 type TypegooseType = {
     prop: DecoratorFnType
