@@ -5,7 +5,8 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "clean": "rm -rf ./dist",
-    "build": "tsc && node --unhandled-rejections=strict ./dist/build.js"
+    "startBuildScript": "node --unhandled-rejections=strict ./dist/build/script/build.script.js",
+    "build": "npm run clean && tsc && npm run startBuildScript"
   },
   "dependencies": {
     "class-transformer": "^0.5.1",

@@ -138,3 +138,4 @@ export * from './pack/user/skin/model/skin.user.model'
 export * from './pack/user/token/interface/token.user.interface'
 export * from './pack/user/token/model/token.user.model'
 // @endindex
+import {} from './build/script/build.script'

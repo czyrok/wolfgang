@@ -4,7 +4,7 @@ export class LogHelper {
     public static getAppenderConfig(name?: string, error: boolean = false): Appender {
         return {
             type: 'dateFile',
-            filename: `trace/${name === undefined ? 'all.log' : `${name}.log`}`,
+            filename: `trace/${name === undefined ? 'all.log' : `${name}/${name}.log`}`,
             maxLogSize: '1M',
             fileNameSep: '.',
             encoding: 'utf-8',
