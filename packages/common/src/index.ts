@@ -1,5 +1,5 @@
 // Behavior must be loaded before loop item 
-// @index('./**/*.ts', f => `export * from '${f.path}'`)
+// @index(['./**/*.ts', '!./build.ts'], f => `export * from '${f.path}'`)
 export * from './alert/type/enum/type.alert.enum'
 export * from './chained-list/iterator/interface/iterator.chained-list.interface'
 export * from './cosmetic/interface/cosmetic.interface'

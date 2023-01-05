@@ -5,7 +5,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "clean": "rm -rf ./dist",
-    "build": "tsc"
+    "build": "tsc && node --unhandled-rejections=strict ./dist/build.js"
   },
   "dependencies": {
     "class-transformer": "^0.5.1",
