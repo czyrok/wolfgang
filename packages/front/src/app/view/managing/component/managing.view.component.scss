@@ -1,0 +1,16 @@
+@use '../../../app.scss';
+
+@use '../../../../scss/lib/property';
+
+@use 'scss-toolkit/src/mixin/theme';
+
+.container {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-areas: 'a b';
+    grid-template-columns: 0px auto;
+}
+
+.container ::ng-deep main {
+    width: calc(100% - 0px);
+}
