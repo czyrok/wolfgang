@@ -1,6 +1,4 @@
-import { Configuration, Logger } from 'log4js'
-
-import { configure, getLogger } from '../../fix/log4js.fix'
+import { Configuration, Logger, configure, getLogger } from 'log4js'
 
 import { AlreadyConfiguredLogError } from '../error/already-configured.log.error'
 import { NotConfiguredLogError } from '../error/not-configured.log.error'

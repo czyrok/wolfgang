@@ -1,7 +1,5 @@
-import { Ref } from '@typegoose/typegoose'
+import { Ref, prop, getModelForClass } from '@typegoose/typegoose'
 import { Exclude, Expose } from 'class-transformer'
-
-import { Prop, getModelForClass } from '../../../../../fix/typegoose.fix'
 
 import { UserModel } from '../../../../../user/model/user.model'
 import { MessageChatGameModel } from '../../model/message.chat.game.model'
@@ -11,11 +9,11 @@ import { UserMessageChatGameInterface } from '../interface/user.message.chat.gam
 @Exclude()
 export class UserMessageChatGameModel extends MessageChatGameModel implements UserMessageChatGameInterface {
     @Expose()
-    @Prop({ required: false, ref: () => UserMessageChatGameModel })
+    @prop({ required: false, ref: () => UserMessageChatGameModel })
     parent!: Ref<UserMessageChatGameModel>
 
     @Expose()
-    @Prop({ required: true, ref: () => UserModel })
+    @prop({ required: true, ref: () => UserModel })
     user!: Ref<UserModel>
 
 }

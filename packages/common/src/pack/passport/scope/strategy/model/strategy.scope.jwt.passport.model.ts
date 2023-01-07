@@ -1,6 +1,4 @@
-import { StrategyOptions, VerifyCallbackWithRequest } from 'passport-jwt'
-
-import { Strategy } from '../../../../fix/passportjwt.fix'
+import { StrategyOptions, VerifyCallbackWithRequest, Strategy } from 'passport-jwt'
 
 import { OptionsStrategyScopePassportInterface } from '../options/interface/options.strategy.scope.passport.interface'
 

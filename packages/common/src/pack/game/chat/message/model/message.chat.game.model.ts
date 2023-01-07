@@ -1,6 +1,5 @@
 import { Exclude, Expose } from 'class-transformer'
-
-import { Prop, getModelForClass } from '../../../../fix/typegoose.fix'
+import { prop, getModelForClass } from '@typegoose/typegoose'
 
 import { DocumentModel } from '../../../../model/document.model'
 
@@ -9,11 +8,11 @@ import { MessageChatGameInterface } from '../interface/message.chat.game.interfa
 @Exclude()
 export class MessageChatGameModel extends DocumentModel implements MessageChatGameInterface {
     @Expose()
-    @Prop({ required: true })
+    @prop({ required: true })
     text!: string
 
     @Expose()
-    @Prop({ required: true, default: new Date() })
+    @prop({ required: true, default: new Date() })
     releaseDate!: Date
 }
 

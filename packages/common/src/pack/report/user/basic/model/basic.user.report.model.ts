@@ -1,6 +1,5 @@
 import { Exclude, Expose } from 'class-transformer'
-
-import { Prop, getModelForClass } from '../../../../fix/typegoose.fix'
+import { prop, getModelForClass } from '@typegoose/typegoose'
 
 import { UserReportModel } from '../../model/user.report.model'
 import { TypeUserReportEnum } from '../../type/enum/type.user.report.enum'
@@ -9,7 +8,7 @@ import { BasicUserReportInterface } from '../interface/basic.user.report.interfa
 @Exclude()
 export class BasicUserReportModel extends UserReportModel implements BasicUserReportInterface {
     @Expose()
-    @Prop({ required: true })
+    @prop({ required: true })
     type!: TypeUserReportEnum
 }
 

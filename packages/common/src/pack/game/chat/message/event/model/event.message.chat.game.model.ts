@@ -1,6 +1,5 @@
 import { Exclude, Expose } from 'class-transformer'
-
-import { Prop, getModelForClass } from '../../../../../fix/typegoose.fix'
+import { prop, getModelForClass } from '@typegoose/typegoose'
 
 import { MessageChatGameModel } from '../../model/message.chat.game.model'
 import { EventMessageChatGameInterface } from '../interface/event.message.chat.game.interface'
@@ -8,7 +7,7 @@ import { EventMessageChatGameInterface } from '../interface/event.message.chat.g
 @Exclude()
 export class EventMessageChatGameModel extends MessageChatGameModel implements EventMessageChatGameInterface {
     @Expose()
-    @Prop({ required: true })
+    @prop({ required: true })
     imageUrl!: string
 }
 

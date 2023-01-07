@@ -1,9 +1,6 @@
 import { Socket } from 'socket.io'
-import { MiddlewareInterface } from 'ts-socket.io-controller'
-
-import { SocketMiddleware } from '../../../fix/tssocketiocontroller.fix'
-
-import { initialize, authenticate } from '../../../fix/passport.fix'
+import { MiddlewareInterface, SocketMiddleware } from 'ts-socket.io-controller'
+import { initialize, authenticate } from 'passport'
 
 import { TypePassportEnum } from '../../type/enum/type.passport.enum'
 

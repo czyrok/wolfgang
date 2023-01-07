@@ -27,7 +27,7 @@
         /* Sert à forcer la maj de la width avec le aspect-ratio au redimensionnement de la page */
         width: max(0vh, 100%);
         /* Sert à forcer la maj de la width avec le aspect-ratio au chargement de la page */
-        animation: element.getAnimation('fix') 0.01s linear 0.01s forwards;
+        animation: element.getAnimation('fix') 0.1s linear 0.1s forwards;
     }
 
     @include element.defineAnimation('fix') {

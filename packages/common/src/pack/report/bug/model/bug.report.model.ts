@@ -1,6 +1,5 @@
 import { Exclude, Expose } from 'class-transformer'
-
-import { Prop, getModelForClass } from '../../../fix/typegoose.fix'
+import { prop, getModelForClass } from '@typegoose/typegoose'
 
 import { ReportModel } from '../../model/report.model'
 import { BugReportInterface } from '../interface/bug.report.interface'
@@ -8,7 +7,7 @@ import { BugReportInterface } from '../interface/bug.report.interface'
 @Exclude()
 export class BugReportModel extends ReportModel implements BugReportInterface {
     @Expose()
-    @Prop({ required: true })
+    @prop({ required: true })
     desc!: string
 }
 

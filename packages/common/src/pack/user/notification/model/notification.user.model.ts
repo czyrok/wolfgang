@@ -1,8 +1,6 @@
-import { Ref } from '@typegoose/typegoose'
+import { Ref, prop, getModelForClass } from '@typegoose/typegoose'
 import { Exclude, Expose } from 'class-transformer'
 import { Schema } from 'mongoose'
-
-import { Prop, getModelForClass } from '../../../fix/typegoose.fix'
 
 import { DocumentModel } from '../../../model/document.model'
 import { UserModel } from '../../model/user.model'
@@ -14,27 +12,27 @@ import { TypeNotificationUserEnum } from '../type/enum/type.notification.user.en
 @Exclude()
 export class NotificationUserModel extends DocumentModel implements NotificationUserInterface {
     @Expose()
-    @Prop({ required: true, ref: () => UserModel })
+    @prop({ required: true, ref: () => UserModel })
     user!: Ref<UserModel>
 
     @Expose()
-    @Prop({ required: true, default: new Date() })
+    @prop({ required: true, default: new Date() })
     releaseDate!: Date
 
     @Expose()
-    @Prop()
+    @prop()
     translate!: string
 
     @Expose()
-    @Prop({ type: Schema.Types.Mixed, default: {} })
+    @prop({ type: Schema.Types.Mixed, default: {} })
     data!: any
 
     @Expose()
-    @Prop()
+    @prop()
     redirection!: string
 
     @Expose()
-    @Prop({ required: true })
+    @prop({ required: true })
     type!: TypeNotificationUserEnum
 }
 

@@ -1,7 +1,5 @@
-import { Ref } from '@typegoose/typegoose'
+import { Ref, prop, getModelForClass } from '@typegoose/typegoose'
 import { Exclude, Expose } from 'class-transformer'
-
-import { Prop, getModelForClass } from '../../../fix/typegoose.fix'
 
 import { DocumentModel } from '../../../model/document.model'
 import { UserModel } from '../../../user/model/user.model'
@@ -12,15 +10,15 @@ import { PurchaseCosmeticInterface } from '../interface/purchase.cosmetic.interf
 @Exclude()
 export class PurchaseCosmeticModel extends DocumentModel implements PurchaseCosmeticInterface {
     @Expose()
-    @Prop({ required: true, ref: () => UserModel })
+    @prop({ required: true, ref: () => UserModel })
     user!: Ref<UserModel>
 
     @Expose()
-    @Prop({ required: true, ref: () => CosmeticModel })
+    @prop({ required: true, ref: () => CosmeticModel })
     cosmetic!: Ref<CosmeticModel>
 
     @Expose()
-    @Prop({ required: true, default: new Date() })
+    @prop({ required: true, default: new Date() })
     releaseDate!: Date
 }
 

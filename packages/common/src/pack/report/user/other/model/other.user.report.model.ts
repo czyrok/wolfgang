@@ -1,6 +1,5 @@
 import { Exclude, Expose } from 'class-transformer'
-
-import { Prop, getModelForClass } from '../../../../fix/typegoose.fix'
+import { prop, getModelForClass } from '@typegoose/typegoose'
 
 import { UserReportModel } from '../../model/user.report.model'
 import { OtherUserReportInterface } from '../interface/other.user.report.interface'
@@ -8,7 +7,7 @@ import { OtherUserReportInterface } from '../interface/other.user.report.interfa
 @Exclude()
 export class OtherUserReportModel extends UserReportModel implements OtherUserReportInterface {
     @Expose()
-    @Prop({ required: true })
+    @prop({ required: true })
     reason!: string
 }
 

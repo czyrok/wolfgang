@@ -1,4 +1,4 @@
-import { config } from '../../fix/dotenv.fix'
+import { config } from 'dotenv'
 
 import { VarNotFoundEnvError } from '../error/var-not-found.env.error'
 
