@@ -1,0 +1,72 @@
+<!-- <div class="container">
+  <h1 data-css-h1 data-css-font data-css-color data-css-dark data-css-accent>Règles</h1>
+
+  <div class="sub">
+    <div class="top">
+      <div class="field">
+        <label for="range" data-css-h3 data-css-font>Nombre de joueurs</label>
+        <input id="range" type="range" min="6" max="20">
+      </div>
+
+      <div class="field">
+        <h3 data-css-h3 data-css-font>Équilibrage</h3>
+        <div class="balance">
+          <div class="left" style="width: 20%;">
+
+          </div>
+          <div class="cursor">
+
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <h3 data-css-h3 data-css-font>Options</h3>
+
+        <div class="button-list">
+          <app-shared-interactive-button text="Cartes aléatoires"></app-shared-interactive-button>
+          <app-shared-interactive-button text="Partie privée"></app-shared-interactive-button>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <h3 data-css-h3 data-css-font>Cartes en jeu</h3>
+      <app-shared-interactive-list [list]="list"></app-shared-interactive-list>
+    </div>
+  </div>
+</div>
+
+ -->
+
+<ng-template #contentTemplate>
+  <div class="box">
+    <div class="field">
+      <label for="range" data-css-h2 data-css-font data-css-color>Nombre de joueurs</label>
+      <input id="range" type="range" min="6" max="20">
+    </div>
+  
+    <div class="field">
+      <h2 data-css-h2 data-css-font data-css-color>Équilibrage</h2>
+      <div class="balance">
+        <div class="left" style="width: 20%;"></div>
+      </div>
+    </div>
+  
+    <div class="field">
+      <h2 data-css-h2 data-css-font data-css-color>Options</h2>
+  
+      <div class="button-list">
+        <app-shared-interactive-button text="Cartes aléatoires"></app-shared-interactive-button>
+        <app-shared-interactive-button text="Partie privée"></app-shared-interactive-button>
+      </div>
+    </div>
+  
+    <div class="field">
+      <h2 data-css-h2 data-css-font data-css-color>Cartes en jeu</h2>
+      <app-shared-interactive-list [list]="list"></app-shared-interactive-list>
+    </div>
+  </div>
+</ng-template>
+
+<app-shared-item-form title="Règles" [contentTemplate]="contentTemplate" [aside]="true"></app-shared-item-form>

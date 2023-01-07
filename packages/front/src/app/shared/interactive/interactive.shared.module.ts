@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { FormsModule } from '@angular/forms'
-import { BrowserModule } from '@angular/platform-browser'
 import { RouterModule } from '@angular/router'
 
 import { ListInteractiveSharedModule } from './list/list.interactive.shared.module'
@@ -18,7 +17,6 @@ import { ListDetailedInteractiveSharedModule } from './list-detailed/list-detail
     ],
     imports: [
         CommonModule,
-        BrowserModule,
         RouterModule,
         FormsModule,
         ListInteractiveSharedModule,
@@ -31,5 +29,4 @@ import { ListDetailedInteractiveSharedModule } from './list-detailed/list-detail
         TextBarInteractiveSharedComponent
     ]
 })
-
 export class InteractiveSharedModule { }

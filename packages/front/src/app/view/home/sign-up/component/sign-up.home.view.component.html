@@ -1,0 +1,53 @@
+<ng-template #formTemplate>
+  <form class="box center" action="" method="post">
+    <div class="field">
+      <label for="username" data-css-h2 data-css-font data-css-color>Pseudo</label>
+
+      <div data-css-text-bar data-css-border-radius="rounded">
+        <input id="username" type="text" placeholder="Saisissez votre pseudo" data-css-input>
+        <div class="line" data-css-underline>
+          <div data-css-underline></div>
+        </div>
+        <span class="icofont-user" data-css-icofont></span>
+      </div>
+    </div>
+
+
+    <div class="field">
+      <label for="email" data-css-h2 data-css-font data-css-color>Adresse email</label>
+
+      <div data-css-text-bar data-css-border-radius="rounded">
+        <input id="email" type="email" placeholder="Saisissez votre e-mail" data-css-input>
+        <div class="line" data-css-underline>
+          <div data-css-underline></div>
+        </div>
+        <span class="icofont-at" data-css-icofont></span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="password" data-css-h2 data-css-font data-css-color>Mot de passe</label>
+
+      <div data-css-text-bar data-css-border-radius="rounded">
+        <input id="password" type="password" placeholder="Saisissez votre mot de passe" data-css-input>
+        <div class="line" data-css-underline>
+          <div data-css-underline></div>
+        </div>
+        <span class="icofont-ui-password" data-css-icofont></span>
+      </div>
+    </div>
+
+    <div class="field column">
+      <button type="submit" data-css-important data-css-accent data-css-button data-css-event data-css-border-radius="rounded">
+        <div data-css-inter>
+          S'inscrire
+        </div>
+      </button>
+
+      <app-shared-interactive-button link="../log-in" text="Se connecter">
+      </app-shared-interactive-button>
+    </div>
+  </form>
+</ng-template>
+
+<app-view-page-form title="Inscription" [formTemplate]="formTemplate"></app-view-page-form>

@@ -1,0 +1,12 @@
+<div class="container {{ detailed ? 'detailed' : '' }}" [attr.type]="alert.type" data-css-text data-css-font>
+  <span class="icon icofont-{{ icofont }}" data-css-square></span>
+  <p class="text">{{ alert.text }}</p>
+  <!-- <span class="close icofont-close" (click)="click()" data-css-square></span> -->
+  <div class="c100 p53">
+    <div class="slice">
+      <div class="bar"></div>
+      <div class="fill"></div>
+    </div>
+    <span class="close icofont-close" (click)="click()" data-css-square></span>
+  </div>
+</div>

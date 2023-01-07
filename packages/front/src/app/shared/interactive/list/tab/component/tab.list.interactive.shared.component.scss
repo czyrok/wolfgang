@@ -1,14 +1,14 @@
-@use '../../list.interactive.shared.scss';
+@use '../../../../../app.scss';
 
 @use '../../../../../../scss/lib/property';
 
-@use '~scss-toolkit/src/mixin/theme';
+@use 'scss-toolkit/src/mixin/theme';
 
 .container {
   border-radius: property.get('borderRadius', 'rounded');
   padding: property.get('borderLimit', 'regular');
 
-  @include theme.themeHandler(true, 'isolatedElement', 'item') {
+  @include theme.themeHandler(false, 'containerElement2', 'item') {
     background-color: theme.get('background');
   }
 }
@@ -19,10 +19,6 @@
   grid-template-columns: 1fr auto;
   align-items: center;
   cursor: pointer;
-
-  @include theme.themeHandler(true, 'isolatedElement', 'item') {
-    color: theme.get('color');
-  }
 }
 
 .container:not(.icon-only) .items {

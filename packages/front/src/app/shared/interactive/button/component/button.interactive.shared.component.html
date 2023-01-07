@@ -1,17 +1,19 @@
-<button [attr.data-css-important]="important ? true : null" [attr.data-css-accent]="accent ? true : null"
-  data-css-button data-css-event data-css-border-radius="rounded">
+<button [attr.data-css-important]="important ? true : null"
+  [attr.data-css-accent]="accent ? true : null" data-css-button data-css-border-radius="rounded">
 
   <ng-container *ngIf="link; else textTemplate">
-    <a routerLinkActive="active" [attr.data-css-accent]="accent ? true : null" [routerLink]="[link]" data-css-link
+    <a [routerLinkActive]="active ? 'active' : 'none'" [attr.data-css-accent]="accent ? true : null" [routerLink]="[link]" data-css-inter
       [attr.data-css-square]="text === undefined ? true : null">
-      <span *ngIf="icofont != undefined" class="icofont-{{ icofont }}"></span>
+      <span *ngIf="icofont != undefined" class="icofont-{{ icofont }}" data-css-icofont></span>
       {{ text }}
     </a>
   </ng-container>
 
   <ng-template #textTemplate>
-    <span *ngIf="icofont != undefined" class="icofont-{{ icofont }}"></span>
-    {{ text }}
+    <div class="{{ active ? 'active' : '' }}" data-css-inter>
+      <span *ngIf="icofont != undefined" class="icofont-{{ icofont }}" data-css-icofont></span>
+      {{ text }}
+    </div>
   </ng-template>
 
 </button>

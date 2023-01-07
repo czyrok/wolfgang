@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GamesMainViewComponent } from './games.main.view.component';
+import { DefaultGamesMainViewComponent } from './default.games.main.view.component';
 
-describe('GamesMainViewComponent', () => {
-  let component: GamesMainViewComponent;
-  let fixture: ComponentFixture<GamesMainViewComponent>;
+describe('DefaultGamesMainViewComponent', () => {
+  let component: DefaultGamesMainViewComponent;
+  let fixture: ComponentFixture<DefaultGamesMainViewComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GamesMainViewComponent ]
+      declarations: [ DefaultGamesMainViewComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GamesMainViewComponent);
+    fixture = TestBed.createComponent(DefaultGamesMainViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,4 +1,4 @@
-@use '~scss-toolkit/src/mixin/element';
+@use 'scss-toolkit/src/mixin/element';
 
 @use '../../lib/property';
 @use '../../lib/definition';
@@ -13,15 +13,30 @@
     }
 
     @include element.defineContent() {
-        font-size: property.get('fontSize', 'entryElement', 'regular');
+        display: flex;
+        align-items: center;
+        column-gap: property.get('borderLimit', 'small');
+        font-size: property.get('fontSize', 'sideElement', 'text');
         white-space: nowrap;
         font-family: property.get('font', 'regular');
         padding: property.get('borderLimit', 'small') + property.get('borderLimit', 'verySmall');
     }
 
+    @include element.createTag('icofont', ' ') {
+        @include element.defineContent() {
+            font-size: property.get('fontSize', 'sideElement', 'icofont');
+        }
+    }
+
     @include element.createSubsection('important') {
         @include element.defineContent() {
-            font-size: property.get('fontSize', 'entryElement', 'important');
+            font-size: property.get('fontSize', 'sideElement', 'important', 'text');
+        }
+
+        @include element.createTag('icofont', ' ') {
+            @include element.defineContent() {
+                font-size: property.get('fontSize', 'sideElement', 'important', 'icofont');
+            }
         }
     }
 }

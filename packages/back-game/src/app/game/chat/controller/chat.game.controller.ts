@@ -1,5 +1,4 @@
 import { EmitOnSuccess, MessageBody, OnConnect, OnMessage, SocketController, EmitNamespaceBroadcastOnSuccess } from 'ts-socket.io-controller'
-
 import { TypeChatGameEnum, ChatGameModelDocument, MessageChatGameModel, MessageChatGameModelDocument } from 'common'
 
 @SocketController({

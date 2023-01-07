@@ -1,0 +1,5 @@
+@use '../../../../../../scss/lib/property';
+
+.container {
+    width: property.get('size', 'img', 'item');
+}

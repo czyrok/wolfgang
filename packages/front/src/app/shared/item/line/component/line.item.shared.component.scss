@@ -1,0 +1,58 @@
+@use '../../../../app.scss';
+
+@use '../../../../../scss/lib/property';
+
+@use 'scss-toolkit/src/mixin/theme';
+
+.line {
+    display: flex;
+    position: relative;
+    align-items: center;
+    column-gap: property.get('borderLimit', 'big');
+    padding: property.get('borderLimit', 'regular');
+    padding-right: property.get('borderLimit', 'big');
+    padding-left: property.get('borderLimit', 'big');
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+::ng-deep .lines-container.all .line {
+    box-shadow: property.get('shadow', 'box', 'lite');
+
+    @include theme.themeHandler(false, 'containerElement2') {
+        background-color: theme.get('background');
+    }
+}
+
+.line::before {
+    content: ' ';
+    position: absolute;
+    inset: 0 0 0 0;
+    transition: transform property.get('transition', 'regular') ease;
+    transform: scaleX(0);
+    transform-origin: bottom right;
+
+    @include theme.themeHandler(false, 'containerElement2') {
+        border-top: property.get('size', 'outline') solid theme.get('hover');
+        border-bottom: property.get('size', 'outline') solid theme.get('hover');
+    }
+}
+
+.line:hover::before {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+.line ::ng-deep .field {
+    display: flex;
+    column-gap: property.get('borderLimit', 'big');
+    align-items: center;
+}
+
+::ng-deep .lines-container:not(.all) :has(.line):nth-child(2n - 1) .line {
+    box-shadow: property.get('shadow', 'box', 'lite');
+
+    @include theme.themeHandler(false, 'containerElement2') {
+        background-color: theme.get('background');
+    }
+}

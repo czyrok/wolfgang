@@ -1,0 +1,22 @@
+<main>
+  <ng-template #buttonTemplate>
+    <app-shared-interactive-button link="./sign-up" text="S'inscrire"></app-shared-interactive-button>
+    <app-shared-interactive-button link="/game/currently" text="Jouer ?" [accent]="true"
+      [important]="true"></app-shared-interactive-button>
+  </ng-template>
+
+  <ng-template #contentTemplate>
+    <div class="wrapper">
+      <div class="lines-container all">
+        <app-shared-user-line-profile></app-shared-user-line-profile>
+      </div>
+
+      <div class="center">
+
+      </div>
+    </div>
+  </ng-template>
+
+  <app-view-page-list title="Wolfgang" [buttonTemplate]="buttonTemplate"
+    [contentTemplate]="contentTemplate" [list]="false"></app-view-page-list>
+</main>

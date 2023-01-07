@@ -3,6 +3,9 @@ dist
 tmp
 out-tsc
 
+# Logs
+trace
+
 # Only exists if Bazel was run
 bazel-out
 
@@ -44,3 +47,6 @@ typings
 # System files
 .DS_Store
 Thumbs.db
+
+# Other
+package-lock.json
