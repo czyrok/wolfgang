@@ -1,38 +1,3 @@
-<!-- <main>
-  <section>
-
-    <div class="wrapper">
-      <h2 data-css-h2 data-css-font data-css-color data-css-dark data-css-accent>Aide</h2>
-      <div class="super-container">
-        <div class="container-1">
-          <div data-css-text-bar data-css-label data-css-border-radius="rounded">
-            <input type="text" placeholder="Rechercher une carte" data-css-input>
-            <div class="line" data-css-underline>
-              <div data-css-underline></div>
-            </div>
-            <span class="icofont-search-2" data-css-icofont></span>
-          </div>
-
-          <app-shared-interactive-list [list]="list"></app-shared-interactive-list>
-        </div>
-
-        <div class="container-2">
-          <img src="titre-carte.jpg" alt="" data-css-square>
-
-          <div class="title">
-            <h3 data-css-h3 data-css-font>titre carte</h3>
-          </div>
-
-          <div class="desc">
-            <p>decription carte</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-</main>
- -->
-
 <section>
   <ng-template #buttonTemplate>
     <div data-css-border-radius="rounded" data-css-text-bar data-css-important data-css-accent>
@@ -48,18 +13,18 @@
     <div class="box">
       <div class="grid">
         <div class="area-a">
-  
+          <app-shared-interactive-list-detailed [list]="list"></app-shared-interactive-list-detailed>
         </div>
   
         <div class="area-b">
           <p class="text" data-css-text data-css-font data-css-color>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quae alias omnis, quod delectus reiciendis atque repellat sequi! Nemo odio fuga harum id mollitia laboriosam ullam magnam distinctio dicta minus, natus voluptate voluptas doloribus libero perspiciatis, debitis corrupti necessitatibus sunt quisquam obcaecati facere voluptatibus suscipit, non laborum! Ad nulla, blanditiis exercitationem illo accusantium error, similique, ducimus quaerat possimus inventore nihil culpa alias tempore facilis. Officia, laborum dolores quibusdam laudantium molestiae vitae inventore dolorem, sint distinctio, itaque eius rerum ipsa eaque amet. Laborum incidunt omnis ipsum minima nisi eius similique sapiente dolores aut esse, possimus mollitia culpa quaerat officia laboriosam, voluptas doloribus?
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto mollitia adipisci nisi beatae, porro sapiente laudantium eius provident maxime praesentium perferendis dicta amet illo dolorem quia magnam numquam quasi incidunt odio iure. Explicabo adipisci doloribus voluptas earum facere, sequi sint molestias omnis quis ipsa vel, qui, animi perferendis dolorem nemo?
           </p>
         </div>
       </div>
     </div>
   </ng-template>
 
-  <app-view-page-list title="Aide : X" [buttonTemplate]="buttonTemplate"
-    [contentTemplate]="contentTemplate" [list]="false"></app-view-page-list>
+  <app-view-page-scroll title="Aide : X" [buttonTemplate]="buttonTemplate"
+    [contentTemplate]="contentTemplate" [list]="false"></app-view-page-scroll>
 </section>

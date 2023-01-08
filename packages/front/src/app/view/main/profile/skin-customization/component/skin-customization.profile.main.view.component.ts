@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core'
 
-import { ListInteractiveSharedModel } from 'src/app/shared/interactive/list/model/list.interactive.shared.model'
-import { ItemTabListInteractiveSharedModel } from 'src/app/shared/interactive/list/tab/item/model/item.tab.list.interactive.shared.model'
-import { TabListInteractiveSharedModel } from 'src/app/shared/interactive/list/tab/model/tab.list.interactive.shared.model'
+import { DetailedListInteractiveSharedModel } from 'src/app/shared/interactive/list/detailed/model/detailed.list.interactive.shared.model'
+import { TabDetailedListInteractiveSharedModel } from 'src/app/shared/interactive/list/detailed/tab/model/tab.detailed.list.interactive.shared.model'
+import { ItemSubTabTabDetailedListInteractiveSharedModel } from 'src/app/shared/interactive/list/detailed/tab/sub-tab/item/model/item.sub-tab.tab.detailed.list.interactive.shared.model'
+import { SubTabTabDetailedListInteractiveSharedModel } from 'src/app/shared/interactive/list/detailed/tab/sub-tab/model/sub-tab.tab.detailed.list.interactive.shared.model'
 
 @Component({
   selector: 'app-view-main-profile-skin-customization',
@@ -10,49 +11,55 @@ import { TabListInteractiveSharedModel } from 'src/app/shared/interactive/list/t
   styleUrls: ['./skin-customization.profile.main.view.component.scss']
 })
 export class SkinCustomizationProfileMainViewComponent implements OnInit {
-  list!: ListInteractiveSharedModel
+  list!: DetailedListInteractiveSharedModel
 
   ngOnInit(): void {
-    this.list = new ListInteractiveSharedModel()
-      .addTab(new TabListInteractiveSharedModel()
-        .setTitle("Hat")
-        .setIsIconOnly(true)
-        .addItem(new ItemTabListInteractiveSharedModel()
-          .setName("chapeau loup garou gris")
-          .setIsDisabled(false)
-          .setImgURL('https://m.gralon.net/medias-vignettes/articles/vignettes/le-loup-garou-un-personnage-de-legende-2252-700x700c.jpg'))
+    this.list = new DetailedListInteractiveSharedModel()
+      .addTab(new TabDetailedListInteractiveSharedModel()
+        .setTitle('Chapeau')
+        .addSubTab(new SubTabTabDetailedListInteractiveSharedModel()
+          .setTitle('Possédés')
+          .setIsIconOnly(true)
+          .addItem(new ItemSubTabTabDetailedListInteractiveSharedModel()
+            .setName('Chap1')
+            .setCount(0)
+            .setIsDisabled(false)
+            .setImgURL('https://m.gralon.net/medias-vignettes/articles/vignettes/le-loup-garou-un-personnage-de-legende-2252-700x700c.jpg')
+          )
+        )
+        .addSubTab(new SubTabTabDetailedListInteractiveSharedModel()
+          .setTitle('Non possédés')
+          .setIsIconOnly(true)
+          .addItem(new ItemSubTabTabDetailedListInteractiveSharedModel()
+            .setName('Chap2')
+            .setCount(0)
+            .setIsDisabled(false)
+            .setImgURL('https://m.gralon.net/medias-vignettes/articles/vignettes/le-loup-garou-un-personnage-de-legende-2252-700x700c.jpg')
+          )
+        )
       )
-      .addTab(new TabListInteractiveSharedModel()
-        .setTitle("Head")
-        .setIsIconOnly(true)
-        .addItem(new ItemTabListInteractiveSharedModel()
-          .setName("lunette loup garou gris")
-          .setIsDisabled(false)
-          .setImgURL('https://m.gralon.net/medias-vignettes/articles/vignettes/le-loup-garou-un-personnage-de-legende-2252-700x700c.jpg'))
-      )
-      .addTab(new TabListInteractiveSharedModel()
-        .setTitle("Top")
-        .setIsIconOnly(true)
-        .addItem(new ItemTabListInteractiveSharedModel()
-          .setName("haut loup garou gris")
-          .setIsDisabled(false)
-          .setImgURL('https://m.gralon.net/medias-vignettes/articles/vignettes/le-loup-garou-un-personnage-de-legende-2252-700x700c.jpg'))
-      )
-      .addTab(new TabListInteractiveSharedModel()
-        .setTitle("Pants")
-        .setIsIconOnly(true)
-        .addItem(new ItemTabListInteractiveSharedModel()
-          .setName("pants loup garou gris")
-          .setIsDisabled(false)
-          .setImgURL('https://m.gralon.net/medias-vignettes/articles/vignettes/le-loup-garou-un-personnage-de-legende-2252-700x700c.jpg'))
-      )
-      .addTab(new TabListInteractiveSharedModel()
-        .setTitle("Shoes")
-        .setIsIconOnly(true)
-        .addItem(new ItemTabListInteractiveSharedModel()
-          .setName("chaussures loup garou gris")
-          .setIsDisabled(false)
-          .setImgURL('https://m.gralon.net/medias-vignettes/articles/vignettes/le-loup-garou-un-personnage-de-legende-2252-700x700c.jpg'))
+      .addTab(new TabDetailedListInteractiveSharedModel()
+        .setTitle('Tête')
+        .addSubTab(new SubTabTabDetailedListInteractiveSharedModel()
+          .setTitle('Possédés')
+          .setIsIconOnly(true)
+          .addItem(new ItemSubTabTabDetailedListInteractiveSharedModel()
+            .setName('Chap1')
+            .setCount(0)
+            .setIsDisabled(false)
+            .setImgURL('https://m.gralon.net/medias-vignettes/articles/vignettes/le-loup-garou-un-personnage-de-legende-2252-700x700c.jpg')
+          )
+        )
+        .addSubTab(new SubTabTabDetailedListInteractiveSharedModel()
+          .setTitle('Non possédés')
+          .setIsIconOnly(true)
+          .addItem(new ItemSubTabTabDetailedListInteractiveSharedModel()
+            .setName('Chap1')
+            .setCount(10)
+            .setIsDisabled(false)
+            .setImgURL('https://m.gralon.net/medias-vignettes/articles/vignettes/le-loup-garou-un-personnage-de-legende-2252-700x700c.jpg')
+          )
+        )
       )
   }
 }

@@ -37,11 +37,7 @@
     }
 }
 
-.container.title .title-wrapper .title {
-    display: flex;
-}
-
-.container ::ng-deep .box {
+.container ::ng-deep > .box {
     display: flex;
     flex-direction: column;
     padding: property.get('borderLimit', 'regular');
@@ -51,34 +47,34 @@
     overflow-y: auto;
 }
 
-.container ::ng-deep .center {
+.container ::ng-deep > .box.center {
     align-items: center;
 }
 
-.container.title ::ng-deep .box {
+.container.title ::ng-deep > .box {
     padding-top: property.get('borderLimit', 'regular') + property.get('borderRadius', 'rounded');
 }
 
-.container ::ng-deep .box .field {
+.container ::ng-deep > .box > .field {
     display: flex;
     flex-direction: column;
 }
 
-.container ::ng-deep .box .field.column {
+.container ::ng-deep > .box > .field.column {
     row-gap: property.get('borderLimit', 'regular');
     align-items: center;
 }
 
-.container ::ng-deep .box .fix.left {
+.container ::ng-deep > .box .fix.left {
     margin-left: -1 * property.get('borderLimit', 'regular');
     width: calc(100% + property.get('borderLimit', 'regular'));
 }
 
-.container ::ng-deep .box .fix.right {
+.container ::ng-deep > .box .fix.right {
     width: calc(100% + property.get('borderLimit', 'regular'));
 }
 
-.container ::ng-deep .box .fix.left.right {
+.container ::ng-deep > .box .fix.left.right {
     margin-left: -1 * property.get('borderLimit', 'regular');
     width: calc(100% + property.get('borderLimit', 'regular') * 2);
 }

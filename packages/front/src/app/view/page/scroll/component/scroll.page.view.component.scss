@@ -41,6 +41,6 @@
   overflow-y: auto;
 }
 
-.wrapper .container-2.padding ::ng-deep .box {
+.wrapper .container-2.padding ::ng-deep > .box {
   padding: property.get('borderLimit', 'regular');
 }
