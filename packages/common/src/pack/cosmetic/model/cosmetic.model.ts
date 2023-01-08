@@ -15,7 +15,7 @@ export class CosmeticModel extends DocumentModel implements CosmeticInterface {
 
     @Expose()
     @prop({ required: true })
-    gamePointPrice!: string
+    gamePointPrice!: number
 
     @Expose()
     @prop({ required: true })

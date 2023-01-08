@@ -1,10 +1,10 @@
 import { EmitOnFail, EmitOnSuccess, OnConnect, OnDisconnect, OnMessage, SkipEmitOnEmptyResult, SocketController, SocketIO } from 'ts-socket.io-controller'
 
 @SocketController({
-    namespace: '/main/games',
+    namespace: '/game/currently',
     init: () => {}
 })
-export class GamesMainController {
+export class CurrentlyGameController {
     @OnConnect()
     connection() {
         console.log('client connected');

@@ -2,7 +2,7 @@ import { DocumentType } from '@typegoose/typegoose'
 import { VerifiedCallback } from 'passport-jwt'
 import { use } from 'passport'
 
-import { UserNotFoundPassportError } from '../../error/user-not-found.passport.error'
+import { NotFoundUserError } from '../../../user/error/not-found.user.error'
 import { AccessDeniedScopePassportError } from '../error/access-denied.scope.passport.error'
 
 import { EnvUtil } from '../../../env/util/env.util'
@@ -31,7 +31,7 @@ export class ScopeJWTPassportUtil {
                 return done(new AccessDeniedScopePassportError, false)
 
             let user: DocumentType<UserModel> = await UserModelDocument.getUserByToken(payload.sub) as DocumentType<UserModel>
-            if (!user) done(new UserNotFoundPassportError, false)
+            if (!user) done(new NotFoundUserError, false)
 
             return done(null, user)
         }))
