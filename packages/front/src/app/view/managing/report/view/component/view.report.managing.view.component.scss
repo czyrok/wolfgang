@@ -4,7 +4,11 @@ section {
     height: 100%;
 }
 
-section .grid {
+section .box {
+    height: 100%;
+}
+
+section .box .grid {
     height: 100%;
     display: grid;
     grid-template-areas:
@@ -16,23 +20,17 @@ section .grid {
     column-gap: property.get('borderLimit', 'big');
 }
 
-section .grid .area-a {
+section .box .grid .area-a {
     display: flex;
     align-items: center;
     column-gap: 20px;
     grid-area: a;
 }
 
-section .grid .area-b {
+section .box .grid .area-b {
     grid-area: b;
 }
 
-section .grid .area-c {
+section .box .grid .area-c {
     grid-area: c;
-}
-
-.chat{
-  width: 200px;
-  height: 100%;
-  background-color: yellow;
 }

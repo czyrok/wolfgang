@@ -1,3 +1,7 @@
+<ng-template #titleTemplate>
+  <h2 data-css-h2 data-css-font data-css-color data-css-dark data-css-accent>{{ title }}</h2>
+</ng-template>
+
 <ng-template #contentTemplate>
   <div class="box">
     <div class="wrapper">
@@ -11,4 +15,4 @@
   </div>
 </ng-template>
 
-<app-shared-item-form [contentTemplate]="contentTemplate" [aside]="true"></app-shared-item-form>
+<app-shared-item-form [titleTemplate]="title !== undefined ? titleTemplate : undefined" [contentTemplate]="contentTemplate" [aside]="true"></app-shared-item-form>

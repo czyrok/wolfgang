@@ -1,30 +1,37 @@
 <section>
   <ng-template #buttonTemplate>
     <app-shared-interactive-button text="Annuler" [important]="true"></app-shared-interactive-button>
-    <app-shared-interactive-button text="Sanctioner" [accent]="true" [important]="true"></app-shared-interactive-button>
+    <app-shared-interactive-button text="Sanctionner" [accent]="true" [important]="true"></app-shared-interactive-button>
   </ng-template>
 
   <ng-template #contentTemplate>
+    <div class="lines-container all">
+      <app-shared-user-line-profile></app-shared-user-line-profile>
+    </div>
+
     <div class="box">
       <div class="grid">
         <div class="area-a">
-          <app-shared-label text="Type"></app-shared-label>
           <app-shared-label text="10" icofont="thumbs-up"></app-shared-label>
           <app-shared-label text="3" icofont="thumbs-down"></app-shared-label>
+
+          <app-shared-alert-text icofont="flag" text="Type"></app-shared-alert-text>
         </div>
 
         <div class="area-b">
-          <p>Description</p>
+          <p data-css-text data-css-font data-css-color>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quos ducimus id earum? A facere non ut dicta distinctio rerum quasi, incidunt est sint asperiores, nostrum enim ex quidem dolor nisi, id quod? Aperiam, voluptates? Veniam, esse. Beatae amet adipisci quod.
+          </p>
         </div>
 
         <div class="area-c">
-          <div class="chat"></div>
+          <app-shared-chat title="Retranscription du chat"></app-shared-chat>
         </div>
       </div>
     </div>
   </ng-template>
 
 
-  <app-view-page-scroll title="Signalement : X" [buttonTemplate]="buttonTemplate" [contentTemplate]="contentTemplate"
+  <app-view-page-scroll title="Signalement : X (date ?)" [buttonTemplate]="buttonTemplate" [contentTemplate]="contentTemplate"
     [list]="false"></app-view-page-scroll>
 </section>

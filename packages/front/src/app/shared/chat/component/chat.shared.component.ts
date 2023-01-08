@@ -1,5 +1,4 @@
-import { Component } from '@angular/core'
-
+import { Component, Input } from '@angular/core'
 
 @Component({
   selector: 'app-shared-chat',
@@ -7,5 +6,5 @@ import { Component } from '@angular/core'
   styleUrls: ['./chat.shared.component.scss']
 })
 export class ChatSharedComponent {
-
+  @Input() title!: string
 }

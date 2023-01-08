@@ -6,7 +6,7 @@ import { Component, Input, TemplateRef } from '@angular/core'
   styleUrls: ['./form.item.shared.component.scss']
 })
 export class FormItemSharedComponent {
-  @Input() titleTemplate!: TemplateRef<any>
+  @Input() titleTemplate: TemplateRef<any> | undefined
   @Input() contentTemplate!: TemplateRef<any>
 
   @Input() aside: boolean = false
