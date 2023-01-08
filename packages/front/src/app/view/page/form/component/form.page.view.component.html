@@ -1,3 +1,7 @@
 <div class="wrapper">
-  <app-shared-item-form [title]="title" [contentTemplate]="formTemplate" [aside]="true"></app-shared-item-form>
+  <ng-template #titleTemplate>
+    <h1 data-css-h1 data-css-font data-css-color data-css-dark data-css-accent>{{ title }}</h1>
+  </ng-template>
+
+  <app-shared-item-form [title]="title" [titleTemplate]="titleTemplate" [contentTemplate]="formTemplate" [aside]="true"></app-shared-item-form>
 </div>

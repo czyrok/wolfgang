@@ -1,26 +1,7 @@
-@use '../list-detailed.interactive.shared.scss';
-
 @use '../../../../../scss/lib/property';
-@use '../../../../../scss/lib/color';
 
-@use '~scss-toolkit/src/mixin/theme';
-
-.container {
-  width: 100%;
-  height: 100%;
-  border-radius: property.get('borderRadius', 'regular');
-  padding: property.get('borderLimit', 'regular');
-  box-sizing: border-box;
-  display: grid;
-  grid-template-areas: 'a'
-    'b';
-
-  @include theme.themeHandler(true, 'isolatedElement') {
-    background-color: theme.get('background');
-  }
-}
-
-.container .tab {
+.top {
   display: flex;
-  justify-content: space-between;
+  width: 100%;
+  column-gap: property.get('borderLimit', 'big');
 }

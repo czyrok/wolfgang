@@ -1,5 +1,5 @@
 <div class="container" *ngIf="tab.visibility">
-  <div class="subTab" *ngFor="let subTab of tab.subTabList">
+  <div class="tab" *ngFor="let subTab of tab.subTabList">
     <app-shared-interactive-list-detailed-tab-sub-tab [subTab]="subTab"></app-shared-interactive-list-detailed-tab-sub-tab>
   </div>
 </div>

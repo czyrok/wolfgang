@@ -9,10 +9,10 @@ section {
 }
 
 section .box .grid {
-  height: 100%;
   display: grid;
   grid-template-areas: 'a b';
   grid-template-columns: 1fr 1fr;
+  grid-template-rows: 100%;
   row-gap: property.get('borderLimit', 'big');
   column-gap: property.get('borderLimit', 'big');
 }

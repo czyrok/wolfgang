@@ -1,20 +1,4 @@
-@use '../../../list-detailed.interactive.shared.scss';
-
 @use '../../../../../../../scss/lib/property';
-
-@use '~scss-toolkit/src/mixin/theme';
-
-.container {
-  padding: property.get('borderLimit', 'regular');
-}
-
-.container .top {
-  display: grid;
-  grid-template-areas: 'a b';
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  cursor: pointer;
-}
 
 .container:not(.icon-only) .items {
   display: flex;

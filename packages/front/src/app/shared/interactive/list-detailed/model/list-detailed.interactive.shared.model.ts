@@ -5,10 +5,13 @@ import { TabListDetailedInteractiveSharedModel } from "../tab/model/tab.list-det
 export class ListDetailedInteractiveSharedModel {
     private _tabList: Array<TabListDetailedInteractiveSharedModel> = new Array()
     private _visibilityEvent: EventEmitter<string> = new EventEmitter
-    private _currentTab: string = ''
 
     public get tabList(): Array<TabListDetailedInteractiveSharedModel> {
         return this._tabList
+    }
+
+    public get visibilityEvent(): EventEmitter<string> {
+        return this._visibilityEvent
     }
 
     public addTab(value: TabListDetailedInteractiveSharedModel): this {
@@ -18,9 +21,4 @@ export class ListDetailedInteractiveSharedModel {
 
         return this
     }
-
-    public get visibilityEvent(): EventEmitter<string> {
-        return this._visibilityEvent
-    }
-
 }

@@ -1,7 +1,0 @@
-@use '../../../../scss/lib/property';
-
-.wrapper {
-  padding: property.get('borderLimit', 'regular');
-  box-sizing: border-box;
-  height: 100%;
-}

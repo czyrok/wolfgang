@@ -3,34 +3,11 @@ import { ItemSubTabTabListDetailedInteractiveSharedModel } from "../item/model/i
 
 export class SubTabTabListDetailedInteractiveSharedModel {
   private _title: string = ''
-  private _visibility: boolean = false
   private _isIconOnly: boolean = false
   private _itemList: Array<ItemSubTabTabListDetailedInteractiveSharedModel> = new Array()
 
-  public setTitle(value: string): this {
-    this._title = value
-
-    return this
-  }
-
-  public setVisibility(value: boolean): this {
-    this._visibility = value
-
-    return this
-  }
-
-  public setIsIconOnly(value: boolean): this {
-    this._isIconOnly = value
-
-    return this
-  }
-
   public get title(): string {
     return this._title
-  }
-
-  public get visibility(): boolean {
-    return this._visibility
   }
 
   public get isIconOnly(): boolean {
@@ -39,6 +16,18 @@ export class SubTabTabListDetailedInteractiveSharedModel {
 
   public get itemList(): Array<ItemSubTabTabListDetailedInteractiveSharedModel> {
     return this._itemList
+  }
+
+  public setTitle(value: string): this {
+    this._title = value
+
+    return this
+  }
+
+  public setIsIconOnly(value: boolean): this {
+    this._isIconOnly = value
+
+    return this
   }
 
   public addItem(value: ItemSubTabTabListDetailedInteractiveSharedModel): this {

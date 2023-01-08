@@ -1,6 +1,7 @@
-<div class="container {{ aside ? 'aside' : '' }} {{ title !== undefined ? 'title': '' }}">
-  <div *ngIf="title !== undefined" class="title-wrapper">
-    <h1 class="title" data-css-h1 data-css-font data-css-color data-css-dark data-css-accent>{{ title }}</h1>
+<div class="container {{ aside ? 'aside' : '' }} {{ titleTemplate !== undefined ? 'title': '' }}">
+  <div *ngIf="titleTemplate !== undefined" class="title-wrapper">
+    <ng-container *ngTemplateOutlet="titleTemplate">
+    </ng-container>
   </div>
 
   <ng-container *ngTemplateOutlet="contentTemplate">

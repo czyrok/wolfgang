@@ -15,5 +15,5 @@ export class ListDetailedInteractiveSharedComponent implements AfterViewInit {
     this.list.visibilityEvent.emit(title)
   }
 
-  @Input() list!: ListDetailedInteractiveSharedModel;
+  @Input() list!: ListDetailedInteractiveSharedModel
 }

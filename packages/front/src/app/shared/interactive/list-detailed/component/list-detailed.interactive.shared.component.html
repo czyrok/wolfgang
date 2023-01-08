@@ -1,12 +1,19 @@
-<div class="container">
-  <div class="tab">
-    <div *ngFor="let tab of list.tabList">
-      <h3 (click)="changeTab(tab.title)">{{ tab.title }}</h3>
+<ng-template #topTemplate>
+  <div class="top">
+    <ng-container *ngFor="let tab of list.tabList">
+      <app-shared-interactive-button [text]="tab.title" [active]="tab.visibility" (click)="changeTab(tab.title)"></app-shared-interactive-button>
+    </ng-container>
+  </div>
+</ng-template>
+
+<ng-template #contentTemplate>
+  <div class="box">
+    <div>
+      <ng-container *ngFor="let tab of list.tabList">
+        <app-shared-interactive-list-detailed-tab [tab]="tab"></app-shared-interactive-list-detailed-tab>
+      </ng-container>
     </div>
   </div>
-  <div>
-    <div *ngFor="let tab of list.tabList">
-      <app-shared-interactive-list-detailed-tab [tab]="tab"></app-shared-interactive-list-detailed-tab>
-    </div>
-  </div>
-</div>
+</ng-template>
+
+<app-shared-item-form [titleTemplate]="topTemplate" [contentTemplate]="contentTemplate"></app-shared-item-form>

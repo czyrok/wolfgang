@@ -1,8 +1,7 @@
-<div class="container">
-  <div class="tab">
-  </div>
-  <h3>{{ subTab.title }}</h3>
-  <div class="subTab" *ngFor="let item of subTab.itemList">
-    <app-shared-interactive-list-detailed-tab-sub-tab-item [item]="item"></app-shared-interactive-list-detailed-tab-sub-tab-item>
+<div class="container {{ subTab.isIconOnly ? 'icon-only' : '' }}">
+  <h3 data-css-h3 data-css-font data-css-color>{{ subTab.title }}</h3>
+
+  <div class="items" *ngFor="let item of subTab.itemList">
+    <app-shared-interactive-list-detailed-tab-sub-tab-item [item]="item" [isIconOnly]="subTab.isIconOnly"></app-shared-interactive-list-detailed-tab-sub-tab-item>
   </div>
 </div>
