@@ -1,3 +1,38 @@
-section .box .text {
-  text-align: justify;
+@use '../../../../../../scss/lib/property';
+
+section {
+    height: 100%;
+}
+
+section .grid {
+    height: 100%;
+    display: grid;
+    grid-template-areas:
+        'a c'
+        'b c';
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto 1fr;
+    row-gap: property.get('borderLimit', 'big');
+    column-gap: property.get('borderLimit', 'big');
+}
+
+section .grid .area-a {
+    display: flex;
+    align-items: center;
+    column-gap: 20px;
+    grid-area: a;
+}
+
+section .grid .area-b {
+    grid-area: b;
+}
+
+section .grid .area-c {
+    grid-area: c;
+}
+
+.chat{
+  width: 200px;
+  height: 100%;
+  background-color: yellow;
 }
