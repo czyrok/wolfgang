@@ -30,7 +30,7 @@
     border-bottom-left-radius: property.get('borderRadius', 'rounded');
     border-bottom-right-radius: property.get('borderRadius', 'rounded');
     margin-bottom: -1 * property.get('borderRadius', 'rounded');
-    z-index: 1;
+    z-index: 0;
 
     @include theme.themeHandler(false, 'containerElement2', 'top') {
         background-color: theme.get('background');
