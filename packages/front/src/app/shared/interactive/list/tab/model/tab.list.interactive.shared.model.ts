@@ -5,7 +5,23 @@ export class TabListInteractiveSharedModel {
   private _title: string = ''
   private _visibility: boolean = false
   private _isIconOnly: boolean = false
-  private _itemList: Array<ItemTabListInteractiveSharedModel> = new Array()
+  private _itemList: Array<ItemTabListInteractiveSharedModel> = new Array
+
+  public get title(): string {
+    return this._title
+  }
+
+  public get visibility(): boolean {
+    return this._visibility
+  }
+
+  public get isIconOnly(): boolean {
+    return this._isIconOnly
+  }
+
+  public get itemList(): Array<ItemTabListInteractiveSharedModel> {
+    return this._itemList
+  }
 
   public setTitle(value: string): this {
     this._title = value
@@ -23,22 +39,6 @@ export class TabListInteractiveSharedModel {
     this._isIconOnly = value
 
     return this
-  }
-
-  public get title(): string {
-    return this._title
-  }
-
-  public get visibility(): boolean {
-    return this._visibility
-  }
-
-  public get isIconOnly(): boolean {
-    return this._isIconOnly
-  }
-
-  public get itemList(): Array<ItemTabListInteractiveSharedModel> {
-    return this._itemList
   }
 
   public addItem(value: ItemTabListInteractiveSharedModel): this {

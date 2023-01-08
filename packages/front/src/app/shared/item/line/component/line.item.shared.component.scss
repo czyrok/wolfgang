@@ -24,6 +24,14 @@
     }
 }
 
+::ng-deep .lines-container:not(.all) :has(.line):nth-child(2n - 1) .line {
+    box-shadow: property.get('shadow', 'box', 'lite');
+
+    @include theme.themeHandler(false, 'containerElement2') {
+        background-color: theme.get('background');
+    }
+}
+
 .line::before {
     content: ' ';
     position: absolute;
@@ -43,16 +51,8 @@
     transform-origin: bottom left;
 }
 
-.line ::ng-deep .field {
+.line ::ng-deep > .field {
     display: flex;
     column-gap: property.get('borderLimit', 'big');
     align-items: center;
-}
-
-::ng-deep .lines-container:not(.all) :has(.line):nth-child(2n - 1) .line {
-    box-shadow: property.get('shadow', 'box', 'lite');
-
-    @include theme.themeHandler(false, 'containerElement2') {
-        background-color: theme.get('background');
-    }
 }

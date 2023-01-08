@@ -10,7 +10,7 @@ section .grid {
     grid-template-areas:
         'a c'
         'b c';
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 2fr 1fr;
     grid-template-rows: auto 1fr;
     row-gap: property.get('borderLimit', 'big');
     column-gap: property.get('borderLimit', 'big');
@@ -22,6 +22,7 @@ section .grid .area-a {
 
 section .grid .area-b {
     grid-area: b;
+    overflow: hidden;
 }
 
 section .grid .area-c {
