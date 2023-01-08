@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, Input } from '@angular/core'
-import { ListInteractiveSharedModel } from '../model/list.interactive.shared.model';
+import { ListInteractiveSharedModel } from '../model/list.interactive.shared.model'
 
 @Component({
   selector: 'app-shared-interactive-list',

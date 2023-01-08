@@ -1,11 +1,9 @@
-import { Component } from '@angular/core';
-import { ListDetailedInteractiveSharedModel } from 'src/app/shared/interactive/list-detailed/model/list-detailed.interactive.shared.model';
-import { TabListDetailedInteractiveSharedModel } from 'src/app/shared/interactive/list-detailed/tab/model/tab.list-detailed.interactive.shared.model';
-import { ItemSubTabTabListDetailedInteractiveSharedModel } from 'src/app/shared/interactive/list-detailed/tab/sub-tab/item/model/item.sub-tab.tab.list-detailed.interactive.shared.model';
-import { SubTabTabListDetailedInteractiveSharedModel } from 'src/app/shared/interactive/list-detailed/tab/sub-tab/model/sub-tab.tab.list-detailed.interactive.shared.model';
-import { ListInteractiveSharedModel } from 'src/app/shared/interactive/list/model/list.interactive.shared.model'
-import { ItemTabListInteractiveSharedModel } from 'src/app/shared/interactive/list/tab/item/model/item.tab.list.interactive.shared.model'
-import { TabListInteractiveSharedModel } from 'src/app/shared/interactive/list/tab/model/tab.list.interactive.shared.model'
+import { Component } from '@angular/core'
+
+import { DetailedListInteractiveSharedModel } from 'src/app/shared/interactive/list/detailed/model/detailed.list.interactive.shared.model'
+import { TabDetailedListInteractiveSharedModel } from 'src/app/shared/interactive/list/detailed/tab/model/tab.detailed.list.interactive.shared.model'
+import { ItemSubTabTabDetailedListInteractiveSharedModel } from 'src/app/shared/interactive/list/detailed/tab/sub-tab/item/model/item.sub-tab.tab.detailed.list.interactive.shared.model'
+import { SubTabTabDetailedListInteractiveSharedModel } from 'src/app/shared/interactive/list/detailed/tab/sub-tab/model/sub-tab.tab.detailed.list.interactive.shared.model'
 
 @Component({
   selector: 'app-view-main',
@@ -13,62 +11,62 @@ import { TabListInteractiveSharedModel } from 'src/app/shared/interactive/list/t
   styleUrls: ['./help.main.view.component.scss']
 })
 export class HelpMainViewComponent {
-  list!: ListDetailedInteractiveSharedModel
+  list!: DetailedListInteractiveSharedModel
 
   ngOnInit(): void {
-    this.list = new ListDetailedInteractiveSharedModel()
-      .addTab(new TabListDetailedInteractiveSharedModel()
+    this.list = new DetailedListInteractiveSharedModel()
+      .addTab(new TabDetailedListInteractiveSharedModel()
         .setTitle('Gentil')
-        .addSubTab(new SubTabTabListDetailedInteractiveSharedModel()
+        .addSubTab(new SubTabTabDetailedListInteractiveSharedModel()
           .setTitle('Carte de base')
           .setIsIconOnly(true)
-          .addItem(new ItemSubTabTabListDetailedInteractiveSharedModel()
+          .addItem(new ItemSubTabTabDetailedListInteractiveSharedModel()
             .setName('Loup garou')
             .setImgURL('https://m.gralon.net/medias-vignettes/articles/vignettes/le-loup-garou-un-personnage-de-legende-2252-700x700c.jpg')
           )
         )
-        .addSubTab(new SubTabTabListDetailedInteractiveSharedModel()
+        .addSubTab(new SubTabTabDetailedListInteractiveSharedModel()
           .setTitle('Carte de joueurs')
           .setIsIconOnly(true)
-          .addItem(new ItemSubTabTabListDetailedInteractiveSharedModel()
+          .addItem(new ItemSubTabTabDetailedListInteractiveSharedModel()
             .setName('Loup garou')
             .setImgURL('https://m.gralon.net/medias-vignettes/articles/vignettes/le-loup-garou-un-personnage-de-legende-2252-700x700c.jpg')
           )
         )
       )
-      .addTab(new TabListDetailedInteractiveSharedModel()
+      .addTab(new TabDetailedListInteractiveSharedModel()
         .setTitle('Méchant')
-        .addSubTab(new SubTabTabListDetailedInteractiveSharedModel()
+        .addSubTab(new SubTabTabDetailedListInteractiveSharedModel()
           .setTitle('Carte de base')
           .setIsIconOnly(true)
-          .addItem(new ItemSubTabTabListDetailedInteractiveSharedModel()
+          .addItem(new ItemSubTabTabDetailedListInteractiveSharedModel()
             .setName('Loup garou')
             .setImgURL('https://m.gralon.net/medias-vignettes/articles/vignettes/le-loup-garou-un-personnage-de-legende-2252-700x700c.jpg')
           )
         )
-        .addSubTab(new SubTabTabListDetailedInteractiveSharedModel()
+        .addSubTab(new SubTabTabDetailedListInteractiveSharedModel()
           .setTitle('Carte de joueurs')
           .setIsIconOnly(true)
-          .addItem(new ItemSubTabTabListDetailedInteractiveSharedModel()
+          .addItem(new ItemSubTabTabDetailedListInteractiveSharedModel()
             .setName('Loup garou')
             .setImgURL('https://m.gralon.net/medias-vignettes/articles/vignettes/le-loup-garou-un-personnage-de-legende-2252-700x700c.jpg')
           )
         )
       )
-      .addTab(new TabListDetailedInteractiveSharedModel()
+      .addTab(new TabDetailedListInteractiveSharedModel()
         .setTitle('Autre')
-        .addSubTab(new SubTabTabListDetailedInteractiveSharedModel()
+        .addSubTab(new SubTabTabDetailedListInteractiveSharedModel()
           .setTitle('Carte de base')
           .setIsIconOnly(true)
-          .addItem(new ItemSubTabTabListDetailedInteractiveSharedModel()
+          .addItem(new ItemSubTabTabDetailedListInteractiveSharedModel()
             .setName('Loup garou')
             .setImgURL('https://m.gralon.net/medias-vignettes/articles/vignettes/le-loup-garou-un-personnage-de-legende-2252-700x700c.jpg')
           )
         )
-        .addSubTab(new SubTabTabListDetailedInteractiveSharedModel()
+        .addSubTab(new SubTabTabDetailedListInteractiveSharedModel()
           .setTitle('Carte de joueurs')
           .setIsIconOnly(true)
-          .addItem(new ItemSubTabTabListDetailedInteractiveSharedModel()
+          .addItem(new ItemSubTabTabDetailedListInteractiveSharedModel()
             .setName('Loup garou')
             .setImgURL('https://m.gralon.net/medias-vignettes/articles/vignettes/le-loup-garou-un-personnage-de-legende-2252-700x700c.jpg')
           )

@@ -1,10 +1,9 @@
-import { ItemSubTabTabListDetailedInteractiveSharedModel } from "../item/model/item.sub-tab.tab.list-detailed.interactive.shared.model"
+import { ItemSubTabTabDetailedListInteractiveSharedModel } from '../item/model/item.sub-tab.tab.detailed.list.interactive.shared.model'
 
-
-export class SubTabTabListDetailedInteractiveSharedModel {
+export class SubTabTabDetailedListInteractiveSharedModel {
   private _title: string = ''
   private _isIconOnly: boolean = false
-  private _itemList: Array<ItemSubTabTabListDetailedInteractiveSharedModel> = new Array()
+  private _itemList: Array<ItemSubTabTabDetailedListInteractiveSharedModel> = new Array
 
   public get title(): string {
     return this._title
@@ -14,7 +13,7 @@ export class SubTabTabListDetailedInteractiveSharedModel {
     return this._isIconOnly
   }
 
-  public get itemList(): Array<ItemSubTabTabListDetailedInteractiveSharedModel> {
+  public get itemList(): Array<ItemSubTabTabDetailedListInteractiveSharedModel> {
     return this._itemList
   }
 
@@ -30,7 +29,7 @@ export class SubTabTabListDetailedInteractiveSharedModel {
     return this
   }
 
-  public addItem(value: ItemSubTabTabListDetailedInteractiveSharedModel): this {
+  public addItem(value: ItemSubTabTabDetailedListInteractiveSharedModel): this {
     this._itemList.push(value)
 
     return this

@@ -5,7 +5,6 @@ import { RouterModule } from '@angular/router'
 
 import { ButtonInteractiveSharedModule } from './button/button.interactive.shared.component'
 import { ListInteractiveSharedModule } from './list/list.interactive.shared.module'
-import { ListDetailedInteractiveSharedModule } from './list-detailed/list-detailed.interactive.shared.module'
 
 import { TextBarInteractiveSharedComponent } from './text-bar/component/text-bar.interactive.shared.component'
 
@@ -18,13 +17,11 @@ import { TextBarInteractiveSharedComponent } from './text-bar/component/text-bar
         RouterModule,
         FormsModule,
         ButtonInteractiveSharedModule,
-        ListInteractiveSharedModule,
-        ListDetailedInteractiveSharedModule
+        ListInteractiveSharedModule
     ],
     exports: [
         ButtonInteractiveSharedModule,
         ListInteractiveSharedModule,
-        ListDetailedInteractiveSharedModule,
         TextBarInteractiveSharedComponent
     ]
 })

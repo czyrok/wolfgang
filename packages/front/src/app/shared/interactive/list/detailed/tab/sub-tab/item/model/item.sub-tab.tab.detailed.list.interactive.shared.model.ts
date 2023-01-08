@@ -1,4 +1,4 @@
-export class ItemTabListInteractiveSharedModel {
+export class ItemSubTabTabDetailedListInteractiveSharedModel {
   private _name: string = ''
   private _callBack: () => void = () => { }
   private _isDisabled: boolean = true
