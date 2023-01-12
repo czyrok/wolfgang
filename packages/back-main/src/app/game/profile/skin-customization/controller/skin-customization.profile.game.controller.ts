@@ -2,7 +2,6 @@ import { EmitOnFail, EmitOnSuccess, MessageBody, OnConnect, OnDisconnect, OnMess
 import { DocumentType } from '@typegoose/typegoose'
 import { CosmeticModelDocument, SkinUserModel, NotEnoughGamePointUserError, UserModel, NotFoundUserError, UserModelDocument, PurchaseCosmeticModelDocument, CosmeticModel } from 'common'
 
-
 @SocketController({
     namespace: '/game/profile/Skin-customization',
     init: () => { }

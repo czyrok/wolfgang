@@ -1,8 +1,8 @@
-import { EnvUtil, VarEnvEnum, JWTHelper } from 'common'
 import { EmitOnFail, SocketRequest, OnConnect, OnDisconnect, OnMessage, SocketController, EmitOnSuccess } from 'ts-socket.io-controller'
+import { EnvUtil, VarEnvEnum, JWTHelper } from 'common'
 
 @SocketController({
-    namespace: '/home/log-in/:username',
+    namespace: '/home/log-in',
     init: () => {}
 })
 export class LogInHomeController {

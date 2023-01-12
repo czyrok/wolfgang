@@ -1,8 +1,5 @@
-// Behavior must be loaded before loop item 
-// @index(['./**/*.ts', '!./build.ts'], f => `export * from '${f.path}'`)
-export * from './build/config/build.config'
-export * from './build/config/interface/config.build.interface'
-export * from './build/script/build.script'
+// Behavior must be loaded before loop item
+// @index(['./**/*.ts', '!./build/**'], f => `export * from '${f.path}'`)
 export * from './pack/alert/type/enum/type.alert.enum'
 export * from './pack/chained-list/iterator/interface/iterator.chained-list.interface'
 export * from './pack/cosmetic/interface/cosmetic.interface'
@@ -142,4 +139,3 @@ export * from './pack/user/skin/model/skin.user.model'
 export * from './pack/user/token/interface/token.user.interface'
 export * from './pack/user/token/model/token.user.model'
 // @endindex
-import {} from './build/script/build.script'
