@@ -41,7 +41,7 @@ export class UserModel extends DocumentModel implements UserInterface {
     }
 
     public static async getUserByToken(this: ReturnModelType<typeof UserModel>, tokenId: string): Promise<DocumentType<UserModel> | null> {
-        return await this.findById(tokenId).populate('user').exec()
+        return await this.findById(tokenId).exec()
     }
 }
 

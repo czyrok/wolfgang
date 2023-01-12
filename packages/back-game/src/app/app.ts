@@ -2,7 +2,6 @@ import http from 'http'
 import { connect } from 'mongoose'
 import { Server } from 'socket.io'
 import { SocketIoController } from 'ts-socket.io-controller'
-import { config } from 'dotenv'
 import { LogUtil, LogHelper, TypeLogEnum, EnvUtil, VarEnvEnum } from 'common'
 
 import { GameController } from './game/controller/game.controller'
@@ -19,10 +18,10 @@ async function run(): Promise<void> {
 
     LogUtil.logger(TypeLogEnum.APP).trace('App started')
 
-    await connect('mongodb://localhost:60017/wolfgang', {
-        authSource: 'admin',
-        user: 'admin',
-        pass: 'pass'
+    await connect(`mongodb://${EnvUtil.get(VarEnvEnum.DB_URL)}:${EnvUtil.get(VarEnvEnum.DB_PORT)}/wolfgang`, {
+        authSource: EnvUtil.get(VarEnvEnum.DB_USER),
+        user: EnvUtil.get(VarEnvEnum.DB_USER),
+        pass: EnvUtil.get(VarEnvEnum.DB_PW)
     })
 
     LogUtil.logger(TypeLogEnum.APP).trace('Database connection initialized')

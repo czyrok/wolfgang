@@ -1,10 +1,5 @@
-<<<<<<< Updated upstream
-// Behavior must be loaded before loop item 
-// @index(['./**/*.ts', '!./build.ts'], f => `export * from '${f.path}'`)
-=======
 // Behavior must be loaded before loop item
 // @index(['./**/*.ts', '!./build/**'], f => `export * from '${f.path}'`)
->>>>>>> Stashed changes
 export * from './pack/alert/type/enum/type.alert.enum'
 export * from './pack/chained-list/iterator/interface/iterator.chained-list.interface'
 export * from './pack/cosmetic/interface/cosmetic.interface'
@@ -38,7 +33,6 @@ export * from './pack/game/context/next/type/next.context.game.type'
 export * from './pack/game/context/res/model/res.context.game.model'
 export * from './pack/game/context/res/type/res.context.game.type'
 export * from './pack/game/context/res/waiting/model/waiting.res.context.game.model'
-export * from './pack/game/distribution/random/error/count.random.distribution.game.error'
 export * from './pack/game/distribution/random/model/random.distribution.game.model'
 export * from './pack/game/distribution/setup/interface/setup.distribution.game.interface'
 export * from './pack/game/executor/model/executor.game.model'
@@ -87,6 +81,7 @@ export * from './pack/game/player/vote/handler/model/handler.vote.player.game.mo
 export * from './pack/game/player/vote/model/vote.player.game.model'
 export * from './pack/game/player/vote/type/enum/type.vote.player.game.enum'
 export * from './pack/game/rules/card/choosing/model/card-choosing.rules.model'
+export * from './pack/game/rules/card/error/count.card.rules.game.error'
 export * from './pack/game/rules/model/rules.game.model'
 export * from './pack/game/set/result/model/result.set.model'
 export * from './pack/game/set/result/type/result.set.game.type'
@@ -100,7 +95,6 @@ export * from './pack/log/util/log.util'
 export * from './pack/model/document.model'
 export * from './pack/param/map/key-not-found/error/key-not-found.map.param.error'
 export * from './pack/param/map/model/map.param.model'
-export * from './pack/passport/error/user-not-found.passport.error'
 export * from './pack/passport/local/error/password-invalid.local.passport.error'
 export * from './pack/passport/local/helper/local.passport.helper'
 export * from './pack/passport/local/middleware/local.passport.middleware'
@@ -125,6 +119,8 @@ export * from './pack/report/user/other/model/other.user.report.model'
 export * from './pack/report/user/type/enum/type.user.report.enum'
 export * from './pack/user/cards-proposal/interface/cards-proposal.user.interface'
 export * from './pack/user/cards-proposal/model/cards-proposal.user.model'
+export * from './pack/user/error/not-enough-game-point.user.error'
+export * from './pack/user/error/not-found.user.error'
 export * from './pack/user/friend-request/acceptation-type/enum/acceptation-type.friend-request.user.enum'
 export * from './pack/user/friend-request/interface/friend-request.user.interface'
 export * from './pack/user/friend-request/model/friend-request.user.model'

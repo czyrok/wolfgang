@@ -1,4 +1,4 @@
-import { CountRandomDistributionGameError } from '../error/count.random.distribution.game.error'
+import { CountCardRulesGameError } from '../../../rules/card/error/count.card.rules.game.error'
 
 import { LogUtil } from '../../../../log/util/log.util'
 
@@ -15,7 +15,7 @@ import { TypeCardGameEnum } from '../../../card/type/enum/type.card.game.enum'
 
 export class RandomDistributionGameModel {
     public async processing(choices: Array<CardChoosingRulesModel>, players: Array<PlayerGameModel>): Promise<void> {
-        this.verifyCount(choices, players).catch((error: CountRandomDistributionGameError) => {
+        this.verifyCount(choices, players).catch((error: CountCardRulesGameError) => {
             throw error
         })
 
@@ -25,7 +25,7 @@ export class RandomDistributionGameModel {
         for (let player of players) {
             let cardtype: TypeCardGameEnum | undefined = cardTypes.pop()
 
-            if (cardtype === undefined) throw new CountRandomDistributionGameError
+            if (cardtype === undefined) throw new CountCardRulesGameError
 
             let card: CardGameModel = FactoryCardGameModel.instance.get(cardtype)
 
@@ -46,7 +46,7 @@ export class RandomDistributionGameModel {
 
         for (let choice of choices) count += choice.count
 
-        if (count != players.length) throw new CountRandomDistributionGameError
+        if (count != players.length) throw new CountCardRulesGameError
     }
 
     private getCardTypesAvailable(choices: Array<CardChoosingRulesModel>): Array<TypeCardGameEnum> {

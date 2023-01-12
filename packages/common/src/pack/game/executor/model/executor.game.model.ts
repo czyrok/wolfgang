@@ -1,4 +1,4 @@
-import { CountRandomDistributionGameError } from '../../distribution/random/error/count.random.distribution.game.error'
+import { CountCardRulesGameError } from '../../rules/card/error/count.card.rules.game.error'
 
 import { LogUtil } from '../../../log/util/log.util'
 
@@ -26,7 +26,7 @@ export class ExecutorGameModel {
     public prelaunch(state: StateGameModel): void {
         let dist: RandomDistributionGameModel = new RandomDistributionGameModel
 
-        dist.processing(state.rules.choosingcardList, state.players).catch((error: CountRandomDistributionGameError) => {
+        dist.processing(state.rules.choosingcardList, state.players).catch((error: CountCardRulesGameError) => {
             LogUtil.logger(TypeLogEnum.GAME).fatal(error.message)
 
             // #achan

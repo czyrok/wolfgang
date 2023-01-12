@@ -4,7 +4,7 @@ import { initialize, authenticate } from 'passport'
 
 import { TypePassportEnum } from '../../type/enum/type.passport.enum'
 
-@SocketMiddleware()
+@SocketMiddleware('/home/log-in')
 export class LocalPassportMiddleware implements MiddlewareInterface {
     type: 'MiddlewareInterface' = 'MiddlewareInterface'
 

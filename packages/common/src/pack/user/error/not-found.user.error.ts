@@ -1,4 +1,4 @@
-export class UserNotFoundPassportError extends Error {
+export class NotFoundUserError extends Error {
     public constructor() {
         super('Utilisateur non trouvé')
     }
