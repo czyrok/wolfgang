@@ -1,6 +1,6 @@
 export interface ConfigBuildInterface {
     distFolderPath: string
-    fileFormat: string
+    fileFormat: BufferEncoding
     conditionTemplate: string
     criticalDependencies: Array<string>
 }
