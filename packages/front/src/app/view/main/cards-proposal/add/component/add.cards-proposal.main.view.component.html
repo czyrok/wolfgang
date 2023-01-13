@@ -1,38 +1,38 @@
 <ng-template #formTemplate>
-    <form class="box center">
-        <div class="field">
-            <label for="title" data-css-h2 data-css-font data-css-color>Titre</label>
+  <form class="box center" [formGroup]="form" (ngSubmit)="onSubmitForm()">
+    <div class="field">
+      <label for="title" data-css-h2 data-css-font data-css-color>Titre</label>
 
-            <div data-css-text-bar data-css-label data-css-border-radius="rounded">
-                <input id="title" type="text" placeholder="Saisissez le titre" data-css-input>
-                <div class="line" data-css-underline>
-                    <div data-css-underline></div>
-                </div>
-                <span class="icofont-info-circle" data-css-icofont></span>
-            </div>
+      <div data-css-text-bar data-css-label data-css-border-radius="rounded">
+        <input id="title" type="text" placeholder="Saisissez le titre" data-css-input formControlName="title">
+        <div class="line" data-css-underline>
+          <div data-css-underline></div>
         </div>
+        <span class="icofont-info-circle" data-css-icofont></span>
+      </div>
+    </div>
 
-        <div class="field">
-            <label for="description" data-css-h2 data-css-font data-css-color>Description</label>
+    <div class="field">
+      <label for="description" data-css-h2 data-css-font data-css-color>Description</label>
 
-            <div data-css-text-bar data-css-label data-css-border-radius="rounded">
-                <textarea id="description" name="description" rows="10" cols="50" maxlength="500"
-                    placeholder="Saisissez la description de votre carte"></textarea>
-            </div>
+      <div data-css-text-bar data-css-label data-css-border-radius="rounded">
+        <textarea id="description" name="description" rows="10" cols="50"
+          placeholder="Saisissez la description de votre carte" formControlName="description"></textarea>
+      </div>
+    </div>
+
+    <div class="field column">
+      <button type="submit" data-css-important data-css-accent data-css-button data-css-event
+        data-css-border-radius="rounded">
+        <div data-css-inter>
+          Proposer
         </div>
+      </button>
 
-        <div class="field column">
-            <button type="submit" data-css-important data-css-accent data-css-button data-css-event
-                data-css-border-radius="rounded">
-                <div data-css-inter>
-                    Proposer
-                </div>
-            </button>
-
-            <app-shared-interactive-button link="../" text="Annuler">
-            </app-shared-interactive-button>
-        </div>
-    </form>
+      <app-shared-interactive-button link="../" text="Annuler">
+      </app-shared-interactive-button>
+    </div>
+  </form>
 </ng-template>
 
 <app-view-page-form title="Proposer une carte" [formTemplate]="formTemplate"></app-view-page-form>

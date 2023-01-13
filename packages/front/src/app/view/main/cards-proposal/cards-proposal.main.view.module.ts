@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { RouterModule } from '@angular/router'
+import { ReactiveFormsModule } from '@angular/forms'
 
 import { SharedModule } from 'src/app/shared/shared.module'
 import { PageViewModule } from '../../page/page.view.module'
@@ -22,6 +23,7 @@ import { ViewCardsProposalMainViewComponent } from './view/component/view.cards-
         ]
       }
     ]),
+    ReactiveFormsModule,
     SharedModule,
     PageViewModule
   ],
