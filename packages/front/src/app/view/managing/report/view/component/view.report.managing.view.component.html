@@ -1,7 +1,8 @@
 <section>
   <ng-template #buttonTemplate>
     <app-shared-interactive-button text="Annuler" [important]="true"></app-shared-interactive-button>
-    <app-shared-interactive-button text="Sanctionner" [accent]="true" [important]="true"></app-shared-interactive-button>
+    <app-shared-interactive-button text="Sanctionner" [accent]="true"
+      [important]="true"></app-shared-interactive-button>
   </ng-template>
 
   <ng-template #contentTemplate>
@@ -20,7 +21,9 @@
 
         <div class="area-b">
           <p data-css-text data-css-font data-css-color>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quos ducimus id earum? A facere non ut dicta distinctio rerum quasi, incidunt est sint asperiores, nostrum enim ex quidem dolor nisi, id quod? Aperiam, voluptates? Veniam, esse. Beatae amet adipisci quod.
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quos ducimus id earum? A facere non ut dicta
+            distinctio rerum quasi, incidunt est sint asperiores, nostrum enim ex quidem dolor nisi, id quod? Aperiam,
+            voluptates? Veniam, esse. Beatae amet adipisci quod.
           </p>
         </div>
 
@@ -32,6 +35,6 @@
   </ng-template>
 
 
-  <app-view-page-scroll title="Signalement : X (date ?)" [buttonTemplate]="buttonTemplate" [contentTemplate]="contentTemplate"
-    [list]="false"></app-view-page-scroll>
+  <app-view-page-scroll title="Signalement : {{ report.releaseDate }}" [buttonTemplate]="buttonTemplate"
+    [contentTemplate]="contentTemplate" [list]="false"></app-view-page-scroll>
 </section>
