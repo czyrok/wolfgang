@@ -1,6 +1,6 @@
 import { DocumentType } from '@typegoose/typegoose'
 import { VerifiedCallback } from 'passport-jwt'
-import { use } from 'passport'
+import passport from 'passport'
 
 import { NotFoundUserError } from '../../../user/error/not-found.user.error'
 import { AccessDeniedScopePassportError } from '../error/access-denied.scope.passport.error'
@@ -15,15 +15,15 @@ import { UserModel, UserModelDocument } from '../../../user/model/user.model'
 import { TypePassportEnum } from '../../type/enum/type.passport.enum'
 import { VarEnvEnum } from '../../../env/var/enum/var.env.enum'
 
-export class ScopeJWTPassportUtil {
+export class ScopeJWTPassportHelper {
     public static setStrategy(): void {
-        use(TypePassportEnum.SCOPE, new StrategyScopeJWTPassportModel({
+        passport.use(TypePassportEnum.SCOPE, new StrategyScopeJWTPassportModel({
             jwtFromRequest: ExtractorScopePassportHelper.get,
             issuer: EnvUtil.get(VarEnvEnum.JWT_ISSUER),
             audience: EnvUtil.get(VarEnvEnum.JWT_AUDIENCE),
             secretOrKey: EnvUtil.get(VarEnvEnum.JWT_SECRET),
             jsonWebTokenOptions: {
-                ignoreExpiration: false,
+                ignoreExpiration: false
             },
             algorithms: ['HS256']
         }, async (req: any, payload: any, done: VerifiedCallback) => {

@@ -15,6 +15,7 @@ export const BuildConfig: ConfigBuildInterface = {
         'passport-jwt',
         'passport-local',
         'ts-socket.io-controller',
-        '@typegoose/typegoose'
+        '@typegoose/typegoose',
+        'express'
     ]
 }
