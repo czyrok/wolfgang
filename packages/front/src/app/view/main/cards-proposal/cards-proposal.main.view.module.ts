@@ -18,7 +18,7 @@ import { ViewCardsProposalMainViewComponent } from './view/component/view.cards-
       {
         path: '', component: CardsProposalMainViewComponent, children: [
           { path: '', component: DefaultCardsProposalMainViewComponent },
-          { path: 'view', component: ViewCardsProposalMainViewComponent },
+          { path: 'view/:id', component: ViewCardsProposalMainViewComponent },
           { path: 'add', component: AddCardsProposalMainViewComponent }
         ]
       }
