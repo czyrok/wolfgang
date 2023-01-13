@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { AfterViewInit, Component } from '@angular/core'
 
 import { EventSocketService } from '../../../../socket/event/service/event.socket.service'
 
@@ -10,7 +10,7 @@ import { SenderEventSocketModel } from 'src/app/socket/event/sender/model/sender
   templateUrl: './log-in.home.view.component.html',
   styleUrls: ['./log-in.home.view.component.scss']
 })
-export class LogInHomeViewComponent {
+export class LogInHomeViewComponent implements AfterViewInit {
   errorLink: ReceiverEventSocketModel<any> = this.eventSocketService.registerReceiver<any>('/home/log-in-failed', 'trigger').subscribe({
     callback: (data: any) => {
       console.log(data)
@@ -22,4 +22,11 @@ export class LogInHomeViewComponent {
   constructor(
     private eventSocketService: EventSocketService
   ) { }
+
+  ngAfterViewInit(): void {
+    this.triggerLink.emit({
+      'username': 'czyrok',
+      'password': '1234'
+    })
+  }
 }

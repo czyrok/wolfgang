@@ -20,6 +20,7 @@ export class LogInHomeController {
     @EmitOnSuccess()
     @EmitOnFail()
     trigger(@SocketRequest() req: any) {
+        console.log('slt')
         req.cookies[EnvUtil.get(VarEnvEnum.JWT_COOKIE_NAME)] = JWTHelper.generate(req, req.user)
     }
 }
