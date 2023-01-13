@@ -1,4 +1,4 @@
-import { Ref, prop, getModelForClass } from '@typegoose/typegoose'
+import { DocumentType, Ref, prop, getModelForClass } from '@typegoose/typegoose'
 import { Exclude, Expose } from 'class-transformer'
 
 import { DocumentModel } from '../../../model/document.model'
@@ -25,8 +25,19 @@ export class CardsProposalUserModel extends DocumentModel implements CardsPropos
     desc!: string
 
     @Expose()
+    @prop({ required: true })
+    title!: string
+
+    @Expose()
     @prop({ required: true, default: new Date() })
     releaseDate!: Date
+
+    public constructor(desc: string, title: string) {
+        super()
+    
+        this.desc = desc
+        this.title = title
+    }
 }
 
 export const CardsProposalUserModelDocument = getModelForClass(CardsProposalUserModel, { schemaOptions: { collection: 'cards_proposal_user' } })
