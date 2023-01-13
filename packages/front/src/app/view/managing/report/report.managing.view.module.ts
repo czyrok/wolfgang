@@ -16,7 +16,7 @@ import { ViewReportManagingViewComponent } from './view/component/view.report.ma
       {
         path: '', component: ReportManagingViewComponent, children: [
           { path: '', component: DefaultReportManagingViewComponent },
-          { path: 'view', component: ViewReportManagingViewComponent }
+          { path: 'view/:id', component: ViewReportManagingViewComponent }
         ]
       }
     ]),

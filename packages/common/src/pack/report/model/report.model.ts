@@ -13,7 +13,7 @@ export class ReportModel extends DocumentModel implements ReportInterface {
     user!: Ref<UserModel>
 
     @Expose()
-    @prop({ required: true })
+    @prop({ required: true, default: new Date() })
     releaseDate!: Date
 }
 
