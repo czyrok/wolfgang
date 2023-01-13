@@ -6,6 +6,7 @@ import { LogUtil, LogHelper, TypeLogEnum, EnvUtil, VarEnvEnum, LocalPassportMidd
 
 import { LogInHomeController } from './home/log-in/controller/log-in.home.controller'
 import { CurrentlyGameController } from './game/currently/controller/currently.game.controller'
+import { CardsProposalGameController } from './game/cards-proposal/controller/cards-proposal.game.controller'
 import { SkinCustomizationProfileGameController } from './game/profile/skin-customization/controller/skin-customization.profile.game.controller'
 
 async function run(): Promise<void> {
@@ -36,7 +37,8 @@ async function run(): Promise<void> {
         controllers: [
             LogInHomeController,
             CurrentlyGameController,
-            SkinCustomizationProfileGameController
+            SkinCustomizationProfileGameController,
+            CardsProposalGameController
         ],
         middlewares: [
             LocalPassportMiddleware

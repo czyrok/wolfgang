@@ -1,7 +1,8 @@
 <section>
   <ng-template #buttonTemplate>
-    <app-shared-interactive-button text="3" icofont="thumbs-down" [important]="true"></app-shared-interactive-button>
-    <app-shared-interactive-button text="10" icofont="thumbs-up" [accent]="true" [important]="true"></app-shared-interactive-button>
+    <app-shared-interactive-button text="{{ cardProposal.thumbsDownCount }}" icofont="thumbs-down" [important]="true"></app-shared-interactive-button>
+    <app-shared-interactive-button text="{{ cardProposal.thumbsUpCount }}" icofont="thumbs-up" [accent]="true"
+      [important]="true"></app-shared-interactive-button>
   </ng-template>
 
   <ng-template #contentTemplate>
@@ -11,11 +12,11 @@
 
     <div class="box">
       <p class="text" data-css-text data-css-font data-css-color>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores ducimus repellendus nesciunt saepe sint, aliquam ex commodi, temporibus voluptas, odit sed. Porro repudiandae molestias dolor facere illo. Vitae aperiam dignissimos voluptatum unde dolor ullam aliquam quo architecto iste omnis obcaecati maxime repellat corporis, tenetur, perspiciatis neque perferendis facilis beatae ratione vel culpa! Doloribus, recusandae? Consequuntur id ullam optio cum eligendi accusantium nobis omnis, unde quisquam corporis itaque sit odit porro impedit assumenda quo vel sunt iusto fuga ratione laudantium placeat, dolores reiciendis. Repellendus, sunt, accusantium labore nobis molestias a nisi nihil pariatur earum ipsum consequatur numquam quos voluptas ipsam necessitatibus cumque unde inventore harum dolorem, iusto aspernatur ex omnis perferendis dolores. Dolore excepturi iste illo, similique iusto at ea laborum assumenda? A deleniti natus corporis doloribus atque. Atque, eos cumque laudantium totam cum quibusdam itaque dolores ab, fugit dicta nihil rerum dolor sequi architecto possimus? Quis fugit asperiores nihil atque alias vel laudantium commodi placeat rem aperiam illo, soluta reiciendis incidunt distinctio natus a dolorum recusandae corporis eaque excepturi, ratione quas. Officia necessitatibus incidunt consequatur corrupti, dolore eaque tenetur provident. Officia optio ex praesentium? Eligendi quis laboriosam, minima, ex nam sed officiis voluptatibus dignissimos autem facere ab temporibus unde adipisci illum natus reprehenderit eius tempora explicabo laborum nulla officia cupiditate praesentium, sapiente rerum? Amet voluptatum nobis omnis nihil praesentium expedita, hic debitis ut porro fuga labore molestiae, molestias sequi aut esse! Suscipit sed ab a est dolorem. Quos officiis vel qui amet illo deleniti? Aut, est dignissimos. Aperiam assumenda iure nostrum error dolor quas accusantium iste.
+        {{cardProposal.desc}}
       </p>
     </div>
   </ng-template>
 
-  <app-view-page-scroll title="Proposition : X" [buttonTemplate]="buttonTemplate" [contentTemplate]="contentTemplate"
+  <app-view-page-scroll title="Proposition : {{ cardProposal.title }} {{ cardProposal.releaseDate }}" [buttonTemplate]="buttonTemplate" [contentTemplate]="contentTemplate"
     [list]="false"></app-view-page-scroll>
 </section>
