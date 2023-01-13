@@ -7,7 +7,8 @@
     "cleanDist": "rm -rf ./dist",
     "cleanLog": "rm -rf ./trace",
     "startBuildScript": "node --unhandled-rejections=strict ./dist/build/script/build.script.js",
-    "build": "npm run cleanDist && tsc && npm run startBuildScript"
+    "build": "npm run cleanDist && tsc && npm run startBuildScript",
+    "buildW": "tsc && npm run startBuildScript"
   },
   "dependencies": {
     "class-transformer": "^0.5.1",
