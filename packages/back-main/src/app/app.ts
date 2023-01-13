@@ -1,8 +1,9 @@
 import http from 'http'
+import express from 'express'
 import { connect } from 'mongoose'
 import { Server } from 'socket.io'
 import { SocketIoController } from 'ts-socket.io-controller'
-import { LogUtil, LogHelper, TypeLogEnum, EnvUtil, VarEnvEnum, LocalPassportMiddleware } from 'common'
+import { LogUtil, LogHelper, LocalPassportHelper, ScopeJWTPassportHelper, TypeLogEnum, EnvUtil, VarEnvEnum, LocalPassportMiddleware, PassportHelper, UserModel, UserModelDocument, SkinUserModelDocument, SkinUserModel } from 'common'
 
 import { LogInHomeController } from './home/log-in/controller/log-in.home.controller'
 import { CurrentlyGameController } from './game/currently/controller/currently.game.controller'
@@ -25,8 +26,19 @@ async function run(): Promise<void> {
 
     LogUtil.logger(TypeLogEnum.APP).trace('Database connection initialized')
 
-    const server: http.Server = http.createServer()
-    const io = new Server(server)
+    // #areti
+    /*     let test = new UserModelDocument(new UserModel('czyrok', 'lol', '1234'))
+        test.save() */
+
+    const app: express.Application = express(),
+        server: http.Server = http.createServer(app),
+        io = new Server(server)
+
+    PassportHelper.setPassport(io)
+    //LocalPassportHelper.setStrategy()
+    //ScopeJWTPassportHelper.setStrategy()
+
+    LogUtil.logger(TypeLogEnum.APP).trace('Passport configured')
 
     server.listen(EnvUtil.get(VarEnvEnum.GAME_PORT))
 
