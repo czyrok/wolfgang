@@ -1,8 +1,6 @@
 import { EmitOnFail, SocketRequest, EmitOnSuccess, OnConnect, OnDisconnect, OnMessage, SkipEmitOnEmptyResult, SocketController, MessageBody, EmitNamespaceBroadcastOnSuccess } from 'ts-socket.io-controller'
-
-import { CardsProposalUserModelDocument, CardsProposalUserModel } from 'common/src/pack/user/cards-proposal/model/cards-proposal.user.model'
-import { plainToInstance } from 'class-transformer';
-
+import { plainToInstance } from 'class-transformer'
+import { CardsProposalUserModelDocument, CardsProposalUserModel } from 'common'
 
 @SocketController({
     namespace: '/game/cards-proposal',

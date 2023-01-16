@@ -1,8 +1,7 @@
 import { plainToInstance } from 'class-transformer'
-
 import { SocketController, EmitOnSuccess, EmitOnFail, OnConnect, OnDisconnect, SkipEmitOnEmptyResult, OnMessage, MessageBody } from 'ts-socket.io-controller'
-
 import { ReportModel, ReportModelDocument } from 'common'
+
 @SocketController({
     namespace: '/managing/report',
     init: () => { }
