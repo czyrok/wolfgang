@@ -16,6 +16,9 @@ export const BuildConfig: ConfigBuildInterface = {
         'passport-local',
         'ts-socket.io-controller',
         '@typegoose/typegoose',
-        'express'
+        'express',
+        'express-session',
+        'socket.io',
+        'http'
     ]
 }
