@@ -1,10 +1,10 @@
 <ng-template #formTemplate>
-  <form class="box center" action="" method="post">
+  <form class="box center" [formGroup]="form" (ngSubmit)="onSubmitForm()">
     <div class="field">
       <label for="username" data-css-h2 data-css-font data-css-color>Pseudo</label>
 
       <div data-css-text-bar data-css-border-radius="rounded">
-        <input id="username" type="text" placeholder="Saisissez votre pseudo" data-css-input>
+        <input id="username" type="text" placeholder="Saisissez votre pseudo" data-css-input formControlName="username">
         <div class="line" data-css-underline>
           <div data-css-underline></div>
         </div>
@@ -16,7 +16,7 @@
       <label for="password" data-css-h2 data-css-font data-css-color>Mot de passe</label>
 
       <div data-css-text-bar data-css-border-radius="rounded">
-        <input id="password" type="password" placeholder="Saisissez votre mot de passe" data-css-input>
+        <input id="password" type="password" placeholder="Saisissez votre mot de passe" data-css-input formControlName="password">
         <div class="line" data-css-underline>
           <div data-css-underline></div>
         </div>

@@ -1,4 +1,4 @@
-import { DocumentType, Ref, ReturnModelType, prop, getModelForClass } from '@typegoose/typegoose'
+import { DocumentType, Ref, prop, getModelForClass } from '@typegoose/typegoose'
 import { Exclude, Expose } from 'class-transformer'
 
 import { DocumentModel } from '../../model/document.model'
@@ -9,7 +9,8 @@ import { UserInterface } from '../interface/user.interface'
 @Exclude()
 export class UserModel extends DocumentModel implements UserInterface {
     @Expose()
-    @prop({ required: true, ref: () => SkinUserModel })
+    // #achan
+    @prop({ /* required: true,  */ref: () => SkinUserModel })
     skin!: Ref<SkinUserModel>
 
     @Expose()
@@ -34,14 +35,24 @@ export class UserModel extends DocumentModel implements UserInterface {
     @prop()
     socketId!: string
 
+    public constructor(
+        //skin: DocumentType<SkinUserModel>,
+        username: string,
+        email: string,
+        password: string
+    ) {
+        super()
+
+        //this.skin = skin
+        this.username = username
+        this.email = email
+        this.password = password
+    }
+
     public async verifyPassword(this: DocumentType<UserModel>, password: string): Promise<boolean> {
         if (this.password === password) return true
 
-        return true
-    }
-
-    public static async getUserByToken(this: ReturnModelType<typeof UserModel>, tokenId: string): Promise<DocumentType<UserModel> | null> {
-        return await this.findById(tokenId).exec()
+        return false
     }
 }
 

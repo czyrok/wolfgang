@@ -12,25 +12,29 @@
   },
   "dependencies": {
     "class-transformer": "^0.5.1",
+    "cookie": "^0.5.0",
+    "cors": "^2.8.5",
     "crypto-random": "^2.0.1",
     "dotenv": "^16.0.3",
-    "express": "^4.18.2",
+    "express": "~4.18.2",
+    "express-session": "^1.17.3",
     "jsonwebtoken": "^9.0.0",
     "log4js": "^6.7.1",
     "mongoose": "~6.8.0",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
-    "passport-strategy": "^1.0.0",
     "rxjs": "^7.8.0",
-    "ts-socket.io-controller": "^1.0.6"
+    "socket.io": "~4.5.3",
+    "socket.io-client": "~4.5.4",
+    "ts-socket.io-controller": "^1.0.7"
   },
   "devDependencies": {
     "@typegoose/typegoose": "~10.0.0",
+    "@types/express-session": "^1.17.5",
     "@types/passport": "^1.0.11",
     "@types/passport-jwt": "^3.0.8",
     "@types/passport-local": "^1.0.34",
-    "@types/passport-strategy": "^0.2.35",
     "typescript": "~4.8.4"
   }
 }

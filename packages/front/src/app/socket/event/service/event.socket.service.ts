@@ -16,12 +16,12 @@ export class EventSocketService {
   private metadata: MetadataSocketModel = {}
 
   constructor() {
-    io('http://localhost:5501', { autoConnect: true, transports: ['websocket'] })
+    io('http://localhost:5500', { autoConnect: true, transports: ['websocket'], withCredentials: true })
   }
 
   public registerSender<T>(namespace: string, event: string): SenderEventSocketModel<T> {
     if (!this.metadata[namespace]) this.metadata[namespace] = {
-      socket: io('http://localhost:5501' + namespace),
+      socket: io('http://localhost:5500' + namespace, { autoConnect: true, transports: ['websocket'], withCredentials: true }),
       events: {}
     }
 
@@ -41,7 +41,7 @@ export class EventSocketService {
 
   public registerReceiver<T>(namespace: string, event: string): ReceiverEventSocketModel<T> {
     if (!this.metadata[namespace]) this.metadata[namespace] = {
-      socket: io('http://localhost:5501' + namespace),
+      socket: io('http://localhost:5500' + namespace, { autoConnect: true, transports: ['websocket'], withCredentials: true }),
       events: {}
     }
 
