@@ -15,27 +15,27 @@ import { SenderEventSocketModel } from 'src/app/socket/event/sender/model/sender
 export class PlayViewComponent {
   displayChat: boolean = false
 
-  socketLinkGame: SenderEventSocketModel<string> = this.eventSocketLink.registerSender<string>('/game', 'join')
+  //socketLinkGame: SenderEventSocketModel<string> = this.eventSocketLink.registerSender<string>('/game', 'join')
 
   eventGameState: EventEmitter<StateGameModel> = new EventEmitter
-  socketLinkState: ReceiverEventSocketModel<StateGameModel> = this.eventSocketLink.registerReceiver<StateGameModel>('/game', 'state').subscribe({
+  /* socketLinkState: ReceiverEventSocketModel<StateGameModel> = this.eventSocketLink.registerReceiver<StateGameModel>('/game', 'state').subscribe({
     callback: (data: StateGameModel) => {
       this.eventGameState.emit(data)
       console.log(data)
     }
-  })
+  }) */
 
   eventPlayerVote: EventEmitter<VotePlayerGameModel> = new EventEmitter
-  socketLinkPlayerVote!: ReceiverEventSocketModel<Array<VotePlayerGameModel>>
+  //socketLinkPlayerVote!: ReceiverEventSocketModel<Array<VotePlayerGameModel>>
 
   eventPlayerMessage: EventEmitter<MessageChatGameInterface> = new EventEmitter
-  socketLinkPlayerMessage!: ReceiverEventSocketModel<Array<MessageChatGameInterface>>
+  //socketLinkPlayerMessage!: ReceiverEventSocketModel<Array<MessageChatGameInterface>>
 
   constructor(
     private userService: UserService,
-    private eventSocketLink: EventSocketService
+    /* private eventSocketLink: EventSocketService */
   ) {
-    this.socketLinkGame.emit(this.userService.username)
+    /* this.socketLinkGame.emit(this.userService.username)
 
     this.socketLinkPlayerVote = this.eventSocketLink.registerReceiver<Array<VotePlayerGameModel>>('/game/player/vote', 'get').subscribe({
       callback: (data: Array<VotePlayerGameModel>) => {
@@ -48,7 +48,7 @@ export class PlayViewComponent {
         console.log(data)
         //for (let oneData of data) this.eventPlayerMessage.emit(oneData)
       }
-    })
+    }) */
   }
 
   changeDisplayChatButtonCallback: () => void = () => {
