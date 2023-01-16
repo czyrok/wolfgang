@@ -9,8 +9,8 @@ import { TokenUserModel, TokenUserModelDocument } from '../../user/token/model/t
 import { VarEnvEnum } from '../../env/var/enum/var.env.enum'
 
 export class JWTHelper {
-    public static generate(req: any, user: DocumentType<UserModel>): string {
-        let token: DocumentType<TokenUserModel> = new TokenUserModelDocument(new TokenUserModel(user, EnvUtil.get(VarEnvEnum.JWT_EXPIRES), req.ip))
+    public static generate(user: DocumentType<UserModel>, ip: string): string {
+        let token: DocumentType<TokenUserModel> = new TokenUserModelDocument(new TokenUserModel(user, EnvUtil.get(VarEnvEnum.JWT_EXPIRES), ip))
         token.save()
 
         let jwt: string = sign({
@@ -25,7 +25,8 @@ export class JWTHelper {
                 issuer: EnvUtil.get(VarEnvEnum.JWT_ISSUER),
                 audience: EnvUtil.get(VarEnvEnum.JWT_AUDIENCE),
                 expiresIn: EnvUtil.get(VarEnvEnum.JWT_EXPIRES)
-            })
+            }
+        )
 
         return jwt
     }
