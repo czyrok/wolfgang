@@ -8,6 +8,7 @@ import { LogInHomeController } from './home/log-in/controller/log-in.home.contro
 import { SignUpHomeController } from './home/sign-up/controller/sign-up.home.controller'
 import { CurrentlyGameController } from './game/currently/controller/currently.game.controller'
 import { CardsProposalGameController } from './game/cards-proposal/controller/cards-proposal.game.controller'
+import { ProfileGameController } from './game/profile/controller/profile.game.controller'
 import { SkinCustomizationProfileGameController } from './game/profile/skin-customization/controller/skin-customization.profile.game.controller'
 
 async function run(): Promise<void> {
@@ -38,6 +39,7 @@ async function run(): Promise<void> {
             LogInHomeController,
             SignUpHomeController,
             CurrentlyGameController,
+            ProfileGameController,
             SkinCustomizationProfileGameController,
             CardsProposalGameController
         ],
