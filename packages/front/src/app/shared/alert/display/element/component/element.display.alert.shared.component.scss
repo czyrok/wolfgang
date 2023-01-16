@@ -51,34 +51,6 @@
     padding: property.get('borderLimit', 'verySmall') * 2;
 }
 
-.container[type='SuccessAlertType'] .icon {
-    @include theme.themeHandler(true, 'alert') {
-        background-color: theme.get('success', 'icon');
-        color: theme.get('color');
-    }
-}
-
-.container[type='InformAlertType'] .icon {
-    @include theme.themeHandler(true, 'alert') {
-        background-color: theme.get('inform', 'icon');
-        color: theme.get('color');
-    }
-}
-
-.container[type='WarningAlertType'] .icon {
-    @include theme.themeHandler(true, 'alert') {
-        background-color: theme.get('warning', 'icon');
-        color: theme.get('color');
-    }
-}
-
-.container[type='DangerAlertType'] .icon {
-    @include theme.themeHandler(true, 'alert') {
-        background-color: theme.get('danger', 'icon');
-        color: theme.get('color');
-    }
-}
-
 .container.detailed .text {
     text-align: justify;
 }
@@ -96,31 +68,77 @@
     cursor: pointer;
 }
 
+.container[type='SuccessAlertType'] .icon,
+.container[type='SuccessAlertType'] .button:hover,
 .container[type='SuccessAlertType'] .close:hover {
-    @include theme.themeHandler(true, 'alert') {
-        background-color: theme.get('success', 'icon');
-        color: theme.get('color');
+    @include theme.themeHandler(true, 'alert', 'success') {
+        background-color: theme.get('icon');
     }
 }
 
+.container[type='InformAlertType'] .icon,
+.container[type='InformAlertType'] .button:hover,
 .container[type='InformAlertType'] .close:hover {
-    @include theme.themeHandler(true, 'alert') {
-        background-color: theme.get('inform', 'icon');
-        color: theme.get('color');
+    @include theme.themeHandler(true, 'alert', 'inform') {
+        background-color: theme.get('icon');
     }
 }
 
+.container[type='WarningAlertType'] .icon,
+.container[type='WarningAlertType'] .button:hover,
 .container[type='WarningAlertType'] .close:hover {
-    @include theme.themeHandler(true, 'alert') {
-        background-color: theme.get('warning', 'icon');
-        color: theme.get('color');
+    @include theme.themeHandler(true, 'alert', 'warning') {
+        background-color: theme.get('icon');
     }
 }
 
+.container[type='DangerAlertType'] .icon,
+.container[type='DangerAlertType'] .button:hover,
 .container[type='DangerAlertType'] .close:hover {
-    @include theme.themeHandler(true, 'alert') {
-        background-color: theme.get('danger', 'icon');
-        color: theme.get('color');
+    @include theme.themeHandler(true, 'alert', 'danger') {
+        background-color: theme.get('icon');
+    }
+}
+
+.container .button-container {
+    display: flex;
+    column-gap: property.get('borderLimit', 'small');
+}
+
+.container .button-container .button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: property.get('borderRadius', 'regular');
+    cursor: pointer;
+}
+
+.container .button-container .button:hover {
+    padding: property.get('borderLimit', 'verySmall');
+    border: 0;
+}
+
+.container[type='SuccessAlertType'] .button  {
+    @include theme.themeHandler(true, 'alert', 'success') {
+        border: property.get('borderLimit', 'verySmall') solid theme.get('icon');
+    }
+}
+
+.container[type='InformAlertType'] .button {
+    @include theme.themeHandler(true, 'alert', 'inform') {
+        border: property.get('borderLimit', 'verySmall') solid theme.get('icon');
+    }
+}
+
+.container[type='WarningAlertType'] .button {
+    @include theme.themeHandler(true, 'alert', 'warning') {
+        border: property.get('borderLimit', 'verySmall') solid theme.get('icon');
+    }
+}
+
+.container[type='DangerAlertType'] .button {
+    @include theme.themeHandler(true, 'alert', 'danger') {
+        border: property.get('borderLimit', 'verySmall') solid theme.get('icon');
     }
 }
 

@@ -26,7 +26,7 @@ export class SessionSharedService {
                         },
                         error: (error: Error) => {
                             resolve()
-                            this.displayAlertSharedService.emitDanger(error.message)
+                            this.displayAlertSharedService.emitSuccess(error.message)
                         }
                     }
                 )

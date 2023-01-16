@@ -3,6 +3,7 @@ import { Injectable, EventEmitter } from '@angular/core'
 import { DisplayAlertSharedInterface } from '../interface/display.alert.shared.interface'
 
 import { TypeAlertEnum } from 'common'
+import { ButtonListDisplayAlertSharedInterface } from '../button-list/interface/button-list.display.alert.shared.interface'
 
 @Injectable({
     providedIn: 'root'
@@ -14,31 +15,35 @@ export class DisplayAlertSharedService {
         return this._alertEvent
     }
 
-    public emitSuccess(text: string): void {
+    public emitSuccess(text: string, buttonList?: Array<ButtonListDisplayAlertSharedInterface>): void {
         this.alertEvent.emit({
             type: TypeAlertEnum.SUCCESS,
-            text: text
+            text: text,
+            buttonList: buttonList
         })
     }
 
-    public emitInform(text: string): void {
+    public emitInform(text: string, buttonList?: Array<ButtonListDisplayAlertSharedInterface>): void {
         this.alertEvent.emit({
             type: TypeAlertEnum.INFORM,
-            text: text
+            text: text,
+            buttonList: buttonList
         })
     }
 
-    public emitWarning( text: string): void {
+    public emitWarning(text: string, buttonList?: Array<ButtonListDisplayAlertSharedInterface>): void {
         this.alertEvent.emit({
             type: TypeAlertEnum.WARNING,
-            text: text
+            text: text,
+            buttonList: buttonList
         })
     }
 
-    public emitDanger(text: string): void {
+    public emitDanger(text: string, buttonList?: Array<ButtonListDisplayAlertSharedInterface>): void {
         this.alertEvent.emit({
             type: TypeAlertEnum.DANGER,
-            text: text
+            text: text,
+            buttonList: buttonList
         })
     }
 }
