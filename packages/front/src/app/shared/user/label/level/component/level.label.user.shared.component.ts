@@ -7,4 +7,5 @@ import { Component, Input } from '@angular/core'
 })
 export class LevelLabelUserSharedComponent {
   @Input() text: boolean = true
+  @Input() level?: number
 }

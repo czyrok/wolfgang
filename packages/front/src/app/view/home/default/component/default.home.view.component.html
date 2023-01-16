@@ -1,15 +1,19 @@
 <main>
   <ng-template #buttonTemplate>
-    <app-shared-interactive-button link="./sign-up" text="S'inscrire"></app-shared-interactive-button>
+    <ng-container *ngIf="!isAuth()">
+      <app-shared-interactive-button link="./sign-up" text="S'inscrire"></app-shared-interactive-button>
+    </ng-container>
     <app-shared-interactive-button link="/game/currently" text="Jouer ?" [accent]="true"
       [important]="true"></app-shared-interactive-button>
   </ng-template>
 
   <ng-template #contentTemplate>
     <div class="wrapper">
-      <div class="lines-container all">
-        <app-shared-user-line-profile></app-shared-user-line-profile>
-      </div>
+      <ng-container *ngIf="isAuth()">
+        <div class="lines-container all">
+          <app-shared-user-line-profile [username]="getUsername()"></app-shared-user-line-profile>
+        </div>
+      </ng-container>
 
       <div class="center">
 
@@ -17,6 +21,6 @@
     </div>
   </ng-template>
 
-  <app-view-page-scroll title="Wolfgang" [buttonTemplate]="buttonTemplate"
-    [contentTemplate]="contentTemplate" [list]="false"></app-view-page-scroll>
+  <app-view-page-scroll title="Wolfgang" [buttonTemplate]="buttonTemplate" [contentTemplate]="contentTemplate"
+    [list]="false"></app-view-page-scroll>
 </main>

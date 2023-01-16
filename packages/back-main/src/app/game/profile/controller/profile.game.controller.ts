@@ -1,5 +1,7 @@
+import { DocumentType } from '@typegoose/typegoose';
 import { plainToInstance } from 'class-transformer'
-import { UserModel, UserModelDocument } from 'common';
+import { NotFoundUserError, UserModel, UserModelDocument } from 'common';
+import { LeanDocument } from 'mongoose';
 import { EmitOnFail, EmitOnSuccess, MessageBody, OnConnect, OnDisconnect, OnMessage, SkipEmitOnEmptyResult, SocketController } from 'ts-socket.io-controller'
 
 
@@ -10,21 +12,24 @@ import { EmitOnFail, EmitOnSuccess, MessageBody, OnConnect, OnDisconnect, OnMess
 export class ProfileGameController {
     @OnConnect()
     connection() {
-        console.log('client connected');
+        console.log('client connected2');
     }
 
     @OnDisconnect()
     disconnect() {
-        console.log('client disconnected');
+        console.log('client disconnected2');
     }
 
     @EmitOnSuccess()
     @EmitOnFail()
-    @SkipEmitOnEmptyResult()
     @OnMessage()
     async view(@MessageBody() username: string) {
-        let obj = await UserModelDocument.findById(username).populate('user', 'skin').lean().exec()
-        let user: UserModel = plainToInstance(UserModel, obj)
-        return user
+        const obj = await UserModelDocument.findOne({
+            username: username
+        }).populate('skin').lean().exec()
+
+        if (!obj) throw new NotFoundUserError
+
+        return plainToInstance(UserModel, obj)
     }
 }
