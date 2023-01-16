@@ -2,6 +2,15 @@
 
 @use '../../lib/property';
 
+@include element.createElement('text') {
+    @include element.createSubsection('font') {
+        @include element.defineContent() {
+            font-family: property.get('font', 'regular') !important;
+            font-size: property.get('fontSize', 'regular');
+        }
+    }
+}
+
 @include element.createElement('h1') {
     @include element.createSubsection('font') {
         @include element.defineContent() {
