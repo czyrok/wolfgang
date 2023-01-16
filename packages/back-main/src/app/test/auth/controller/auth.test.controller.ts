@@ -19,6 +19,6 @@ export class AuthTestController {
 
         LogUtil.logger(TypeLogEnum.ACCESS).info(`${user.username} is making authentification test`)
 
-        return true
+        return user.username
     }
 }
