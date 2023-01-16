@@ -12,15 +12,14 @@ export class ProfileLineUserSharedComponent {
 
   async ngAfterViewInit(): Promise<void> {
 
-    let reportLink: ReceiverLinkSocketModel<UserModel> = (await this.eventSocketLink.registerReceiver<UserModel>('/game/profile', 'view')).subscribe(
-      (data: UserModel) => {
-        this.user = data
-        
-      }
-    )
+    if (this.username !== undefined) {
+      let userLink: ReceiverLinkSocketModel<UserModel> = (await this.eventSocketLink.registerReceiver<UserModel>('/game/profile', 'view')).subscribe(
+        (data: UserModel) => {
+          this.user = data
+        }
+      )
 
-    let usernameLink: SenderLinkSocketModel<string> = await this.eventSocketLink.registerSender<string>('/game/profile', 'view')
-    if (this.username !== null) {
+      let usernameLink: SenderLinkSocketModel<string> = await this.eventSocketLink.registerSender<string>('/game/profile', 'view')
       usernameLink.emit(this.username)
     }
   }
