@@ -4,7 +4,7 @@ import { CanActivate, Router } from '@angular/router'
 import { AuthSharedService } from '../service/auth.shared.service'
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class AuthSharedGuard implements CanActivate {
   constructor(
@@ -16,9 +16,9 @@ export class AuthSharedGuard implements CanActivate {
     this.authSharedService.testAuth()
 
     if (!this.authSharedService.isAuth) {
-        return this.router.parseUrl('log-in')
+      return this.router.parseUrl('log-in')
     } else {
-        return true
+      return true
     }
   }
 }
