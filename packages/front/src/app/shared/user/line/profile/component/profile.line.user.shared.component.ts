@@ -14,7 +14,7 @@ export class ProfileLineUserSharedComponent {
 
   constructor(
     private eventSocketLink: SocketSharedService,
-    private authSharedService: AuthSharedService,
+    private authSharedService: AuthSharedService
   ) { }
 
   async ngAfterViewInit(): Promise<void> {

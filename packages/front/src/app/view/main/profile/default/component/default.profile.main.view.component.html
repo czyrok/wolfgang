@@ -1,23 +1,25 @@
 <section>
   <ng-template #buttonTemplate>
-    <app-shared-interactive-button link="./skin-customization" text="Personnaliser le skin" [accent]="true"
+    <ng-container *ngIf="getUsername()===user?.username">
+      <app-shared-interactive-button link="./skin-customization" text="Personnaliser le skin" [accent]="true"
       [important]="true">
     </app-shared-interactive-button>
+  </ng-container>
   </ng-template>
 
   <ng-template #contentTemplate>
     <div class="wrapper">
       <div class="grid">
         <div class="area-a">
-          <app-shared-user-avatar-all></app-shared-user-avatar-all>
+          <app-shared-user-avatar-all [user]="user" ></app-shared-user-avatar-all>
         </div>
-        
+
         <div class="area-b">
-          <app-shared-user-label-level></app-shared-user-label-level>
+          <app-shared-user-label-level [level]="user?.level"></app-shared-user-label-level>
         </div>
 
         <div class="area-c">
-          <app-shared-user-label-point></app-shared-user-label-point>
+          <app-shared-user-label-point [pointCount]="user?.gamePointCount"></app-shared-user-label-point>
         </div>
       </div>
     </div>

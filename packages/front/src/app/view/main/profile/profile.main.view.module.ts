@@ -15,8 +15,8 @@ import { SkinCustomizationProfileMainViewComponent } from './skin-customization/
         RouterModule.forChild([
             {
                 path: '', component: ProfileMainViewComponent, children: [
-                    { path: '', component: DefaultProfileMainViewComponent },
-                    { path: 'skin-customization', component: SkinCustomizationProfileMainViewComponent }
+                    { path: ':username', component: DefaultProfileMainViewComponent },
+                    { path: ':username/skin-customization', component: SkinCustomizationProfileMainViewComponent }
                 ]
             }
         ]),
