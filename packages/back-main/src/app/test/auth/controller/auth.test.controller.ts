@@ -13,7 +13,7 @@ export class AuthTestController {
     @EmitOnSuccess()
     trigger(@ConnectedSocket() socket: Socket) {
         const req: Request = socket.request as Request,
-            user: DocumentType<UserModel> = req.user as DocumentType<UserModel>
+            user: DocumentType<UserModel> = req.session.user as DocumentType<UserModel>
 
         if (!user) throw new NotFoundUserError
 

@@ -50,9 +50,8 @@ export class TestScopeIoMiddleware implements MiddlewareInterface {
 
         const req: Request = socket.request as Request
 
-        req.user = user
-        // #averif
-        //req.session.save()
+        req.session.user = user
+        req.session.save()
 
         // #achan
         LogUtil.logger(TypeLogEnum.ACCESS).info(`${user.username} is accessing`)

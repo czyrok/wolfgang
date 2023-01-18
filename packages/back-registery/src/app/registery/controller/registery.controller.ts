@@ -1,13 +1,10 @@
-import { Socket } from 'socket.io';
-import { ConnectedSocket, EmitOnFail, EmitOnSuccess, MessageBody, OnConnect, OnDisconnect, OnMessage, SocketController } from 'ts-socket.io-controller'
+import { Socket } from 'socket.io'
+import { ConnectedSocket, EmitOnSuccess, MessageBody, OnConnect, OnDisconnect, OnMessage, SocketController } from 'ts-socket.io-controller'
+import { GameModel, LogUtil, TypeLogEnum } from 'common'
 
 import { RegisteryModel } from '../model/registery.model'
 
-import { ThreadGameInterface } from '../../game/thread/interface/thread.game.interface'
-
-import uuid from 'uuid'
-
-let registery: RegisteryModel
+import { InstanceGameInterface } from '../../game/instance/interface/instance.game.interface'
 
 @SocketController({
     namespace: '/registery',
@@ -15,46 +12,53 @@ let registery: RegisteryModel
 })
 export class RegisteryController {
     @OnConnect()
-    connection() {
-        console.log('client connected');
-    }
-
-    @OnDisconnect()
-    disconnect() {
-        console.log('client disconnected');
-    }
-
-    @OnMessage()
-    save(@ConnectedSocket() socket: Socket) {
-        if (registery[socket.id] === undefined) {
-            registery[socket.id] = {
+    connection(@ConnectedSocket() socket: Socket) {
+        if (RegisteryModel.instance[socket.id] === undefined) {
+            RegisteryModel.instance[socket.id] = {
                 socket: socket,
                 games: new Array()
             }
         }
+
+        LogUtil.logger(TypeLogEnum.REGISTERY).trace('A new instance registered')
+    }
+
+    @OnDisconnect()
+    disconnect(@ConnectedSocket() socket: Socket) {
+        delete RegisteryModel.instance[socket.id]
+
+        LogUtil.logger(TypeLogEnum.REGISTERY).trace('An instance lost')
     }
 
     @OnMessage()
-    update(@MessageBody() data: ThreadGameInterface, @ConnectedSocket() socket: Socket) {
-        let instance = registery[socket.id]
+    update(@MessageBody() game: GameModel, @ConnectedSocket() socket: Socket) {
+        const instance: InstanceGameInterface | undefined = RegisteryModel.instance[socket.id]
 
         if (instance !== undefined) {
-            for (let game of instance.games) {
-                if (game.id === data.id) {
-                    game.playerCount = data.playerCount
+            let found: boolean = false
+
+            for (let i = 0; i < instance.games.length; i++) {
+                if (instance.games[i].id === game.id) {
+                    found = true
+                
+                    instance.games[i] = game
+
                     break
                 }
+            }
+
+            if (!found) {
+                instance.games.push(game)
             }
         }
     }
 
     @OnMessage()
     @EmitOnSuccess()
-    @EmitOnFail()
     get() {
-        let list: Array<ThreadGameInterface> = new Array()
+        let list: Array<GameModel> = new Array()
 
-        for (let [, instance] of registery) {
+        for (let [, instance] of RegisteryModel.instance) {
             list.push(...instance.games)
         }
 
@@ -63,33 +67,20 @@ export class RegisteryController {
 
     @OnMessage()
     create() {
-        let minId!: string
-        let min!: number
+        let minId!: string,
+            min!: number
 
-        for (let [key, instance] of registery) {
-            if (min === undefined) {
+        for (let [key, instance] of RegisteryModel.instance) {
+            if (min === undefined || instance.games.length < min) {
                 min = instance.games.length
                 minId = key
-            }
-            else {
-                if (min > instance.games.length) {
-                    min = instance.games.length
-                    minId = key
-                }
             }
         }
 
         if (minId !== undefined) {
-            let gameId: string = uuid.v4()
+            RegisteryModel.instance[minId].socket.emit('create')
 
-            registery[minId].games.push({
-                id: gameId,
-                playerCount: 1
-            })
-
-            // adef
-            registery[minId].socket.emit('create', gameId)
+            LogUtil.logger(TypeLogEnum.REGISTERY).trace('A new game created')
         }
     }
 }
-

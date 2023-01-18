@@ -1,7 +1,7 @@
 import { connect } from 'mongoose'
 import { Server } from 'socket.io'
 import { SocketIoController } from 'ts-socket.io-controller'
-import { LogUtil, LogHelper, ScopeIoMiddleware, AdminScopeIoMiddleware, ConfigAppHelper, TypeLogEnum, EnvUtil, VarEnvEnum, TestScopeIoMiddleware } from 'common'
+import { LogUtil, LogHelper, SessionIoMiddleware, ScopeIoMiddleware, AdminScopeIoMiddleware, ConfigAppHelper, TypeLogEnum, EnvUtil, VarEnvEnum, TestScopeIoMiddleware } from 'common'
 
 import { AuthTestController } from './test/auth/controller/auth.test.controller'
 import { LogInHomeController } from './home/log-in/controller/log-in.home.controller'
@@ -29,6 +29,11 @@ async function run(): Promise<void> {
 
     const io: Server = ConfigAppHelper.setup({
         port: parseInt(EnvUtil.get(VarEnvEnum.MAIN_PORT)),
+        cors: {
+            // #achan
+            origin: 'http://localhost:4200',
+            credentials: true
+        },
         session: true
     })
 
@@ -42,6 +47,7 @@ async function run(): Promise<void> {
             CardsProposalGameController
         ],
         middlewares: [
+            SessionIoMiddleware,
             TestScopeIoMiddleware,
             ScopeIoMiddleware,
             AdminScopeIoMiddleware
