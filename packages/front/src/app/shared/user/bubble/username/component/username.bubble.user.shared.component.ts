@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core'
   styleUrls: ['./username.bubble.user.shared.component.scss']
 })
 export class UsernameBubbleUserSharedComponent {
-  @Input() id!: string
-
+  @Input() username?: string
+  @Input() level!: number
   @Input() detailed: boolean = false
 }

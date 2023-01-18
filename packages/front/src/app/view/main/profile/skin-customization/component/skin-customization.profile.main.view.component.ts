@@ -4,7 +4,9 @@ import { DetailedListInteractiveSharedModel } from 'src/app/shared/interactive/l
 import { TabDetailedListInteractiveSharedModel } from 'src/app/shared/interactive/list/detailed/tab/model/tab.detailed.list.interactive.shared.model'
 import { ItemSubTabTabDetailedListInteractiveSharedModel } from 'src/app/shared/interactive/list/detailed/tab/sub-tab/item/model/item.sub-tab.tab.detailed.list.interactive.shared.model'
 import { SubTabTabDetailedListInteractiveSharedModel } from 'src/app/shared/interactive/list/detailed/tab/sub-tab/model/sub-tab.tab.detailed.list.interactive.shared.model'
-
+import { AuthSharedService } from 'src/app/shared/auth/service/auth.shared.service'
+import { ReceiverLinkSocketModel, SenderLinkSocketModel, UserModel } from 'common'
+import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
 @Component({
   selector: 'app-view-main-profile-skin-customization',
   templateUrl: './skin-customization.profile.main.view.component.html',
@@ -12,8 +14,25 @@ import { SubTabTabDetailedListInteractiveSharedModel } from 'src/app/shared/inte
 })
 export class SkinCustomizationProfileMainViewComponent implements OnInit {
   list!: DetailedListInteractiveSharedModel
+  user!: UserModel
+  constructor(
+    private eventSocketLink: SocketSharedService,
+    private authSharedService: AuthSharedService
+  ) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    if (this.authSharedService.username !== undefined) {
+      const userLink: ReceiverLinkSocketModel<UserModel> = (await this.eventSocketLink.registerReceiver<UserModel>('/game/profile', 'view')).subscribe(
+        (data: UserModel) => {
+          this.user = data
+          userLink.unsubscribe()
+        }
+      )
+      const usernameLink: SenderLinkSocketModel<string> = await this.eventSocketLink.registerSender<string>('/game/profile', 'view')
+
+      usernameLink.emit(this.authSharedService.username)
+    }
+    
     this.list = new DetailedListInteractiveSharedModel()
       .addTab(new TabDetailedListInteractiveSharedModel()
         .setTitle('Chapeau')
@@ -61,5 +80,9 @@ export class SkinCustomizationProfileMainViewComponent implements OnInit {
           )
         )
       )
+  }
+
+  getUsername(): string | undefined {
+    return this.authSharedService.username
   }
 }

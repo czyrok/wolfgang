@@ -1,4 +1,7 @@
 import { Component } from '@angular/core'
+import { ActivatedRoute } from '@angular/router'
+
+import { AuthSharedService } from '../../../../shared/auth/service/auth.shared.service'
 
 @Component({
   selector: 'app-view-home-default',
@@ -6,5 +9,19 @@ import { Component } from '@angular/core'
   styleUrls: ['./default.home.view.component.scss']
 })
 export class DefaultHomeViewComponent {
+  constructor(
+    private authSharedService: AuthSharedService,
+    private activatedRoute: ActivatedRoute
+  ) {
+    this.authSharedService
+  }
+
+  isAuth(): boolean {
+    return this.authSharedService.isAuth
+  }
+
+  getUsername(): string | undefined{
+    return this.authSharedService.username
+  }
 
 }

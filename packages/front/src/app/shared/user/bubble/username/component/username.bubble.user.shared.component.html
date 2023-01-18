@@ -1,11 +1,11 @@
 <ng-template #contentTemplate>
-    <p data-css-text data-css-color data-css-font>{{ id }}</p>
+    <p data-css-text data-css-color data-css-font>{{ username }}</p>
 </ng-template>
 
 <ng-template #contentTemplateDetailed>
-    <app-shared-user-label-level [text]="false"></app-shared-user-label-level>
+    <app-shared-user-label-level [text]="false" [level]="level"></app-shared-user-label-level>
 
-    <p data-css-text data-css-color data-css-font>{{ id }}</p>
+    <p data-css-text data-css-color data-css-font>{{ username }}</p>
 
     <app-shared-interactive-button icofont="user-alt-1" link="/profile"></app-shared-interactive-button>
 </ng-template>

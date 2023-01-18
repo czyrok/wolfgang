@@ -6,7 +6,7 @@
     <app-shared-item-bubble *ngIf="playerVotingList.length != 0"
         [contentTemplate]="contentTemplateVote"></app-shared-item-bubble>
 
-    <app-shared-user-bubble-username [id]="id" [detailed]="detailed"></app-shared-user-bubble-username>
+    <app-shared-user-bubble-username [username]="user?.username" [detailed]="detailed"></app-shared-user-bubble-username>
 
     <div class="img" >
         <img src="asset/img/user.svg" alt="a enlever">

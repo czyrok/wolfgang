@@ -61,7 +61,7 @@ export class PlaceCircleAvatarPlayViewModel {
   public static create(voteEventEmitter: EventEmitter<VotePlayerGameModel>,renderer: Renderer2, changeDetectorRef: ChangeDetectorRef, viewContainerRef: ViewContainerRef, id: string): PlaceCircleAvatarPlayViewModel {
     let componentRef: ComponentRef<AllAvatarUserSharedComponent> = viewContainerRef.createComponent(AllAvatarUserSharedComponent)
 
-    componentRef.instance.id = id
+    //componentRef.instance.user = id
     componentRef.instance.eventPlayerVote = voteEventEmitter
 
     changeDetectorRef.detectChanges()

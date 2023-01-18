@@ -1,6 +1,6 @@
 import { SocketController, EmitOnSuccess, EmitOnFail, SocketRequest, OnConnect, OnDisconnect, OnMessage } from 'ts-socket.io-controller'
-
 import { ReportModel, ReportModelDocument } from 'common'
+
 @SocketController({
     namespace: '/main/report',
     init: () => { }

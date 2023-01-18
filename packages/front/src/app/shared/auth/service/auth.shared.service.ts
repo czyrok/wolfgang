@@ -10,6 +10,7 @@ import { SocketSharedService } from '../../socket/service/socket.shared.service'
 })
 export class AuthSharedService {
   private _isAuth: boolean = false
+  private _username: string | undefined = undefined
 
   public constructor(
     private cookieService: CookieService,
@@ -25,6 +26,14 @@ export class AuthSharedService {
     return this._isAuth
   }
 
+  private set username(value: string | undefined) {
+    this._username = value
+  }
+
+  public get username(): string | undefined {
+    return this._username
+  }
+
   public async setToken(token: string): Promise<void> {
     // #achan secure, et utiliser env
     this.cookieService.set('token', token, 518400000, '/', undefined, false, 'Lax')
@@ -34,16 +43,19 @@ export class AuthSharedService {
 
   public async testAuth(): Promise<void> {
     await this.sessionSharedService.refreshSession()
+
     this.isAuth = false
+    this.username = undefined
 
     // #achan
     if (!this.cookieService.check('token')) return
 
     const testLink: SenderLinkSocketModel<void> = await this.socketSharedService.registerSender('/test/auth', 'trigger')
-    const resTestLink: ReceiverLinkSocketModel<void> = await this.socketSharedService.registerReceiver('/test/auth', 'trigger')
+    const resTestLink: ReceiverLinkSocketModel<string> = await this.socketSharedService.registerReceiver('/test/auth', 'trigger')
 
-    resTestLink.subscribe(() => {
+    resTestLink.subscribe((username: string) => {
       this.isAuth = true
+      this.username = username
 
       resTestLink.unsubscribe()
     })
