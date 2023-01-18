@@ -21,8 +21,10 @@ export class CardsProposalGameController {
     @EmitNamespaceBroadcastOnSuccess('list')
     @EmitOnFail()
     async add(@SocketRequest() req: any, @MessageBody() cardProposal: CardsProposalUserModel) {
-        cardProposal.user = req.user
+        cardProposal.user = req.session.user
+
         const proposal = new CardsProposalUserModelDocument(cardProposal)
+
         await proposal.save()
 
         return [proposal]
