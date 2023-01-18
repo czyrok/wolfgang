@@ -29,7 +29,7 @@ export class ProfileGameController {
         }).populate('skin').lean().exec()
 
         if (!obj) throw new NotFoundUserError
-
+        
         return plainToInstance(UserModel, obj)
     }
 }

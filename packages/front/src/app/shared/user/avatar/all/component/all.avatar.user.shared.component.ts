@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, HostListener, AfterViewInit, OnDestroy } from '@angular/core'
 
 // #nsm
-import { VotePlayerGameModel /*, TypeVotePlayerGameEnum */ } from 'common'
+import { UserModel, VotePlayerGameModel /*, TypeVotePlayerGameEnum */ } from 'common'
 import { Subscription } from 'rxjs'
 
 import { UserService } from 'src/app/user/service/user.service'
@@ -41,7 +41,7 @@ export class AllAvatarUserSharedComponent implements AfterViewInit, OnDestroy {
     if (this.sub !== undefined) this.sub.unsubscribe()
   }
 
-  @Input() id: string = 'czyrok'
+  @Input() user?: UserModel
   @Input() reduced: boolean = false
   @Input() detailed: boolean = false
 
