@@ -22,8 +22,6 @@ export class ContainerModalSharedComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.modalSharedService.modalClosingEvent.subscribe(() => {
       this.display = false
-
-      console.log('slt')
     })
 
     this.modalSharedService.modalOpeningEvent.subscribe((modal: ModalSharedInterface) => {
@@ -35,8 +33,6 @@ export class ContainerModalSharedComponent implements AfterViewInit {
       this.changeDetectorRef.detectChanges()
 
       this.display = true
-
-      console.log(this.display)
     })
   }
 

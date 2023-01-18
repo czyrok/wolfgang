@@ -1,7 +1,7 @@
 import { Socket } from 'socket.io'
 import { DocumentType } from '@typegoose/typegoose'
 import { MiddlewareInterface, SocketMiddleware } from 'ts-socket.io-controller'
-import { verify, JwtPayload, JsonWebTokenError } from 'jsonwebtoken'
+import { verify, JwtPayload } from 'jsonwebtoken'
 import { Request } from 'express'
 import { parse } from 'cookie'
 
@@ -55,9 +55,10 @@ export class AdminScopeIoMiddleware implements MiddlewareInterface {
 
         const req: Request = socket.request as Request
 
-        req.user = user
-        // #averif
-        //req.session.save()
+        if (req.session) req.session.save()
+
+        req.session.user = user
+        req.session.save()
 
         // #achan
         LogUtil.logger(TypeLogEnum.ACCESS).info(`${user.username} is accessing to ${'admin'}`)

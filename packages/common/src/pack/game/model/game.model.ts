@@ -1,4 +1,6 @@
 import { Subscription } from 'rxjs'
+import { Exclude, Expose } from 'class-transformer'
+import { v4 } from 'uuid'
 
 import { LogUtil } from '../../log/util/log.util'
 
@@ -9,10 +11,15 @@ import { HandlerPlayerGameModel } from '../player/handler/model/handler.player.g
 
 import { TypeLogEnum } from '../../log/type/enum/type.log.enum'
 
+@Exclude()
 export class GameModel {
     private static _instance?: GameModel
 
+    @Expose()
+    private _id: string = v4()
     private _executor: ExecutorGameModel = new ExecutorGameModel
+
+    @Expose()
     private _state: StateGameModel = new StateGameModel
 
     private constructor() {
@@ -23,6 +30,10 @@ export class GameModel {
         if (this._instance === undefined) this._instance = new GameModel
 
         return this._instance
+    }
+
+    public get id(): string {
+        return this._id
     }
 
     private get executor(): ExecutorGameModel {

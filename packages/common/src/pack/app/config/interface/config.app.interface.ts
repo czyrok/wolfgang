@@ -1,4 +1,7 @@
+import { CorsOptions } from 'cors'
+
 export interface ConfigAppInterface {
     port: number
-    session?: boolean,
+    cors: CorsOptions
+    session?: boolean
 }

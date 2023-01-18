@@ -16,8 +16,6 @@ import { CardsProposalUserModel } from 'common'
 export class AddCardsProposalMainViewComponent {
   form: UntypedFormGroup
 
-  addCardProposalLink: SenderEventSocketModel<CardsProposalUserModel> = this.eventSocketService.registerSender<CardsProposalUserModel>('/game/cards-proposal', 'add')
-
   constructor(
     private router: Router,
     private formBuilder: UntypedFormBuilder,
@@ -31,8 +29,11 @@ export class AddCardsProposalMainViewComponent {
 
   onSubmitForm(): void {
     if (this.form.valid) {
+      const addCardProposalLink: SenderEventSocketModel<CardsProposalUserModel> = this.eventSocketService.registerSender<CardsProposalUserModel>('/game/cards-proposal', 'add')
+      
       const cardsproposalusermodel = new CardsProposalUserModel(this.form.get('title')?.value, this.form.get('description')?.value)
-      this.addCardProposalLink.emit(cardsproposalusermodel)
+      
+      addCardProposalLink.emit(cardsproposalusermodel)
 
       this.router.navigateByUrl('../')
     }
