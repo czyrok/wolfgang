@@ -26,6 +26,8 @@ export class ContainerModalSharedComponent implements AfterViewInit {
       console.log('slt')
     })
 
+    console.log('sl')
+
     this.modalSharedService.modalOpeningEvent.subscribe((modal: ModalSharedInterface) => {
       let component: ComponentRef<ElementModalSharedComponent> = this.targetRef.createComponent(ElementModalSharedComponent)
 

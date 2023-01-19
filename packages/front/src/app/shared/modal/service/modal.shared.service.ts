@@ -30,6 +30,7 @@ export class ModalSharedService {
 
     public open(modal: ModalSharedInterface): void {
         if (!this.oneOpened) {
+          console.log(modal.template)
             this.modalOpeningEvent.next(modal)
 
             this.oneOpened = true

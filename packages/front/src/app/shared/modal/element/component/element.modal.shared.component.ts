@@ -17,7 +17,7 @@ export class ElementModalSharedComponent implements AfterViewInit, OnDestroy {
   ) { }
 
   ngAfterViewInit(): void {
-    if (this.closingEventSub !== undefined)
+    if (this.closingEventSub === undefined)
       this.closingEventSub = this.modalSharedService.modalClosingEvent.subscribe((notForSelf: boolean) => {
         if (!notForSelf) {
           this.componentRef.destroy()

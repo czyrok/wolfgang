@@ -2,10 +2,10 @@ import { SocketController, EmitOnSuccess, EmitOnFail, SocketRequest, OnConnect, 
 import { ReportModel, ReportModelDocument } from 'common'
 
 @SocketController({
-    namespace: '/main/report',
+    namespace: '/report',
     init: () => { }
 })
-export class ReportMainController {
+export class ReportController {
     @OnConnect()
     connection() {
         console.log('client connected');

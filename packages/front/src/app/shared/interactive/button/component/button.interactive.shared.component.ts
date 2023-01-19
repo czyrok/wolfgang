@@ -1,4 +1,4 @@
-import { Component, HostListener, Input } from '@angular/core'
+import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core'
 
 @Component({
   selector: 'app-shared-interactive-button',
@@ -14,7 +14,11 @@ export class ButtonInteractiveSharedComponent {
   @Input() accent: boolean = false
   @Input() important: boolean = false
 
+  @Output() clickEvent: EventEmitter<void> = new EventEmitter
+
   @HostListener('click') click(): void {
     if (this.callback !== undefined) this.callback()
+
+    this.clickEvent.emit()
   }
 }
