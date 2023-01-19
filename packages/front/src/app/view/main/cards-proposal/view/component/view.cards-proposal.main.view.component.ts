@@ -22,7 +22,7 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
 
     if (id !== null) {
       const cardProposalLink: ReceiverLinkSocketModel<CardsProposalUserModel> = await this.socketSharedService.registerReceiver<CardsProposalUserModel>('/game/cards-proposal', 'view')
-      
+
       cardProposalLink.subscribe((data: CardsProposalUserModel) => {
         this.cardProposal = data
 
@@ -33,5 +33,21 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
 
       triggerLink.emit(id)
     }
+  }
+
+  async callbackThumbsDownCount(): Promise<void> {
+    if (this.cardProposal === undefined) return
+
+    const triggerLink: SenderLinkSocketModel<string> = await this.socketSharedService.registerSender<string>('/game/cards-proposal', 'upThumbsDownCount')
+
+    triggerLink.emit(this.cardProposal.id)
+  }
+
+  async callbackThumbsUpCount(): Promise<void> {
+    if (this.cardProposal === undefined) return
+
+    const triggerLink: SenderLinkSocketModel<string> = await this.socketSharedService.registerSender<string>('/game/cards-proposal', 'upThumbsUpCount')
+
+    triggerLink.emit(this.cardProposal.id)
   }
 }
