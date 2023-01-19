@@ -1,6 +1,7 @@
 import { EmitOnFail, SocketRequest, EmitOnSuccess, OnConnect, OnDisconnect, OnMessage, SkipEmitOnEmptyResult, SocketController, MessageBody, EmitNamespaceBroadcastOnSuccess } from 'ts-socket.io-controller'
 import { plainToInstance } from 'class-transformer'
 import { CardsProposalUserModelDocument, CardsProposalUserModel } from 'common'
+import { DocumentType } from '@typegoose/typegoose';
 
 @SocketController({
     namespace: '/game/cards-proposal',
@@ -37,14 +38,36 @@ export class CardsProposalGameController {
         let cardsProposaltList: Array<CardsProposalUserModel> = plainToInstance(CardsProposalUserModel, list)
         return cardsProposaltList
     }
-    
+
     @OnMessage()
     @EmitOnSuccess()
     @EmitOnFail()
-    async view(@MessageBody() id: string){
+    async view(@MessageBody() id: string) {
         let obj = await CardsProposalUserModelDocument.findById(id).populate('user', 'skin').lean().exec()
         let card: CardsProposalUserModel = plainToInstance(CardsProposalUserModel, obj)
         return card
+    }
+
+    @OnMessage()
+    async upThumbsDownCount(@MessageBody() id: string) {
+        const cardProposal: DocumentType<CardsProposalUserModel> = await CardsProposalUserModelDocument
+            .findById(id)
+            .exec() as DocumentType<CardsProposalUserModel>
+
+        cardProposal.thumbsDownCount++
+
+        await cardProposal.save()
+    }
+
+    @OnMessage()
+    async upThumbsUpCount(@MessageBody() id: string) {
+        const cardProposal: DocumentType<CardsProposalUserModel> = await CardsProposalUserModelDocument
+            .findById(id)
+            .exec() as DocumentType<CardsProposalUserModel>
+
+        cardProposal.thumbsUpCount++
+
+        await cardProposal.save()
     }
 }
 
