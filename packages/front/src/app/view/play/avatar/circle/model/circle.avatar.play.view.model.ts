@@ -1,44 +1,68 @@
 import { ChangeDetectorRef, ElementRef, Renderer2, ViewContainerRef, EventEmitter } from '@angular/core'
-import { VotePlayerGameModel } from 'common'
+import { PlayerGameModel, VotePlayerGameModel } from 'common'
 
 import { PlaceCircleAvatarPlayViewModel } from '../place/model/place.circle.avatar.play.view.model'
 
 export class CircleAvatarPlayViewModel {
-  private list: Array<PlaceCircleAvatarPlayViewModel> = new Array()
+  private _placesList: Array<PlaceCircleAvatarPlayViewModel> = new Array()
 
-  constructor(
-    private voteEventEmitter: EventEmitter<VotePlayerGameModel>,
-    private renderer: Renderer2,
-    private changeDetectorRef: ChangeDetectorRef,
-    private viewContainerRef: ViewContainerRef,
-    private elementRef: ElementRef<HTMLElement>
+  public constructor(
+    private _voteEventEmitter: EventEmitter<VotePlayerGameModel>,
+    private _renderer: Renderer2,
+    private _changeDetectorRef: ChangeDetectorRef,
+    private _targetRef: ViewContainerRef,
+    private _boxElementRef: ElementRef<HTMLElement>
   ) {
     this.update()
   }
 
+  public get placesList(): Array<PlaceCircleAvatarPlayViewModel> {
+    return this._placesList
+  }
+
+  public get voteEventEmitter(): EventEmitter<VotePlayerGameModel> {
+    return this._voteEventEmitter
+  }
+
+  public get renderer(): Renderer2 {
+    return this._renderer
+  }
+
+  public get changeDetectorRef(): ChangeDetectorRef {
+    return this._changeDetectorRef
+  }
+
+  public get targetRef(): ViewContainerRef {
+    return this._targetRef
+  }
+
+  public get boxElementRef(): ElementRef<HTMLElement> {
+    return this._boxElementRef
+  }
+
   public update(): void {
-    let radius: number = Math.min(
-      this.elementRef.nativeElement.offsetWidth,
-      this.elementRef.nativeElement.offsetHeight) / 2,
-      t: number = 2 * Math.PI / this.list.length
+    const radius: number = Math.min(
+      this.boxElementRef.nativeElement.offsetWidth,
+      this.boxElementRef.nativeElement.offsetHeight) / 2,
+      t: number = 2 * Math.PI / this.placesList.length
 
     let maxX: number = 0,
       maxY: number = 0
 
     let map: Map<number, Array<PlaceCircleAvatarPlayViewModel>> = new Map()
 
-    for (let i = 0; i < this.list.length; i++) {
-      this.list[i].y = (Math.cos(t * i) * radius * 0.8) + radius
-      this.list[i].x = (Math.sin(t * i) * radius) + radius
+    for (let i = 0; i < this.placesList.length; i++) {
+      this.placesList[i].y = (Math.cos(t * i) * radius * 0.8) + radius
+      this.placesList[i].x = (Math.sin(t * i) * radius) + radius
 
-      if (this.list[i].x > maxX) maxX = this.list[i].x
-      if (this.list[i].y > maxY) maxY = this.list[i].y
+      if (this.placesList[i].x > maxX) maxX = this.placesList[i].x
+      if (this.placesList[i].y > maxY) maxY = this.placesList[i].y
 
-      if (map.has(this.list[i].y)) {
-        map.get(this.list[i].y)?.push(this.list[i])
+      if (map.has(this.placesList[i].y)) {
+        map.get(this.placesList[i].y)?.push(this.placesList[i])
       } else {
-        map.set(this.list[i].y, [
-          this.list[i]
+        map.set(this.placesList[i].y, [
+          this.placesList[i]
         ])
       }
     }
@@ -53,13 +77,13 @@ export class CircleAvatarPlayViewModel {
       }
     }))
 
-    maxX = this.elementRef.nativeElement.offsetWidth - maxX
-    maxY = this.elementRef.nativeElement.offsetHeight - maxY
+    maxX = this.boxElementRef.nativeElement.offsetWidth - maxX
+    maxY = this.boxElementRef.nativeElement.offsetHeight - maxY
 
     let count = 1
 
-    for (let element of map) {
-      for (let place of element[1]) {
+    for (const element of map) {
+      for (const place of element[1]) {
         place.index = count
 
         place.x += maxX / 2
@@ -72,25 +96,27 @@ export class CircleAvatarPlayViewModel {
     }
   }
 
-  public setPlayers(idList: Array<string>) {
-    this.list.splice(0, this.list.length)
+  public setPlayers(playersList: Array<PlayerGameModel>) {
+    this.placesList.splice(0, this.placesList.length)
 
-    for (let id of idList) {
-      this.list.push(PlaceCircleAvatarPlayViewModel.create(this.voteEventEmitter, this.renderer, this.changeDetectorRef, this.viewContainerRef, id))
+    for (const player of playersList) {
+      this.placesList.push(PlaceCircleAvatarPlayViewModel.create(player, this.voteEventEmitter, this.renderer, this.changeDetectorRef, this.targetRef))
     }
-  }
-
-  public addPlayer(id: string): void {
-    this.list.push(PlaceCircleAvatarPlayViewModel.create(this.voteEventEmitter, this.renderer, this.changeDetectorRef, this.viewContainerRef, id))
 
     this.update()
   }
 
-  public removePlayer(id: string): void {
-    for (let i = 0; i < this.list.length; i++) {
-      if (this.list[i].id == id) {
-        this.list[i].destroy()
-        this.list.splice(i, 1)
+  public addPlayer(player: PlayerGameModel): void {
+    this.placesList.push(PlaceCircleAvatarPlayViewModel.create(player, this.voteEventEmitter, this.renderer, this.changeDetectorRef, this.targetRef))
+
+    this.update()
+  }
+
+  public removePlayer(player: PlayerGameModel): void {
+    for (let i = 0; i < this.placesList.length; i++) {
+      if (this.placesList[i].player.user.id == player.user.id) {
+        this.placesList[i].destroy()
+        this.placesList.splice(i, 1)
 
         break
       }

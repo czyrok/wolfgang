@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, ComponentRef, Renderer2, ViewContainerRef, EventEmitter } from '@angular/core'
-import { VotePlayerGameModel } from 'common'
+import { PlayerGameModel, VotePlayerGameModel } from 'common'
 
 import { AllAvatarUserSharedComponent } from 'src/app/shared/user/avatar/all/component/all.avatar.user.shared.component'
 
@@ -8,42 +8,46 @@ export class PlaceCircleAvatarPlayViewModel {
   private _y: number = 0
   private _index: number = 0
 
-  constructor(
-    private renderer: Renderer2,
-    private componentRef: ComponentRef<AllAvatarUserSharedComponent>,
-    private _id: string
+  public constructor(
+    private _player: PlayerGameModel,
+    private _renderer: Renderer2,
+    private _componentRef: ComponentRef<AllAvatarUserSharedComponent>
   ) { }
 
-  public set x(value: number) {
-    this._x = value
-  }
-
-  public set y(value: number) {
-    this._y = value
+  public get index(): number {
+    return this._index
   }
 
   public set index(value: number) {
     this._index = value
   }
 
-  public set id(value: string) {
-    this._id = value
-  }
-
   public get x(): number {
     return this._x
+  }
+
+  public set x(value: number) {
+    this._x = value
   }
 
   public get y(): number {
     return this._y
   }
 
-  public get index(): number {
-    return this._index
+  public set y(value: number) {
+    this._y = value
   }
 
-  public get id(): string {
-    return this._id
+  public get player(): PlayerGameModel {
+    return this._player
+  }
+
+  public get renderer(): Renderer2 {
+    return this._renderer
+  }
+
+  public get componentRef(): ComponentRef<AllAvatarUserSharedComponent> {
+    return this._componentRef
   }
 
   public update(): void {
@@ -58,14 +62,19 @@ export class PlaceCircleAvatarPlayViewModel {
     this.componentRef.destroy()
   }
 
-  public static create(voteEventEmitter: EventEmitter<VotePlayerGameModel>,renderer: Renderer2, changeDetectorRef: ChangeDetectorRef, viewContainerRef: ViewContainerRef, id: string): PlaceCircleAvatarPlayViewModel {
-    let componentRef: ComponentRef<AllAvatarUserSharedComponent> = viewContainerRef.createComponent(AllAvatarUserSharedComponent)
+  public static create(
+    player: PlayerGameModel,
+    voteEventEmitter: EventEmitter<VotePlayerGameModel>,
+    renderer: Renderer2, changeDetectorRef: ChangeDetectorRef,
+    viewContainerRef: ViewContainerRef
+  ): PlaceCircleAvatarPlayViewModel {
+    const componentRef: ComponentRef<AllAvatarUserSharedComponent> = viewContainerRef.createComponent(AllAvatarUserSharedComponent)
 
-    //componentRef.instance.user = id
+    componentRef.instance.user = player.user
     componentRef.instance.eventPlayerVote = voteEventEmitter
 
     changeDetectorRef.detectChanges()
 
-    return new PlaceCircleAvatarPlayViewModel(renderer, componentRef, id)
+    return new PlaceCircleAvatarPlayViewModel(player, renderer, componentRef)
   }
 }
