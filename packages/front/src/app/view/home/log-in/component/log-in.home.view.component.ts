@@ -34,10 +34,7 @@ export class LogInHomeViewComponent {
         = await this.socketSharedService.registerReceiver<string>('/home/log-in', 'trigger')
 
       tokenLink.subscribe(async (token: string) => {
-
-        console.log('ntm')
         await this.authSharedService.setToken(token)
-        console.log('ntm2')
 
         this.router.navigateByUrl('/games')
 

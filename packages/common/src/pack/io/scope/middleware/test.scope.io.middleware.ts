@@ -9,6 +9,7 @@ import { UndefinedJwtError } from '../../../jwt/error/undefined.jwt.error'
 import { NotFoundUserError } from '../../../user/error/not-found.user.error'
 import { NotFoundTokenUserError } from '../../../user/token/error/not-found.token.user.error'
 import { UndefinedCookieJwtError } from '../../../jwt/error/undefined-cookie.jwt.error'
+import { InactiveTokenUserError } from '../../../user/token/error/inactive.token.user.error'
 
 import { EnvUtil } from '../../../env/util/env.util'
 import { LogUtil } from '../../../log/util/log.util'
@@ -19,15 +20,19 @@ import { TokenUserModel, TokenUserModelDocument } from '../../../user/token/mode
 import { VarEnvEnum } from '../../../env/var/enum/var.env.enum'
 import { TypeLogEnum } from '../../../log/type/enum/type.log.enum'
 
-@SocketMiddleware('/test/auth')
+@SocketMiddleware('/auth')
 export class TestScopeIoMiddleware implements MiddlewareInterface {
     type: 'MiddlewareInterface' = 'MiddlewareInterface'
 
     async use(socket: Socket, next: (err?: any) => any): Promise<void> {
+
+        console.log('ddd3')
         const cookies: any = parse(socket.request.headers.cookie || ''),
             jwt: string = cookies[EnvUtil.get(VarEnvEnum.JWT_COOKIE_NAME)]
 
         let payload: JwtPayload | undefined = undefined
+
+        console.log('ddd4', cookies)
 
         try {
             payload = verify(jwt, EnvUtil.get(VarEnvEnum.JWT_SECRET), {
@@ -39,18 +44,24 @@ export class TestScopeIoMiddleware implements MiddlewareInterface {
             return next(new UndefinedCookieJwtError)
         }
 
+        console.log('ddd5')
+
         if (!payload.sub) return next(new UndefinedJwtError)
 
-        let token: DocumentType<TokenUserModel> = await TokenUserModelDocument.findById(payload.sub).populate('user').exec() as DocumentType<TokenUserModel>
+        const token: DocumentType<TokenUserModel> = await TokenUserModelDocument.findById(payload.sub).populate('user').exec() as DocumentType<TokenUserModel>
 
         if (!token) return next(new NotFoundTokenUserError)
+        console.log('ddd')
+        if (!token.active) return next(new InactiveTokenUserError)
+        console.log('ddd2')
         if (!token.user) return next(new NotFoundUserError)
 
-        let user: DocumentType<UserModel> = token.user as DocumentType<UserModel>
+        const user: DocumentType<UserModel> = token.user as DocumentType<UserModel>
 
         const req: Request = socket.request as Request
 
         req.session.user = user
+        req.session.token = token
         req.session.save()
 
         // #achan

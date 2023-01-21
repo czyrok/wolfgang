@@ -3,7 +3,7 @@ import { Server } from 'socket.io'
 import { SocketIoController } from 'ts-socket.io-controller'
 import { LogUtil, LogHelper, SessionIoMiddleware, ScopeIoMiddleware, AdminScopeIoMiddleware, ConfigAppHelper, TypeLogEnum, EnvUtil, VarEnvEnum, TestScopeIoMiddleware } from 'common'
 
-import { AuthTestController } from './test/auth/controller/auth.test.controller'
+import { AuthController } from './auth/controller/auth.controller'
 import { LogInHomeController } from './home/log-in/controller/log-in.home.controller'
 import { SignUpHomeController } from './home/sign-up/controller/sign-up.home.controller'
 import { CurrentlyGameController } from './game/currently/controller/currently.game.controller'
@@ -42,7 +42,7 @@ async function run(): Promise<void> {
 
     SocketIoController.useSocketIoServer(io, {
         controllers: [
-            AuthTestController,
+            AuthController,
             LogInHomeController,
             SignUpHomeController,
             CurrentlyGameController,

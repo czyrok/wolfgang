@@ -9,6 +9,7 @@ import { PlayerGameModel } from '../player/model/player.game.model'
 import { HandlerPlayerGameModel } from '../player/handler/model/handler.player.game.model'
 
 import { TypeLogEnum } from '../../log/type/enum/type.log.enum'
+import { UserModel } from '../../user/model/user.model'
 
 @Exclude()
 export class GameModel {
@@ -58,15 +59,15 @@ export class GameModel {
         return this._stateChange
     }
 
-    public newPlayer(username: string, socketId: string): boolean {
+    public newPlayer(user: UserModel, socketId: string): boolean {
         if (this.state.rules.playerCountMax == this.state.players.length
             || this.executor.isStarted) return false
 
-        let player: PlayerGameModel = new PlayerGameModel(username, socketId)
+        let player: PlayerGameModel = new PlayerGameModel(user, socketId)
 
         HandlerPlayerGameModel.instance.addPlayer(player)
 
-        LogUtil.logger(TypeLogEnum.GAME).info(`${username} joined the game`)
+        LogUtil.logger(TypeLogEnum.GAME).info(`${user.username} joined the game`)
 
         if (this.state.rules.playerCountMax == HandlerPlayerGameModel.instance.players.length) {
             this.executor.prelaunch(this.state)

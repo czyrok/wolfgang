@@ -1,5 +1,6 @@
 import { Exclude, Expose } from 'class-transformer'
 
+import { UserModel } from '../../../user/model/user.model'
 import { CardGameModel } from '../../card/model/card.game.model'
 
 import { CampPlayerGameEnum } from '../camp/enum/camp.player.game.enum'
@@ -7,7 +8,7 @@ import { CampPlayerGameEnum } from '../camp/enum/camp.player.game.enum'
 @Exclude()
 export class PlayerGameModel {
     @Expose()
-    private _userId: string
+    private _user: UserModel
 
     private _activityDate!: Date
     private _inactivityLevel: number = 0
@@ -17,8 +18,8 @@ export class PlayerGameModel {
     private _camp: CampPlayerGameEnum = CampPlayerGameEnum.UNDEFINED
     private _card!: CardGameModel
 
-    constructor(userId: string, private _socketId: string) {
-        this._userId = userId
+    public constructor(user: UserModel, private _socketId: string) {
+        this._user = user
     }
 
     public set activityDate(value: Date) {
@@ -49,8 +50,8 @@ export class PlayerGameModel {
         this._card = value
     }
 
-    public get userId(): string {
-        return this._userId
+    public get user(): UserModel {
+        return this._user
     }
 
     public get socketId(): string {
