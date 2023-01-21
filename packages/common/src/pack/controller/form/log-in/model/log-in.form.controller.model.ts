@@ -3,10 +3,10 @@ import { Exclude, Expose } from 'class-transformer'
 @Exclude()
 export class LogInFormControllerModel {
     @Expose()
-    private _username!: string
+    private _username: string
 
     @Expose()
-    private _password!: string
+    private _password: string
 
     public constructor(
         username: string,

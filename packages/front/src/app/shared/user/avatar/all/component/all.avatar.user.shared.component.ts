@@ -4,8 +4,6 @@ import { Component, EventEmitter, Input, HostListener, AfterViewInit, OnDestroy 
 import { UserModel, VotePlayerGameModel /*, TypeVotePlayerGameEnum */ } from 'common'
 import { Subscription } from 'rxjs'
 
-import { UserService } from 'src/app/user/service/user.service'
-
 @Component({
   selector: 'app-shared-user-avatar-all',
   templateUrl: './all.avatar.user.shared.component.html',
@@ -15,9 +13,7 @@ export class AllAvatarUserSharedComponent implements AfterViewInit, OnDestroy {
   playerVotingList: Array<string> = new Array()
   sub!: Subscription
 
-  constructor(
-    private userService: UserService
-  ) { }
+  constructor() { }
 
   ngAfterViewInit(): void {
     /* if (this.eventPlayerVote !== undefined) this.sub = this.eventPlayerVote.subscribe((value: VotePlayerGameModel) => {

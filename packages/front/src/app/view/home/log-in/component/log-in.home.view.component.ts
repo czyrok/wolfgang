@@ -31,24 +31,29 @@ export class LogInHomeViewComponent {
   async onSubmitForm(): Promise<void> {
     if (this.form.valid) {
       const tokenLink: ReceiverLinkSocketModel<string>
-        = (await this.socketSharedService.registerReceiver<string>('/home/log-in', 'trigger'))
-          .subscribe((token: string) => {
-            this.authSharedService.setToken(token)
+        = await this.socketSharedService.registerReceiver<string>('/home/log-in', 'trigger')
 
-            this.router.navigateByUrl('/games')
+      tokenLink.subscribe(async (token: string) => {
 
-            tokenLink.unsubscribe()
-            errorLink.unsubscribe()
-          })
+        console.log('ntm')
+        await this.authSharedService.setToken(token)
+        console.log('ntm2')
+
+        this.router.navigateByUrl('/games')
+
+        tokenLink.unsubscribe()
+        errorLink.unsubscribe()
+      })
 
       const errorLink: ReceiverLinkSocketModel<any>
-        = (await this.socketSharedService.registerReceiver<any>('/home/log-in', 'trigger-failed'))
-          .subscribe((error: any) => {
-            this.displayAlertSharedService.emitDanger(error)
+        = await this.socketSharedService.registerReceiver<any>('/home/log-in', 'trigger-failed')
 
-            tokenLink.unsubscribe()
-            errorLink.unsubscribe()
-          })
+      errorLink.subscribe((error: any) => {
+        this.displayAlertSharedService.emitDanger(error)
+
+        tokenLink.unsubscribe()
+        errorLink.unsubscribe()
+      })
 
       const triggerLink: SenderLinkSocketModel<LogInFormControllerModel>
         = await this.socketSharedService.registerSender<LogInFormControllerModel>('/home/log-in', 'trigger')

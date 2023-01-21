@@ -3,7 +3,7 @@
 
   <ul>
     <li><app-shared-interactive-button link="./currently" icofont="game-pad" [active]="true" [accent]="true" [important]="true"></app-shared-interactive-button></li>
-    <li><app-shared-interactive-button link="./profile" icofont="user-alt-1" [active]="true"></app-shared-interactive-button></li>
+    <li><app-shared-interactive-button link="./profile/{{ getUsername() }}" icofont="user-alt-1" [active]="true"></app-shared-interactive-button></li>
     <li><app-shared-interactive-button link="./cards-proposal" icofont="list" [active]="true"></app-shared-interactive-button></li>
     <li><app-shared-interactive-button link="./help" icofont="life-ring" [active]="true"></app-shared-interactive-button></li>
   </ul>

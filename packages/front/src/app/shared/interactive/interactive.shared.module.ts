@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 
-import { ButtonInteractiveSharedModule } from './button/button.interactive.shared.component'
+import { ButtonInteractiveSharedModule } from './button/button.interactive.shared.module'
 import { ListInteractiveSharedModule } from './list/list.interactive.shared.module'
 
 import { TextBarInteractiveSharedComponent } from './text-bar/component/text-bar.interactive.shared.component'

@@ -1,6 +1,5 @@
-import { Subscription } from 'rxjs'
+import { Subject, Subscription } from 'rxjs'
 import { Exclude, Expose } from 'class-transformer'
-import { v4 } from 'uuid'
 
 import { LogUtil } from '../../log/util/log.util'
 
@@ -16,13 +15,20 @@ export class GameModel {
     private static _instance?: GameModel
 
     @Expose()
-    private _id: string = v4()
+    private _id?: string
+    
     private _executor: ExecutorGameModel = new ExecutorGameModel
 
     @Expose()
     private _state: StateGameModel = new StateGameModel
 
+    private _stateChange: Subject<GameModel> = new Subject()
+
     private constructor() {
+        this.state.onChange(() => {
+            this.stateChange.next(this)
+        })
+
         LogUtil.logger(TypeLogEnum.GAME).trace('Game initialized')
     }
 
@@ -32,8 +38,12 @@ export class GameModel {
         return this._instance
     }
 
-    public get id(): string {
+    public get id(): string | undefined {
         return this._id
+    }
+
+    public set id(value: string | undefined) {
+        this._id = value
     }
 
     private get executor(): ExecutorGameModel {
@@ -42,6 +52,10 @@ export class GameModel {
 
     public get state(): StateGameModel {
         return this._state
+    }
+
+    private get stateChange(): Subject<GameModel> {
+        return this._stateChange
     }
 
     public newPlayer(username: string, socketId: string): boolean {
@@ -62,7 +76,7 @@ export class GameModel {
         return true
     }
 
-    public onStateChange(callback: (state: StateGameModel) => void): Subscription {
-        return this.state.onChange(callback)
+    public onStateChange(callback: (game: GameModel) => void): Subscription {
+        return this.stateChange.subscribe(callback)
     }
 }

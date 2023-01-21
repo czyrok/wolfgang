@@ -24,14 +24,12 @@
     "rxjs": "^7.8.0",
     "socket.io": "~4.5.3",
     "socket.io-client": "~4.5.4",
-    "ts-socket.io-controller": "^1.0.7",
-    "uuid": "^9.0.0"
+    "ts-socket.io-controller": "^1.0.7"
   },
   "devDependencies": {
     "@typegoose/typegoose": "~10.0.0",
     "@types/express-session": "^1.17.5",
     "@types/jsonwebtoken": "^9.0.1",
-    "@types/uuid": "^9.0.0",
     "typescript": "~4.8.4"
   }
 }

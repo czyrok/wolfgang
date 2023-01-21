@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 
 import { ItemSharedModule } from '../../../item/item.shared.module'
-import { ButtonInteractiveSharedModule } from '../../button/button.interactive.shared.component'
+import { ButtonInteractiveSharedModule } from '../../button/button.interactive.shared.module'
 
 import { DetailedListInteractiveSharedComponent } from './component/detailed.list.interactive.shared.component'
 import { TabDetailedListInteractiveSharedComponent } from './tab/component/tab.detailed.list.interactive.shared.component'

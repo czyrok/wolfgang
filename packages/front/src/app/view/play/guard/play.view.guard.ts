@@ -1,20 +1,31 @@
 import { Injectable } from '@angular/core'
-import { CanActivate, Router } from '@angular/router'
+import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router'
 
-import { UserService } from 'src/app/user/service/user.service'
+import { GameSharedService } from '../../../shared/game/service/game.shared.service'
+import { DisplayAlertSharedService } from '../../../shared/alert/display/service/display.alert.shared.service'
 
 @Injectable()
 export class PlayViewGuard implements CanActivate {
-  constructor(
-    private router: Router,
-    private userService: UserService
-  ) { }
+    constructor(
+        private router: Router,
+        private gameSharedService: GameSharedService,
+        private DisplayAlertSharedService: DisplayAlertSharedService
+    ) { }
 
-  canActivate() {
-    if (this.userService.username === undefined) {
-      return this.router.parseUrl('home/username')
-    } else {
-      return true
+    async canActivate(route: ActivatedRouteSnapshot): Promise<boolean | UrlTree> {
+        await this.gameSharedService.checkStatus()
+
+        if (this.gameSharedService.inGame && !route.firstChild) return this.router.parseUrl(`/game/profile/${this.gameSharedService.gameId}`)
+        if (!route.firstChild) return this.router.parseUrl('/game/currently')
+
+        const gameId: string | undefined = route.firstChild.params['game_id']
+        
+        if (!gameId) return this.router.parseUrl('/game/currently')
+
+        if (this.gameSharedService.joinGame(gameId)) return true
+
+        this.DisplayAlertSharedService.emitWarning('Vous êtes déjà dans une partie')
+
+        return this.router.parseUrl('/game/currently')
     }
-  }
 }

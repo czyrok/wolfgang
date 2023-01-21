@@ -18,6 +18,9 @@ export class StateGameModel implements ChangeInterface<StateGameModel> {
     private _isNight: boolean = false
 
     @Expose()
+    private _isFinished: boolean = false
+
+    @Expose()
     private _players: Array<PlayerGameModel> = new Array
 
     @Expose()
@@ -49,12 +52,16 @@ export class StateGameModel implements ChangeInterface<StateGameModel> {
         this.stateChange.next(this)
     }
 
+    public get currentBehaviorType(): Array<TypeBehaviorItemLoopGameEnum> {
+        return this._currentBehaviorType
+    }
+
     public get isNight(): boolean {
         return this._isNight
     }
 
-    public get currentBehaviorType(): Array<TypeBehaviorItemLoopGameEnum> {
-        return this._currentBehaviorType
+    public get isFinished(): boolean {
+        return this._isFinished
     }
 
     public get players(): Array<PlayerGameModel> {

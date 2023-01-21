@@ -36,30 +36,39 @@ export class AuthSharedService {
 
   public async setToken(token: string): Promise<void> {
     // #achan secure, et utiliser env
-    this.cookieService.set('token', token, 518400000, '/', undefined, false, 'Lax')
+    this.cookieService.set('token', token, 6, '/', undefined, false, 'Lax')
 
     await this.testAuth()
   }
 
   public async testAuth(): Promise<void> {
-    await this.sessionSharedService.refreshSession()
-
     this.isAuth = false
     this.username = undefined
 
     // #achan
     if (!this.cookieService.check('token')) return
 
+    await this.sessionSharedService.refreshSession()
+    await this.doAuth()
+  }
+
+  private async doAuth(): Promise<void> {
     const testLink: SenderLinkSocketModel<void> = await this.socketSharedService.registerSender('/test/auth', 'trigger')
     const resTestLink: ReceiverLinkSocketModel<string> = await this.socketSharedService.registerReceiver('/test/auth', 'trigger')
 
-    resTestLink.subscribe((username: string) => {
-      this.isAuth = true
-      this.username = username
+    return new Promise((resolve: (value: void) => void) => {
+      resTestLink.subscribe((username: string) => {
+        this.isAuth = true
+        this.username = username
 
-      resTestLink.unsubscribe()
+        console.log('ouiiii')
+
+        resolve()
+
+        resTestLink.unsubscribe()
+      })
+
+      testLink.emit()
     })
-
-    testLink.emit()
   }
 }

@@ -1,13 +1,14 @@
 <section>
   <ng-template #buttonTemplate>
-    <app-shared-interactive-button text="Créer une partie" link="/play" [important]="true">
+    <app-shared-interactive-button text="Créer une partie" [important]="true"
+      (clickEvent)="createGameButtonCallback()">
     </app-shared-interactive-button>
     <app-shared-interactive-button text="Rejoindre une partie" link="/play" [accent]="true" [important]="true">
     </app-shared-interactive-button>
   </ng-template>
 
   <ng-template #contentTemplate>
-    <ng-template #contentTemplateLine>
+    <ng-template #contentTemplateLine let-game="game">
       <div class="field">
         <app-shared-user-avatar-head></app-shared-user-avatar-head>
 
@@ -25,13 +26,10 @@
       </div>
     </ng-template>
 
-    <app-shared-item-line link="/play" [contentTemplate]="contentTemplateLine"></app-shared-item-line>
-
-    <app-shared-item-line link="/play" [contentTemplate]="contentTemplateLine"></app-shared-item-line>
-    <app-shared-item-line link="/play" [contentTemplate]="contentTemplateLine"></app-shared-item-line>
-    <app-shared-item-line link="/play" [contentTemplate]="contentTemplateLine"></app-shared-item-line>
-    <app-shared-item-line link="/play" [contentTemplate]="contentTemplateLine"></app-shared-item-line>
-    <app-shared-item-line link="/play" [contentTemplate]="contentTemplateLine"></app-shared-item-line>
+    <ng-container *ngFor="let game of games">
+      <app-shared-item-line link="/play" [contentTemplate]="contentTemplateLine"
+        [context]="{game: game}"></app-shared-item-line>
+    </ng-container>
   </ng-template>
 
   <app-view-page-scroll title="Liste des parties" [buttonTemplate]="buttonTemplate"

@@ -18,7 +18,7 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
-    let id: string | null = this.activatedRoute.snapshot.paramMap.get('id')
+    const id: string | null = this.activatedRoute.snapshot.paramMap.get('view_id')
 
     if (id !== null) {
       const cardProposalLink: ReceiverLinkSocketModel<CardsProposalUserModel> = await this.socketSharedService.registerReceiver<CardsProposalUserModel>('/game/cards-proposal', 'view')

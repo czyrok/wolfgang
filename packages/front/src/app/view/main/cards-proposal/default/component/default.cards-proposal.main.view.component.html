@@ -22,7 +22,7 @@
 
   <ng-container *ngFor="let cardProposal of listCardsProposal">
     <app-shared-item-line link="./view/{{ cardProposal.id }}" [contentTemplate]="contentTemplateLine"
-      [context]="cardProposal"></app-shared-item-line>
+      [context]="{cardProposal: cardProposal}"></app-shared-item-line>
   </ng-container>
 </ng-template>
 
