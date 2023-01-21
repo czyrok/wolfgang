@@ -60,7 +60,29 @@ export class CardsProposalGameController {
         const cardProposalObj: LeanDocument<CardsProposalUserModel> | null = await CardsProposalUserModelDocument.findById(cardProposalId).populate('user', 'skin').lean().exec()
 
         if (!cardProposalObj) throw new NotFoundCardsProposalUserError
-
+        
         return plainToInstance(CardsProposalUserModel, cardProposalObj)
+    }
+
+    @OnMessage()
+    async upThumbsDownCount(@MessageBody() id: string) {
+        const cardProposal: DocumentType<CardsProposalUserModel> = await CardsProposalUserModelDocument
+            .findById(id)
+            .exec() as DocumentType<CardsProposalUserModel>
+
+        cardProposal.thumbsDownCount++
+
+        await cardProposal.save()
+    }
+
+    @OnMessage()
+    async upThumbsUpCount(@MessageBody() id: string) {
+        const cardProposal: DocumentType<CardsProposalUserModel> = await CardsProposalUserModelDocument
+            .findById(id)
+            .exec() as DocumentType<CardsProposalUserModel>
+
+        cardProposal.thumbsUpCount++
+
+        await cardProposal.save()
     }
 }

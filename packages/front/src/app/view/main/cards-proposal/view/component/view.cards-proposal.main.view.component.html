@@ -1,7 +1,7 @@
 <section>
   <ng-template #buttonTemplate>
-    <app-shared-interactive-button text="{{ cardProposal?.thumbsDownCount }}" icofont="thumbs-down" [important]="true"></app-shared-interactive-button>
-    <app-shared-interactive-button text="{{ cardProposal?.thumbsUpCount }}" icofont="thumbs-up" [accent]="true"
+    <app-shared-interactive-button text="{{ cardProposal?.thumbsDownCount }}" icofont="thumbs-down" (clickEvent)="callbackThumbsDownCount()" [important]="true"></app-shared-interactive-button>
+    <app-shared-interactive-button text="{{ cardProposal?.thumbsUpCount }}" icofont="thumbs-up" (clickEvent)="callbackThumbsUpCount()" [accent]="true"
       [important]="true"></app-shared-interactive-button>
   </ng-template>
 

@@ -5,72 +5,62 @@ import { TabDetailedListInteractiveSharedModel } from 'src/app/shared/interactiv
 import { ItemSubTabTabDetailedListInteractiveSharedModel } from 'src/app/shared/interactive/list/detailed/tab/sub-tab/item/model/item.sub-tab.tab.detailed.list.interactive.shared.model'
 import { SubTabTabDetailedListInteractiveSharedModel } from 'src/app/shared/interactive/list/detailed/tab/sub-tab/model/sub-tab.tab.detailed.list.interactive.shared.model'
 
+import cardsConfig from '../../../../../cards/config/cards.config.json'
+
 @Component({
   selector: 'app-view-main',
   templateUrl: './help.main.view.component.html',
   styleUrls: ['./help.main.view.component.scss']
 })
 export class HelpMainViewComponent {
-  list!: DetailedListInteractiveSharedModel
+  list: DetailedListInteractiveSharedModel = new DetailedListInteractiveSharedModel
+  desc!: string
 
   ngOnInit(): void {
-    this.list = new DetailedListInteractiveSharedModel()
-      .addTab(new TabDetailedListInteractiveSharedModel()
-        .setTitle('Gentil')
-        .addSubTab(new SubTabTabDetailedListInteractiveSharedModel()
-          .setTitle('Carte de base')
-          .setIsIconOnly(true)
-          .addItem(new ItemSubTabTabDetailedListInteractiveSharedModel()
-            .setName('Loup garou')
-            .setImgURL('https://m.gralon.net/medias-vignettes/articles/vignettes/le-loup-garou-un-personnage-de-legende-2252-700x700c.jpg')
-          )
-        )
-        .addSubTab(new SubTabTabDetailedListInteractiveSharedModel()
-          .setTitle('Carte de joueurs')
-          .setIsIconOnly(true)
-          .addItem(new ItemSubTabTabDetailedListInteractiveSharedModel()
-            .setName('Loup garou')
-            .setImgURL('https://m.gralon.net/medias-vignettes/articles/vignettes/le-loup-garou-un-personnage-de-legende-2252-700x700c.jpg')
-          )
-        )
-      )
-      .addTab(new TabDetailedListInteractiveSharedModel()
-        .setTitle('Méchant')
-        .addSubTab(new SubTabTabDetailedListInteractiveSharedModel()
-          .setTitle('Carte de base')
-          .setIsIconOnly(true)
-          .addItem(new ItemSubTabTabDetailedListInteractiveSharedModel()
-            .setName('Loup garou')
-            .setImgURL('https://m.gralon.net/medias-vignettes/articles/vignettes/le-loup-garou-un-personnage-de-legende-2252-700x700c.jpg')
-          )
-        )
-        .addSubTab(new SubTabTabDetailedListInteractiveSharedModel()
-          .setTitle('Carte de joueurs')
-          .setIsIconOnly(true)
-          .addItem(new ItemSubTabTabDetailedListInteractiveSharedModel()
-            .setName('Loup garou')
-            .setImgURL('https://m.gralon.net/medias-vignettes/articles/vignettes/le-loup-garou-un-personnage-de-legende-2252-700x700c.jpg')
-          )
-        )
-      )
-      .addTab(new TabDetailedListInteractiveSharedModel()
-        .setTitle('Autre')
-        .addSubTab(new SubTabTabDetailedListInteractiveSharedModel()
-          .setTitle('Carte de base')
-          .setIsIconOnly(true)
-          .addItem(new ItemSubTabTabDetailedListInteractiveSharedModel()
-            .setName('Loup garou')
-            .setImgURL('https://m.gralon.net/medias-vignettes/articles/vignettes/le-loup-garou-un-personnage-de-legende-2252-700x700c.jpg')
-          )
-        )
-        .addSubTab(new SubTabTabDetailedListInteractiveSharedModel()
-          .setTitle('Carte de joueurs')
-          .setIsIconOnly(true)
-          .addItem(new ItemSubTabTabDetailedListInteractiveSharedModel()
-            .setName('Loup garou')
-            .setImgURL('https://m.gralon.net/medias-vignettes/articles/vignettes/le-loup-garou-un-personnage-de-legende-2252-700x700c.jpg')
-          )
-        )
-      )
+    const gentilTab: TabDetailedListInteractiveSharedModel = new TabDetailedListInteractiveSharedModel
+    const mechantTab: TabDetailedListInteractiveSharedModel = new TabDetailedListInteractiveSharedModel
+    const autreTab: TabDetailedListInteractiveSharedModel = new TabDetailedListInteractiveSharedModel
+
+    gentilTab.setTitle('Gentil').setVisibility(true)
+    this.configureTabList(gentilTab, cardsConfig.cards.filter((card: any) => card.type === 'gentil'))
+
+    mechantTab.setTitle('Mechant')
+    this.configureTabList(mechantTab, cardsConfig.cards.filter((card: any) => card.type === 'mechant'))
+
+    autreTab.setTitle('Autre')
+    this.configureTabList(autreTab, cardsConfig.cards.filter((card: any) => card.type === 'autre'))
   }
+
+  configureTabList(tab: TabDetailedListInteractiveSharedModel, cards: Array<any>): void {
+    const tabUserCards: SubTabTabDetailedListInteractiveSharedModel = new SubTabTabDetailedListInteractiveSharedModel
+    const tabBasicCards: SubTabTabDetailedListInteractiveSharedModel = new SubTabTabDetailedListInteractiveSharedModel
+
+    tabBasicCards.setTitle('Carte de base').setIsIconOnly(true)
+    tabUserCards.setTitle('Carte de joueurs').setIsIconOnly(true)
+
+    for (const card of cards) {
+      const item: ItemSubTabTabDetailedListInteractiveSharedModel = new ItemSubTabTabDetailedListInteractiveSharedModel()
+        .setName(card.name)
+        .setImgURL('')
+        .setIsDisabled(false)
+        .setCallBack(() => {
+          this.desc = card.desc
+        })
+
+      if (card.is_player_card) {
+        tabUserCards.addItem(item)
+      } else {
+        tabBasicCards.addItem(item)
+      }
+
+      if (this.desc === undefined) this.desc = card.desc
+    }
+
+    tab
+      .addSubTab(tabBasicCards)
+      .addSubTab(tabUserCards)
+
+    this.list.addTab(tab)
+  }
+
 }
