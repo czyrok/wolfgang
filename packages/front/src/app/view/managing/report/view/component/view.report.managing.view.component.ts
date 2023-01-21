@@ -18,7 +18,7 @@ export class ViewReportManagingViewComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
-    let id: string | null = this.activatedRoute.snapshot.paramMap.get('id')
+    const id: string | null = this.activatedRoute.snapshot.paramMap.get('id')
 
     if (id !== null) {
       const reportLink: ReceiverLinkSocketModel<ReportModel> = await this.socketSharedService.registerReceiver<ReportModel>('/managing/report', 'view')

@@ -2,6 +2,7 @@ import { EmitOnSuccess, MessageBody, OnConnect, OnMessage, SocketController, Emi
 import { TypeChatGameEnum, ChatGameModelDocument, MessageChatGameModel, MessageChatGameModelDocument } from 'common'
 
 @SocketController({
+    // #achan !!!!!
     namespace: '/game/chat',
     init: () => { }
 })

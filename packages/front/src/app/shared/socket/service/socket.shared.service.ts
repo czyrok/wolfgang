@@ -32,4 +32,28 @@ export class SocketSharedService {
 
     return this.handler.registerReceiver<T>(namespace, event)
   }
+
+  public async check<T>(namespace: string, eventType: string, object: T): Promise<boolean> {
+    const checkSenderLink: SenderLinkSocketModel<T> = await this.registerSender(namespace, eventType),
+      checkReceiverLink: ReceiverLinkSocketModel<boolean> = await this.registerReceiver(namespace, eventType),
+      checkErrorLink: ReceiverLinkSocketModel<any> = await this.registerReceiver(namespace, `${eventType}-failed`)
+
+    return new Promise((resolve: (value: boolean) => void) => {
+      checkReceiverLink.subscribe((test: boolean) => {
+        resolve(test)
+
+        checkReceiverLink.unsubscribe()
+        checkErrorLink.unsubscribe()
+      })
+
+      checkErrorLink.subscribe(() => {
+        resolve(false)
+
+        checkReceiverLink.unsubscribe()
+        checkErrorLink.unsubscribe()
+      })
+
+      checkSenderLink.emit(object)
+    })
+  }
 }

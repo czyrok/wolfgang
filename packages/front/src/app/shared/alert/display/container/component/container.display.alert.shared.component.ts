@@ -23,6 +23,8 @@ export class ContainerDisplayAlertComponent implements AfterViewInit {
 
       component.instance.alert = alert
       component.instance.componentRef = component
+      
+      alert.componentRef = component
 
       this.changeDetectorRef.detectChanges()
     })

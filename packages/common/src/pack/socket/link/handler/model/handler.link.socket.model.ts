@@ -99,4 +99,10 @@ export class HandlerSocketLinkModel {
   private getNamespace(namespace: string): Socket {
     return this.socketManager.socket(namespace)
   }
+
+  public getSocket(namespace: string): Socket | undefined {
+    if (!this.metadata[namespace]) return undefined
+
+    return this.metadata[namespace].socket
+  }
 }

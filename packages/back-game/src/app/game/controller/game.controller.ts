@@ -1,31 +1,56 @@
 import { Socket, Namespace } from 'socket.io'
 import { instanceToPlain } from 'class-transformer'
-import { OnMessage, EmitOnSuccess, MessageBody, SocketController, ConnectedSocket } from 'ts-socket.io-controller'
-import { StateGameModel, GameModel } from 'common'
+import { OnMessage, EmitOnSuccess, MessageBody, SocketController, ConnectedSocket, OnConnect } from 'ts-socket.io-controller'
+import { GameModel, NotFoundUserError, UserModel } from 'common'
+import { Request } from 'express'
+import { DocumentType } from '@typegoose/typegoose'
 
 @SocketController({
-    namespace: '/game',
-    init: (io: Namespace) => { 
+    namespace: '/game/:id',
+    init: (io: Namespace) => {
         let game: GameModel = GameModel.instance
 
-        game.onStateChange((state: StateGameModel) => {
-            io.emit('state', instanceToPlain(state))
+        game.onStateChange((game: GameModel) => {
+            io.emit('state', instanceToPlain(game.state))
         })
     }
 })
 export class GameController {
-    @OnMessage()
-    @EmitOnSuccess()
-    state() {
-        let game: GameModel = GameModel.instance
+    @OnConnect()
+    @EmitOnSuccess('state')
+    connect() {
+        console.log('connneeee')
 
-        return game.state
+        return GameModel.instance.state
     }
 
     @OnMessage()
-    join(@MessageBody() player: string, @ConnectedSocket() socket: Socket) {        
-        let game: GameModel = GameModel.instance
+    @EmitOnSuccess()
+    state() {
+        console.log('icici')
 
-        game.newPlayer(player, socket.id)
+        return GameModel.instance.state
+    }
+
+    @OnMessage()
+    @EmitOnSuccess()
+    async join(@ConnectedSocket() socket: Socket) {
+        const req: Request = socket.request as Request,
+            user: DocumentType<UserModel> | undefined = req.session.user
+
+        if (!user) throw new NotFoundUserError
+
+        const game: GameModel = GameModel.instance,
+            gameId: string | undefined = game.id
+
+        // #achan
+        if (!gameId) throw new Error
+
+        if (user.currentGameId !== null && gameId !== user.currentGameId) throw new Error
+
+        user.currentGameId = gameId
+        await user.save()
+
+        game.newPlayer(user.username, socket.id)
     }
 }
