@@ -7,4 +7,6 @@
     <li><app-shared-interactive-button link="./cards-proposal" icofont="list" [active]="true"></app-shared-interactive-button></li>
     <li><app-shared-interactive-button link="./help" icofont="life-ring" [active]="true"></app-shared-interactive-button></li>
   </ul>
+
+  <app-shared-interactive-button *ngIf="getIsAuth()" icofont="logout" (clickEvent)="logoutCallback()"></app-shared-interactive-button>
 </nav>

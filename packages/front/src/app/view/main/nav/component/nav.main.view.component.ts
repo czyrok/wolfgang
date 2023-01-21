@@ -1,4 +1,5 @@
 import { Component } from '@angular/core'
+import { Router } from '@angular/router'
 
 import { AuthSharedService } from 'src/app/shared/auth/service/auth.shared.service'
 
@@ -9,10 +10,21 @@ import { AuthSharedService } from 'src/app/shared/auth/service/auth.shared.servi
 })
 export class NavMainViewComponent {
   constructor(
+    private router: Router,
     private authSharedService: AuthSharedService
   ) { }
-  
+
   getUsername(): string {
     return this.authSharedService.username ?? ''
+  }
+
+  getIsAuth(): boolean {
+    return this.authSharedService.isAuth
+  }
+
+  async logoutCallback(): Promise<void> {
+    await this.authSharedService.logOut()
+
+    this.router.navigateByUrl('/')
   }
 }
