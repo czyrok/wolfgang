@@ -1,20 +1,22 @@
-import { EmitOnFail, EmitOnSuccess, MessageBody, OnConnect, OnDisconnect, OnMessage, SkipEmitOnEmptyResult, SocketController } from 'ts-socket.io-controller'
+import { EmitOnFail, EmitOnSuccess, MessageBody, OnConnect, OnDisconnect, OnMessage, SkipEmitOnEmptyResult, SocketController, SocketRequest } from 'ts-socket.io-controller'
 import { DocumentType } from '@typegoose/typegoose'
-import { CosmeticModelDocument, SkinUserModel, NotEnoughGamePointUserError, UserModel, NotFoundUserError, UserModelDocument, PurchaseCosmeticModelDocument, CosmeticModel } from 'common'
+import { CosmeticModelDocument, SkinUserModel, NotEnoughGamePointUserError, UserModel, NotFoundUserError, PurchaseCosmeticModelDocument, CosmeticModel, PurchaseCosmeticModel, SeparatedCosmeticsListFormControllerModel } from 'common'
+import { plainToInstance } from 'class-transformer';
+import { LeanDocument } from 'mongoose';
 
 @SocketController({
-    namespace: '/game/profile/Skin-customization',
+    namespace: '/game/profile/skin-customization',
     init: () => { }
 })
 export class SkinCustomizationProfileGameController {
     @OnConnect()
     connection() {
-        console.log('client connected');
+        console.log('client connected3');
     }
 
     @OnDisconnect()
     disconnect() {
-        console.log('client disconnected');
+        console.log('client disconnected3');
     }
 
     @OnMessage()
@@ -22,41 +24,78 @@ export class SkinCustomizationProfileGameController {
     @EmitOnFail()
     @SkipEmitOnEmptyResult()
     async list() {
-        return await CosmeticModelDocument.find().lean().exec()
+        console.log('controller')
+        let obj = await CosmeticModelDocument.find().lean().exec()
+
+        return plainToInstance(CosmeticModel, obj)
+    }
+
+    @OnMessage()
+    @EmitOnSuccess()
+    @EmitOnFail()
+    @SkipEmitOnEmptyResult()
+    async cosmetics(@SocketRequest() req: any) {
+        console.log('controller cosmetic')
+        let user: DocumentType<UserModel> = req.user
+
+        if (!user) throw new NotFoundUserError
+
+        const purchasesListObj = await PurchaseCosmeticModelDocument.find({ user: user }).populate('cosmetic').lean().exec()
+        const cosmeticsListObj = await CosmeticModelDocument.find().lean().exec()
+
+        const purchasesList = plainToInstance(PurchaseCosmeticModel, purchasesListObj)
+        const allCosmeticsList = plainToInstance(CosmeticModel, cosmeticsListObj)
+
+        const ownedCosmeticsList: Array<CosmeticModel> = new Array
+
+        for (const purchase of purchasesList) {
+            ownedCosmeticsList.push(purchase.cosmetic as CosmeticModel)
+        }
+
+        const notOwnedCosmeticsList = allCosmeticsList.filter((cosmetic) => {
+            let test: boolean = false
+
+            for (const ownedCosmetic of ownedCosmeticsList) {
+                if (ownedCosmetic.id === cosmetic.id) test = true
+            }
+
+            return !test
+        })
+
+        return new SeparatedCosmeticsListFormControllerModel(ownedCosmeticsList, notOwnedCosmeticsList)
     }
 
     @OnMessage()
     @EmitOnFail()
-    async purchase(@MessageBody() data: CosmeticModel) {
-        const cosmetic = new CosmeticModelDocument(data),
-            // #achan
-            user: DocumentType<UserModel> | null = await UserModelDocument.findById('1').populate('skin', [
-                'hat',
-                'head',
-                'top',
-                'pants',
-                'shoes'
-            ]).exec()
-
+    async purchase(@SocketRequest() req: any, @MessageBody() data: Array<CosmeticModel>) {
+        const user: DocumentType<UserModel> = req.user
+        const skin: DocumentType<SkinUserModel> = user.skin as DocumentType<SkinUserModel>
+        
         if (!user) throw new NotFoundUserError
 
-        const purchase = PurchaseCosmeticModelDocument.find({ cosmetic: cosmetic, user: user }),
-            skin: DocumentType<SkinUserModel> = user.skin as DocumentType<SkinUserModel>
+        for (const oneCosmetic of data) {
+            const cosmetic: DocumentType<CosmeticModel> | null = await CosmeticModelDocument.findById(oneCosmetic.id).exec()
 
-        if (purchase.length > 0) {
-            skin.setCosmetic(cosmetic)
+            if (!cosmetic) throw new Error
 
-            await skin.save()
-        } else {
-            if (user.gamePointCount >= cosmetic.gamePointPrice) {
-                user.gamePointCount -= cosmetic.gamePointPrice
+            const purchase: LeanDocument<PurchaseCosmeticModel> | null = await PurchaseCosmeticModelDocument.findOne({ cosmetic: cosmetic, user: user }).lean().exec()
 
+            if (purchase !== null) {
                 skin.setCosmetic(cosmetic)
 
                 await skin.save()
-                await user.save()
+
             } else {
-                throw new NotEnoughGamePointUserError
+                if (user.gamePointCount >= cosmetic.gamePointPrice) {
+                    user.gamePointCount -= cosmetic.gamePointPrice
+                    skin.setCosmetic(cosmetic)
+
+                    await skin.save()
+                    await user.save()
+                }
+                else {
+                    throw new NotEnoughGamePointUserError
+                }
             }
         }
     }

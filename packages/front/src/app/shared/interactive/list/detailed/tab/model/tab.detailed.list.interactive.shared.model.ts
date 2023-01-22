@@ -1,4 +1,6 @@
 import { EventEmitter } from '@angular/core'
+import { Subject } from 'rxjs'
+import { ItemSubTabTabDetailedListInteractiveSharedModel } from '../sub-tab/item/model/item.sub-tab.tab.detailed.list.interactive.shared.model'
 
 import { SubTabTabDetailedListInteractiveSharedModel } from '../sub-tab/model/sub-tab.tab.detailed.list.interactive.shared.model'
 
@@ -7,6 +9,7 @@ export class TabDetailedListInteractiveSharedModel {
   private _visibility: boolean = false
   private _subTabList: Array<SubTabTabDetailedListInteractiveSharedModel> = new Array
   private _visibilityEvent!: EventEmitter<string>
+  private _clickedItemEvent!: Subject<ItemSubTabTabDetailedListInteractiveSharedModel<any>>
 
   public get title(): string {
     return this._title
@@ -22,6 +25,10 @@ export class TabDetailedListInteractiveSharedModel {
 
   public get visibilityEvent(): EventEmitter<string> {
     return this._visibilityEvent
+  }
+
+  public get clickedItemEvent(): Subject<ItemSubTabTabDetailedListInteractiveSharedModel<any>> {
+    return this._clickedItemEvent
   }
 
   public set visibilityEvent(value: EventEmitter<string>) {
@@ -49,8 +56,24 @@ export class TabDetailedListInteractiveSharedModel {
   }
 
   public addSubTab(value: SubTabTabDetailedListInteractiveSharedModel): this {
+    if (this.clickedItemEvent) value.setClickedItemEvent(this.clickedItemEvent)
+    
     this._subTabList.push(value)
 
     return this
+  }
+
+  public setClickedItemEvent(item: Subject<ItemSubTabTabDetailedListInteractiveSharedModel<any>>): this {
+    this._clickedItemEvent = item
+
+    return this
+  }
+
+  public has(item: ItemSubTabTabDetailedListInteractiveSharedModel<any>): boolean {
+    for (const subTab of this._subTabList) {
+      if (subTab.has(item)) return true
+    }
+
+    return false
   }
 }

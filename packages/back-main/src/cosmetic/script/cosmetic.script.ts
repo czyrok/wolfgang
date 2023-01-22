@@ -1,21 +1,25 @@
 import { connect } from 'mongoose'
 
-import { CosmeticModelDocument } from '../../../../common/src/cosmetic/model/cosmetic.model'
+import { CosmeticModel, CosmeticModelDocument } from 'common'
 
-import { TypeCosmeticEnum } from '../../../../common/src/cosmetic/type/enum/type.cosmetic.enum'
+import { TypeCosmeticEnum } from 'common'
 
-await connect('mongodb://localhost:60017/wolfgang', {
-    authSource: 'admin',
-    user: 'admin',
-    pass: 'pass'
-})
-
-insertCosmetic('translateName', 'price', 'url', TypeCosmeticEnum.HAT)
-insertCosmetic('translateName', 'price', 'url', TypeCosmeticEnum.HEAD)
-insertCosmetic('translateName', 'price', 'url', TypeCosmeticEnum.TOP)
-insertCosmetic('translateName', 'price', 'url', TypeCosmeticEnum.PANTS)
-insertCosmetic('translateName', 'price', 'url', TypeCosmeticEnum.SHOES)
-
-async function insertCosmetic(translateName: string, gamePointPrice: string, imageUrl: string, type: TypeCosmeticEnum): Promise<void> {
-    await new CosmeticModelDocument({ translateName, gamePointPrice, imageUrl, type }).save()
+async function insertCosmetic(translateName: string, gamePointPrice: number, imageUrl: string, type: TypeCosmeticEnum): Promise<void> {
+    await new CosmeticModelDocument(new CosmeticModel(translateName, gamePointPrice, imageUrl, type)).save()
 }
+
+async function run(): Promise<void> {
+    await connect('mongodb://localhost:60017/wolfgang', {
+        authSource: 'admin',
+        user: 'admin',
+        pass: 'pass'
+    })
+    
+    insertCosmetic('chapeau', 10, 'urldf', TypeCosmeticEnum.HAT)
+    insertCosmetic('lunette', 2, 'urllun', TypeCosmeticEnum.HEAD)
+    insertCosmetic('chemise', 50, 'urlche', TypeCosmeticEnum.TOP)
+    insertCosmetic('pantalon', 11, 'urlpan', TypeCosmeticEnum.PANTS)
+    insertCosmetic('basket', 100, 'urlbas', TypeCosmeticEnum.SHOES)
+}
+
+run()
