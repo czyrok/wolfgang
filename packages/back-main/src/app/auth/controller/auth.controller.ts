@@ -25,7 +25,6 @@ export class AuthController {
     @OnMessage()
     @EmitOnSuccess()
     async logOut(@ConnectedSocket() socket: Socket) {
-        console.log('dddjjj')
         const req: Request = socket.request as Request,
             token: DocumentType<TokenUserModel> | undefined = req.session.token
 

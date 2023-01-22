@@ -12,7 +12,7 @@ export class RulesGameModel {
 
     @Expose()
     // #achan
-    private _playerCountMax: number = 1
+    private _playerCountMax: number = 2
 
     @Expose()
     private _choosingcardList: Array<CardChoosingRulesModel> = new Array

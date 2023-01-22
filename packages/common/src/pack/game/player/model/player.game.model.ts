@@ -22,6 +22,10 @@ export class PlayerGameModel {
         this._user = user
     }
 
+    public set socketId(value: string) {
+        this._socketId = value
+    }
+
     public set activityDate(value: Date) {
         this._activityDate = value
     }

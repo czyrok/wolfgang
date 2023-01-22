@@ -31,6 +31,7 @@ export class GamesMainViewComponent implements OnInit, OnDestroy {
 
     this.listReceiverLink.subscribe((games: Array<GameModel>) => {
       this.games = games
+      console.log(games)
     })
 
     const listSenderLink: SenderLinkSocketModel<void> = await this.socketSharedService.registerSender('/game/currently', 'list')

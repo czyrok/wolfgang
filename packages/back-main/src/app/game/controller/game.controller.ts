@@ -1,4 +1,4 @@
-import { EmitOnFail, EmitOnSuccess, OnMessage, SocketController, ConnectedSocket } from 'ts-socket.io-controller'
+import { EmitOnFail, EmitOnSuccess, OnMessage, SocketController, ConnectedSocket, MessageBody } from 'ts-socket.io-controller'
 import { Request } from 'express'
 import { Socket } from 'socket.io'
 import { DocumentType } from '@typegoose/typegoose'
@@ -14,13 +14,17 @@ export class GameController {
     @OnMessage()
     @EmitOnSuccess()
     @EmitOnFail()
-    async check(@ConnectedSocket() socket: Socket) {
+    async checkUserGame(@ConnectedSocket() socket: Socket) {
         const req: Request = socket.request as Request,
             user: DocumentType<UserModel> | undefined = req.session.user
 
         if (!user) throw new NotFoundUserError
 
+        console.log('-----')
+
         const gameId: string | null = user.currentGameId
+
+        console.log('stttt1', gameId)
 
         if (!gameId) return ''
 
@@ -28,12 +32,30 @@ export class GameController {
             test: boolean = await gameConnection.checkGame()
 
         if (!test) {
-            user.currentGameId = null
-            await user.save()
+            console.log('stttt')
+            await user.updateOne({ currentGameId: null })
 
             return ''
         }
 
+        console.log(gameId)
+
         return gameId
+    }
+
+    @OnMessage()
+    @EmitOnSuccess()
+    @EmitOnFail()
+    async check(@MessageBody() gameId: string) {
+        console.log(gameId)
+
+        const gameConnection: CheckConnectionGameModel = new CheckConnectionGameModel(gameId),
+            test: boolean = await gameConnection.checkGame()
+
+        console.log(test)
+
+        if (test) return true
+
+        return false
     }
 }

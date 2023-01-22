@@ -5,6 +5,8 @@ import { GameModel, LogUtil, TypeLogEnum } from 'common'
 
 import { NoAvailableInstanceGameError } from '../../game/instance/error/no-available.instance.game.error'
 
+import { CreationConnectionGameHelper } from '../../game/connection/creation/helper/creation.connection.game.helper'
+
 import { RegisteryModel } from '../model/registery.model'
 
 import { InstanceGameInterface } from '../../game/instance/interface/instance.game.interface'
@@ -15,12 +17,22 @@ import { InstanceGameInterface } from '../../game/instance/interface/instance.ga
 })
 export class RegisteryController {
     @OnDisconnect()
+    @SkipEmitOnEmptyResult()
+    @EmitNamespaceBroadcastOnSuccess('get')
     disconnect(@ConnectedSocket() socket: Socket) {
         if (RegisteryModel.instance[socket.id] === undefined) return
 
         delete RegisteryModel.instance[socket.id]
 
         LogUtil.logger(TypeLogEnum.REGISTERY).trace('An instance lost')
+
+        const list: Array<GameModel> = new Array
+
+        for (const [, instance] of RegisteryModel.instance) {
+            list.push(...instance.games)
+        }
+
+        return list
     }
 
     @OnMessage()
@@ -36,23 +48,32 @@ export class RegisteryController {
     }
 
     @OnMessage()
+    @EmitOnFail()
     @SkipEmitOnEmptyResult()
     @EmitNamespaceBroadcastOnSuccess('get')
     update(@MessageBody() game: GameModel, @ConnectedSocket() socket: Socket) {
         const instance: InstanceGameInterface | undefined = RegisteryModel.instance[socket.id]
 
         if (instance !== undefined) {
+            let found: boolean = false
+
             for (let i = 0; i < instance.games.length; i++) {
                 if (instance.games[i].id === game.id) {
                     instance.games[i] = game
+
+                    found = true
 
                     break
                 }
             }
 
-            let list: Array<GameModel> = new Array()
+            if (!found) instance.games.push(game)
 
-            for (let [, instance] of RegisteryModel.instance) {
+            LogUtil.logger(TypeLogEnum.REGISTERY).trace('A game updated')
+
+            const list: Array<GameModel> = new Array()
+
+            for (const [, instance] of RegisteryModel.instance) {
                 list.push(...instance.games)
             }
 
@@ -63,9 +84,9 @@ export class RegisteryController {
     @OnMessage()
     @EmitOnSuccess()
     get() {
-        let list: Array<GameModel> = new Array
+        const list: Array<GameModel> = new Array
 
-        for (let [, instance] of RegisteryModel.instance) {
+        for (const [, instance] of RegisteryModel.instance) {
             list.push(...instance.games)
         }
 
@@ -75,7 +96,7 @@ export class RegisteryController {
     @OnMessage()
     @EmitOnSuccess()
     @EmitOnFail()
-    create() {
+    async create() {
         let minId!: string,
             min!: number
 
@@ -87,13 +108,15 @@ export class RegisteryController {
         }
 
         if (minId !== undefined) {
-            const id: string = v4()
+            const creationCode: string = v4()
 
-            RegisteryModel.instance[minId].socket.emit('create', id)
+            LogUtil.logger(TypeLogEnum.REGISTERY).info(`Wait for creation of game with code: "${creationCode}"`)
+
+            const gameId: string = await CreationConnectionGameHelper.waitRes(RegisteryModel.instance[minId].socket, creationCode)
 
             LogUtil.logger(TypeLogEnum.REGISTERY).trace('A new game created')
 
-            return id
+            return gameId
         } else {
             LogUtil.logger(TypeLogEnum.REGISTERY).warn('No game instance registered')
 

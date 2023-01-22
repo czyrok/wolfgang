@@ -10,27 +10,26 @@ import { HandlerPlayerGameModel } from '../player/handler/model/handler.player.g
 
 import { TypeLogEnum } from '../../log/type/enum/type.log.enum'
 import { UserModel } from '../../user/model/user.model'
+import { v4 } from 'uuid'
 
 @Exclude()
 export class GameModel {
     private static _instance?: GameModel
 
-    @Expose()
-    private _id?: string
+    private _id: string = v4()
+
+    private _creationCode?: string
     
     private _executor: ExecutorGameModel = new ExecutorGameModel
 
-    @Expose()
     private _state: StateGameModel = new StateGameModel
 
     private _stateChange: Subject<GameModel> = new Subject()
 
-    private constructor() {
+    public constructor() {
         this.state.onChange(() => {
             this.stateChange.next(this)
         })
-
-        LogUtil.logger(TypeLogEnum.GAME).trace('Game initialized')
     }
 
     public static get instance(): GameModel {
@@ -39,18 +38,27 @@ export class GameModel {
         return this._instance
     }
 
-    public get id(): string | undefined {
+    @Expose()
+    public get id(): string {
         return this._id
     }
 
-    public set id(value: string | undefined) {
-        this._id = value
+    @Expose()
+    public get creationCode(): string | undefined {
+        return this._creationCode
+    }
+
+    public set creationCode(value: string | undefined) {
+        this.stateChange.next(this)
+
+        this._creationCode = value
     }
 
     private get executor(): ExecutorGameModel {
         return this._executor
     }
 
+    @Expose()
     public get state(): StateGameModel {
         return this._state
     }
@@ -60,10 +68,18 @@ export class GameModel {
     }
 
     public newPlayer(user: UserModel, socketId: string): boolean {
-        if (this.state.rules.playerCountMax == this.state.players.length
+        const checkPlayer: PlayerGameModel | null = this.checkPlayer(user.id)
+        
+        if (checkPlayer) {
+            checkPlayer.socketId = socketId
+
+            return true
+        }
+
+        if (this.state.rules.playerCountMax === this.state.players.length
             || this.executor.isStarted) return false
 
-        let player: PlayerGameModel = new PlayerGameModel(user, socketId)
+        const player: PlayerGameModel = new PlayerGameModel(user, socketId)
 
         HandlerPlayerGameModel.instance.addPlayer(player)
 
@@ -75,6 +91,14 @@ export class GameModel {
         }
 
         return true
+    }
+
+    public checkPlayer(userId: string): PlayerGameModel | null {
+        for (const player of this.state.players) {
+            if (player.user.id === userId) return player
+        }
+
+        return null
     }
 
     public onStateChange(callback: (game: GameModel) => void): Subscription {

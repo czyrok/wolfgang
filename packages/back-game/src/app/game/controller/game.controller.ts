@@ -1,9 +1,9 @@
 import { Socket, Namespace } from 'socket.io'
 import { instanceToPlain } from 'class-transformer'
-import { OnMessage, EmitOnSuccess, MessageBody, SocketController, ConnectedSocket, OnConnect } from 'ts-socket.io-controller'
-import { GameModel, NotFoundUserError, UserModel } from 'common'
 import { Request } from 'express'
 import { DocumentType } from '@typegoose/typegoose'
+import { OnMessage, EmitOnSuccess, MessageBody, SocketController, ConnectedSocket, OnConnect } from 'ts-socket.io-controller'
+import { GameModel, NotFoundUserError, UserModel, InitializationGameError, AlreadyInGameUserError, LogUtil, TypeLogEnum } from 'common'
 
 @SocketController({
     namespace: '/game/:id',
@@ -16,19 +16,9 @@ import { DocumentType } from '@typegoose/typegoose'
     }
 })
 export class GameController {
-    @OnConnect()
-    @EmitOnSuccess('state')
-    connect() {
-        console.log('connneeee')
-
-        return GameModel.instance.state
-    }
-
     @OnMessage()
     @EmitOnSuccess()
     state() {
-        console.log('icici')
-
         return GameModel.instance.state
     }
 
@@ -36,21 +26,25 @@ export class GameController {
     @EmitOnSuccess()
     async join(@ConnectedSocket() socket: Socket) {
         const req: Request = socket.request as Request,
-            user: DocumentType<UserModel> | undefined = req.session.user
+            userDoc: DocumentType<UserModel> | undefined = req.session.user
 
-        if (!user) throw new NotFoundUserError
+        if (!userDoc) throw new NotFoundUserError
 
         const game: GameModel = GameModel.instance,
             gameId: string | undefined = game.id
 
         // #achan
-        if (!gameId) throw new Error
+        if (!gameId) throw new InitializationGameError
+        if (userDoc.currentGameId !== null && gameId !== userDoc.currentGameId) throw new AlreadyInGameUserError
 
-        if (user.currentGameId !== null && gameId !== user.currentGameId) throw new Error
+        if (userDoc.currentGameId !== gameId) {
+            await userDoc.updateOne({
+                currentGameId: gameId
+            })
+        }
 
-        user.currentGameId = gameId
-        await user.save()
+        const user: UserModel = userDoc.toObject()
 
-        game.newPlayer(user.username, socket.id)
+        LogUtil.logger(TypeLogEnum.APP).trace(game.newPlayer(user, socket.id))
     }
 }

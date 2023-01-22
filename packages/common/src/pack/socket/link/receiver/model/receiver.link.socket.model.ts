@@ -4,7 +4,7 @@ import { LinkSocketModel } from '../../model/link.socket.model'
 
 export class ReceiverLinkSocketModel<T> extends LinkSocketModel<T> {
     private _defaultSub!: Subscription
-    private _sub!: Subscription
+    private _subList: Array<Subscription> = new Array
 
     private _data!: T
 
@@ -23,12 +23,8 @@ export class ReceiverLinkSocketModel<T> extends LinkSocketModel<T> {
         return this._defaultSub
     }
 
-    public set sub(value: Subscription) {
-        this._sub = value
-    }
-
-    public get sub(): Subscription {
-        return this._sub
+    public get subList(): Array<Subscription> {
+        return this._subList
     }
 
     public set data(value: T) {
@@ -41,13 +37,7 @@ export class ReceiverLinkSocketModel<T> extends LinkSocketModel<T> {
 
     public subscribe(callback?: (data: T) => void): this {
         if (callback) {
-            if (this.sub === undefined) {
-                this.sub = this.observable.subscribe(callback)
-            } else {
-                this.sub.unsubscribe()
-
-                this.sub = this.observable.subscribe(callback)
-            }
+            this.subList.push(this.observable.subscribe(callback))
         } else {
             if (this.defaultSub === undefined) this.defaultSub = this.observable.subscribe((data: T) => {
                 this.data = data
@@ -59,7 +49,10 @@ export class ReceiverLinkSocketModel<T> extends LinkSocketModel<T> {
 
     public unsubscribe(): this {
         if (this.defaultSub !== undefined) this.defaultSub.unsubscribe()
-        if (this.sub !== undefined) this.sub.unsubscribe()
+
+        for (const sub of this.subList) {
+            sub.unsubscribe()
+        }
 
         return this
     }

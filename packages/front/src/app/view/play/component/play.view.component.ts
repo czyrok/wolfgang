@@ -1,8 +1,9 @@
-import { AfterViewInit, Component, EventEmitter, OnInit } from '@angular/core'
-import { MessageChatGameInterface, ReceiverLinkSocketModel, StateGameModel, VotePlayerGameModel } from 'common'
-
-import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
+import { AfterViewInit, Component, EventEmitter } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
+import { MessageChatGameInterface, ReceiverLinkSocketModel, SenderLinkSocketModel, StateGameModel, VotePlayerGameModel, HandlerEventLinkSocketModel } from 'common'
+
+import { GameSharedService } from 'src/app/shared/game/service/game.shared.service'
+import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
 
 @Component({
   selector: 'app-view-play',
@@ -25,8 +26,11 @@ export class PlayViewComponent implements AfterViewInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private socketSharedService: SocketSharedService
+    private socketSharedService: SocketSharedService,
+    private gameSharedService: GameSharedService
   ) {
+    
+
     /* this.socketLinkGame.emit(this.userService.username)
 
     this.socketLinkPlayerVote = this.eventSocketLink.registerReceiver<Array<VotePlayerGameModel>>('/game/player/vote', 'get').subscribe({
@@ -44,7 +48,12 @@ export class PlayViewComponent implements AfterViewInit {
   }
 
   async ngAfterViewInit(): Promise<void> {
-    let id: string | null = this.activatedRoute.snapshot.paramMap.get('gameId')
+    const sender: SenderLinkSocketModel<void> | undefined = await this.gameSharedService.eventHandler?.getSender('join')
+
+    console.log(sender)
+    sender?.emit()
+
+    /* let id: string | null = this.activatedRoute.snapshot.paramMap.get('gameId')
 
     console.log(id)
 
@@ -63,7 +72,7 @@ export class PlayViewComponent implements AfterViewInit {
           //this.eventGameState.emit(data)
         }
       )
-    }
+    } */
   }
 
   changeDisplayChatButtonCallback: () => void = () => {

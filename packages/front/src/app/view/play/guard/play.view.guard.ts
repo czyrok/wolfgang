@@ -22,9 +22,11 @@ export class PlayViewGuard implements CanActivate {
         
         if (!gameId) return this.router.parseUrl('/game/currently')
 
-        if (this.gameSharedService.joinGame(gameId)) return true
+        console.log(this.gameSharedService.gameId)
 
-        this.DisplayAlertSharedService.emitWarning('Vous êtes déjà dans une partie')
+        if (await this.gameSharedService.joinGame(gameId)) return true
+
+        this.DisplayAlertSharedService.emitWarning('Vous ne pouvez pas rejoindre cette partie')
 
         return this.router.parseUrl('/game/currently')
     }
