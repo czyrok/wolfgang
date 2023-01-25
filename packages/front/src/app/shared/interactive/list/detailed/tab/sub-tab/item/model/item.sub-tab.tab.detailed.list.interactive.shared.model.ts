@@ -75,8 +75,6 @@ export class ItemSubTabTabDetailedListInteractiveSharedModel<T> {
   public setClickedItemEvent(item: Subject<ItemSubTabTabDetailedListInteractiveSharedModel<T>>): this {
     this._clickedItemEvent = item
 
-    console.log(this, item)
-
     return this
   }
 

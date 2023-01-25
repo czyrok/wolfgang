@@ -36,14 +36,14 @@ export class UserModel extends DocumentModel implements UserInterface {
     socketId!: string
 
     public constructor(
-        //skin: DocumentType<SkinUserModel>,
+        skin: DocumentType<SkinUserModel>,
         username: string,
         email: string,
         password: string
     ) {
         super()
 
-        //this.skin = skin
+        this.skin = skin
         this.username = username
         this.email = email
         this.password = password

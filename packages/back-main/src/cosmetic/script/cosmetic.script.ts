@@ -15,11 +15,11 @@ async function run(): Promise<void> {
         pass: 'pass'
     })
     
-    insertCosmetic('chapeau', 10, 'urldf', TypeCosmeticEnum.HAT)
-    insertCosmetic('lunette', 2, 'urllun', TypeCosmeticEnum.HEAD)
-    insertCosmetic('chemise', 50, 'urlche', TypeCosmeticEnum.TOP)
-    insertCosmetic('pantalon', 11, 'urlpan', TypeCosmeticEnum.PANTS)
-    insertCosmetic('basket', 100, 'urlbas', TypeCosmeticEnum.SHOES)
+    insertCosmetic('chapeau2', 20, 'urlchap2', TypeCosmeticEnum.HAT)
+    insertCosmetic('lunette2', 5, 'urllun2', TypeCosmeticEnum.HEAD)
+    insertCosmetic('t-shirt', 20, 'urltsh', TypeCosmeticEnum.TOP)
+    insertCosmetic('jean', 30, 'urljean', TypeCosmeticEnum.PANTS)
+    insertCosmetic('chaussure', 80, 'urlchau', TypeCosmeticEnum.SHOES)
 }
 
 run()

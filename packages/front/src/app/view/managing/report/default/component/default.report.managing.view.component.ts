@@ -1,6 +1,6 @@
 import { Component } from '@angular/core'
 
-import { ReportModel } from 'common'
+import { ReportModel, UserModel } from 'common'
 import { ReceiverEventSocketModel } from 'src/app/socket/event/receiver/model/receiver.event.socket.model'
 import { EventSocketService } from 'src/app/socket/event/service/event.socket.service'
 
@@ -21,4 +21,10 @@ export class DefaultReportManagingViewComponent {
   constructor(
     private eventSocketLink: EventSocketService
   ) { }
+
+  getUserId(user: UserModel | string): string {
+    if (user instanceof UserModel) return user.getId() || 'ntm'
+
+    return 'ntm'
+  }
 }

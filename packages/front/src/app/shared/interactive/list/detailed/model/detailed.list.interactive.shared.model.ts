@@ -32,6 +32,7 @@ export class DetailedListInteractiveSharedModel {
                 }
             }
             this.selectedItems = this.selectedItems.filter((items: ItemSubTabTabDetailedListInteractiveSharedModel<any>) => items !== itemTmp)
+            
             this.selectedItems.push(item)
         })
     }
