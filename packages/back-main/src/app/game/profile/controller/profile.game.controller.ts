@@ -1,7 +1,8 @@
 import { DocumentType } from '@typegoose/typegoose'
 import { plainToInstance } from 'class-transformer'
-import { NotFoundUserError, UserModel, UserModelDocument } from 'common'
 import { EmitOnFail, EmitOnSuccess, MessageBody, OnConnect, OnDisconnect, OnMessage, SocketController } from 'ts-socket.io-controller'
+import { NotFoundUserError, UserModel, UserModelDocument } from 'common'
+import { LeanDocument } from 'mongoose';
 
 
 @SocketController({
@@ -36,7 +37,7 @@ export class ProfileGameController {
     @EmitOnFail()
     @OnMessage()
     async view(@MessageBody() username: string) {
-        const obj = await UserModelDocument.findOne({
+        const obj: LeanDocument<UserModel> | null = await UserModelDocument.findOne({
             username: username
         }).populate('skin').lean().exec()
 

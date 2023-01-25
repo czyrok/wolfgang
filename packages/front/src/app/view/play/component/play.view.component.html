@@ -2,32 +2,36 @@
   <div class="wrapper">
     <div class="button-container">
       <div class="left">
-        <app-shared-interactive-button icofont="close" link="/game/currently" [important]="true"></app-shared-interactive-button>
-  
-        <app-shared-label text="00:00" icofont="sand-clock" [accent]="true" [important]="true"></app-shared-label>
+        <app-shared-interactive-button icofont="close" link="/game/currently"
+          [important]="true"></app-shared-interactive-button>
+
+        <app-shared-label *ngIf="chrono < 0 ? false : true" text="{{chrono}}" icofont="stopwatch" [accent]="true"
+          [important]="true"></app-shared-label>
       </div>
-  
-      <div>
+
+      <!-- <div>
         <app-shared-interactive-button icofont="chat" [active]="displayChat" [callback]="changeDisplayChatButtonCallback" [important]="true"></app-shared-interactive-button>
-      </div>
+      </div> -->
     </div>
-  
+
     <div class="chat-container">
-      <app-shared-chat *ngIf="displayChat"></app-shared-chat>
-  
+      <app-shared-chat *ngIf="displayChat" [eventMessageEvent]="eventMessageEvent"
+        [playerMessageEvent]="playerMessageEvent"></app-shared-chat>
+
       <app-view-play-rules *ngIf="!displayChat"></app-view-play-rules>
-  
+
       <div data-css-text-bar data-css-border-radius="rounded">
-        <input type="text" placeholder="Saisissez un message" data-css-input>
+        <input type="text" placeholder="Saisissez un message" data-css-input [(ngModel)]="message" (keyup)="sendMessage($event)">
         <div class="line" data-css-underline>
           <div data-css-underline></div>
         </div>
         <span class="icofont-paper-plane" data-css-icofont></span>
       </div>
     </div>
-  
+
     <div>
-      <app-view-play-avatar-circle [eventPlayerVote]="eventPlayerVote" [eventGameState]="eventGameState"></app-view-play-avatar-circle>
+      <app-view-play-avatar-circle [eventPlayerVote]="eventPlayerVote"
+        [gameStateEvent]="gameStateEvent"></app-view-play-avatar-circle>
     </div>
   </div>
 </ng-template>

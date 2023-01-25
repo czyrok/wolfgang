@@ -15,16 +15,16 @@ export class PlayViewGuard implements CanActivate {
     async canActivate(route: ActivatedRouteSnapshot): Promise<boolean | UrlTree> {
         await this.gameSharedService.checkStatus()
 
-        if (this.gameSharedService.inGame && !route.firstChild) return this.router.parseUrl(`/game/profile/${this.gameSharedService.gameId}`)
+        if (this.gameSharedService.inGame && !route.firstChild) return this.router.parseUrl(`/play/${this.gameSharedService.gameId}`)
         if (!route.firstChild) return this.router.parseUrl('/game/currently')
 
         const gameId: string | undefined = route.firstChild.params['game_id']
         
         if (!gameId) return this.router.parseUrl('/game/currently')
 
-        if (this.gameSharedService.joinGame(gameId)) return true
+        if (await this.gameSharedService.joinGame(gameId)) return true
 
-        this.DisplayAlertSharedService.emitWarning('Vous êtes déjà dans une partie')
+        this.DisplayAlertSharedService.emitWarning('Vous ne pouvez pas rejoindre cette partie')
 
         return this.router.parseUrl('/game/currently')
     }

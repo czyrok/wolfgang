@@ -1,4 +1,4 @@
-import { EnvUtil, GameModel, HandlerSocketLinkModel, SenderLinkSocketModel, VarEnvEnum } from "common"
+import { EnvUtil, GameModel, HandlerSocketLinkModel, LogUtil, SenderLinkSocketModel, TypeLogEnum, VarEnvEnum } from 'common'
 
 export class ConnectionRegisteryModel {
     private static _instance?: ConnectionRegisteryModel
@@ -9,7 +9,16 @@ export class ConnectionRegisteryModel {
     private _updateLink: SenderLinkSocketModel<GameModel>
         = this.connection.registerSender('/registery', 'update')
 
-    private constructor() { }
+    private constructor() {
+        LogUtil.logger(TypeLogEnum.APP).trace('un petit cc')
+        this.connection.socketManager.on('error', (err) => {
+            LogUtil.logger(TypeLogEnum.APP).trace(err)
+        })
+        const test = this.connection.registerReceiver('/registery', 'update-failed').subscribe((err) => {
+            LogUtil.logger(TypeLogEnum.APP).trace(err)
+        })
+        this.updateLink.emit(GameModel.instance)
+    }
 
     public static get instance(): ConnectionRegisteryModel {
         if (this._instance === undefined) this._instance = new ConnectionRegisteryModel

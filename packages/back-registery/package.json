@@ -9,7 +9,7 @@
   "dependencies": {
     "common": "file:../common",
     "express": "~4.18.2",
-    "socket.io": "~4.5.3",
+    "socket.io": "~4.5.4",
     "ts-socket.io-controller": "^1.0.7",
     "typedi": "^0.10.0",
     "uuid": "^9.0.0",

@@ -1,16 +1,13 @@
 import http from 'http'
 import { connect } from 'mongoose'
 import { Server } from 'socket.io'
+import { instanceToPlain } from 'class-transformer'
 import { SocketIoController } from 'ts-socket.io-controller'
 import { LogUtil, LogHelper, TypeLogEnum, EnvUtil, VarEnvEnum, GameModel, ScopeIoMiddleware, SessionIoMiddleware } from 'common'
 
 import { GameController } from './game/controller/game.controller'
-/* import { ChatGameController } from './game/chat/controller/chat.game.controller'
-import { VotePlayerGameController } from './game/player/vote/controller/vote.player.game.controller' */
-
-import { GameMiddleware } from './game/middleware/game.middleware'
-
-import { ConnectionRegisteryModel } from './registery/connection/model/connection.registery.model'
+import { ChatGameController } from './game/chat/controller/chat.game.controller'
+/* import { VotePlayerGameController } from './game/player/vote/controller/vote.player.game.controller' */
 
 async function run(): Promise<void> {
     LogUtil.config = LogHelper.getConfig(
@@ -40,13 +37,12 @@ async function run(): Promise<void> {
     SocketIoController.useSocketIoServer(io, {
         controllers: [
             GameController,
-            /* ChatGameController,
-            VotePlayerGameController */
+            /* ChatGameController, */
+            /* VotePlayerGameController */
         ],
         middlewares: [
             SessionIoMiddleware,
-            ScopeIoMiddleware,
-            GameMiddleware
+            ScopeIoMiddleware
         ],
         useClassTransformer: true
     })
@@ -55,13 +51,19 @@ async function run(): Promise<void> {
 
     const game: GameModel = GameModel.instance
 
-    game.id = process.env['ID'] as string
-
     game.onStateChange((game: GameModel) => {
-        ConnectionRegisteryModel.instance.updateLink.emit(game)
+        if (process.send) process.send(instanceToPlain(game))
     })
 
-    LogUtil.logger(TypeLogEnum.APP).info(`Game have id: "${game.id}"`)
+    process.on('message', (msg) => {
+        if (msg.cmd === 'getGameData') {
+            if (process.send) process.send(instanceToPlain(game))
+        }
+    })
+
+    game.creationCode = process.env['CREATION_CODE'] as string
+
+    LogUtil.logger(TypeLogEnum.APP).info(`Initialized game: "{ id: "${game.gameId}", creationCode: "${game.creationCode}" }"`)
 }
 
 run().catch((error: Error) => {

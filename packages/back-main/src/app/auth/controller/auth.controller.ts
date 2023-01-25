@@ -25,7 +25,6 @@ export class AuthController {
     @OnMessage()
     @EmitOnSuccess()
     async logOut(@ConnectedSocket() socket: Socket) {
-        console.log('dddjjj')
         const req: Request = socket.request as Request,
             token: DocumentType<TokenUserModel> | undefined = req.session.token
 
@@ -36,6 +35,10 @@ export class AuthController {
         await token.save()
 
         const user: DocumentType<UserModel> = token.user as DocumentType<UserModel>
+
+        req.session.destroy(() => {
+            
+        })
 
         LogUtil.logger(TypeLogEnum.ACCESS).info(`${user.username} is disconnecting`)
     }

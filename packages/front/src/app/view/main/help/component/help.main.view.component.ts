@@ -41,7 +41,7 @@ export class HelpMainViewComponent {
     for (const card of cards) {
       const item: ItemSubTabTabDetailedListInteractiveSharedModel<any> = new ItemSubTabTabDetailedListInteractiveSharedModel()
         .setName(card.name)
-        .setImgURL('')
+        .setImgURL(`asset/img/${card.imageUrl}`)
         .setIsDisabled(false)
         .setCallBack(() => {
           this.desc = card.desc

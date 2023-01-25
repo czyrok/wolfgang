@@ -7,5 +7,6 @@ import { Component, Input } from '@angular/core'
   styleUrls: ['./event.message.chat.shared.component.scss']
 })
 export class EventMessageChatSharedComponent {
-
+  @Input() text!: string
+  @Input() imageUrl!: string
 }

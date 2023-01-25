@@ -27,6 +27,8 @@ nav .logo {
     width: property.get('size', 'nav', 'logo');
     aspect-ratio: 1 / 1;
     background-color: yellow;
+    background-image: url('../../../../../asset/img/logo.jpg');
+    background-size: cover;
 }
 
 nav ul {

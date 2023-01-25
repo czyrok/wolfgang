@@ -16,7 +16,7 @@
   grid-template-columns: 1fr auto;
 }
 
-.container img {
+.container .avatar {
   grid-area: a;
   display: flex;
   width: property.get('size', 'chat', 'icon');
@@ -26,8 +26,8 @@
 
 .container p {
   grid-area: b;
-  border-top-left-radius: property.get('borderRadius', 'rounded');
-  border-bottom-left-radius: property.get('borderRadius', 'rounded');
+  border-top-left-radius: property.get('borderRadius', 'regular');
+  border-bottom-left-radius: property.get('borderRadius', 'regular');
   padding: property.get('borderLimit', 'verySmall');
   height: fit-content;
 

@@ -19,14 +19,18 @@ export class CircleAvatarPlayViewComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.avatarsCircle = new CircleAvatarPlayViewModel(this.eventPlayerVote, this.renderer, this.changeDetectorRef, this.targetRef, this.boxContainerRef)
 
-    if (this.eventGameState !== undefined) this.eventGameState.subscribe((data: StateGameModel) => {
+    if (this.gameStateEvent !== undefined) this.gameStateEvent.subscribe((data: StateGameModel) => {
+      this.avatarsCircle.removeAll()
+
       this.avatarsCircle.setPlayers(data.players)
+
+      this.avatarsCircle.update()
       this.avatarsCircle.update()
     })
   }
 
   @Input() eventPlayerVote!: EventEmitter<VotePlayerGameModel>
-  @Input() eventGameState!: EventEmitter<StateGameModel>
+  @Input() gameStateEvent!: EventEmitter<StateGameModel>
 
   @ViewChild('target', { read: ViewContainerRef }) targetRef!: ViewContainerRef
   @ViewChild('widthTarget') boxContainerRef!: ElementRef<HTMLElement>

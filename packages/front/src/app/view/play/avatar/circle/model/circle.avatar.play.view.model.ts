@@ -102,14 +102,10 @@ export class CircleAvatarPlayViewModel {
     for (const player of playersList) {
       this.placesList.push(PlaceCircleAvatarPlayViewModel.create(player, this.voteEventEmitter, this.renderer, this.changeDetectorRef, this.targetRef))
     }
-
-    this.update()
   }
 
   public addPlayer(player: PlayerGameModel): void {
     this.placesList.push(PlaceCircleAvatarPlayViewModel.create(player, this.voteEventEmitter, this.renderer, this.changeDetectorRef, this.targetRef))
-
-    this.update()
   }
 
   public removePlayer(player: PlayerGameModel): void {
@@ -121,7 +117,13 @@ export class CircleAvatarPlayViewModel {
         break
       }
     }
+  }
 
-    this.update()
+  public removeAll(): void {
+    for (const place of this.placesList) {
+      place.destroy()
+    }
+
+    this.placesList.splice(0, this.placesList.length)
   }
 }
