@@ -20,7 +20,8 @@ export class ReportMainController {
     @EmitOnFail()
     @OnMessage()
     async insertReport(@SocketRequest() req: any, report: ReportModel) {
-        report.user = req.user
+        report.user = req.session.user
+        
         await new ReportModelDocument(report).save()
     }
 }

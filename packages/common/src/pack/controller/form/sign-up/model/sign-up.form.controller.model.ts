@@ -3,13 +3,13 @@ import { Exclude, Expose } from 'class-transformer'
 @Exclude()
 export class SignUpFormControllerModel {
     @Expose()
-    private _username!: string
+    private _username: string
 
     @Expose()
-    private _email!: string
+    private _email: string
 
     @Expose()
-    private _password!: string
+    private _password: string
 
     public constructor(
         username: string,

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { CanActivate, Router } from '@angular/router'
+import { CanActivate, Router, UrlTree } from '@angular/router'
 
 import { AuthSharedService } from '../service/auth.shared.service'
 
@@ -12,11 +12,11 @@ export class AuthSharedGuard implements CanActivate {
     private authSharedService: AuthSharedService
   ) { }
 
-  canActivate() {
-    this.authSharedService.testAuth()
+  async canActivate(): Promise<boolean | UrlTree> {
+    await this.authSharedService.testAuth()
 
     if (!this.authSharedService.isAuth) {
-      return this.router.parseUrl('log-in')
+      return this.router.parseUrl('/log-in')
     } else {
       return true
     }

@@ -9,4 +9,5 @@ export class LineItemSharedComponent {
   @Input() link!: string
 
   @Input() contentTemplate!: TemplateRef<any>
+  @Input() context!: any
 }

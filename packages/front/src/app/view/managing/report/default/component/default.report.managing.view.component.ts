@@ -1,30 +1,31 @@
-import { Component } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
+import { ReportModel, ReceiverLinkSocketModel, SenderLinkSocketModel } from 'common'
 
-import { ReportModel, UserModel } from 'common'
-import { ReceiverEventSocketModel } from 'src/app/socket/event/receiver/model/receiver.event.socket.model'
-import { EventSocketService } from 'src/app/socket/event/service/event.socket.service'
+import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
 
 @Component({
   selector: 'app-view-managing-report-default',
   templateUrl: './default.report.managing.view.component.html',
   styleUrls: ['./default.report.managing.view.component.scss']
 })
-export class DefaultReportManagingViewComponent {
+export class DefaultReportManagingViewComponent implements OnInit {
   reportList!: Array<ReportModel>
 
-  reportLink: ReceiverEventSocketModel<Array<ReportModel>> = this.eventSocketLink.registerReceiver<Array<ReportModel>>('/managing/report', 'list').subscribe({
-    callback: (data: Array<ReportModel>) => {
-      this.reportList = data
-    }
-  })
-
   constructor(
-    private eventSocketLink: EventSocketService
+    private socketSharedService: SocketSharedService
   ) { }
+  
+  async ngOnInit(): Promise<void> {
+    const reportListLink: ReceiverLinkSocketModel<Array<ReportModel>> = await this.socketSharedService.registerReceiver<Array<ReportModel>>('/managing/report', 'list')
+    
+    reportListLink.subscribe((data: Array<ReportModel>) => {
+      this.reportList = data
 
-  getUserId(user: UserModel | string): string {
-    if (user instanceof UserModel) return user.getId() || 'ntm'
+      reportListLink.unsubscribe()
+    })
 
-    return 'ntm'
+    const triggerLink: SenderLinkSocketModel<void> = await this.socketSharedService.registerSender<void>('/managing/report', 'list')
+
+    triggerLink.emit()
   }
 }

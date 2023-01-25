@@ -36,30 +36,64 @@ export class AuthSharedService {
 
   public async setToken(token: string): Promise<void> {
     // #achan secure, et utiliser env
-    this.cookieService.set('token', token, 518400000, '/', undefined, false, 'Lax')
+    this.cookieService.set('token', token, 6, '/', undefined, false, 'Lax')
 
     await this.testAuth()
   }
 
   public async testAuth(): Promise<void> {
-    await this.sessionSharedService.refreshSession()
-
-    this.isAuth = false
-    this.username = undefined
-
-    // #achan
+    // #achan use env
     if (!this.cookieService.check('token')) return
 
-    const testLink: SenderLinkSocketModel<void> = await this.socketSharedService.registerSender('/test/auth', 'trigger')
-    const resTestLink: ReceiverLinkSocketModel<string> = await this.socketSharedService.registerReceiver('/test/auth', 'trigger')
+    this.disconnect()
 
-    resTestLink.subscribe((username: string) => {
-      this.isAuth = true
-      this.username = username
+    await this.sessionSharedService.refreshSession()
+    await this.doAuth()
+  }
 
-      resTestLink.unsubscribe()
+  private async doAuth(): Promise<void> {
+    const testLink: SenderLinkSocketModel<void> = await this.socketSharedService.registerSender('/auth', 'test')
+    const resTestLink: ReceiverLinkSocketModel<string> = await this.socketSharedService.registerReceiver('/auth', 'test')
+
+    return new Promise((resolve: (value: void) => void) => {
+      resTestLink.subscribe((username: string) => {
+        this.connect(username)
+
+        resolve()
+
+        resTestLink.unsubscribe()
+      })
+
+      testLink.emit()
     })
+  }
 
-    testLink.emit()
+  public async logOut(): Promise<void> {
+    const logOutSenderLink: SenderLinkSocketModel<void> = await this.socketSharedService.registerSender('/auth', 'logOut')
+    const logOutReceiverLink: ReceiverLinkSocketModel<void> = await this.socketSharedService.registerReceiver('/auth', 'logOut')
+
+    return new Promise((resolve: (value: void) => void) => {
+      logOutReceiverLink.subscribe(() => {
+        this.disconnect()
+        // #achan
+        this.cookieService.delete('token')
+
+        resolve()
+
+        logOutReceiverLink.unsubscribe()
+      })
+
+      logOutSenderLink.emit()
+    })
+  }
+
+  private connect(username: string): void {
+    this.isAuth = true
+    this.username = username
+  }
+
+  private disconnect(): void {
+    this.isAuth = false
+    this.username = undefined
   }
 }

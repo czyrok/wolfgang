@@ -32,8 +32,8 @@ export class UserModel extends DocumentModel implements UserInterface {
     level!: number
 
     @Expose()
-    @prop()
-    socketId!: string
+    @prop({ required: true, default: null })
+    currentGameId!: string | null
 
     public constructor(
         skin: DocumentType<SkinUserModel>,

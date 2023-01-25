@@ -2,6 +2,7 @@ import { OnConnect, OnMessage, EmitOnSuccess, MessageBody, EmitNamespaceBroadcas
 import { VotePlayerGameModel, HandlerVotePlayerGameModel } from 'common'
 
 @SocketController({
+    // #achan !!!!!
     namespace: '/game/player/vote',
     init: () => { }
 })

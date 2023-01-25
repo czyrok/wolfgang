@@ -1,11 +1,8 @@
-import { Component, EventEmitter, OnInit } from '@angular/core'
-
+import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
+import { ReportModel, ReceiverLinkSocketModel, SenderLinkSocketModel } from 'common'
 
-import { ReportModel } from 'common'
-import { ReceiverEventSocketModel } from 'src/app/socket/event/receiver/model/receiver.event.socket.model'
-import { SenderEventSocketModel } from 'src/app/socket/event/sender/model/sender.event.socket.model'
-import { EventSocketService } from 'src/app/socket/event/service/event.socket.service'
+import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
 
 @Component({
   selector: 'app-view-managing-report-view',
@@ -14,25 +11,27 @@ import { EventSocketService } from 'src/app/socket/event/service/event.socket.se
 })
 export class ViewReportManagingViewComponent implements OnInit {
   report!: ReportModel
-  
-  reportLink: ReceiverEventSocketModel<ReportModel> = this.eventSocketLink.registerReceiver<ReportModel>('/managing/report', 'view').subscribe({
-    callback: (data: ReportModel) => {
-      this.report = data
-    }
-  })
-
-  idLink: SenderEventSocketModel<string> = this.eventSocketLink.registerSender<string>('/managing/report', 'view')
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private eventSocketLink: EventSocketService
+    private socketSharedService: SocketSharedService,
   ) { }
 
-  ngOnInit(): void {
-    let id: string | null = this.activatedRoute.snapshot.paramMap.get('id')
+  async ngOnInit(): Promise<void> {
+    const id: string | null = this.activatedRoute.snapshot.paramMap.get('id')
 
     if (id !== null) {
-      this.idLink.emit(id)
+      const reportLink: ReceiverLinkSocketModel<ReportModel> = await this.socketSharedService.registerReceiver<ReportModel>('/managing/report', 'view')
+      
+      reportLink.subscribe((data: ReportModel) => {
+        this.report = data
+
+        reportLink.unsubscribe()
+      })
+    
+      const triggerLink: SenderLinkSocketModel<string> = await this.socketSharedService.registerSender<string>('/managing/report', 'view')
+
+      triggerLink.emit(id)
     }
   }
 }

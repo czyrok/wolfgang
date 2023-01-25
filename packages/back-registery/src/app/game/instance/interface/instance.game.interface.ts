@@ -1,8 +1,7 @@
 import { Socket } from 'socket.io'
-
-import { ThreadGameInterface } from '../../thread/interface/thread.game.interface'
+import { GameModel } from 'common'
 
 export interface InstanceGameInterface {
     socket: Socket,
-    games: Array<ThreadGameInterface>
+    games: Array<GameModel>
 }

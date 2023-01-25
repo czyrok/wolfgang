@@ -1,6 +1,8 @@
-import { EmitOnFail, SocketRequest, EmitOnSuccess, OnConnect, OnDisconnect, OnMessage, SkipEmitOnEmptyResult, SocketController, MessageBody, EmitNamespaceBroadcastOnSuccess } from 'ts-socket.io-controller'
+import { EmitOnFail, SocketRequest, EmitOnSuccess, OnConnect, OnDisconnect, OnMessage, SocketController, MessageBody, EmitNamespaceBroadcastOnSuccess } from 'ts-socket.io-controller'
 import { plainToInstance } from 'class-transformer'
-import { CardsProposalUserModelDocument, CardsProposalUserModel } from 'common'
+import { LeanDocument } from 'mongoose'
+import { DocumentType } from '@typegoose/typegoose'
+import { CardsProposalUserModelDocument, CardsProposalUserModel, NotFoundCardsProposalUserError } from 'common'
 
 @SocketController({
     namespace: '/game/cards-proposal',
@@ -18,11 +20,25 @@ export class CardsProposalGameController {
     }
 
     @OnMessage()
+    @EmitOnSuccess()
+    @EmitOnFail()
+    async check(@MessageBody() cardProposalId: string) {
+        const cardProposal: DocumentType<CardsProposalUserModel> | null = await CardsProposalUserModelDocument.findById(cardProposalId).exec()
+
+        if (!cardProposal) throw new NotFoundCardsProposalUserError
+
+        return true
+    }
+
+    @OnMessage()
     @EmitNamespaceBroadcastOnSuccess('list')
     @EmitOnFail()
     async add(@SocketRequest() req: any, @MessageBody() cardProposal: CardsProposalUserModel) {
+        // #achan vérifier si pas undefined
         cardProposal.user = req.user
+
         const proposal = new CardsProposalUserModelDocument(cardProposal)
+
         await proposal.save()
 
         return [proposal]
@@ -31,20 +47,42 @@ export class CardsProposalGameController {
     @OnMessage()
     @EmitOnSuccess()
     @EmitOnFail()
-    @SkipEmitOnEmptyResult()
     async list() {
-        let list = await CardsProposalUserModelDocument.find().populate('user', 'skin').lean().exec()
-        let cardsProposaltList: Array<CardsProposalUserModel> = plainToInstance(CardsProposalUserModel, list)
-        return cardsProposaltList
+        const cardsProposalListObj: Array<LeanDocument<CardsProposalUserModel>> = await CardsProposalUserModelDocument.find().populate('user', 'skin').lean().exec()
+
+        return plainToInstance(CardsProposalUserModel, cardsProposalListObj)
     }
-    
+
     @OnMessage()
     @EmitOnSuccess()
     @EmitOnFail()
-    async view(@MessageBody() id: string){
-        let obj = await CardsProposalUserModelDocument.findById(id).populate('user', 'skin').lean().exec()
-        let card: CardsProposalUserModel = plainToInstance(CardsProposalUserModel, obj)
-        return card
+    async view(@MessageBody() cardProposalId: string) {
+        const cardProposalObj: LeanDocument<CardsProposalUserModel> | null = await CardsProposalUserModelDocument.findById(cardProposalId).populate('user', 'skin').lean().exec()
+
+        if (!cardProposalObj) throw new NotFoundCardsProposalUserError
+        
+        return plainToInstance(CardsProposalUserModel, cardProposalObj)
+    }
+
+    @OnMessage()
+    async upThumbsDownCount(@MessageBody() id: string) {
+        const cardProposal: DocumentType<CardsProposalUserModel> = await CardsProposalUserModelDocument
+            .findById(id)
+            .exec() as DocumentType<CardsProposalUserModel>
+
+        cardProposal.thumbsDownCount++
+
+        await cardProposal.save()
+    }
+
+    @OnMessage()
+    async upThumbsUpCount(@MessageBody() id: string) {
+        const cardProposal: DocumentType<CardsProposalUserModel> = await CardsProposalUserModelDocument
+            .findById(id)
+            .exec() as DocumentType<CardsProposalUserModel>
+
+        cardProposal.thumbsUpCount++
+
+        await cardProposal.save()
     }
 }
-
