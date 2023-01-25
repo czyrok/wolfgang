@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input } from '@angular/core'
+import { Component, Input } from '@angular/core'
 import { DetailedListInteractiveSharedModel } from '../model/detailed.list.interactive.shared.model'
 
 @Component({
@@ -6,11 +6,7 @@ import { DetailedListInteractiveSharedModel } from '../model/detailed.list.inter
   templateUrl: './detailed.list.interactive.shared.component.html',
   styleUrls: ['./detailed.list.interactive.shared.component.scss']
 })
-export class DetailedListInteractiveSharedComponent implements AfterViewInit {
-  ngAfterViewInit(): void {
-    this.changeTab(this.list.tabList[0].title)
-  }
-
+export class DetailedListInteractiveSharedComponent {
   changeTab(title: string): void {
     this.list.visibilityEvent.emit(title)
   }

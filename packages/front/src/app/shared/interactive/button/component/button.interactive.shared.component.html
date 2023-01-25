@@ -1,5 +1,5 @@
 <button [attr.data-css-important]="important ? true : null"
-  [attr.data-css-accent]="accent ? true : null" data-css-button data-css-border-radius="rounded">
+  [attr.data-css-accent]="accent ? true : null" [attr.data-css-show-after]="count > 0 ? 'true' : null" [attr.data-count]="count" data-css-button data-css-border-radius="rounded">
 
   <ng-container *ngIf="link; else textTemplate">
     <a [routerLinkActive]="active ? 'active' : 'none'" [attr.data-css-accent]="accent ? true : null" [routerLink]="[link]" data-css-inter

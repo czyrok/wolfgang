@@ -12,7 +12,7 @@ export class LogInHomeController {
     @EmitOnSuccess()
     @EmitOnFail()
     async trigger(@ConnectedSocket() socket: Socket, @MessageBody() message: LogInFormControllerModel) {
-        const user: DocumentType<UserModel> | null = await UserModelDocument.findOne({ username: message.username })
+        const user: DocumentType<UserModel> | null = await UserModelDocument.findOne({ username: message.username }).exec()
 
         if (!user) throw new NotFoundUserError
 
