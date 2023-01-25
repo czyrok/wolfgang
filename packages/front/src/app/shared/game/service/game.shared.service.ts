@@ -117,7 +117,7 @@ export class GameSharedService implements HandlerLinkSocketInterface {
 
         this.currentGameId = gameId
 
-        await this.sessionSharedService.refreshSession()
+        //await this.sessionSharedService.refreshSession()
 
         this.getSocketHandler().socketManager.connect()
 
@@ -221,9 +221,7 @@ export class GameSharedService implements HandlerLinkSocketInterface {
     }
 
     async registerSender<T>(namespace: string, event: string): Promise<SenderLinkSocketModel<T>> {
-        await this.sessionSharedService.refreshSession()
-
-        console.log(namespace)
+        //await this.sessionSharedService.refreshSession()
 
         return this.getSocketHandler().registerSender<T>(namespace, event)
     }
@@ -233,9 +231,7 @@ export class GameSharedService implements HandlerLinkSocketInterface {
     }
 
     async registerReceiver<T>(namespace: string, event: string): Promise<ReceiverLinkSocketModel<T>> {
-        await this.sessionSharedService.refreshSession()
-
-        console.log(namespace)
+        //await this.sessionSharedService.refreshSession()
 
         return this.getSocketHandler().registerReceiver<T>(namespace, event)
     }

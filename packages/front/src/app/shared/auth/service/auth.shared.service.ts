@@ -47,24 +47,31 @@ export class AuthSharedService {
 
     this.disconnect()
 
-    await this.sessionSharedService.refreshSession()
+    //await this.sessionSharedService.refreshSession()
     await this.doAuth()
   }
 
   private async doAuth(): Promise<void> {
-    const testLink: SenderLinkSocketModel<void> = await this.socketSharedService.registerSender('/auth', 'test')
-    const resTestLink: ReceiverLinkSocketModel<string> = await this.socketSharedService.registerReceiver('/auth', 'test')
+    const testSenderLink: SenderLinkSocketModel<void> = await this.socketSharedService.registerSender('/auth', 'test')
+    const testReceiverLink: ReceiverLinkSocketModel<string> = await this.socketSharedService.registerReceiver('/auth', 'test')
+    const testErrorLink: ReceiverLinkSocketModel<string> = await this.socketSharedService.registerReceiver('/auth', 'test')
 
     return new Promise((resolve: (value: void) => void) => {
-      resTestLink.subscribe((username: string) => {
+      testReceiverLink.subscribe((username: string) => {
+        testReceiverLink.unsubscribe()
+        testErrorLink.unsubscribe()
+
         this.connect(username)
 
         resolve()
-
-        resTestLink.unsubscribe()
       })
 
-      testLink.emit()
+      testErrorLink.subscribe((error: any) => {
+        testReceiverLink.unsubscribe()
+        testErrorLink.unsubscribe()
+      })
+
+      testSenderLink.emit()
     })
   }
 
@@ -75,8 +82,9 @@ export class AuthSharedService {
     return new Promise((resolve: (value: void) => void) => {
       logOutReceiverLink.subscribe(() => {
         this.disconnect()
+
         // #achan
-        this.cookieService.delete('token')
+        this.cookieService.delete('token', '/', undefined, false, 'Lax')
 
         resolve()
 

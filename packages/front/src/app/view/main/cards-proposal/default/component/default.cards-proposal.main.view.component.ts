@@ -27,6 +27,11 @@ export class DefaultCardsProposalMainViewComponent implements OnInit {
     const triggerLink: SenderLinkSocketModel<void> = await this.socketSharedService.registerSender<void>('/game/cards-proposal', 'list')
 
     triggerLink.emit()
-    console.log(this.listCardsProposal)
+  }
+
+  getDate(date: string): string {
+    const convertedDate: Date = new Date(date)
+
+    return convertedDate.toLocaleDateString()
   }
 }

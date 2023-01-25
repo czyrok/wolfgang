@@ -9,7 +9,8 @@ export class DocumentModel {
     @Expose()
     public _id!: string
     
-    protected __v!: number
+    @Expose()
+    public __v!: number
 
     public get id(): string {
         return this._id.toString()

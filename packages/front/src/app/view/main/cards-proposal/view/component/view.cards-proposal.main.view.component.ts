@@ -123,4 +123,9 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
     }
   }
 
+  getDate(): string | number {
+    const date: Date = new Date(this.cardProposal.releaseDate)
+
+    return date.toLocaleDateString()
+  }
 }

@@ -15,8 +15,6 @@ export class AuthSharedGuard implements CanActivate {
   async canActivate(): Promise<boolean | UrlTree> {
     await this.authSharedService.testAuth()
 
-    console.log('???')
-
     if (!this.authSharedService.isAuth) {
       return this.router.parseUrl('/log-in')
     } else {
