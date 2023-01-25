@@ -17,7 +17,7 @@ export class DefaultCardsProposalMainViewComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     const cardsProposalLink: ReceiverLinkSocketModel<Array<CardsProposalUserModel>> = await this.socketSharedService.registerReceiver<Array<CardsProposalUserModel>>('/game/cards-proposal', 'list')
-    
+
     cardsProposalLink.subscribe((data: Array<CardsProposalUserModel>) => {
       this.listCardsProposal = data
 
@@ -27,5 +27,6 @@ export class DefaultCardsProposalMainViewComponent implements OnInit {
     const triggerLink: SenderLinkSocketModel<void> = await this.socketSharedService.registerSender<void>('/game/cards-proposal', 'list')
 
     triggerLink.emit()
+    console.log(this.listCardsProposal)
   }
 }

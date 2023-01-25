@@ -3,7 +3,7 @@ import { Expose, Transform } from 'class-transformer'
 export class DocumentModel {
     @Expose({ name: 'id' })
     @Transform((value) => {
-        if ('value' in value) return value.obj[value.key].toString()
+        if ('value' in value && value.obj[value.key]) return value.obj[value.key].toString()
 
         return '???'
     })
@@ -11,7 +11,6 @@ export class DocumentModel {
 
     @Expose()
     public __v!: number
-
 
     public get id(): string {
         return this._id

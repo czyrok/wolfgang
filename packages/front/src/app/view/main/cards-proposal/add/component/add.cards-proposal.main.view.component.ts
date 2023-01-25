@@ -2,7 +2,7 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { Component } from '@angular/core'
 import { Router } from '@angular/router'
 
-import { CardsProposalUserModel, SenderLinkSocketModel } from 'common'
+import { CardsProposalUserModel, CardsProposalUserModelDocument, SenderLinkSocketModel } from 'common'
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
 
 @Component({
@@ -26,11 +26,11 @@ export class AddCardsProposalMainViewComponent {
 
   async onSubmitForm(): Promise<void> {
     if (this.form.valid) {
-      const addCardProposalLink: SenderLinkSocketModel<CardsProposalUserModel> = await this.socketSharedService.registerSender<CardsProposalUserModel>('/game/cards-proposal', 'add')
+      const addCardProposalLink: SenderLinkSocketModel</* CardsProposalUserModel */void> = await this.socketSharedService.registerSender<void>('/game/cards-proposal', 'add')
       const cardsproposalusermodel = new CardsProposalUserModel(this.form.get('title')?.value, this.form.get('description')?.value)
-      
-      addCardProposalLink.emit(cardsproposalusermodel)
 
+      addCardProposalLink.emit(/* cardsproposalusermodel */)
+      console.log(cardsproposalusermodel)
       this.router.navigateByUrl('../')
     }
   }
