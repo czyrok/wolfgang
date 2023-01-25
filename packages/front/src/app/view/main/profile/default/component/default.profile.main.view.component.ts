@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { ReceiverLinkSocketModel, SenderLinkSocketModel, UserModel } from 'common'
+import { CosmeticModel, ReceiverLinkSocketModel, SenderLinkSocketModel, UserModel } from 'common'
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
 import { AuthSharedService } from '../../../../../shared/auth/service/auth.shared.service'
 
@@ -13,7 +13,7 @@ import { AuthSharedService } from '../../../../../shared/auth/service/auth.share
 })
 export class DefaultProfileMainViewComponent {
   user!: UserModel
-
+  cosmeticList!: Array<CosmeticModel>
   constructor(
     private eventSocketLink: SocketSharedService,
     private authSharedService: AuthSharedService,
@@ -31,6 +31,17 @@ export class DefaultProfileMainViewComponent {
           userLink.unsubscribe()
         }
       )
+
+      const cosmeticLink: ReceiverLinkSocketModel<Array<CosmeticModel>> = (await this.eventSocketLink.registerReceiver<Array<CosmeticModel>>('/game/profile', 'skin')).subscribe(
+        (data: Array<CosmeticModel>) => {
+          this.cosmeticList = data 
+        }
+      )
+
+      const cosmeticLinkEmit: SenderLinkSocketModel<string> = await this.eventSocketLink.registerSender<string>('/game/profile', 'skin')
+
+
+      cosmeticLinkEmit.emit(username)
 
       const usernameLink: SenderLinkSocketModel<string> = await this.eventSocketLink.registerSender<string>('/game/profile', 'view')
 
