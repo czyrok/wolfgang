@@ -12,6 +12,7 @@
 }
 
 .container .img {
+    min-width: 70%;
     display: flex;
     aspect-ratio: 1 / 1.45;
     height: max(0vh, 100%);

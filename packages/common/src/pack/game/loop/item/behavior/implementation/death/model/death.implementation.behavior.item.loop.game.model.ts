@@ -7,6 +7,8 @@ import { ContextGameModel } from '../../../../../../context/model/context.game.m
 import { TypeChatGameEnum } from '../../../../../../chat/type/enum/type.chat.game.enum'
 import { TypeProcessBehaviorItemLoopGameEnum } from '../../../process/type/enum/type.process.behavior.item.loop.game.enum'
 import { TypeBehaviorItemLoopGameEnum } from '../../../type/enum/type.behavior.item.loop.game.enum'
+import { GameModel } from '../../../../../../model/game.model'
+import { TypeModeChatGameEnum } from '../../../../../../chat/mode/type/enum/type.mode.chat.game.enum'
 
 @InitFactoryRegistering()
 export class DeathImplementationBehaviorItemLoopGameModel extends BehaviorItemLoopGameModel {
@@ -16,7 +18,8 @@ export class DeathImplementationBehaviorItemLoopGameModel extends BehaviorItemLo
             // #achan
             timer: 0,
             cardTypeList: [],
-            chat: TypeChatGameEnum.DEATH
+            chat: TypeChatGameEnum.DEATH,
+            chatMode: TypeModeChatGameEnum.NIGHT
         })
     }
 
@@ -29,11 +32,22 @@ export class DeathImplementationBehaviorItemLoopGameModel extends BehaviorItemLo
     }
 
     public doAtBeginning(context: ContextGameModel): void {
-        // #achan afficher un message
-        let players: Array<PlayerGameModel> = context[TypeProcessBehaviorItemLoopGameEnum.KILL]
+        const game: GameModel = GameModel.instance
 
-        for (let player of players) {
+        const players: Array<PlayerGameModel> = context[TypeProcessBehaviorItemLoopGameEnum.KILL]
+
+        if (players.length > 1) {
+            game.sendEventMessage(`Plusieurs personnes sont mortes`, 'skull-danger')
+        } else if (players.length > 0) {
+            game.sendEventMessage(`Une personne est morte`, 'skull-danger')
+        } else {
+            game.sendEventMessage(`Personne n'est mort`, 'skull-danger')
+        }
+
+        for (const player of players) {
             player.isDead = true
+
+            game.sendEventMessage(`${player.user.username} est mort ! Son rôle était ${player.card.config.type}`, 'skull-danger')
 
             this.players.push(player)
         }

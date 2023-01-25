@@ -8,7 +8,7 @@ export class CreationConnectionGameHelper {
                 if (creationCode === game.creationCode) {
                     socket.off('ready', listener)
 
-                    resolve(game.id)
+                    resolve(game.gameId)
                 }
             }
 

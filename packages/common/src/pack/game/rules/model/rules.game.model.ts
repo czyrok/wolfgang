@@ -19,7 +19,7 @@ export class RulesGameModel {
 
     public constructor() {
         // #achan
-        //this.choosingcardList.push(new CardChoosingRulesModel(FactoryCardGameModel.instance.get(TypeCardGameEnum.VILLAGER), 2))
+        this.choosingcardList.push(new CardChoosingRulesModel(FactoryCardGameModel.instance.get(TypeCardGameEnum.VILLAGER), 1))
         this.choosingcardList.push(new CardChoosingRulesModel(FactoryCardGameModel.instance.get(TypeCardGameEnum.GREY_WEREWOLF), 1))
     }
 

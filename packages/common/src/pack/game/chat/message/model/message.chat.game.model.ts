@@ -14,6 +14,12 @@ export class MessageChatGameModel extends DocumentModel implements MessageChatGa
     @Expose()
     @prop({ required: true, default: new Date() })
     releaseDate!: Date
+
+    public constructor(text: string) {
+        super()
+
+        this.text = text
+    }
 }
 
 export const MessageChatGameModelDocument = getModelForClass(MessageChatGameModel, { schemaOptions: { collection: 'message_chat_game' } })

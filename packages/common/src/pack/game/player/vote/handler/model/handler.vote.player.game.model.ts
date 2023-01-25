@@ -18,7 +18,7 @@ export class HandlerVotePlayerGameModel {
 
     public removeVoteOfPlayer(player: PlayerGameModel): void {
         for (let i = 0; i < this.votesList.length; i++) {
-            if (this.votesList[i].votingPlayer.user.id === player.user.id) {
+            if (this.votesList[i].votingPlayer.user._id === player.user._id) {
                 this.votesList.splice(i, 1)
 
                 break
@@ -37,8 +37,8 @@ export class HandlerVotePlayerGameModel {
 
         for (const vote of this.votesList) {
             for (const player of players) {
-                if (vote.votingPlayer.user.id === player.user.id) {
-                    const votedPlayer: [PlayerGameModel, number] | undefined = votedPlayers.find(([a,]: [PlayerGameModel, number]) => a.user.id == vote.votedPlayer.user.id)
+                if (vote.votingPlayer.user._id === player.user._id) {
+                    const votedPlayer: [PlayerGameModel, number] | undefined = votedPlayers.find(([a,]: [PlayerGameModel, number]) => a.user._id == vote.votedPlayer.user._id)
 
                     if (votedPlayer !== undefined) {
                         votedPlayer[1]++

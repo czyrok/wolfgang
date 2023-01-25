@@ -1,5 +1,6 @@
 import { InitFactoryRegistering } from '../../../../../../factory/decorator/factory.game.decorator'
 
+import { GameModel } from '../../../../../../model/game.model'
 import { ContextGameModel } from '../../../../../../context/model/context.game.model'
 import { PlayerGameModel } from '../../../../../../player/model/player.game.model'
 import { BehaviorItemLoopGameModel } from '../../../model/behavior.item.loop.game.model'
@@ -11,17 +12,19 @@ import { TypeChatGameEnum } from '../../../../../../chat/type/enum/type.chat.gam
 import { TypeCardGameEnum } from '../../../../../../card/type/enum/type.card.game.enum'
 import { TypeProcessBehaviorItemLoopGameEnum } from '../../../process/type/enum/type.process.behavior.item.loop.game.enum'
 import { TypeBehaviorItemLoopGameEnum } from '../../../type/enum/type.behavior.item.loop.game.enum'
+import { TypeModeChatGameEnum } from '../../../../../../chat/mode/type/enum/type.mode.chat.game.enum'
 
 @InitFactoryRegistering()
 export class WerewolfImplementationBehaviorItemLoopGameModel extends BehaviorItemLoopGameModel {
     public constructor() {
         super({
             type: TypeBehaviorItemLoopGameEnum.WEREWOLF,
-            timer: 90,
+            timer: 10,
             cardTypeList: [
                 TypeCardGameEnum.GREY_WEREWOLF
             ],
             chat: TypeChatGameEnum.WEREWOLF,
+            chatMode: TypeModeChatGameEnum.NIGHT,
             campHierarchy: 1,
             campStrategy: new VillainImplementationStrategyCampPlayerGameModel
         })
@@ -36,18 +39,21 @@ export class WerewolfImplementationBehaviorItemLoopGameModel extends BehaviorIte
     }
 
     public doAtBeginning(context: ContextGameModel): void {
-        // #achan
+        const game: GameModel = GameModel.instance
+
+        game.sendEventMessage('C\'est au tour des loups garous de désigner quelqu\'un !', 'cat-face')
+
         context.next()
     }
 
     public doAtEnd(context: ContextGameModel): void {
         // #achan
-
-        let handler: HandlerVotePlayerGameModel = HandlerVotePlayerGameModel.instance,
+        const handler: HandlerVotePlayerGameModel = HandlerVotePlayerGameModel.instance,
             player: PlayerGameModel | null = handler.mostVotedOfPlayersGroup(this.getPlayer())
 
         if (player !== null) {
-            let result: ResultSetGameModel = new ResultSetGameModel
+            const result: ResultSetGameModel = new ResultSetGameModel
+            
             result[TypeProcessBehaviorItemLoopGameEnum.KILL] = [player]
 
             context.next(result)

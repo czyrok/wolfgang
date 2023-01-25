@@ -39,7 +39,7 @@ if (isMaster) {
         worker.on('message', (msg: any) => {
             const game: GameModel = plainToInstance(GameModel, msg)
 
-            if (game.id) {
+            if (game.gameId) {
                 const obj: any = instanceToPlain(game)
 
                 if (first) readyLink.emit(obj)

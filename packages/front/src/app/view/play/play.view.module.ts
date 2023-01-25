@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { RouterModule } from '@angular/router'
+import { FormsModule } from '@angular/forms'
 
 import { SharedModule } from 'src/app/shared/shared.module'
 import { PageViewModule } from '../page/page.view.module'
@@ -15,6 +16,7 @@ import { CircleAvatarPlayViewComponent } from './avatar/circle/component/circle.
         RouterModule.forChild([
             { path: ':game_id', component: PlayViewComponent }
         ]),
+        FormsModule,
         SharedModule,
         PageViewModule
     ],

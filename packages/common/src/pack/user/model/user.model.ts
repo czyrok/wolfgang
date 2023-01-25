@@ -20,6 +20,7 @@ export class UserModel extends DocumentModel implements UserInterface {
     @prop({ required: true })
     email!: string
 
+    @Exclude()
     @prop({ required: true })
     password!: string
 
@@ -32,7 +33,7 @@ export class UserModel extends DocumentModel implements UserInterface {
     level!: number
 
     @Expose()
-    @prop({ required: true, default: null })
+    @prop({ default: null })
     currentGameId!: string | null
 
     public constructor(

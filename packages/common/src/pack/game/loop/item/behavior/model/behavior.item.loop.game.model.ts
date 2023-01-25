@@ -4,23 +4,28 @@ import { FactoryBehaviorItemLoopGameModel } from '../factory/model/factory.behav
 import { ContextGameModel } from '../../../../context/model/context.game.model'
 import { PlayerGameModel } from '../../../../player/model/player.game.model'
 import { CardGameModel } from '../../../../card/model/card.game.model'
+import { FactoryCardGameModel } from '../../../../card/factory/model/factory.card.game.model'
 
 import { ConfigBehaviorItemLoopGameInterface } from '../config/interface/config.behavior.item.loop.game.interface'
 import { SetupDistributionGameInterface } from '../../../../distribution/setup/interface/setup.distribution.game.interface'
 import { HandlerPlayerGameInterface } from '../../../../player/handler/interface/handler.player.game.interface'
 import { HandlerCardGameInterface } from '../../../../card/handler/interface/handler.card.game.interface'
 import { StrategyItemLoopGameInterface } from '../../strategy/interface/strategy.item.loop.game.interface'
+import { HandlerChatGameInterface } from '../../../../chat/handler/interface/handler.chat.game.interface'
 
 import { TypeLogEnum } from '../../../../../log/type/enum/type.log.enum'
+import { TypeChatGameEnum } from '../../../../chat/type/enum/type.chat.game.enum'
 
 import { ResultSetGameType } from '../../../../set/result/type/result.set.game.type'
-import { FactoryCardGameModel } from '../../../../card/factory/model/factory.card.game.model'
+import { ChatGameModelDocument } from '../../../../chat/model/chat.game.model'
+import { GameModel } from '../../../../model/game.model'
 
 export abstract class BehaviorItemLoopGameModel implements
     StrategyItemLoopGameInterface,
     HandlerCardGameInterface,
     HandlerPlayerGameInterface,
-    SetupDistributionGameInterface {
+    SetupDistributionGameInterface,
+    HandlerChatGameInterface {
     private _players: Array<PlayerGameModel> = new Array
 
     public constructor(
@@ -92,6 +97,21 @@ export abstract class BehaviorItemLoopGameModel implements
     }
 
     setup(): void {
+        this.players.splice(0, this.players.length)
+
         for (const card of FactoryCardGameModel.instance.getList(this.config.cardTypeList)) this.players.push(...card.getPlayer())
+        for (const player of this.players) player.addBehavior(this.config.type)
+    }
+
+    getChatType(): Array<TypeChatGameEnum> {
+        const type: TypeChatGameEnum | undefined = this.config.chat
+
+        if (type) return [type]
+
+        return []
+    }
+
+    async createChat(): Promise<void> {
+        if (this.config.chat && this.config.chatMode) await ChatGameModelDocument.createChat(GameModel.instance.gameId, this.config.chat, this.config.chatMode)
     }
 }

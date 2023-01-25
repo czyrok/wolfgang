@@ -3,7 +3,7 @@ import { MiddlewareInterface, SocketMiddleware } from 'ts-socket.io-controller'
 import { LogUtil, TypeLogEnum, GameModel } from 'common'
 
 // #afaire
-@SocketMiddleware('/game/:id')
+@SocketMiddleware(`/game/${GameModel.instance.gameId}`)
 export class GameMiddleware implements MiddlewareInterface {
     type: 'MiddlewareInterface' = 'MiddlewareInterface'
 
@@ -15,7 +15,7 @@ export class GameMiddleware implements MiddlewareInterface {
         // Ou mode spectateur
 
         const id: string = socket.nsp.name.split('/')[2]
-        LogUtil.logger(TypeLogEnum.APP).trace(id, 'beach', GameModel.instance.id)
+        LogUtil.logger(TypeLogEnum.APP).trace(id, 'beach', GameModel.instance.gameId)
 
         next()
     }

@@ -2,6 +2,7 @@ import { EmitOnFail, OnMessage, SocketController, EmitOnSuccess, MessageBody, Co
 import { DocumentType } from '@typegoose/typegoose'
 import { Socket } from 'socket.io'
 import { TypeLogEnum, JWTHelper, InvalidPasswordUserError, UserModelDocument, NotFoundUserError, UserModel, LogInFormControllerModel, LogUtil } from 'common'
+import { Request } from 'express'
 
 @SocketController({
     namespace: '/home/log-in',
@@ -21,6 +22,11 @@ export class LogInHomeController {
         if (!is) throw new InvalidPasswordUserError
 
         LogUtil.logger(TypeLogEnum.LOG_IN).info(`${user.username} is connecting`)
+
+        const req: Request = socket.request as Request
+
+        req.session.user = user
+        req.session.save()
 
         return JWTHelper.generate(user, socket.handshake.address)
     }

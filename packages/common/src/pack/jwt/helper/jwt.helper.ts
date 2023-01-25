@@ -14,7 +14,7 @@ export class JWTHelper {
         token.save()
 
         let jwt: string = sign({
-            sub: token.id,
+            sub: token._id,
             scopes: [
                 // #achan
                 'admin'

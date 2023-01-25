@@ -5,12 +5,9 @@ import { instanceToPlain } from 'class-transformer'
 import { SocketIoController } from 'ts-socket.io-controller'
 import { LogUtil, LogHelper, TypeLogEnum, EnvUtil, VarEnvEnum, GameModel, ScopeIoMiddleware, SessionIoMiddleware } from 'common'
 
-import { TestController } from './test/controller/test.controller'
 import { GameController } from './game/controller/game.controller'
-/* import { ChatGameController } from './game/chat/controller/chat.game.controller'
-import { VotePlayerGameController } from './game/player/vote/controller/vote.player.game.controller' */
-
-import { GameMiddleware } from './game/middleware/game.middleware'
+import { ChatGameController } from './game/chat/controller/chat.game.controller'
+/* import { VotePlayerGameController } from './game/player/vote/controller/vote.player.game.controller' */
 
 async function run(): Promise<void> {
     LogUtil.config = LogHelper.getConfig(
@@ -39,15 +36,13 @@ async function run(): Promise<void> {
 
     SocketIoController.useSocketIoServer(io, {
         controllers: [
-            TestController,
             GameController,
-            /* ChatGameController,
-            VotePlayerGameController */
+            /* ChatGameController, */
+            /* VotePlayerGameController */
         ],
         middlewares: [
             SessionIoMiddleware,
-            ScopeIoMiddleware,
-            GameMiddleware
+            ScopeIoMiddleware
         ],
         useClassTransformer: true
     })
@@ -68,9 +63,7 @@ async function run(): Promise<void> {
 
     game.creationCode = process.env['CREATION_CODE'] as string
 
-    //if (process.send) process.send(instanceToPlain(game))
-
-    LogUtil.logger(TypeLogEnum.APP).info(`Initialized game: "{ id: "${game.id}", creationCode: "${game.creationCode}" }"`)
+    LogUtil.logger(TypeLogEnum.APP).info(`Initialized game: "{ id: "${game.gameId}", creationCode: "${game.creationCode}" }"`)
 }
 
 run().catch((error: Error) => {

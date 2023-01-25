@@ -4,7 +4,7 @@ import { Socket } from 'socket.io'
 import { DocumentType } from '@typegoose/typegoose'
 import { UserModel, NotFoundUserError } from 'common'
 
-import { CheckConnectionGameModel } from '../connection/check/model/check.connection.game.model'
+import { CheckConnectionRegisteryHelper } from '../../registery/connection/check/helper/check.connection.registery.helper'
 
 @SocketController({
     namespace: '/game',
@@ -20,25 +20,17 @@ export class GameController {
 
         if (!user) throw new NotFoundUserError
 
-        console.log('-----')
-
         const gameId: string | null = user.currentGameId
-
-        console.log('stttt1', gameId)
 
         if (!gameId) return ''
 
-        const gameConnection: CheckConnectionGameModel = new CheckConnectionGameModel(gameId),
-            test: boolean = await gameConnection.checkGame()
+        const test: boolean = await CheckConnectionRegisteryHelper.checkGame(gameId)
 
         if (!test) {
-            console.log('stttt')
             await user.updateOne({ currentGameId: null })
 
             return ''
         }
-
-        console.log(gameId)
 
         return gameId
     }
@@ -47,12 +39,7 @@ export class GameController {
     @EmitOnSuccess()
     @EmitOnFail()
     async check(@MessageBody() gameId: string) {
-        console.log(gameId)
-
-        const gameConnection: CheckConnectionGameModel = new CheckConnectionGameModel(gameId),
-            test: boolean = await gameConnection.checkGame()
-
-        console.log(test)
+        const test: boolean = await CheckConnectionRegisteryHelper.checkGame(gameId)
 
         if (test) return true
 

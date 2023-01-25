@@ -14,14 +14,24 @@ export class SignUpHomeController {
     async trigger(@ConnectedSocket() socket: Socket, @MessageBody() message: SignUpFormControllerModel) {
         const user: DocumentType<UserModel> | null = await UserModelDocument.findOne({ username: message.username })
 
+        console.log(user)
+
         if (user) throw new AlreadyExistUserError
 
-        const newUser: DocumentType<UserModel> = new UserModelDocument(new UserModel(message.username, message.email, message.password)) as DocumentType<UserModel>
+        console.log('alo')
 
-        await newUser.save()
+        try {
+            const newUser: DocumentType<UserModel> = new UserModelDocument(new UserModel(message.username, message.email, message.password)) as DocumentType<UserModel>
 
-        LogUtil.logger(TypeLogEnum.LOG_IN).info(`${newUser.username} is signing up`)
+            await newUser.save()
 
-        return JWTHelper.generate(newUser, socket.handshake.address)
+            console.log('alencorentm')
+
+            LogUtil.logger(TypeLogEnum.LOG_IN).info(`${newUser.username} is signing up`)
+
+            return JWTHelper.generate(newUser, socket.handshake.address)
+        } catch (error: any) {
+            console.log(error)
+        }
     }
 }

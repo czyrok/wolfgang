@@ -36,6 +36,10 @@ export class AuthController {
 
         const user: DocumentType<UserModel> = token.user as DocumentType<UserModel>
 
+        req.session.destroy(() => {
+            
+        })
+
         LogUtil.logger(TypeLogEnum.ACCESS).info(`${user.username} is disconnecting`)
     }
 }

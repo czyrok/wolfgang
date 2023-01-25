@@ -21,18 +21,6 @@ export class SocketSharedService implements HandlerLinkSocketInterface {
     return this._handler
   }
 
-  public async registerSender<T>(namespace: string, event: string): Promise<SenderLinkSocketModel<T>> {
-    await this.sessionSharedService.refreshSession()
-
-    return this.handler.registerSender<T>(namespace, event)
-  }
-
-  public async registerReceiver<T>(namespace: string, event: string): Promise<ReceiverLinkSocketModel<T>> {
-    await this.sessionSharedService.refreshSession()
-
-    return this.handler.registerReceiver<T>(namespace, event)
-  }
-
   public async check<T>(namespace: string, eventType: string, object: T): Promise<boolean> {
     const checkSenderLink: SenderLinkSocketModel<T> = await this.registerSender(namespace, eventType),
       checkReceiverLink: ReceiverLinkSocketModel<boolean> = await this.registerReceiver(namespace, eventType),
@@ -55,5 +43,17 @@ export class SocketSharedService implements HandlerLinkSocketInterface {
 
       checkSenderLink.emit(object)
     })
+  }
+
+  async registerSender<T>(namespace: string, eventType: string): Promise<SenderLinkSocketModel<T>> {
+    await this.sessionSharedService.refreshSession()
+
+    return this.handler.registerSender<T>(namespace, eventType)
+  }
+
+  async registerReceiver<T>(namespace: string, eventType: string): Promise<ReceiverLinkSocketModel<T>> {
+    await this.sessionSharedService.refreshSession()
+
+    return this.handler.registerReceiver<T>(namespace, eventType)
   }
 }

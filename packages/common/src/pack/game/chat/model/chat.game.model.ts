@@ -1,53 +1,90 @@
-import { Ref, prop, getModelForClass } from '@typegoose/typegoose'
-import { Exclude, Expose } from 'class-transformer'
+import { Ref, prop, getModelForClass, DocumentType, ReturnModelType } from '@typegoose/typegoose'
 
 import { DocumentModel } from '../../../model/document.model'
-import { MessageChatGameModel, /* MessageChatGameModelDocument */ } from '../message/model/message.chat.game.model'
+import { MessageChatGameModel } from '../message/model/message.chat.game.model'
+import { UserMessageChatGameModel, UserMessageChatGameModelDocument } from '../message/user/model/user.message.chat.game.model'
+import { UserModel } from '../../../user/model/user.model'
+import { EventMessageChatGameModel, EventMessageChatGameModelDocument } from '../message/event/model/event.message.chat.game.model'
 
 import { ChatGameInterface } from '../interface/chat.game.interface'
 
 import { TypeChatGameEnum } from '../type/enum/type.chat.game.enum'
+import { TypeModeChatGameEnum } from '../mode/type/enum/type.mode.chat.game.enum'
 
-@Exclude()
 export class ChatGameModel extends DocumentModel implements ChatGameInterface {
-    @Expose()
     @prop({ required: true })
     gameId!: string
 
-    @Expose()
     @prop({ required: true })
     type!: TypeChatGameEnum
 
-    @Expose()
-    @prop({ ref: () => MessageChatGameModel, default: new Array })
-    message!: Array<Ref<MessageChatGameModel>>
+    @prop({ required: true })
+    modeType!: TypeModeChatGameEnum
 
-    // #achan
-    /* public static async getChat(this: ReturnModelType<typeof ChatGameModelDocument>, gameId: string, type: TypeChatGameEnum): Promise<any> {
-        let chat: any = this.findOne({
+    @prop({ ref: () => MessageChatGameModel, default: new Array })
+    messages!: Array<Ref<MessageChatGameModel>>
+
+    public static async createChat(
+        this: ReturnModelType<typeof ChatGameModel>,
+        gameId: string,
+        type: TypeChatGameEnum,
+        modeType: TypeModeChatGameEnum
+    ): Promise<DocumentType<ChatGameModel> | null> {
+        let chat: DocumentType<ChatGameModel> | null = await this.findOne({
             gameId: gameId,
             type: type
         }).exec()
 
-        if (chat === null) {
+        if (!chat) {
             chat = new ChatGameModelDocument({
                 gameId: gameId,
-                type: type
+                type: type,
+                modeType: modeType
             })
 
-            chat.save()
+            await chat.save()
         }
 
         return chat
     }
 
-    // #achan
-    public static async addMessage(this: ReturnModelType<typeof ChatGameModelDocument>, chat: any, message: MessageChatGameModel) {
-        // #averif
-        chat.message.push(new MessageChatGameModelDocument(message))
+    public static async getChat(
+        gameId: string,
+        type: TypeChatGameEnum
+    ): Promise<DocumentType<ChatGameModel> | null> {
+        const chat: DocumentType<ChatGameModel> | null = await ChatGameModelDocument.findOne({
+            gameId: gameId,
+            type: type
+        }).exec()
 
-        chat.save()
-    } */
+        return chat
+    }
+
+    public async sendUserMessage(this: DocumentType<ChatGameModel>, user: DocumentType<UserModel>, text: string): Promise<DocumentType<UserMessageChatGameModel>> {
+        const message: DocumentType<UserMessageChatGameModel> = new UserMessageChatGameModelDocument(new UserMessageChatGameModel(text))
+
+        message.user = user
+
+        message.save()
+
+        this.messages.push(message)
+
+        await this.updateOne({ messages: this.messages }).exec()
+
+        return message
+    }
+
+    public async sendEventMessage(this: DocumentType<ChatGameModel>, text: string, imageUrl: string): Promise<DocumentType<EventMessageChatGameModel>> {
+        const message: DocumentType<EventMessageChatGameModel> = new EventMessageChatGameModelDocument(new EventMessageChatGameModel(text, imageUrl))
+
+        message.save()
+
+        this.messages.push(message)
+
+        await this.updateOne({ messages: this.messages }).exec()
+
+        return message
+    }
 }
 
 export const ChatGameModelDocument = getModelForClass(ChatGameModel, { schemaOptions: { collection: 'chat_game' } })

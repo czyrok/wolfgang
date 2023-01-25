@@ -12,20 +12,26 @@ import { Exclude, Expose } from 'class-transformer'
 @Exclude()
 export class StateGameModel implements ChangeInterface<StateGameModel> {
     @Expose()
+    private _isStarted: boolean = false
+
+    @Expose()
+    private _isFinished: boolean = false
+
+    @Expose()
     private _currentBehaviorType: Array<TypeBehaviorItemLoopGameEnum> = new Array
 
     @Expose()
     private _isNight: boolean = false
 
     @Expose()
-    private _isFinished: boolean = false
+    private _endTurnDate?: Date
 
     @Expose()
     private _players: Array<PlayerGameModel> = new Array
 
     @Expose()
     private _rules: RulesGameModel = new RulesGameModel
-    
+
     private _stateChange: Subject<StateGameModel> = new Subject()
 
     public constructor() {
@@ -34,46 +40,71 @@ export class StateGameModel implements ChangeInterface<StateGameModel> {
         })
     }
 
-    public set isNight(value: boolean) {
-        this._isNight = value
-
-        this.stateChange.next(this)
+    public set isStarted(value: boolean) {
+        this._isStarted = value
     }
 
-    public set currentBehaviorType(value: Array<TypeBehaviorItemLoopGameEnum>) {
-        this._currentBehaviorType = value
-
-        this.stateChange.next(this)
+    @Expose()
+    public get isStarted(): boolean {
+        return this._isStarted
     }
 
-    public set players(value: Array<PlayerGameModel>) {
-        this._players = value
-        
-        this.stateChange.next(this)
+    public set isFinished(value: boolean) {
+        this._isFinished = value
     }
 
-    public get currentBehaviorType(): Array<TypeBehaviorItemLoopGameEnum> {
-        return this._currentBehaviorType
-    }
-
-    public get isNight(): boolean {
-        return this._isNight
-    }
-
+    @Expose()
     public get isFinished(): boolean {
         return this._isFinished
     }
 
+    public set isNight(value: boolean) {
+        this._isNight = value
+    }
+
+    @Expose()
+    public get isNight(): boolean {
+        return this._isNight
+    }
+
+    public set endTurnDate(value: Date | undefined) {
+        this._endTurnDate = value
+    }
+
+    @Expose()
+    public get endTurnDate(): Date | undefined {
+        return this._endTurnDate
+    }
+
+    public set currentBehaviorType(value: Array<TypeBehaviorItemLoopGameEnum>) {
+        this._currentBehaviorType = value
+    }
+
+    @Expose()
+    public get currentBehaviorType(): Array<TypeBehaviorItemLoopGameEnum> {
+        return this._currentBehaviorType
+    }
+
+    public set players(value: Array<PlayerGameModel>) {
+        this._players = value
+    }
+
+    @Expose()
     public get players(): Array<PlayerGameModel> {
         return this._players
     }
 
+    @Expose()
     public get rules(): RulesGameModel {
         return this._rules
     }
 
     private get stateChange(): Subject<StateGameModel> {
         return this._stateChange
+    }
+
+    public notifyUpdate(): void {
+        this.stateChange.next(this)
     }
 
     onChange(callback: (state: StateGameModel) => void): Subscription {

@@ -6,11 +6,15 @@ import { HandlerBehaviorItemLoopGameInterface } from '../behavior/handler/interf
 import { StrategyItemLoopGameInterface } from '../strategy/interface/strategy.item.loop.game.interface'
 import { SetupDistributionGameInterface } from '../../../distribution/setup/interface/setup.distribution.game.interface'
 import { ConfigItemLoopGameInterface } from '../config/interface/config.item.loop.game.interface'
+import { HandlerChatGameInterface } from '../../../chat/handler/interface/handler.chat.game.interface'
+import { TypeChatGameEnum } from '../../../chat/type/enum/type.chat.game.enum'
+import { PlayerGameModel } from '../../../player/model/player.game.model'
 
 export abstract class ItemLoopGameModel implements
     StrategyItemLoopGameInterface,
     HandlerBehaviorItemLoopGameInterface,
-    SetupDistributionGameInterface {
+    SetupDistributionGameInterface,
+    HandlerChatGameInterface {
     private _isInitialized: boolean = false
     private _nextIndex: number = 0
     protected _nextList: Array<ItemLoopGameModel> = new Array
@@ -61,9 +65,17 @@ export abstract class ItemLoopGameModel implements
         }
     }
 
-    abstract entryPoint(context: ContextGameModel): void
+    abstract entryPoint(context: ContextGameModel): boolean
 
     abstract getBehavior(): Array<BehaviorItemLoopGameModel>
 
+    abstract getPlayerBehavior(player: PlayerGameModel): Array<BehaviorItemLoopGameModel>
+
+    abstract getTimerBehavior(): number
+
     abstract setup(): void
+
+    abstract getChatType(): Array<TypeChatGameEnum>
+
+    abstract createChat(): Promise<void>
 }

@@ -13,11 +13,15 @@ export class GetConnectionRegisteryModel {
         this.connection.socketManager.on('open', () => {
             LogUtil.logger(TypeLogEnum.APP).trace('App connected to registery')
 
+            this.getLink.data = new Array
+
             sender.emit()
         })
 
         this.connection.socketManager.on('close', () => {
             LogUtil.logger(TypeLogEnum.APP).warn('App disconnected from registery')
+
+            this.getLink.data = new Array
         })
 
         this.connection.socketManager.connect()
