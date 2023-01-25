@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { ReportModel, ReceiverLinkSocketModel, SenderLinkSocketModel } from 'common'
+
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
 
 @Component({
@@ -13,7 +14,7 @@ export class DefaultReportManagingViewComponent implements OnInit {
   constructor(
     private socketSharedService: SocketSharedService
   ) { }
-
+  
   async ngOnInit(): Promise<void> {
     const reportListLink: ReceiverLinkSocketModel<Array<ReportModel>> = await this.socketSharedService.registerReceiver<Array<ReportModel>>('/managing/report', 'list')
     

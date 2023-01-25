@@ -1,0 +1,3 @@
+button::after {
+    content: attr(data-count);
+}

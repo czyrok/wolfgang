@@ -18,4 +18,8 @@ export class DocumentModel {
     public get v(): number {
         return this.__v
     }
+
+    public getId(): string {
+        return this._id
+    }
 }
