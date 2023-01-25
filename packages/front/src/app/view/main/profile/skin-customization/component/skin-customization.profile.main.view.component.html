@@ -1,8 +1,8 @@
 <section>
   <ng-template #buttonTemplate>
     <app-shared-interactive-button text="Annuler" link="../" [important]="true"></app-shared-interactive-button>
-    <app-shared-interactive-button text="Valider" link="../" [accent]="true"
-      [important]="true"></app-shared-interactive-button>
+    <app-shared-interactive-button text="Valider" [count]="amount" (clickEvent)="purchaseButtonCallback()"
+      ></app-shared-interactive-button>
   </ng-template>
 
   <ng-template #contentTemplate>

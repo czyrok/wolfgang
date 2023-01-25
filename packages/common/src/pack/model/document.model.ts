@@ -1,7 +1,7 @@
 import { Expose, Transform } from 'class-transformer'
 
 export class DocumentModel {
-    @Expose()
+    @Expose({ name: 'id' })
     @Transform((value) => {
         if ('value' in value && value.obj[value.key]) return value.obj[value.key].toString()
 
@@ -18,5 +18,9 @@ export class DocumentModel {
 
     public get v(): number {
         return this.__v
+    }
+
+    public getId(): string {
+        return this._id
     }
 }

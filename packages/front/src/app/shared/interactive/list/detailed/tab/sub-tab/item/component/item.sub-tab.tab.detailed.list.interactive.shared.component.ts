@@ -8,10 +8,16 @@ import { ItemSubTabTabDetailedListInteractiveSharedModel } from '../model/item.s
   styleUrls: ['./item.sub-tab.tab.detailed.list.interactive.shared.component.scss']
 })
 export class ItemSubTabTabDetailedListInteractiveSharedComponent {
-  @Input() item!: ItemSubTabTabDetailedListInteractiveSharedModel
+  @Input() item!: ItemSubTabTabDetailedListInteractiveSharedModel<any>
   @Input() isIconOnly!: boolean
 
   @HostListener('click') click(): void {
-    if (this.item !== undefined && !this.item.isDisabled) this.item.callBack()
+    if (this.item !== undefined && !this.item.isDisabled) {
+      this.item.callBack()
+      this.item.setIsSelected(!this.item.isSelected)
+      //console.log(this.item)
+      this.item.clickedItemEvent.next(this.item)
+    }
+    
   }
 }
