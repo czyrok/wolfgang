@@ -9,6 +9,7 @@ import { DetailedListInteractiveSharedModel } from 'src/app/shared/interactive/l
 import { TabDetailedListInteractiveSharedModel } from 'src/app/shared/interactive/list/detailed/tab/model/tab.detailed.list.interactive.shared.model'
 import { SubTabTabDetailedListInteractiveSharedModel } from 'src/app/shared/interactive/list/detailed/tab/sub-tab/model/sub-tab.tab.detailed.list.interactive.shared.model'
 import { ItemSubTabTabDetailedListInteractiveSharedModel } from 'src/app/shared/interactive/list/detailed/tab/sub-tab/item/model/item.sub-tab.tab.detailed.list.interactive.shared.model'
+import { ActivatedRoute, Router } from '@angular/router'
 
 @Component({
   selector: 'app-view-main-profile-skin-customization',
@@ -22,17 +23,45 @@ export class SkinCustomizationProfileMainViewComponent implements OnInit {
 
   cosmeticsList!: SeparatedCosmeticsListFormControllerModel
   amount: number = 0
+  
+  username!: string
 
   constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
     private eventSocketLink: SocketSharedService,
     private authSharedService: AuthSharedService
-  ) { }
+  ) {
+    const username: string | null | undefined = this.activatedRoute.parent?.snapshot.paramMap.get('username')
+
+    console.log(username)
+
+    if (username) this.username = username
+  }
 
   async ngOnInit(): Promise<void> {
     if (this.authSharedService.username !== undefined) {
       this.list.clickedItemEvent.subscribe(() => {
         let res: number = 0
         for (const item of this.list.selectedItems) {
+
+          switch (item.associedObject.type) {
+            case TypeCosmeticEnum.HAT:
+              this.hat = item.associedObject
+              break
+            case TypeCosmeticEnum.HEAD:
+              this.head = item.associedObject
+              break
+            case TypeCosmeticEnum.TOP:
+              this.top = item.associedObject
+              break
+            case TypeCosmeticEnum.PANTS:
+              this.pants = item.associedObject
+              break
+            case TypeCosmeticEnum.SHOES:
+              this.shoes = item.associedObject
+          }
+
           if (this.cosmeticsList.notOwnedCosmetics.indexOf(item.associedObject) >= 0) {
             res += item.count
           }
@@ -57,6 +86,7 @@ export class SkinCustomizationProfileMainViewComponent implements OnInit {
       cosmeticsLink.subscribe(
         (data: SeparatedCosmeticsListFormControllerModel) => {
           this.cosmeticsList = data
+          console.log(data)
           this.configureList(data, TypeCosmeticEnum.HAT)
           this.configureList(data, TypeCosmeticEnum.HEAD)
           this.configureList(data, TypeCosmeticEnum.TOP)
@@ -76,7 +106,7 @@ export class SkinCustomizationProfileMainViewComponent implements OnInit {
   }
 
   configureList(cosmetics: SeparatedCosmeticsListFormControllerModel, type: TypeCosmeticEnum): void {
-    
+
     let tab = new TabDetailedListInteractiveSharedModel()
 
     switch (type) {
@@ -112,7 +142,7 @@ export class SkinCustomizationProfileMainViewComponent implements OnInit {
     for (let cosmetic of list) {
       subTab.addItem(new ItemSubTabTabDetailedListInteractiveSharedModel<CosmeticModel>()
         .setName(cosmetic.translateName)
-        .setImgURL(cosmetic.imageUrl)
+        .setImgURL('asset/img/cosmetics/' + cosmetic.imageUrl + '.png')
         .setCount(cosmetic.gamePointPrice)
         .setAssociedObject(cosmetic)
         .setIsDisabled(false)
@@ -122,13 +152,28 @@ export class SkinCustomizationProfileMainViewComponent implements OnInit {
   }
 
   async purchaseButtonCallback(): Promise<void> {
-    const purchaseSend: SenderLinkSocketModel<Array<CosmeticModel>> = await this.eventSocketLink.registerSender<Array<CosmeticModel>>('/game/profile/skin-customization', 'purchase')
+    const purchaseSend: SenderLinkSocketModel<Array<CosmeticModel>> = await this.eventSocketLink.registerSender('/game/profile/skin-customization', 'purchase')
+    const purchaseRec: ReceiverLinkSocketModel<void> = await this.eventSocketLink.registerReceiver('/game/profile/skin-customization', 'purchase')
     const cosmetics: Array<CosmeticModel> = new Array
 
     for (const cosmetic of this.list.selectedItems) {
       cosmetics.push(cosmetic.associedObject)
     }
 
+    purchaseRec.subscribe(() => {
+      purchaseRec.unsubscribe()
+
+      console.log('ouiiiiiii')
+
+      this.router.navigateByUrl('/game/profile/' + this.user.username)
+    })
+
     purchaseSend.emit(cosmetics)
   }
+
+  hat!: CosmeticModel
+  head!: CosmeticModel
+  top!: CosmeticModel
+  pants!: CosmeticModel
+  shoes!: CosmeticModel
 }

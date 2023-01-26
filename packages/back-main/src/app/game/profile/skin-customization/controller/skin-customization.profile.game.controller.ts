@@ -36,7 +36,7 @@ export class SkinCustomizationProfileGameController {
     @SkipEmitOnEmptyResult()
     async cosmetics(@SocketRequest() req: any) {
         console.log('controller cosmetic')
-        let user: DocumentType<UserModel> = req.user
+        let user: DocumentType<UserModel> = req.session.user
         if (!user) throw new NotFoundUserError
 
         const purchasesListObj: Array<DocumentType<PurchaseCosmeticModel>> = await PurchaseCosmeticModelDocument.find({ user: new Types.ObjectId(user.id) }).populate('cosmetic').exec()
@@ -75,13 +75,17 @@ export class SkinCustomizationProfileGameController {
             cosmetic.id = id
             finalNotOwnedCosmeticsList.push(cosmetic)
         }
+
+        console.log(finalOwnedCosmeticsList)
+
         return new SeparatedCosmeticsListFormControllerModel(finalOwnedCosmeticsList, finalNotOwnedCosmeticsList)
     }
 
     @OnMessage()
+    @EmitOnSuccess()
     @EmitOnFail()
     async purchase(@SocketRequest() req: any, @MessageBody() data: Array<CosmeticModel>) {
-        const user: DocumentType<UserModel> = req.user
+        const user: DocumentType<UserModel> = req.session.user
         const skin: DocumentType<SkinUserModel> | null = await SkinUserModelDocument.findById(user.skin).exec()
         console.log('skin:', skin)
         console.log('user id:', user)
@@ -125,6 +129,8 @@ export class SkinCustomizationProfileGameController {
             }
         }
         console.log('fin de purchase')
+
+        return true
     }
 }
 

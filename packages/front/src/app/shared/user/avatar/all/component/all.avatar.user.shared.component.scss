@@ -12,14 +12,49 @@
 }
 
 .container .img {
+    max-width: 500px;
     min-width: 70%;
     display: flex;
     aspect-ratio: 1 / 1.45;
     height: max(0vh, 100%);
     overflow: hidden;
+    justify-content: center;
+    justify-items: center;
+    flex-direction: column;
 }
 
 .container.reduced .img {
     //width: property.get('size', 'avatar', 'width');
     height: property.get('size', 'avatar', 'height');
+}
+
+.hat {
+    height: 36%;
+    display: flex;
+    aspect-ratio: 6 / 2;
+    z-index: 0;
+}
+
+.head {
+    height: 23%;
+    display: flex;
+    aspect-ratio: 4 / 2;
+}
+
+.top {
+    height: 20%;
+    display: flex;
+    aspect-ratio: 6 / 2;
+}
+
+.pants {
+    display: flex;
+    aspect-ratio: 6 / 2;
+    height: 24%;
+}
+
+.shoes {
+    height: 6%;
+    display: flex;
+    aspect-ratio: 17 / 2;
 }
