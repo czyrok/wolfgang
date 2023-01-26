@@ -19,7 +19,7 @@ export class VillagerImplementationBehaviorItemLoopGameModel extends BehaviorIte
     public constructor() {
         super({
             type: TypeBehaviorItemLoopGameEnum.VILLAGER,
-            timer: 10,
+            timer: 60,
             cardTypeList: [
                 TypeCardGameEnum.GREY_WEREWOLF,
                 TypeCardGameEnum.VILLAGER
