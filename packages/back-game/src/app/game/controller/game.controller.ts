@@ -197,7 +197,7 @@ export class GameController {
         return player
     }
 
-    @OnConnect()
+    /* @OnConnect()
     @EmitOnSuccess('get')
     getVote() {
         let handler: HandlerVotePlayerGameModel =  HandlerVotePlayerGameModel.instance
@@ -212,5 +212,5 @@ export class GameController {
         handlervote.toVote(vote)
 
         return [vote]
-    }
+    } */
 }

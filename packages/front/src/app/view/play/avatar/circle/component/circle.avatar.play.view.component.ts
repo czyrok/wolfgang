@@ -11,6 +11,8 @@ import { CircleAvatarPlayViewModel } from '../model/circle.avatar.play.view.mode
 export class CircleAvatarPlayViewComponent implements AfterViewInit {
   avatarsCircle!: CircleAvatarPlayViewModel
 
+  first: boolean = true
+
   constructor(
     private renderer: Renderer2,
     private changeDetectorRef: ChangeDetectorRef
@@ -20,12 +22,25 @@ export class CircleAvatarPlayViewComponent implements AfterViewInit {
     this.avatarsCircle = new CircleAvatarPlayViewModel(this.eventPlayerVote, this.renderer, this.changeDetectorRef, this.targetRef, this.boxContainerRef)
 
     if (this.gameStateEvent !== undefined) this.gameStateEvent.subscribe((data: StateGameModel) => {
-      this.avatarsCircle.removeAll()
+      if (data.isStarted && this.first) {
+        this.avatarsCircle.removeAll()
 
-      this.avatarsCircle.setPlayers(data.players)
+        this.avatarsCircle.setPlayers(data.players)
 
-      this.avatarsCircle.update()
-      this.avatarsCircle.update()
+        this.avatarsCircle.update()
+        this.avatarsCircle.update()
+
+        this.first = false
+      }
+
+      if (!data.isStarted) {
+        this.avatarsCircle.removeAll()
+
+        this.avatarsCircle.setPlayers(data.players)
+
+        this.avatarsCircle.update()
+        this.avatarsCircle.update()
+      }
     })
   }
 
