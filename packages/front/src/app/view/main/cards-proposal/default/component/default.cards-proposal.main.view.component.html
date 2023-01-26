@@ -15,8 +15,10 @@
     </div>
 
     <div class="field">
-      <app-shared-label [text]="cardProposal.thumbsUpCount" icofont="thumbs-up"></app-shared-label>
-      <app-shared-label [text]="cardProposal.thumbsDownCount" icofont="thumbs-down"></app-shared-label>
+      <p data-css-text data-css-color data-css-font>{{ getDate(cardProposal.releaseDate) }}</p>
+
+      <!-- <app-shared-label [text]="cardProposal.thumbsUpCount" icofont="thumbs-up"></app-shared-label>
+      <app-shared-label [text]="cardProposal.thumbsDownCount" icofont="thumbs-down"></app-shared-label> -->
     </div>
   </ng-template>
 

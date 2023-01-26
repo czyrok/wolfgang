@@ -12,9 +12,11 @@ export class SocketSharedService implements HandlerLinkSocketInterface {
   public constructor(
     private sessionSharedService: SessionSharedService
   ) {
-    this.sessionSharedService.refreshSession().then(() => {
+    /* this.sessionSharedService.refreshSession().then(() => {
       this.handler.socketManager.connect()
-    })
+    }) */
+
+    this.handler.socketManager.opts.autoConnect = true
   }
 
   private get handler(): HandlerSocketLinkModel {
@@ -46,13 +48,13 @@ export class SocketSharedService implements HandlerLinkSocketInterface {
   }
 
   async registerSender<T>(namespace: string, eventType: string): Promise<SenderLinkSocketModel<T>> {
-    await this.sessionSharedService.refreshSession()
+    //await this.sessionSharedService.refreshSession()
 
     return this.handler.registerSender<T>(namespace, eventType)
   }
 
   async registerReceiver<T>(namespace: string, eventType: string): Promise<ReceiverLinkSocketModel<T>> {
-    await this.sessionSharedService.refreshSession()
+    //await this.sessionSharedService.refreshSession()
 
     return this.handler.registerReceiver<T>(namespace, eventType)
   }

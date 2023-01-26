@@ -42,7 +42,6 @@ export class SkinCustomizationProfileMainViewComponent implements OnInit {
       })
       const userLink: ReceiverLinkSocketModel<UserModel> = (await this.eventSocketLink.registerReceiver<UserModel>('/game/profile', 'view')).subscribe(
         (data: UserModel) => {
-          console.log(data)
           this.user = data
           userLink.unsubscribe()
         }
@@ -58,7 +57,6 @@ export class SkinCustomizationProfileMainViewComponent implements OnInit {
       cosmeticsLink.subscribe(
         (data: SeparatedCosmeticsListFormControllerModel) => {
           this.cosmeticsList = data
-          console.log(data.notOwnedCosmetics)
           this.configureList(data, TypeCosmeticEnum.HAT)
           this.configureList(data, TypeCosmeticEnum.HEAD)
           this.configureList(data, TypeCosmeticEnum.TOP)
@@ -120,12 +118,10 @@ export class SkinCustomizationProfileMainViewComponent implements OnInit {
         .setIsDisabled(false)
         .setClickedItemEvent(this.list.clickedItemEvent)
       )
-      console.log(cosmetic.id)
     }
   }
 
   async purchaseButtonCallback(): Promise<void> {
-    console.log('boutton validé')
     const purchaseSend: SenderLinkSocketModel<Array<CosmeticModel>> = await this.eventSocketLink.registerSender<Array<CosmeticModel>>('/game/profile/skin-customization', 'purchase')
     const cosmetics: Array<CosmeticModel> = new Array
 

@@ -9,14 +9,10 @@ import { EventMessageChatGameModel, UserMessageChatGameModel } from 'common'
 export class ChatSharedComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     if (this.playerMessageEvent) this.playerMessageEvent.subscribe((message: UserMessageChatGameModel) => {
-      console.log('allo')
       this.addPlayerMessage(message)
     })
 
-    console.log(this.eventMessageEvent, 'JFFRHGRIUGHIURHGRIUHGRGIHURHRGGRIUGRHU')
-
     if (this.eventMessageEvent) this.eventMessageEvent.subscribe((message: EventMessageChatGameModel) => {
-      console.log('allo')
       this.addEventMessage(message)
     })
   }
@@ -29,8 +25,6 @@ export class ChatSharedComponent implements AfterViewInit {
   }
 
   addEventMessage(message: EventMessageChatGameModel): void {
-    console.log(this.viewContainerRefTarget)
-
     if (this.viewContainerRefTarget && this.eventMessageTemplateRef)
       this.viewContainerRefTarget.createEmbeddedView(this.eventMessageTemplateRef, {
         message: message
