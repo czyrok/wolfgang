@@ -1,14 +1,14 @@
 <section>
   <ng-template #buttonTemplate>
     <app-shared-interactive-button text="Annuler" link="../" [important]="true"></app-shared-interactive-button>
-    <app-shared-interactive-button text="Valider" [count]="amount" (clickEvent)="purchaseButtonCallback()"
+    <app-shared-interactive-button text="Valider" [count]="amount" [important]="true" [accent]="true" (clickEvent)="purchaseButtonCallback()"
       ></app-shared-interactive-button>
   </ng-template>
 
   <ng-template #contentTemplate>
     <div class="grid">
       <div class="area-a">
-        <app-shared-user-label-point></app-shared-user-label-point>
+        <app-shared-user-label-point [pointCount]="user.gamePointCount"></app-shared-user-label-point>
       </div>
 
       <div class="area-b">
