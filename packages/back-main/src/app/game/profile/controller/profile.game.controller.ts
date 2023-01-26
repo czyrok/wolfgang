@@ -62,56 +62,25 @@ export class ProfileGameController {
         const id: string = skin.id
 
         const cosmeticListObj: Array<DocumentType<CosmeticModel>> = new Array
-        let cosmetic!: DocumentType<CosmeticModel>
         const cosmeticsListObj: Array<DocumentType<CosmeticModel>> = await CosmeticModelDocument.find().exec()
 
         for(let oneCosmetic of cosmeticsListObj){
-            cosmetic = new CosmeticModelDocument
 
             if(oneCosmetic.id === skin.hat.toString()){
-                cosmetic._id = oneCosmetic.id
-                cosmetic.imageUrl = oneCosmetic.imageUrl
-                cosmetic.gamePointPrice = oneCosmetic.gamePointPrice
-                cosmetic.translateName = oneCosmetic.translateName
-                cosmetic.type = oneCosmetic.type
-
-                cosmeticListObj.push(cosmetic)
+                cosmeticListObj.push(oneCosmetic)
             }
             else if(oneCosmetic.id === skin.head.toString()){
-                cosmetic._id = oneCosmetic.id
-                cosmetic.imageUrl = oneCosmetic.imageUrl
-                cosmetic.gamePointPrice = oneCosmetic.gamePointPrice
-                cosmetic.translateName = oneCosmetic.translateName
-                cosmetic.type = oneCosmetic.type
-
-                cosmeticListObj.push(cosmetic)
+                cosmeticListObj.push(oneCosmetic)
             }
             else if(oneCosmetic.id === skin.top.toString()){
-                cosmetic._id = oneCosmetic.id
-                cosmetic.imageUrl = oneCosmetic.imageUrl
-                cosmetic.gamePointPrice = oneCosmetic.gamePointPrice
-                cosmetic.translateName = oneCosmetic.translateName
-                cosmetic.type = oneCosmetic.type
-
-                cosmeticListObj.push(cosmetic)
+                cosmeticListObj.push(oneCosmetic)
             }
             else if(oneCosmetic.id === skin.pants.toString()){
-                cosmetic._id = oneCosmetic.id
-                cosmetic.imageUrl = oneCosmetic.imageUrl
-                cosmetic.gamePointPrice = oneCosmetic.gamePointPrice
-                cosmetic.translateName = oneCosmetic.translateName
-                cosmetic.type = oneCosmetic.type
 
-                cosmeticListObj.push(cosmetic)
+                cosmeticListObj.push(oneCosmetic)
             }
             else if(oneCosmetic.id === skin.shoes.toString()){
-                cosmetic._id = oneCosmetic.id
-                cosmetic.imageUrl = oneCosmetic.imageUrl
-                cosmetic.gamePointPrice = oneCosmetic.gamePointPrice
-                cosmetic.translateName = oneCosmetic.translateName
-                cosmetic.type = oneCosmetic.type
-
-                cosmeticListObj.push(cosmetic)
+                cosmeticListObj.push(oneCosmetic)
             }
         }
 
