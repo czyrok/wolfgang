@@ -1,6 +1,6 @@
 import { DocumentType } from '@typegoose/typegoose'
 import { plainToInstance } from 'class-transformer'
-import { CosmeticModel, CosmeticModelDocument, NotFoundUserError, SkinUserModel, SkinUserModelDocument, UserModel, UserModelDocument } from 'common'
+import { CosmeticModel, CosmeticModelDocument, NotFoundUserError, SkinUserModel, SkinUserModelDocument, UserModel, UserModelDocument, NotFoundSkinUserError, NotFoundCosmeticError } from 'common'
 import { EmitOnFail, EmitOnSuccess, MessageBody, OnConnect, OnDisconnect, OnMessage, SocketController } from 'ts-socket.io-controller'
 
 
@@ -55,44 +55,26 @@ export class ProfileGameController {
 
         if (!user) throw new NotFoundUserError
 
-        let skin: DocumentType<SkinUserModel> | null = await SkinUserModelDocument.findById(user.skin).exec()
+        const skin: DocumentType<SkinUserModel> | null = await SkinUserModelDocument.findById(user.skin).exec()
 
-        if (!skin) throw new NotFoundUserError
+        if (!skin) throw new NotFoundSkinUserError
 
-        const id: string = skin.id
+        const hat: DocumentType<CosmeticModel> | null = await CosmeticModelDocument.findById(skin.hat).exec(),
+            head: DocumentType<CosmeticModel> | null = await CosmeticModelDocument.findById(skin.head).exec(),
+            top: DocumentType<CosmeticModel> | null = await CosmeticModelDocument.findById(skin.top).exec(),
+            pants: DocumentType<CosmeticModel> | null = await CosmeticModelDocument.findById(skin.pants).exec(),
+            shoes: DocumentType<CosmeticModel> | null = await CosmeticModelDocument.findById(skin.shoes).exec()
 
-        const cosmeticListObj: Array<DocumentType<CosmeticModel>> = new Array
-        const cosmeticsListObj: Array<DocumentType<CosmeticModel>> = await CosmeticModelDocument.find().exec()
+        if (hat === null || head === null || top === null || pants === null || shoes === null) throw new NotFoundCosmeticError
 
-        for(let oneCosmetic of cosmeticsListObj){
+        const cosmeticsList: Array<CosmeticModel> = [
+            hat.toObject(),
+            head.toObject(),
+            top.toObject(),
+            pants.toObject(),
+            shoes.toObject()
+        ]
 
-            if(oneCosmetic.id === skin.hat.toString()){
-                cosmeticListObj.push(oneCosmetic)
-            }
-            else if(oneCosmetic.id === skin.head.toString()){
-                cosmeticListObj.push(oneCosmetic)
-            }
-            else if(oneCosmetic.id === skin.top.toString()){
-                cosmeticListObj.push(oneCosmetic)
-            }
-            else if(oneCosmetic.id === skin.pants.toString()){
-
-                cosmeticListObj.push(oneCosmetic)
-            }
-            else if(oneCosmetic.id === skin.shoes.toString()){
-                cosmeticListObj.push(oneCosmetic)
-            }
-        }
-
-        const cosmeticList: Array<CosmeticModel> = new Array
-
-        for(let oneCosmetic of cosmeticListObj){
-            const id: string = oneCosmetic.id
-            oneCosmetic = oneCosmetic.toObject()
-            oneCosmetic.id = id
-            cosmeticList.push(oneCosmetic)
-        }
-
-        return cosmeticList
+        return cosmeticsList
     }
 }

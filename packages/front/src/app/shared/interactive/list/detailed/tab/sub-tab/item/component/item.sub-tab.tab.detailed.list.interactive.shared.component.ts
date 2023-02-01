@@ -15,7 +15,8 @@ export class ItemSubTabTabDetailedListInteractiveSharedComponent {
     if (this.item !== undefined && !this.item.isDisabled) {
       this.item.callBack()
       this.item.setIsSelected(!this.item.isSelected)
-      this.item.clickedItemEvent.next(this.item)
-    } 
+
+      if (this.item.clickedItemEvent !== undefined) this.item.clickedItemEvent.next(this.item)
+    }
   }
 }
