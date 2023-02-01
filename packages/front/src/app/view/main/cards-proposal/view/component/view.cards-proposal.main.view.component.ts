@@ -10,91 +10,77 @@ import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared
   styleUrls: ['./view.cards-proposal.main.view.component.scss']
 })
 export class ViewCardsProposalMainViewComponent implements OnInit {
+  cardProposalId: string | null = null
   cardProposal!: CardsProposalUserModel
-  user!:UserModel
+
+  user!: UserModel
   userVoteCardProposal!: VoteCardsProposalUserModel
-  typeVote!: string
 
   constructor(
     private socketSharedService: SocketSharedService,
     private activatedRoute: ActivatedRoute
   ) { }
 
-  async update(id: string): Promise<void>{
-
+  async updateCardProposal(): Promise<void> {
     const cardProposalLink: ReceiverLinkSocketModel<CardsProposalUserModel> = await this.socketSharedService.registerReceiver<CardsProposalUserModel>('/game/cards-proposal', 'view')
 
     cardProposalLink.subscribe((data: CardsProposalUserModel) => {
       this.cardProposal = data
+
       cardProposalLink.unsubscribe()
     })
 
     const triggerLink: SenderLinkSocketModel<string> = await this.socketSharedService.registerSender<string>('/game/cards-proposal', 'view')
 
-    triggerLink.emit(id)
-    this.getUser()
-    this.getType()
+    if (this.cardProposalId)
+      triggerLink.emit(this.cardProposalId)
   }
 
   async ngOnInit(): Promise<void> {
-    const id: string | null =  this.activatedRoute.snapshot.paramMap.get('card_proposal_id')
-    if(id!==null){
-      this.update(id)
-      this.getUser()
-    }
+    const id: string | null = this.activatedRoute.snapshot.paramMap.get('card_proposal_id')
+
+    this.cardProposalId = id
+
+    this.updateCardProposal()
+    this.setUser()
   }
 
   async callbackThumbsDownCount(): Promise<void> {
-
-    if (this.cardProposal === undefined) return
+    if (!this.cardProposal) return
 
     const triggerLink: SenderLinkSocketModel<string> = await this.socketSharedService.registerSender<string>('/game/cards-proposal', 'upThumbsDownCount')
-    const id: string | null =  this.activatedRoute.snapshot.paramMap.get('card_proposal_id')
-
     const voteDownCardProposalLink: ReceiverLinkSocketModel<VoteCardsProposalUserModel> = await this.socketSharedService.registerReceiver<VoteCardsProposalUserModel>('/game/cards-proposal', 'upThumbsDownCount')
 
     voteDownCardProposalLink.subscribe((data: VoteCardsProposalUserModel) => {
       this.userVoteCardProposal = data
 
-      if(id!==null){
-        this.update(id)
-      }
+      this.updateCardProposal()
+
       voteDownCardProposalLink.unsubscribe()
     })
 
-    if(id!==null){
-      triggerLink.emit(id)
-      this.update(id)
-    }
+    if (this.cardProposalId)
+      triggerLink.emit(this.cardProposalId)
   }
 
   async callbackThumbsUpCount(): Promise<void> {
-
-    if (this.cardProposal === undefined) return
-
+    if (!this.cardProposal) return
 
     const triggerLink: SenderLinkSocketModel<string> = await this.socketSharedService.registerSender<string>('/game/cards-proposal', 'upThumbsUpCount')
-    const id: string | null =  this.activatedRoute.snapshot.paramMap.get('card_proposal_id')
-
     const voteUpCardProposalLink: ReceiverLinkSocketModel<VoteCardsProposalUserModel> = await this.socketSharedService.registerReceiver<VoteCardsProposalUserModel>('/game/cards-proposal', 'upThumbsUpCount')
 
     voteUpCardProposalLink.subscribe((data: VoteCardsProposalUserModel) => {
       this.userVoteCardProposal = data
 
-      if(id!==null){
-        this.update(id)
-      }
+      this.updateCardProposal()
+
       voteUpCardProposalLink.unsubscribe()
     })
-
-    if(id!==null){
-      triggerLink.emit(id)
-      this.update(id)
-    }
+    if (this.cardProposalId)
+      triggerLink.emit(this.cardProposalId)
   }
 
-  async getUser(): Promise<void> {
-
+  async setUser(): Promise<void> {
     const cardProposalLink: ReceiverLinkSocketModel<UserModel> = await this.socketSharedService.registerReceiver<UserModel>('/game/cards-proposal', 'user')
 
     cardProposalLink.subscribe((data: UserModel) => {
@@ -103,24 +89,26 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
       cardProposalLink.unsubscribe()
     })
 
-
-
     const triggerLink: SenderLinkSocketModel<string> = await this.socketSharedService.registerSender<string>('/game/cards-proposal', 'user')
-    const id: string | null =  this.activatedRoute.snapshot.paramMap.get('card_proposal_id')
 
-    if(id!==null){
-      triggerLink.emit(id)
-    }
+    if (this.cardProposalId)
+      triggerLink.emit(this.cardProposalId)
   }
 
-  async getType():  Promise<void>{
-    if(this.userVoteCardProposal === undefined || this.userVoteCardProposal.type===TypeVoteEnum.UNVOTED ){
-      this.typeVote='undefined'
-    }else if(this.userVoteCardProposal.type===TypeVoteEnum.THUMBSUPCOUNT){
-      this.typeVote='up'
-    }else if(this.userVoteCardProposal.type===TypeVoteEnum.THUMBSDOWNCOUNT){
-      this.typeVote='down'
+  getUserVoteType(): string {
+    let typeVote: string = 'undefined'
+
+    if (this.userVoteCardProposal === undefined || this.userVoteCardProposal.type === TypeVoteEnum.UNVOTED) {
+      typeVote = 'undefined'
     }
+    else if (this.userVoteCardProposal.type === TypeVoteEnum.THUMBSUPCOUNT) {
+      typeVote = 'up'
+    }
+    else if (this.userVoteCardProposal.type === TypeVoteEnum.THUMBSDOWNCOUNT) {
+      typeVote = 'down'
+    }
+
+    return typeVote
   }
 
   getDate(): string {
