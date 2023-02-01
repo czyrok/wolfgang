@@ -93,11 +93,14 @@ export class CardsProposalGameController {
             const vote: VoteCardsProposalUserModel = new VoteCardsProposalUserModel(cardProposal, TypeVoteEnum.THUMBSDOWNCOUNT)
             vote.user = req.session.user
 
-            await new VoteCardsProposalUserModelDocument(vote).save()
+            const userVote: DocumentType<VoteCardsProposalUserModel> | null = new VoteCardsProposalUserModelDocument(vote)
+            
+            await userVote.save()
             await cardProposal.save()
-            console.log('slt1111')
 
-            return vote
+            const obj: VoteCardsProposalUserModel = userVote.toObject()
+
+            return obj
         }
         else if (userVote.type === TypeVoteEnum.THUMBSDOWNCOUNT) {
 
@@ -116,16 +119,10 @@ export class CardsProposalGameController {
             userVote.type = TypeVoteEnum.THUMBSDOWNCOUNT
         }
 
-        /* cardProposal.update({thumbsDownCount: cardProposal.thumbsDownCount } )
-        cardProposal.update({thumbsUpCount: cardProposal.thumbsUpCount-- } )
-        cardProposal.update({type: userVote.type } ) */
-
         await cardProposal.save()
         await userVote.save()
 
         const obj: VoteCardsProposalUserModel = userVote.toObject()
-
-        console.log('slt12')
 
         return obj
     }
@@ -143,21 +140,23 @@ export class CardsProposalGameController {
         if (userVote === null || userVote.type === undefined) {
             cardProposal.thumbsUpCount++
 
-            cardProposal.updateOne({ thumbsDownCount: cardProposal.thumbsDownCount })
             const vote: VoteCardsProposalUserModel = new VoteCardsProposalUserModel(cardProposal, TypeVoteEnum.THUMBSUPCOUNT)
-
             vote.user = req.session.user
 
-            await new VoteCardsProposalUserModelDocument(vote).save()
+            const userVote: DocumentType<VoteCardsProposalUserModel> | null = new VoteCardsProposalUserModelDocument(vote)
+            
+            await userVote.save()
+            await cardProposal.save()
 
-            console.log('slt121122333')
+            const obj: VoteCardsProposalUserModel = userVote.toObject()
 
-            return vote
+            return obj
         }
         else if (userVote.type === TypeVoteEnum.THUMBSUPCOUNT) {
 
             cardProposal.thumbsUpCount--
             userVote.type = TypeVoteEnum.UNVOTED
+            console.log('Unvoted')
         }
         else if (userVote.type === TypeVoteEnum.THUMBSDOWNCOUNT) {
 
@@ -171,14 +170,8 @@ export class CardsProposalGameController {
             userVote.type = TypeVoteEnum.THUMBSUPCOUNT
         }
 
-        /* cardProposal.update({thumbsDownCount: cardProposal.thumbsDownCount } )
-        cardProposal.update({thumbsUpCount: cardProposal.thumbsUpCount } )
-        cardProposal.update({type: userVote.type }) */
-
         await cardProposal.save()
         await userVote.save()
-
-        console.log('slt1233')
 
         const obj: VoteCardsProposalUserModel = userVote.toObject()
 
