@@ -6,6 +6,8 @@ import { UserModel } from '../../user/model/user.model'
 
 import { ReportInterface } from '../interface/report.interface'
 
+import { TypeReportEnum } from '../type/enum/type.report.enum'
+
 @Exclude()
 export class ReportModel extends DocumentModel implements ReportInterface {
     @Expose()
@@ -15,7 +17,10 @@ export class ReportModel extends DocumentModel implements ReportInterface {
     @Expose()
     @prop({ required: true, default: new Date() })
     releaseDate!: Date
+
+    @Expose()
+    @prop({ required: true })
+    type!: TypeReportEnum
 }
 
 export const ReportModelDocument = getModelForClass(ReportModel, { schemaOptions: { collection: 'report' } })
-
