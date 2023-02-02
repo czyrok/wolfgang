@@ -9,6 +9,21 @@
             @include element.definePropertyHover() {
                 background-color: theme.get('background', 'active') !important;
             }
+
+            @include element.definePropertyActive() {
+                @include element.createSubsection('show-after=true') {
+                    @include element.defineProperty('::after') {
+                        color: theme.get('font', 'regular');
+                    }
+                }
+            }
+    
+            @include element.createSubsection('show-after=true') {
+                @include element.defineProperty('::after') {
+                    color: theme.get('font', 'regular');
+                    background-color: theme.get('background', 'active');
+                }
+            }
         }
     }
 
