@@ -10,7 +10,7 @@
   </ng-template>
 
   <ng-template #contentTemplate>
-    <div class="lines-container all">
+    <div *ngIf="user" class="lines-container all">
       <app-shared-user-line-profile [username]="user.username"></app-shared-user-line-profile>
     </div>
 

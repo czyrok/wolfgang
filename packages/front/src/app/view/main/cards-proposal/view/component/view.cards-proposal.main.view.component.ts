@@ -41,6 +41,8 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
 
     this.cardProposalId = id
 
+    if(!this.userVoteCardProposal) this.getInit()
+
     this.updateCardProposal()
     this.setUser()
   }
@@ -96,10 +98,10 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
   }
 
   getUserVoteType(): string {
-    let typeVote: string = 'undefined'
+    let typeVote!: string
 
-    if (this.userVoteCardProposal === undefined || this.userVoteCardProposal.type === TypeVoteEnum.UNVOTED) {
-      typeVote = 'undefined'
+    if (this.userVoteCardProposal === undefined) {
+      typeVote = 'undef'
     }
     else if (this.userVoteCardProposal.type === TypeVoteEnum.THUMBSUPCOUNT) {
       typeVote = 'up'
@@ -111,8 +113,24 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
     return typeVote
   }
 
+  async getInit(): Promise<void>{
+    const voteUpCardProposalLink: ReceiverLinkSocketModel<VoteCardsProposalUserModel> = await this.socketSharedService.registerReceiver<VoteCardsProposalUserModel>('/game/cards-proposal', 'initType')
+
+    voteUpCardProposalLink.subscribe((data: VoteCardsProposalUserModel) => {
+      this.userVoteCardProposal = data
+
+      voteUpCardProposalLink.unsubscribe()
+    })
+
+    const triggerLink: SenderLinkSocketModel<string> = await this.socketSharedService.registerSender<string>('/game/cards-proposal', 'initType')
+
+    if (this.cardProposalId){
+      triggerLink.emit(this.cardProposalId)
+    }
+  }
+
   getDate(): string {
-    const date: Date = new Date(this.cardProposal.releaseDate)
+    const date: Date = new Date(this.cardProposal?.releaseDate)
 
     return date.toLocaleDateString()
   }
