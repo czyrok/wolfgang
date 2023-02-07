@@ -9,11 +9,12 @@ import { TokenUserModel, TokenUserModelDocument } from '../../user/token/model/t
 import { VarEnvEnum } from '../../env/var/enum/var.env.enum'
 
 export class JWTHelper {
-    public static generate(user: DocumentType<UserModel>, ip: string): string {
-        let token: DocumentType<TokenUserModel> = new TokenUserModelDocument(new TokenUserModel(user, EnvUtil.get(VarEnvEnum.JWT_EXPIRES), ip))
-        token.save()
+    public static async generate(user: DocumentType<UserModel>, ip: string): Promise<string> {
+        const token: DocumentType<TokenUserModel> = new TokenUserModelDocument(new TokenUserModel(user, EnvUtil.get(VarEnvEnum.JWT_EXPIRES), ip))
+        
+        await token.save()
 
-        let jwt: string = sign({
+        const jwt: string = sign({
             sub: token._id,
             scopes: [
                 // #achan

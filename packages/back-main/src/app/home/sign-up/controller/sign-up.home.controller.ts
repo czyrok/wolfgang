@@ -56,11 +56,14 @@ export class SignUpHomeController {
         newPurchase.cosmetic = shoesCosmetic
         newPurchase.user = newUser
         newPurchase.save()
+
         await skin.save()
         await newUser.save()
 
         LogUtil.logger(TypeLogEnum.LOG_IN).info(`${newUser.username} is signing up`)
 
-        return JWTHelper.generate(newUser, socket.handshake.address)
+        const jwt: string = await JWTHelper.generate(newUser, socket.handshake.address)
+
+        return jwt
     }
 }

@@ -9,16 +9,6 @@ import { EmitOnFail, EmitOnSuccess, MessageBody, OnConnect, OnDisconnect, OnMess
     init: () => { }
 })
 export class ProfileGameController {
-    @OnConnect()
-    connection() {
-        console.log('client connected2');
-    }
-
-    @OnDisconnect()
-    disconnect() {
-        console.log('client disconnected2');
-    }
-
     @OnMessage()
     @EmitOnSuccess()
     @EmitOnFail()

@@ -38,6 +38,9 @@ export class AuthSharedService {
     // #achan secure, et utiliser env
     this.cookieService.set('token', token, 6, '/', undefined, false, 'Lax')
 
+    this.socketSharedService.handler.socketManager.engine.close()
+    this.socketSharedService.handler.socketManager.connect()
+
     await this.testAuth()
   }
 
@@ -47,14 +50,16 @@ export class AuthSharedService {
 
     this.disconnect()
 
-    //await this.sessionSharedService.refreshSession()
+    await this.sessionSharedService.refreshSession()
     await this.doAuth()
   }
 
   private async doAuth(): Promise<void> {
-    const testSenderLink: SenderLinkSocketModel<void> = await this.socketSharedService.registerSender('/auth', 'test')
-    const testReceiverLink: ReceiverLinkSocketModel<string> = await this.socketSharedService.registerReceiver('/auth', 'test')
-    const testErrorLink: ReceiverLinkSocketModel<string> = await this.socketSharedService.registerReceiver('/auth', 'test')
+    this.socketSharedService.handler.getNamespace('/auth').connect()
+
+    const testSenderLink: SenderLinkSocketModel<void> = await this.socketSharedService.registerSender('/auth', 'test'),
+      testReceiverLink: ReceiverLinkSocketModel<string> = await this.socketSharedService.registerReceiver('/auth', 'test'),
+      testErrorLink: ReceiverLinkSocketModel<string> = await this.socketSharedService.registerReceiver('/auth', 'test')
 
     return new Promise((resolve: (value: void) => void) => {
       testReceiverLink.subscribe((username: string) => {
@@ -76,12 +81,14 @@ export class AuthSharedService {
   }
 
   public async logOut(): Promise<void> {
-    const logOutSenderLink: SenderLinkSocketModel<void> = await this.socketSharedService.registerSender('/auth', 'logOut')
-    const logOutReceiverLink: ReceiverLinkSocketModel<void> = await this.socketSharedService.registerReceiver('/auth', 'logOut')
+    const logOutSenderLink: SenderLinkSocketModel<void> = await this.socketSharedService.registerSender('/auth', 'logOut'),
+      logOutReceiverLink: ReceiverLinkSocketModel<void> = await this.socketSharedService.registerReceiver('/auth', 'logOut')
 
     return new Promise((resolve: (value: void) => void) => {
       logOutReceiverLink.subscribe(() => {
         this.disconnect()
+
+        this.socketSharedService.handler.getNamespace('/auth').disconnect()
 
         // #achan
         this.cookieService.delete('token', '/', undefined, false, 'Lax')

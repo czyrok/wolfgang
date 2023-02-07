@@ -28,6 +28,8 @@ export class LogInHomeController {
         req.session.user = user
         req.session.save()
 
-        return JWTHelper.generate(user, socket.handshake.address)
+        const jwt: string = await JWTHelper.generate(user, socket.handshake.address)
+
+        return jwt
     }
 }

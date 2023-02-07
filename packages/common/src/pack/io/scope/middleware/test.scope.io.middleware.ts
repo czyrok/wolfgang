@@ -25,14 +25,10 @@ export class TestScopeIoMiddleware implements MiddlewareInterface {
     type: 'MiddlewareInterface' = 'MiddlewareInterface'
 
     async use(socket: Socket, next: (err?: any) => any): Promise<void> {
-
-        console.log('ddd3')
         const cookies: any = parse(socket.request.headers.cookie || ''),
             jwt: string = cookies[EnvUtil.get(VarEnvEnum.JWT_COOKIE_NAME)]
 
         let payload: JwtPayload | undefined = undefined
-
-        console.log('ddd4', cookies)
 
         try {
             payload = verify(jwt, EnvUtil.get(VarEnvEnum.JWT_SECRET), {
@@ -44,16 +40,12 @@ export class TestScopeIoMiddleware implements MiddlewareInterface {
             return next(new UndefinedCookieJwtError)
         }
 
-        console.log('ddd5')
-
         if (!payload.sub) return next(new UndefinedJwtError)
 
         const token: DocumentType<TokenUserModel> = await TokenUserModelDocument.findById(payload.sub).populate('user').exec() as DocumentType<TokenUserModel>
 
         if (!token) return next(new NotFoundTokenUserError)
-        console.log('ddd')
         if (!token.active) return next(new InactiveTokenUserError)
-        console.log('ddd2')
         if (!token.user) return next(new NotFoundUserError)
 
         const user: DocumentType<UserModel> = token.user as DocumentType<UserModel>
