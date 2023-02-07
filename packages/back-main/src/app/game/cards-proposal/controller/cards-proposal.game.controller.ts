@@ -108,9 +108,9 @@ export class CardsProposalGameController {
             cardProposal.thumbsDownCount--
 
             userVoteCardsProposal.delete()
-            
+
             await cardProposal.save()
-            
+
             return
         }
         else if (userVoteCardsProposal.type === TypeVoteEnum.THUMBSUPCOUNT) {
@@ -167,9 +167,9 @@ export class CardsProposalGameController {
             cardProposal.thumbsUpCount--
 
             userVoteCardsProposal.delete()
-            
+
             await cardProposal.save()
-            
+
             return
         }
         else if (userVoteCardsProposal.type === TypeVoteEnum.THUMBSDOWNCOUNT) {
@@ -191,15 +191,10 @@ export class CardsProposalGameController {
 
         return obj
     }
-    
-
-
-
-
 
     @OnMessage()
     @EmitOnSuccess()
-    async initType(@ConnectedSocket() socket: Socket, @MessageBody() id: string) {
+    async initTypeUserVoteCardProposal(@ConnectedSocket() socket: Socket, @MessageBody() id: string) {
         const req: Request = socket.request as Request,
             user: DocumentType<UserModel> | undefined = req.session.user
 
@@ -212,11 +207,10 @@ export class CardsProposalGameController {
         const userVoteCardsProposal: DocumentType<VoteCardsProposalUserModel> | null = await VoteCardsProposalUserModelDocument
             .findOne({ user: user.id, cardProposal: cardProposal._id }).exec()
 
-        if(userVoteCardsProposal){
-            const obj: VoteCardsProposalUserModel = userVoteCardsProposal.toObject()
+        if (!userVoteCardsProposal) throw new NotFoundCardsProposalUserError
 
-            return obj
-        }
-        else return
+        const obj: VoteCardsProposalUserModel = userVoteCardsProposal.toObject()
+
+        return obj
     }
 }

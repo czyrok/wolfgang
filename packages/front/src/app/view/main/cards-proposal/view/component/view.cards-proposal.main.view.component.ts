@@ -41,7 +41,7 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
 
     this.cardProposalId = id
 
-    if(!this.userVoteCardProposal) this.getInit()
+    if(!this.userVoteCardProposal) this.setDefaultTypeUserVoteCardProposal()
 
     this.updateCardProposal()
     this.setUser()
@@ -113,8 +113,8 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
     return typeVote
   }
 
-  async getInit(): Promise<void>{
-    const voteUpCardProposalLink: ReceiverLinkSocketModel<VoteCardsProposalUserModel> = await this.socketSharedService.registerReceiver<VoteCardsProposalUserModel>('/game/cards-proposal', 'initType')
+  async setDefaultTypeUserVoteCardProposal(): Promise<void>{
+    const voteUpCardProposalLink: ReceiverLinkSocketModel<VoteCardsProposalUserModel> = await this.socketSharedService.registerReceiver<VoteCardsProposalUserModel>('/game/cards-proposal', 'initTypeUserVoteCardProposal')
 
     voteUpCardProposalLink.subscribe((data: VoteCardsProposalUserModel) => {
       this.userVoteCardProposal = data
@@ -122,7 +122,7 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
       voteUpCardProposalLink.unsubscribe()
     })
 
-    const triggerLink: SenderLinkSocketModel<string> = await this.socketSharedService.registerSender<string>('/game/cards-proposal', 'initType')
+    const triggerLink: SenderLinkSocketModel<string> = await this.socketSharedService.registerSender<string>('/game/cards-proposal', 'initTypeUserVoteCardProposal')
 
     if (this.cardProposalId){
       triggerLink.emit(this.cardProposalId)
