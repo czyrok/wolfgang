@@ -107,7 +107,11 @@ export class CardsProposalGameController {
         else if (userVoteCardsProposal.type === TypeVoteEnum.THUMBSDOWNCOUNT) {
             cardProposal.thumbsDownCount--
 
-            userVoteCardsProposal.type = TypeVoteEnum.UNVOTED
+            userVoteCardsProposal.delete()
+
+            await cardProposal.save()
+
+            return
         }
         else if (userVoteCardsProposal.type === TypeVoteEnum.THUMBSUPCOUNT) {
             cardProposal.thumbsDownCount++
@@ -162,7 +166,11 @@ export class CardsProposalGameController {
         else if (userVoteCardsProposal.type === TypeVoteEnum.THUMBSUPCOUNT) {
             cardProposal.thumbsUpCount--
 
-            userVoteCardsProposal.type = TypeVoteEnum.UNVOTED
+            userVoteCardsProposal.delete()
+
+            await cardProposal.save()
+
+            return
         }
         else if (userVoteCardsProposal.type === TypeVoteEnum.THUMBSDOWNCOUNT) {
             cardProposal.thumbsUpCount++
@@ -178,6 +186,28 @@ export class CardsProposalGameController {
 
         await cardProposal.save()
         await userVoteCardsProposal.save()
+
+        const obj: VoteCardsProposalUserModel = userVoteCardsProposal.toObject()
+
+        return obj
+    }
+
+    @OnMessage()
+    @EmitOnSuccess()
+    async initTypeUserVoteCardProposal(@ConnectedSocket() socket: Socket, @MessageBody() id: string) {
+        const req: Request = socket.request as Request,
+            user: DocumentType<UserModel> | undefined = req.session.user
+
+        if (!user) throw new NotFoundUserError
+
+        const cardProposal: DocumentType<CardsProposalUserModel> = await CardsProposalUserModelDocument
+            .findById(id)
+            .exec() as DocumentType<CardsProposalUserModel>
+
+        const userVoteCardsProposal: DocumentType<VoteCardsProposalUserModel> | null = await VoteCardsProposalUserModelDocument
+            .findOne({ user: user.id, cardProposal: cardProposal._id }).exec()
+
+        if (!userVoteCardsProposal) throw new NotFoundCardsProposalUserError
 
         const obj: VoteCardsProposalUserModel = userVoteCardsProposal.toObject()
 
