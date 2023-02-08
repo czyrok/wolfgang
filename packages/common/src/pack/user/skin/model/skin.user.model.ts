@@ -50,7 +50,6 @@ export class SkinUserModel extends DocumentModel implements SkinUserInterface {
         switch (cosmetic.type) {
             case TypeCosmeticEnum.HAT:
                 this.hat = cosmetic
-                console.log(this.hat)
                 await this.updateOne({ hat: cosmetic }).exec()
                 break
             case TypeCosmeticEnum.HEAD:
@@ -70,9 +69,9 @@ export class SkinUserModel extends DocumentModel implements SkinUserInterface {
                 await this.updateOne({ shoes: cosmetic }).exec()
                 break
         }
-        console.log('maj de la date')
+
         await this.updateOne({ lastReleaseDate: new Date }).exec()
-        console.log('pas de crash')
+
         await this.save()
     }
 }

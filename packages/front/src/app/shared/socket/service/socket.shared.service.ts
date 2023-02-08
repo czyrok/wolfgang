@@ -16,10 +16,11 @@ export class SocketSharedService implements HandlerLinkSocketInterface {
       this.handler.socketManager.connect()
     }) */
 
-    this.handler.socketManager.opts.autoConnect = true
+    this.handler.socketManager.reconnection(true)
+    this.handler.socketManager.connect()
   }
 
-  private get handler(): HandlerSocketLinkModel {
+  public get handler(): HandlerSocketLinkModel {
     return this._handler
   }
 

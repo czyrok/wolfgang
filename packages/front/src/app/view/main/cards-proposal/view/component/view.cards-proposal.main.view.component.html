@@ -1,16 +1,16 @@
 <section>
   <ng-template #buttonTemplate>
 
-    <!-- <app-shared-interactive-button text="{{ cardProposal?.thumbsUpCount }}" icofont="thumbs-up" (clickEvent)="callbackThumbsUpCount()" [active]="typeVote == 'undefined'? false : (typeVote == 'up' ? true : false)" [accent]="true"
+    <app-shared-interactive-button text="{{ cardProposal?.thumbsUpCount }}" icofont="thumbs-up" (clickEvent)="callbackThumbsUpCount()" [active]="getUserVoteType() == 'up' ? true : false" [accent]="true"
     [important]="true"></app-shared-interactive-button>
 
-    <app-shared-interactive-button text="{{ cardProposal?.thumbsDownCount }}" icofont="thumbs-down" (clickEvent)="callbackThumbsDownCount()" [active]="typeVote == 'undefined'? false : (typeVote == 'down' ? true : false)"
-    [important]="true"></app-shared-interactive-button> -->
+    <app-shared-interactive-button text="{{ cardProposal?.thumbsDownCount }}" icofont="thumbs-down" (clickEvent)="callbackThumbsDownCount()" [active]="getUserVoteType() == 'down' ? true : false"
+    [important]="true"></app-shared-interactive-button>
 
   </ng-template>
 
   <ng-template #contentTemplate>
-    <div class="lines-container all">
+    <div *ngIf="user" class="lines-container all">
       <app-shared-user-line-profile [username]="user.username"></app-shared-user-line-profile>
     </div>
 

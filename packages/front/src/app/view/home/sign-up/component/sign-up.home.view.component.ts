@@ -37,7 +37,6 @@ export class SignUpHomeViewComponent {
       tokenLink.subscribe(async (token: string) => {
         await this.authSharedService.setToken(token)
 
-        console.log('hum')
         this.router.navigateByUrl('/game')
 
         tokenLink.unsubscribe()

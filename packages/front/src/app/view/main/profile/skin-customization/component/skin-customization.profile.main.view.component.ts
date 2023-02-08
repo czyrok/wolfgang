@@ -23,7 +23,7 @@ export class SkinCustomizationProfileMainViewComponent implements OnInit {
 
   cosmeticsList!: SeparatedCosmeticsListFormControllerModel
   amount: number = 0
-  
+
   username!: string
 
   constructor(
@@ -34,70 +34,18 @@ export class SkinCustomizationProfileMainViewComponent implements OnInit {
   ) {
     const username: string | null | undefined = this.activatedRoute.parent?.snapshot.paramMap.get('username')
 
-    console.log(username)
-
     if (username) this.username = username
   }
 
   async ngOnInit(): Promise<void> {
     if (this.authSharedService.username !== undefined) {
       this.list.clickedItemEvent.subscribe(() => {
-        let res: number = 0
-        for (const item of this.list.selectedItems) {
-
-          switch (item.associedObject.type) {
-            case TypeCosmeticEnum.HAT:
-              this.hat = item.associedObject
-              break
-            case TypeCosmeticEnum.HEAD:
-              this.head = item.associedObject
-              break
-            case TypeCosmeticEnum.TOP:
-              this.top = item.associedObject
-              break
-            case TypeCosmeticEnum.PANTS:
-              this.pants = item.associedObject
-              break
-            case TypeCosmeticEnum.SHOES:
-              this.shoes = item.associedObject
-          }
-
-          if (this.cosmeticsList.notOwnedCosmetics.indexOf(item.associedObject) >= 0) {
-            res += item.count
-          }
-        }
-
-        this.amount = res
+        this.updateSkinAmount()
       })
-      const userLink: ReceiverLinkSocketModel<UserModel> = (await this.eventSocketLink.registerReceiver<UserModel>('/game/profile', 'view')).subscribe(
-        (data: UserModel) => {
-          this.user = data
-          userLink.unsubscribe()
-        }
-      )
 
-      const usernameLink: SenderLinkSocketModel<string> = await this.eventSocketLink.registerSender<string>('/game/profile', 'view')
+      this.setUser(this.authSharedService.username)
 
-      usernameLink.emit(this.authSharedService.username)
-
-      const cosmeticsLink: ReceiverLinkSocketModel<SeparatedCosmeticsListFormControllerModel>
-        = await this.eventSocketLink.registerReceiver<SeparatedCosmeticsListFormControllerModel>('/game/profile/skin-customization', 'cosmetics')
-
-      cosmeticsLink.subscribe(
-        (data: SeparatedCosmeticsListFormControllerModel) => {
-          this.cosmeticsList = data
-          console.log(data)
-          this.configureList(data, TypeCosmeticEnum.HAT)
-          this.configureList(data, TypeCosmeticEnum.HEAD)
-          this.configureList(data, TypeCosmeticEnum.TOP)
-          this.configureList(data, TypeCosmeticEnum.PANTS)
-          this.configureList(data, TypeCosmeticEnum.SHOES)
-        }
-      )
-
-      const cosmeticsSend: SenderLinkSocketModel<void> = await this.eventSocketLink.registerSender<void>('/game/profile/skin-customization', 'cosmetics')
-
-      cosmeticsSend.emit()
+      this.setCosmeticsList()
     }
   }
 
@@ -105,26 +53,88 @@ export class SkinCustomizationProfileMainViewComponent implements OnInit {
     return this.authSharedService.username
   }
 
-  configureList(cosmetics: SeparatedCosmeticsListFormControllerModel, type: TypeCosmeticEnum): void {
+  updateSkinAmount(): void {
+    let res: number = 0
 
-    let tab = new TabDetailedListInteractiveSharedModel()
+    for (const item of this.list.selectedItems) {
+      switch (item.associedObject.type) {
+        case TypeCosmeticEnum.HAT:
+          this.hat = item.associedObject
+          break
+        case TypeCosmeticEnum.HEAD:
+          this.head = item.associedObject
+          break
+        case TypeCosmeticEnum.TOP:
+          this.top = item.associedObject
+          break
+        case TypeCosmeticEnum.PANTS:
+          this.pants = item.associedObject
+          break
+        case TypeCosmeticEnum.SHOES:
+          this.shoes = item.associedObject
+          break
+      }
+
+      if (this.cosmeticsList.notOwnedCosmetics.indexOf(item.associedObject) >= 0) res += item.count
+    }
+
+    this.amount = res
+  }
+
+  async setUser(username: string): Promise<void> {
+    const userLink: ReceiverLinkSocketModel<UserModel> = (await this.eventSocketLink.registerReceiver<UserModel>('/game/profile', 'view')).subscribe(
+      (data: UserModel) => {
+        this.user = data
+        userLink.unsubscribe()
+      }
+    )
+
+    const usernameLink: SenderLinkSocketModel<string> = await this.eventSocketLink.registerSender<string>('/game/profile', 'view')
+
+    usernameLink.emit(username)
+  }
+
+  async setCosmeticsList(): Promise<void> {
+    const cosmeticsLink: ReceiverLinkSocketModel<SeparatedCosmeticsListFormControllerModel>
+      = await this.eventSocketLink.registerReceiver<SeparatedCosmeticsListFormControllerModel>('/game/profile/skin-customization', 'cosmetics')
+
+    cosmeticsLink.subscribe(
+      (data: SeparatedCosmeticsListFormControllerModel) => {
+        this.cosmeticsList = data
+
+        this.configureList(data, TypeCosmeticEnum.HAT)
+        this.configureList(data, TypeCosmeticEnum.HEAD)
+        this.configureList(data, TypeCosmeticEnum.TOP)
+        this.configureList(data, TypeCosmeticEnum.PANTS)
+        this.configureList(data, TypeCosmeticEnum.SHOES)
+      }
+    )
+
+    const cosmeticsSend: SenderLinkSocketModel<void> = await this.eventSocketLink.registerSender<void>('/game/profile/skin-customization', 'cosmetics')
+
+    cosmeticsSend.emit()
+  }
+
+  configureList(cosmetics: SeparatedCosmeticsListFormControllerModel, type: TypeCosmeticEnum): void {
+    const tab = new TabDetailedListInteractiveSharedModel()
 
     switch (type) {
       case TypeCosmeticEnum.HAT:
-        tab.setTitle('Hat')
+        tab.setTitle('Chapeau')
         tab.setVisibility(true)
         break
       case TypeCosmeticEnum.HEAD:
-        tab.setTitle('Head')
+        tab.setTitle('Tête')
         break
       case TypeCosmeticEnum.TOP:
-        tab.setTitle('Top')
+        tab.setTitle('Haut')
         break
       case TypeCosmeticEnum.PANTS:
-        tab.setTitle('Pants')
+        tab.setTitle('Pantalon')
         break
       case TypeCosmeticEnum.SHOES:
-        tab.setTitle('Shoes')
+        tab.setTitle('Chaussures')
+        break
     }
 
     let subTab = new SubTabTabDetailedListInteractiveSharedModel().setIsIconOnly(true).setTitle('Possédé')
@@ -139,7 +149,7 @@ export class SkinCustomizationProfileMainViewComponent implements OnInit {
   }
 
   configureSubTab(subTab: SubTabTabDetailedListInteractiveSharedModel, list: Array<CosmeticModel>): void {
-    for (let cosmetic of list) {
+    for (const cosmetic of list) {
       subTab.addItem(new ItemSubTabTabDetailedListInteractiveSharedModel<CosmeticModel>()
         .setName(cosmetic.translateName)
         .setImgURL('asset/img/cosmetics/' + cosmetic.imageUrl + '.png')
@@ -162,8 +172,6 @@ export class SkinCustomizationProfileMainViewComponent implements OnInit {
 
     purchaseRec.subscribe(() => {
       purchaseRec.unsubscribe()
-
-      console.log('ouiiiiiii')
 
       this.router.navigateByUrl('/game/profile/' + this.user.username)
     })
