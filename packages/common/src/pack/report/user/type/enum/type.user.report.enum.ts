@@ -1,7 +1,7 @@
 export enum TypeUserReportEnum {
-    NEGATIVE_TACTICS,
-    INAPROPRIATE_WORDS,
-    FLOOD,
-    ADVERTISING,
-    LINK
+    NEGATIVE_TACTICS = 'NegativeTacticsReportUserType',
+    INAPROPRIATE_WORDS = 'InapropriateWordsReportUserType',
+    FLOOD = 'FloodReportUserType',
+    ADVERTISING = 'AdvertisingReportUserType',
+    LINK = 'LinkReportUserType'
 }

@@ -7,23 +7,33 @@
 
   <ng-template #contentTemplate>
     <div class="lines-container all">
-      <app-shared-user-line-profile></app-shared-user-line-profile>
+      <ng-container *ngFor="let concernedUser of concernedUsers">
+        <app-shared-user-line-profile [username]="concernedUser.username"></app-shared-user-line-profile>
+      </ng-container>
     </div>
 
     <div class="box">
       <div class="grid">
         <div class="area-a">
-          <app-shared-label text="10" icofont="thumbs-up"></app-shared-label>
-          <app-shared-label text="3" icofont="thumbs-down"></app-shared-label>
+          <app-shared-alert-text *ngIf="bugReport" icofont="flag" text="{{ bugReport.type }}"></app-shared-alert-text>
+          <app-shared-alert-text *ngIf="basicReport" icofont="flag" text="{{ basicReport.type }}"></app-shared-alert-text>
+          <app-shared-alert-text *ngIf="otherReport" icofont="flag" text="{{ otherReport.type }}"></app-shared-alert-text>
 
-          <app-shared-alert-text icofont="flag" text="Type"></app-shared-alert-text>
+          <app-shared-alert-text *ngIf="basicReport" icofont="flag" text="{{ basicReport.reportType }}"></app-shared-alert-text>
+
+          <app-shared-label *ngIf="basicReport" text="{{ basicReport.thumbsUpCount }}" icofont="thumbs-up"></app-shared-label>
+          <app-shared-label *ngIf="basicReport" text="{{ basicReport.thumbsDownCount }}" icofont="thumbs-down"></app-shared-label>
+
+          <app-shared-label *ngIf="otherReport" text="{{ otherReport.thumbsUpCount }}" icofont="thumbs-up"></app-shared-label>
+          <app-shared-label *ngIf="otherReport" text="{{ otherReport.thumbsDownCount }}" icofont="thumbs-down"></app-shared-label>
         </div>
 
         <div class="area-b">
-          <p data-css-text data-css-font data-css-color>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quos ducimus id earum? A facere non ut dicta
-            distinctio rerum quasi, incidunt est sint asperiores, nostrum enim ex quidem dolor nisi, id quod? Aperiam,
-            voluptates? Veniam, esse. Beatae amet adipisci quod.
+          <p data-css-text data-css-font data-css-color *ngIf="bugReport">
+            {{ bugReport.desc }}
+          </p>
+          <p data-css-text data-css-font data-css-color *ngIf="otherReport">
+            {{ otherReport.reason }}
           </p>
         </div>
 
@@ -35,6 +45,10 @@
   </ng-template>
 
 
-  <app-view-page-scroll title="Signalement : {{ report?.releaseDate }}" [buttonTemplate]="buttonTemplate"
+  <app-view-page-scroll *ngIf="bugReport" title="Signalement : {{ getDate(bugReport) }}" [buttonTemplate]="buttonTemplate"
+    [contentTemplate]="contentTemplate" [list]="false"></app-view-page-scroll>
+  <app-view-page-scroll *ngIf="basicReport" title="Signalement : {{ getDate(basicReport) }}" [buttonTemplate]="buttonTemplate"
+    [contentTemplate]="contentTemplate" [list]="false"></app-view-page-scroll>
+  <app-view-page-scroll *ngIf="otherReport" title="Signalement : {{ getDate(otherReport) }}" [buttonTemplate]="buttonTemplate"
     [contentTemplate]="contentTemplate" [list]="false"></app-view-page-scroll>
 </section>
