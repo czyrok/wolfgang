@@ -8,12 +8,25 @@
 
     <app-shared-user-bubble-username [username]="user?.username" [detailed]="detailed"></app-shared-user-bubble-username>
 
-    <div class="img" >
-        <!-- <img src="asset/img/user.svg" alt="a enlever"> -->
-        <img class="hat" src="asset/img/cosmetics/{{ getHat()?.imageUrl }}.png" alt="{{ getHat()?.translateName }}">
-        <img class="head" src="asset/img/cosmetics/{{ getHead()?.imageUrl }}.png" alt="{{ getHead()?.translateName }}">
-        <img class="top" src="asset/img/cosmetics/{{ getTop()?.imageUrl }}.png" alt="{{ getTop()?.translateName }}">
-        <img class="pants" src="asset/img/cosmetics/{{ getPants()?.imageUrl }}.png" alt="{{ getPants()?.translateName }}">
-        <img class="shoes" src="asset/img/cosmetics/{{ getShoes()?.imageUrl }}.png" alt="{{ getShoes()?.translateName }}">
+    <div class="img" appSharedUserAvatarAll [active]="!reduced">
+        <div class="skin-hat skin">
+          <img class="img-cosmetic" src="asset/img/cosmetics/{{ getHat()?.imageUrl }}.png" alt="{{ getHat()?.translateName }}">
+        </div>
+
+        <div class="skin-head skin">
+          <img class="img-cosmetic" src="asset/img/cosmetics/{{ getHead()?.imageUrl }}.png" alt="{{ getHead()?.translateName }}">
+        </div>
+
+        <div class="skin-top skin">
+          <img class="img-cosmetic" src="asset/img/cosmetics/{{ getTop()?.imageUrl }}.png" alt="{{ getTop()?.translateName }}">
+        </div>
+
+        <div class="skin-pants skin">
+          <img class="img-cosmetic" src="asset/img/cosmetics/{{ getPants()?.imageUrl }}.png" alt="{{ getPants()?.translateName }}">
+        </div>
+
+        <div class="skin-shoes skin">
+          <img class="img-cosmetic" src="asset/img/cosmetics/{{ getShoes()?.imageUrl }}.png" alt="{{ getShoes()?.translateName }}">
+        </div>
     </div>
 </div>

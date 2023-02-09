@@ -1,60 +1,54 @@
 @use '../../../../../../scss/lib/property';
 
 .container {
-    display: grid;
-    justify-items: center;
-    grid-template-rows: auto 1fr;
+  display: grid;
+  justify-items: center;
+  grid-template-rows: auto 1fr;
 }
 
-
 .container:not(.reduced) {
-    height: 100%;
+  height: 100%;
 }
 
 .container .img {
-    max-width: 500px;
-    min-width: 70%;
-    display: flex;
-    aspect-ratio: 1 / 1.45;
-    height: max(0vh, 100%);
-    overflow: hidden;
-    justify-content: center;
-    justify-items: center;
-    flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  justify-items: center;
 }
 
 .container.reduced .img {
-    //width: property.get('size', 'avatar', 'width');
-    height: property.get('size', 'avatar', 'height');
+  //width: property.get('size', 'avatar', 'width');
+  height: property.get('size', 'avatar', 'height');
 }
 
-.hat {
-    height: 36%;
-    display: flex;
-    aspect-ratio: 6 / 2;
-    z-index: 0;
+.container .img .skin {
+  width: 100%;
+  height: 0;
+  overflow: visible;
+  position: relative;
 }
 
-.head {
-    height: 23%;
-    display: flex;
-    aspect-ratio: 4 / 2;
+.container .img .skin-hat {
+  z-index: 5;
 }
 
-.top {
-    height: 20%;
-    display: flex;
-    aspect-ratio: 6 / 2;
+.container .img .skin-head {
+  z-index: 1;
 }
 
-.pants {
-    display: flex;
-    aspect-ratio: 6 / 2;
-    height: 24%;
+.container .img .skin-top {
+  z-index: 4;
 }
 
-.shoes {
-    height: 6%;
-    display: flex;
-    aspect-ratio: 17 / 2;
+.container .img .skin-pants {
+  z-index: 3;
+}
+
+.container .img .skin-shoes {
+  z-index: 2;
+}
+
+.container .img .skin .img-cosmetic {
+  width: 100%;
+  display: flex;
 }
