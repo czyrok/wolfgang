@@ -2,9 +2,11 @@ import { Observable, Subscription } from 'rxjs'
 
 import { LinkSocketModel } from '../../model/link.socket.model'
 
+import { SubscriptionReceiverLinkSocketInterface } from '../subscription/interface/subscription.receiver.link.socket.interface'
+
 export class ReceiverLinkSocketModel<T> extends LinkSocketModel<T> {
-    private _defaultSub!: Subscription
-    private _sub!: Subscription
+    private _defaultSub?: Subscription
+    private _subList: Array<SubscriptionReceiverLinkSocketInterface<T>> = new Array
 
     private _data!: T
 
@@ -15,20 +17,20 @@ export class ReceiverLinkSocketModel<T> extends LinkSocketModel<T> {
         super(event)
     }
 
-    public set defaultSub(value: Subscription) {
+    public set defaultSub(value: Subscription | undefined) {
         this._defaultSub = value
     }
 
-    public get defaultSub(): Subscription {
+    public get defaultSub(): Subscription | undefined {
         return this._defaultSub
     }
 
-    public set sub(value: Subscription) {
-        this._sub = value
+    private set subList(value: Array<SubscriptionReceiverLinkSocketInterface<T>>) {
+        this._subList = value
     }
 
-    public get sub(): Subscription {
-        return this._sub
+    public get subList(): Array<SubscriptionReceiverLinkSocketInterface<T>> {
+        return this._subList
     }
 
     public set data(value: T) {
@@ -41,13 +43,10 @@ export class ReceiverLinkSocketModel<T> extends LinkSocketModel<T> {
 
     public subscribe(callback?: (data: T) => void): this {
         if (callback) {
-            if (this.sub === undefined) {
-                this.sub = this.observable.subscribe(callback)
-            } else {
-                this.sub.unsubscribe()
-
-                this.sub = this.observable.subscribe(callback)
-            }
+            this.subList.push({
+                callback: callback,
+                subscription: this.observable.subscribe(callback)
+            })
         } else {
             if (this.defaultSub === undefined) this.defaultSub = this.observable.subscribe((data: T) => {
                 this.data = data
@@ -57,9 +56,31 @@ export class ReceiverLinkSocketModel<T> extends LinkSocketModel<T> {
         return this
     }
 
-    public unsubscribe(): this {
-        if (this.defaultSub !== undefined) this.defaultSub.unsubscribe()
-        if (this.sub !== undefined) this.sub.unsubscribe()
+    public unsubscribe(callback?: (data: T) => void): this {
+        if (callback) {
+            const sub: Subscription = this.subList
+                .filter((sub: SubscriptionReceiverLinkSocketInterface<T>) => sub.callback === callback)
+                .map((sub: SubscriptionReceiverLinkSocketInterface<T>) => sub.subscription)[0]
+
+            this.subList = this.subList
+                .filter((sub: SubscriptionReceiverLinkSocketInterface<T>) => sub.callback !== callback)
+
+            if (sub) sub.unsubscribe()
+
+            return this
+        }
+
+        if (this.defaultSub !== undefined) {
+            this.defaultSub.unsubscribe()
+
+            this.defaultSub = undefined
+        }
+
+        for (const sub of this.subList) {
+            sub.subscription.unsubscribe()
+        }
+
+        this.subList.splice(0, this.subList.length)
 
         return this
     }

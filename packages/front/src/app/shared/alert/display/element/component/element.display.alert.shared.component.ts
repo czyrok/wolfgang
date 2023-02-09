@@ -11,15 +11,17 @@ export class ElementDisplayAlertSharedComponent {
   timeOut!: ReturnType<typeof setTimeout> | undefined
 
   ngAfterViewInit(): void {
-    this.timeOut = setTimeout(_ => {
+    if (this.alert && this.alert.timer) this.timeOut = setTimeout(_ => {
       this.timeOut = undefined
 
       this.click()
-    }, 60000 * 10)
+    }, 10e3)
   }
 
   click(): void {
     if (this.timeOut !== undefined) clearTimeout(this.timeOut)
+
+    this.alert.componentRef = undefined
 
     this.componentRef.destroy()
   }
@@ -27,8 +29,5 @@ export class ElementDisplayAlertSharedComponent {
   @Input() componentRef!: ComponentRef<ElementDisplayAlertSharedComponent>
 
   @Input() icofont: string = 'info'
-
   @Input() alert!: DisplayAlertSharedInterface
-  
-  @Input() detailed: boolean = false
 }

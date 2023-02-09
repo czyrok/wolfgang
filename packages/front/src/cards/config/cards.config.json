@@ -1,16 +1,18 @@
 {
-  "cards":[
+  "cards": [
     {
-      "name":"Villageois",
-      "desc":"Le simple villageois est le rôle de base du jeu du Loup-garou. Il est dans le camp du village. Il n'a aucun pouvoir, alors comme les autres personnages, il use de sa voix et de son droit de vote en journée pour éliminer les loups garous.",
+      "name": "Villageois",
+      "desc": "Le simple villageois est le rôle de base du jeu du Loup-garou. Il est dans le camp du village. Il n'a aucun pouvoir, alors comme les autres personnages, il use de sa voix et de son droit de vote en journée pour éliminer les loups garous.",
       "is_player_card": false,
-      "type":"gentil"
+      "type": "gentil",
+      "imageUrl": "villageois.png"
     },
     {
-      "name":"Loup-Garou",
-      "desc":"Le jour il se comporte comme un villageois. Chaque nuit, il va se réveiller avec les autres Loups-Garous pour désigner une victime qui mourra au début de la prochaine journée.",
+      "name": "Loup-Garou",
+      "desc": "Le jour il se comporte comme un villageois. Chaque nuit, il va se réveiller avec les autres Loups-Garous pour désigner une victime qui mourra au début de la prochaine journée.",
       "is_player_card": false,
-      "type":"mechant"
+      "type": "mechant",
+      "imageUrl": "loup-garou.png"
     }
   ]
 }

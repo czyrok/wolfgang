@@ -1,7 +1,7 @@
 export enum TypeCosmeticEnum {
-    HAT,
-    HEAD,
-    TOP,
-    PANTS,
-    SHOES
+    HAT = 'HatCosmeticType',
+    HEAD = 'HeadCosmeticType',
+    TOP = 'TopCosmeticType',
+    PANTS = 'PantsCosmeticType',
+    SHOES = 'ShoesCosmeticType'
 }

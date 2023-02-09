@@ -5,24 +5,26 @@
 
 <ng-template #contentTemplate>
   <ng-template #contentTemplateLine let-cardProposal="cardProposal">
-    <div class="field">
+    <!-- <div class="field">
       <app-shared-user-avatar-head></app-shared-user-avatar-head>
       <p data-css-text data-css-color data-css-font>{{ cardProposal.user.username }}</p>
-    </div>
+    </div> -->
 
     <div class="field">
       <h2 data-css-h2 data-css-color data-css-font>{{ cardProposal.title }}</h2>
     </div>
 
     <div class="field">
+      <p data-css-text data-css-color data-css-font>{{ getDate(cardProposal.releaseDate) }}</p>
+
       <app-shared-label [text]="cardProposal.thumbsUpCount" icofont="thumbs-up"></app-shared-label>
       <app-shared-label [text]="cardProposal.thumbsDownCount" icofont="thumbs-down"></app-shared-label>
     </div>
   </ng-template>
 
   <ng-container *ngFor="let cardProposal of listCardsProposal">
-    <app-shared-item-line link="./view/{{ cardProposal.id }}" [contentTemplate]="contentTemplateLine"
-      [context]="cardProposal"></app-shared-item-line>
+    <app-shared-item-line link="./view/{{ cardProposal._id }}" [contentTemplate]="contentTemplateLine"
+      [context]="{cardProposal: cardProposal}"></app-shared-item-line>
   </ng-container>
 </ng-template>
 

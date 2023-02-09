@@ -20,6 +20,7 @@ export class RandomDistributionGameModel {
         })
 
         let cardTypes: Array<TypeCardGameEnum> = this.getCardTypesAvailable(choices)
+        
         RandomHelper.shuffle<TypeCardGameEnum>(cardTypes)
 
         for (let player of players) {
@@ -30,6 +31,7 @@ export class RandomDistributionGameModel {
             let card: CardGameModel = FactoryCardGameModel.instance.get(cardtype)
 
             card.addPlayer(player)
+            
             player.card = card
         }
 

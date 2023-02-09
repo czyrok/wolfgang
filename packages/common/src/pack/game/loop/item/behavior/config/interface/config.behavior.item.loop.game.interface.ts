@@ -5,12 +5,14 @@ import { TypeBehaviorItemLoopGameEnum } from '../../type/enum/type.behavior.item
 import { TypeChatGameEnum } from '../../../../../chat/type/enum/type.chat.game.enum'
 import { TypeCardGameEnum } from '../../../../../card/type/enum/type.card.game.enum'
 import { TimerModeBehaviorItemLoopGameEnum } from '../../timer-mode/enum/timer-mode.behavior.item.loop.game.enum'
+import { TypeModeChatGameEnum } from '../../../../../chat/mode/type/enum/type.mode.chat.game.enum'
 
 export interface ConfigBehaviorItemLoopGameInterface extends ConfigGameInterface<TypeBehaviorItemLoopGameEnum> {
     timer: number,
     cardTypeList: Array<TypeCardGameEnum>,
     timerMode?: TimerModeBehaviorItemLoopGameEnum,
     chat?: TypeChatGameEnum,
+    chatMode?: TypeModeChatGameEnum,
     campHierarchy?: number,
     campStrategy?: StrategyCampPlayerGameInterface,
 }

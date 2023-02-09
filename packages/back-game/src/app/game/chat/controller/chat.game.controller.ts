@@ -1,44 +1,18 @@
-import { EmitOnSuccess, MessageBody, OnConnect, OnMessage, SocketController, EmitNamespaceBroadcastOnSuccess } from 'ts-socket.io-controller'
-import { TypeChatGameEnum, ChatGameModelDocument, MessageChatGameModel, MessageChatGameModelDocument } from 'common'
+import { EmitOnSuccess, MessageBody, OnConnect, OnMessage, SocketController, ConnectedSocket, EmitOnFail } from 'ts-socket.io-controller'
+import { DocumentType } from '@typegoose/typegoose'
+import { Socket } from 'socket.io'
+import { Request } from 'express'
+import { TypeChatGameEnum, ChatGameModelDocument, MessageChatFormControllerModel, GameModel, ChatGameModel, UserModel, NotFoundUserError, PlayerGameModel, MessageChatGameModel, LogUtil, TypeLogEnum } from 'common'
 
 @SocketController({
-    namespace: '/game/chat',
-    init: () => { }
+    namespace: `/game/${GameModel.instance.gameId}/chat`,
+    init: () => {
+        LogUtil.logger(TypeLogEnum.GAME).warn('CONSOLE DE EMRDE1')
+    }
 })
 export class ChatGameController {
-    @EmitOnSuccess('get')
     @OnConnect()
     async conn() {
-        let chat: any = await ChatGameModelDocument.findOne({
-            gameId: 'ID_parti',
-            type: TypeChatGameEnum.ALIVE
-        }).populate('message').lean().exec()
-
-        return chat
-    }
-
-    @EmitNamespaceBroadcastOnSuccess('get')
-    @OnMessage()
-    async emit(@MessageBody() message: MessageChatGameModel) {
-        ChatGameModelDocument.addMessage(TypeChatGameEnum.ALIVE, message)
-        let messagedoc = new MessageChatGameModelDocument(message)
-        let chat: any = await ChatGameModelDocument.findOne({
-            gameId: 'ID_parti',
-            type: TypeChatGameEnum.ALIVE
-        }).populate('message').exec()
-
-        if (chat === null) chat = new ChatGameModelDocument({
-            gameId: 'ID_parti',
-            type: TypeChatGameEnum.ALIVE
-        })
-
-        await messagedoc.save()
-
-        chat.push(messagedoc)
-
-        await chat.save()
-
-        return message
+        LogUtil.logger(TypeLogEnum.GAME).warn('CONSOLE DE EMRDE')
     }
 }
-

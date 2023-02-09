@@ -24,6 +24,20 @@ export class CosmeticModel extends DocumentModel implements CosmeticInterface {
     @Expose()
     @prop({ required: true })
     type!: TypeCosmeticEnum
+
+    constructor(
+        translateName: string,
+        gamePointPrice: number,
+        imageUrl: string,
+        type: TypeCosmeticEnum
+    ){
+        super()
+
+        this.translateName = translateName
+        this.gamePointPrice = gamePointPrice
+        this.imageUrl = imageUrl
+        this.type = type
+    }
 }
 
 export const CosmeticModelDocument = getModelForClass(CosmeticModel, { schemaOptions: { collection: 'cosmetic' } })

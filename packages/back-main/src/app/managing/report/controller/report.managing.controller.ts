@@ -1,6 +1,6 @@
 import { SocketController, EmitOnSuccess, EmitOnFail, OnConnect, OnDisconnect, SkipEmitOnEmptyResult, OnMessage, MessageBody } from 'ts-socket.io-controller'
 import { DocumentType } from '@typegoose/typegoose'
-import { BasicUserReportModel, BasicUserReportModelDocument, BugReportModel, BugReportModelDocument, NotFoundUserError, OtherUserReportModel, OtherUserReportModelDocument, ReportModel, TypeReportEnum, UserModel, UserModelDocument } from 'common'
+import { BasicUserReportModel, BasicUserReportModelDocument, NotFoundReportError, BugReportModel, BugReportModelDocument, NotFoundUserError, OtherUserReportModel, OtherUserReportModelDocument, ReportModel, TypeReportEnum, UserModel, UserModelDocument } from 'common'
 
 @SocketController({
     namespace: '/managing/report',
@@ -15,6 +15,17 @@ export class ReportManagingController {
     @OnDisconnect()
     disconnect() {
         console.log('client disconnected');
+    }
+
+    @OnMessage()
+    @EmitOnSuccess()
+    @EmitOnFail()
+    async check(@MessageBody() reportId: string) {
+        const report: DocumentType<ReportModel> | null = await ReportModelDocument.findById(reportId).exec()
+
+        if (!report) throw new NotFoundReportError
+
+        return true
     }
 
     @EmitOnSuccess()
@@ -51,7 +62,7 @@ export class ReportManagingController {
         if (!reportDoc) reportDoc = await BasicUserReportModelDocument.findById(id).exec()
         if (!reportDoc) reportDoc = await OtherUserReportModelDocument.findById(id).exec()
 
-        if (!reportDoc) throw new Error
+        if (!reportDoc) throw new NotFoundReportError
 
         const user: DocumentType<UserModel> | null = await UserModelDocument.findById(reportDoc.user).exec()
 

@@ -1,73 +1,216 @@
-import { EmitOnFail, SocketRequest, EmitOnSuccess, OnConnect, OnDisconnect, OnMessage, SkipEmitOnEmptyResult, SocketController, MessageBody, EmitNamespaceBroadcastOnSuccess } from 'ts-socket.io-controller'
+import { EmitOnFail, EmitOnSuccess, OnMessage, SocketController, MessageBody, ConnectedSocket, SocketRequest } from 'ts-socket.io-controller'
 import { plainToInstance } from 'class-transformer'
-import { CardsProposalUserModelDocument, CardsProposalUserModel } from 'common'
-import { DocumentType } from '@typegoose/typegoose';
+import { LeanDocument } from 'mongoose'
+import { DocumentType } from '@typegoose/typegoose'
+import { Request } from 'express'
+import { VoteCardsProposalUserModelDocument, VoteCardsProposalUserModel, CardsProposalFormControllerModel, CardsProposalUserModelDocument, CardsProposalUserModel, NotFoundCardsProposalUserError, UserModel, TypeVoteEnum, UserModelDocument, NotFoundUserError } from 'common'
+import { Socket } from 'socket.io'
 
 @SocketController({
     namespace: '/game/cards-proposal',
     init: () => { }
 })
 export class CardsProposalGameController {
-    @OnConnect()
-    connection() {
-        console.log('client connected');
-    }
+    @OnMessage()
+    @EmitOnSuccess()
+    @EmitOnFail()
+    async check(@MessageBody() cardProposalId: string) {
+        const cardProposal: DocumentType<CardsProposalUserModel> | null = await CardsProposalUserModelDocument.findById(cardProposalId).exec()
 
-    @OnDisconnect()
-    disconnect() {
-        console.log('client disconnected');
+        if (!cardProposal) throw new NotFoundCardsProposalUserError
+
+        return true
     }
 
     @OnMessage()
-    @EmitNamespaceBroadcastOnSuccess('list')
-    @EmitOnFail()
-    async add(@SocketRequest() req: any, @MessageBody() cardProposal: CardsProposalUserModel) {
-        cardProposal.user = req.user
-        const proposal = new CardsProposalUserModelDocument(cardProposal)
-        await proposal.save()
+    @EmitOnSuccess()
+    async add(@ConnectedSocket() socket: Socket, @MessageBody() cardProposalForm: CardsProposalFormControllerModel) {
+        const req: Request = socket.request as Request,
+            user: DocumentType<UserModel> | undefined = req.session.user
 
-        return [proposal]
+        if (!user) throw new NotFoundUserError
+
+        const cardProposal: DocumentType<CardsProposalUserModel> = new CardsProposalUserModelDocument(new CardsProposalUserModel(cardProposalForm.title, cardProposalForm.desc))
+
+        cardProposal.user = user
+
+        await cardProposal.save()
     }
 
     @OnMessage()
     @EmitOnSuccess()
     @EmitOnFail()
-    @SkipEmitOnEmptyResult()
     async list() {
-        let list = await CardsProposalUserModelDocument.find().populate('user', 'skin').lean().exec()
-        let cardsProposaltList: Array<CardsProposalUserModel> = plainToInstance(CardsProposalUserModel, list)
-        return cardsProposaltList
+        const cardsProposalListObj: Array<LeanDocument<CardsProposalUserModel>> = await CardsProposalUserModelDocument.find().populate('user', 'skin').lean().exec()
+
+        return plainToInstance(CardsProposalUserModel, cardsProposalListObj)
     }
 
     @OnMessage()
     @EmitOnSuccess()
     @EmitOnFail()
-    async view(@MessageBody() id: string) {
-        let obj = await CardsProposalUserModelDocument.findById(id).populate('user', 'skin').lean().exec()
-        let card: CardsProposalUserModel = plainToInstance(CardsProposalUserModel, obj)
-        return card
+    async view(@MessageBody() cardProposalId: string) {
+        const cardProposalObj: LeanDocument<CardsProposalUserModel> | null = await CardsProposalUserModelDocument.findById(cardProposalId).populate('user', 'skin').lean().exec()
+
+        if (!cardProposalObj) throw new NotFoundCardsProposalUserError
+
+        return plainToInstance(CardsProposalUserModel, cardProposalObj)
     }
 
     @OnMessage()
-    async upThumbsDownCount(@MessageBody() id: string) {
+    @EmitOnSuccess()
+    @EmitOnFail()
+    async user(@MessageBody() cardProposalId: string) {
+        const cardProposal: DocumentType<CardsProposalUserModel> | null = await CardsProposalUserModelDocument.findById(cardProposalId).populate('user', 'skin').exec()
+
+        if (!cardProposal) throw new NotFoundCardsProposalUserError
+
+        const user: DocumentType<UserModel> | null = await UserModelDocument.findById(cardProposal.user).exec()
+
+        if (!user) throw new NotFoundUserError
+
+        const userObj: UserModel = user.toObject()
+
+        return userObj
+    }
+
+    @OnMessage()
+    @EmitOnSuccess()
+    async upThumbsDownCount(@ConnectedSocket() socket: Socket, @MessageBody() id: string) {
+        const req: Request = socket.request as Request,
+            user: DocumentType<UserModel> | undefined = req.session.user
+
+        if (!user) throw new NotFoundUserError
+
         const cardProposal: DocumentType<CardsProposalUserModel> = await CardsProposalUserModelDocument
             .findById(id)
             .exec() as DocumentType<CardsProposalUserModel>
 
-        cardProposal.thumbsDownCount++
+        const userVoteCardsProposal: DocumentType<VoteCardsProposalUserModel> | null = await VoteCardsProposalUserModelDocument
+            .findOne({ user: user.id, cardProposal: cardProposal._id }).exec()
+
+        if (userVoteCardsProposal === null || userVoteCardsProposal.type === undefined) {
+            cardProposal.thumbsDownCount++
+
+            const vote: VoteCardsProposalUserModel = new VoteCardsProposalUserModel(cardProposal, TypeVoteEnum.THUMBSDOWNCOUNT)
+            vote.user = user
+
+            const userVoteCardsProposal: DocumentType<VoteCardsProposalUserModel> | null = new VoteCardsProposalUserModelDocument(vote)
+
+            await userVoteCardsProposal.save()
+            await cardProposal.save()
+
+            const obj: VoteCardsProposalUserModel = userVoteCardsProposal.toObject()
+
+            return obj
+        }
+        else if (userVoteCardsProposal.type === TypeVoteEnum.THUMBSDOWNCOUNT) {
+            cardProposal.thumbsDownCount--
+
+            userVoteCardsProposal.delete()
+
+            await cardProposal.save()
+
+            return
+        }
+        else if (userVoteCardsProposal.type === TypeVoteEnum.THUMBSUPCOUNT) {
+            cardProposal.thumbsDownCount++
+            cardProposal.thumbsUpCount--
+
+            userVoteCardsProposal.type = TypeVoteEnum.THUMBSDOWNCOUNT
+        }
+        else if (userVoteCardsProposal.type === TypeVoteEnum.UNVOTED) {
+            cardProposal.thumbsDownCount++
+
+            userVoteCardsProposal.type = TypeVoteEnum.THUMBSDOWNCOUNT
+        }
 
         await cardProposal.save()
+        await userVoteCardsProposal.save()
+
+        const obj: VoteCardsProposalUserModel = userVoteCardsProposal.toObject()
+
+        return obj
     }
 
     @OnMessage()
-    async upThumbsUpCount(@MessageBody() id: string) {
+    @EmitOnSuccess()
+    async upThumbsUpCount(@ConnectedSocket() socket: Socket, @MessageBody() id: string) {
+        const req: Request = socket.request as Request,
+            user: DocumentType<UserModel> | undefined = req.session.user
+
+        if (!user) throw new NotFoundUserError
+
         const cardProposal: DocumentType<CardsProposalUserModel> = await CardsProposalUserModelDocument
             .findById(id)
             .exec() as DocumentType<CardsProposalUserModel>
 
-        cardProposal.thumbsUpCount++
+        const userVoteCardsProposal: DocumentType<VoteCardsProposalUserModel> | null = await VoteCardsProposalUserModelDocument
+            .findOne({ user: user.id, cardProposal: cardProposal._id }).exec()
+
+        if (userVoteCardsProposal === null || userVoteCardsProposal.type === undefined) {
+            cardProposal.thumbsUpCount++
+
+            const vote: VoteCardsProposalUserModel = new VoteCardsProposalUserModel(cardProposal, TypeVoteEnum.THUMBSUPCOUNT)
+            vote.user = user
+
+            const userVoteCardsProposal: DocumentType<VoteCardsProposalUserModel> | null = new VoteCardsProposalUserModelDocument(vote)
+
+            await userVoteCardsProposal.save()
+            await cardProposal.save()
+
+            const obj: VoteCardsProposalUserModel = userVoteCardsProposal.toObject()
+
+            return obj
+        }
+        else if (userVoteCardsProposal.type === TypeVoteEnum.THUMBSUPCOUNT) {
+            cardProposal.thumbsUpCount--
+
+            userVoteCardsProposal.delete()
+
+            await cardProposal.save()
+
+            return
+        }
+        else if (userVoteCardsProposal.type === TypeVoteEnum.THUMBSDOWNCOUNT) {
+            cardProposal.thumbsUpCount++
+            cardProposal.thumbsDownCount--
+
+            userVoteCardsProposal.type = TypeVoteEnum.THUMBSUPCOUNT
+        }
+        else if (userVoteCardsProposal.type === TypeVoteEnum.UNVOTED) {
+            cardProposal.thumbsUpCount++
+
+            userVoteCardsProposal.type = TypeVoteEnum.THUMBSUPCOUNT
+        }
 
         await cardProposal.save()
+        await userVoteCardsProposal.save()
+
+        const obj: VoteCardsProposalUserModel = userVoteCardsProposal.toObject()
+
+        return obj
+    }
+
+    @OnMessage()
+    @EmitOnSuccess()
+    async initTypeUserVoteCardProposal(@ConnectedSocket() socket: Socket, @MessageBody() id: string) {
+        const req: Request = socket.request as Request,
+            user: DocumentType<UserModel> | undefined = req.session.user
+
+        if (!user) throw new NotFoundUserError
+
+        const cardProposal: DocumentType<CardsProposalUserModel> = await CardsProposalUserModelDocument
+            .findById(id)
+            .exec() as DocumentType<CardsProposalUserModel>
+
+        const userVoteCardsProposal: DocumentType<VoteCardsProposalUserModel> | null = await VoteCardsProposalUserModelDocument
+            .findOne({ user: user.id, cardProposal: cardProposal._id }).exec()
+
+        if (!userVoteCardsProposal) throw new NotFoundCardsProposalUserError
+
+        const obj: VoteCardsProposalUserModel = userVoteCardsProposal.toObject()
+
+        return obj
     }
 }
-

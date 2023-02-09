@@ -16,7 +16,7 @@ export class SessionSharedService {
 
     public refreshSession(): Promise<void> {
         return new Promise((resolve: (value: void) => void) => {
-            if (!this.cookieService.get('sid')) {
+            if (!this.cookieService.check('sid')) {
                 this.httpClient.get('http://localhost:5500/', {
                     withCredentials: true
                 }).subscribe(

@@ -32,7 +32,7 @@ export class CardsProposalUserModel extends DocumentModel implements CardsPropos
     @prop({ required: true, default: new Date() })
     releaseDate!: Date
 
-    public constructor(desc: string, title: string) {
+    public constructor(title: string, desc: string) {
         super()
     
         this.desc = desc

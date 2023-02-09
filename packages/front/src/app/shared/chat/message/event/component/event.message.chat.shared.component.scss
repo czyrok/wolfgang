@@ -26,8 +26,8 @@
 }
 
 .container p {
-  border-top-left-radius: property.get('borderRadius', 'rounded');
-  border-bottom-left-radius: property.get('borderRadius', 'rounded');
+  border-top-left-radius: property.get('borderRadius', 'regular');
+  border-bottom-left-radius: property.get('borderRadius', 'regular');
   padding: property.get('borderLimit', 'verySmall');
   height: fit-content;
 
