@@ -1,13 +1,18 @@
 import { Exclude, Expose, instanceToPlain } from 'class-transformer'
 import { Socket } from 'socket.io'
-import { TypeLogEnum } from '../../../log/type/enum/type.log.enum'
-import { LogUtil } from '../../../log/util/log.util'
-import { TypeGroupTransformEnum } from '../../../transform/group/type/enum/type.group.transform.enum'
 
+import { LogUtil } from '../../../log/util/log.util'
+
+import { FactoryBehaviorItemLoopGameModel } from '../../loop/item/behavior/factory/model/factory.behavior.item.loop.game.model'
+import { BehaviorItemLoopGameModel } from '../../loop/item/behavior/model/behavior.item.loop.game.model'
+import { StateGameModel } from '../../state/model/state.game.model'
 import { UserModel } from '../../../user/model/user.model'
 import { CardGameModel } from '../../card/model/card.game.model'
-import { TypeBehaviorItemLoopGameEnum } from '../../loop/item/behavior/type/enum/type.behavior.item.loop.game.enum'
 
+import { TypeLogEnum } from '../../../log/type/enum/type.log.enum'
+import { TypeGroupTransformEnum } from '../../../transform/group/type/enum/type.group.transform.enum'
+import { TypeChatGameEnum } from '../../chat/type/enum/type.chat.game.enum'
+import { TypeBehaviorItemLoopGameEnum } from '../../loop/item/behavior/type/enum/type.behavior.item.loop.game.enum'
 import { CampPlayerGameEnum } from '../camp/enum/camp.player.game.enum'
 
 @Exclude()
@@ -117,8 +122,40 @@ export class PlayerGameModel {
         return this._card
     }
 
-    private get behaviorList(): Array<TypeBehaviorItemLoopGameEnum> {
+    public get behaviorList(): Array<TypeBehaviorItemLoopGameEnum> {
         return this._behaviorList
+    }
+
+    public getAvailableChatType(state: StateGameModel, priorityChatType?: TypeChatGameEnum): TypeChatGameEnum | null | boolean {
+        const factory: FactoryBehaviorItemLoopGameModel = FactoryBehaviorItemLoopGameModel.instance
+
+        const behaviorList: Array<BehaviorItemLoopGameModel> = factory.getList(this.behaviorList)
+
+        if (priorityChatType) {
+            for (const behavior of behaviorList) {
+                if (!behavior.config.chat) continue
+                if (behavior.config.chat !== priorityChatType) continue
+
+                if (behavior.checkChatAvailable(state)) return priorityChatType
+            }
+
+            return false
+        }
+
+        return BehaviorItemLoopGameModel.getFirstChatTypeAvailable(state, behaviorList)
+    }
+
+    public getAllChat(): Array<TypeChatGameEnum> {
+        const factory: FactoryBehaviorItemLoopGameModel = FactoryBehaviorItemLoopGameModel.instance
+
+        const chatTypeList: Array<TypeChatGameEnum> = new Array,
+            behaviorList: Array<BehaviorItemLoopGameModel> = factory.getList(this.behaviorList)
+
+        for (const behavior of behaviorList) {
+            if (behavior.config.chat) chatTypeList.push(behavior.config.chat)
+        }
+
+        return chatTypeList
     }
 
     public updateActivityDate(): void {

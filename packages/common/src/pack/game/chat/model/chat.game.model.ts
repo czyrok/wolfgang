@@ -10,6 +10,7 @@ import { ChatGameInterface } from '../interface/chat.game.interface'
 
 import { TypeChatGameEnum } from '../type/enum/type.chat.game.enum'
 import { TypeModeChatGameEnum } from '../mode/type/enum/type.mode.chat.game.enum'
+import { TypeMessageChatGameEnum } from '../message/type/enum/type.message.chat.game.enum'
 
 export class ChatGameModel extends DocumentModel implements ChatGameInterface {
     @prop({ required: true })
@@ -55,13 +56,13 @@ export class ChatGameModel extends DocumentModel implements ChatGameInterface {
         const chat: DocumentType<ChatGameModel> | null = await ChatGameModelDocument.findOne({
             gameId: gameId,
             type: type
-        }).exec()
+        }).populate('messages.message.user').exec()
 
         return chat
     }
 
     public async sendUserMessage(this: DocumentType<ChatGameModel>, user: DocumentType<UserModel>, text: string): Promise<DocumentType<UserMessageChatGameModel>> {
-        const message: DocumentType<UserMessageChatGameModel> = new UserMessageChatGameModelDocument(new UserMessageChatGameModel(text))
+        const message: DocumentType<UserMessageChatGameModel> = new UserMessageChatGameModelDocument(new UserMessageChatGameModel(TypeMessageChatGameEnum.USER, text))
 
         message.user = user
 
@@ -69,19 +70,19 @@ export class ChatGameModel extends DocumentModel implements ChatGameInterface {
 
         this.messages.push(message)
 
-        await this.updateOne({ messages: this.messages }).exec()
+        this.save()
 
         return message
     }
 
     public async sendEventMessage(this: DocumentType<ChatGameModel>, text: string, imageUrl: string): Promise<DocumentType<EventMessageChatGameModel>> {
-        const message: DocumentType<EventMessageChatGameModel> = new EventMessageChatGameModelDocument(new EventMessageChatGameModel(text, imageUrl))
+        const message: DocumentType<EventMessageChatGameModel> = new EventMessageChatGameModelDocument(new EventMessageChatGameModel(TypeMessageChatGameEnum.EVENT, text, imageUrl))
 
         message.save()
 
         this.messages.push(message)
 
-        await this.updateOne({ messages: this.messages }).exec()
+        this.save()
 
         return message
     }

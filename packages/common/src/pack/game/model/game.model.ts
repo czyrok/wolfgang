@@ -5,6 +5,7 @@ import { Exclude, Expose, instanceToPlain } from 'class-transformer'
 import { Namespace, Socket } from 'socket.io'
 
 import { UndefinedNamespaceGameError } from '../error/undefined-namespace.game.error'
+import { NotFoundChatGameError } from '../chat/error/not-found.chat.game.error'
 
 import { LogUtil } from '../../log/util/log.util'
 
@@ -153,7 +154,7 @@ export class GameModel extends DocumentModel {
         if (this.state.rules.playerCountMax == HandlerPlayerGameModel.instance.players.length) {
             if (!this.namespace) throw new UndefinedNamespaceGameError
 
-            await this.executor.prelaunch(this.namespace, this.state)
+            await this.executor.prelaunch(this.namespace, this)
 
             this.executor.start(this.state)
         }
@@ -185,42 +186,22 @@ export class GameModel extends DocumentModel {
 
     public checkPlayer(userId: string): PlayerGameModel | null {
         for (const player of this.state.players) {
-            LogUtil.logger(TypeLogEnum.GAME).fatal(`ddd3???? ${player.user._id} ${userId}`)
-
-            if (player.user._id.toString() == userId) {
-                LogUtil.logger(TypeLogEnum.GAME).fatal(`PASWTF`)
-                //LogUtil.logger(TypeLogEnum.GAME).error(`${player.user._id} ${userId}`)
-                return player
-            }
+            if (player.user._id.toString() == userId) return player
         }
 
         return null
     }
 
-    public getChatOfPlayer(player: PlayerGameModel): Array<TypeChatGameEnum> {
-        const loopIte: IteratorLoopGameModel = new IteratorLoopGameModel
+    public async sendPlayerMessage(player: PlayerGameModel, text: string, priorityChatType?: TypeChatGameEnum): Promise<boolean> {
+        const chatType: TypeChatGameEnum | null | boolean = player.getAvailableChatType(this.state, priorityChatType)
 
-        const behaviorList: Array<BehaviorItemLoopGameModel> = new Array,
-            chatTypeList: Array<TypeChatGameEnum> = new Array
+        if (chatType === false || chatType === true) return false
 
-        for (const item of loopIte) {
-            behaviorList.push(...item.getPlayerBehavior(player))
-        }
+        if (!chatType) throw new NotFoundChatGameError
 
-        for (const behavior of behaviorList) {
-            chatTypeList.push(...behavior.getChatType())
-        }
-
-        return chatTypeList
-    }
-
-    public async sendPlayerMessage(player: PlayerGameModel, chatType: TypeChatGameEnum, text: string): Promise<boolean> {
         const chat: DocumentType<ChatGameModel> | null = await ChatGameModelDocument.getChat(this.gameId, chatType)
 
-        // #achan
-        if (!chat) throw Error
-
-        // Vérification !!!
+        if (!chat) throw new NotFoundChatGameError
 
         const messageDoc: DocumentType<UserMessageChatGameModel> = await chat.sendUserMessage(new UserModelDocument(player.user), text),
             message: Array<UserMessageChatGameModel> = [messageDoc.toObject()]
@@ -234,29 +215,19 @@ export class GameModel extends DocumentModel {
         return true
     }
 
-    public async sendEventMessage(text: string, imageUrl: string): Promise<boolean> {
+    public async sendEventMessage(text: string, imageUrl: string): Promise<void> {
         const chat: DocumentType<ChatGameModel> | null = await ChatGameModelDocument.getChat(this.gameId, TypeChatGameEnum.ALIVE)
 
-        // #achan
-        if (!chat) throw Error
+        if (!chat) throw NotFoundChatGameError
 
-        // Vérification !!!
-
-        const messageDoc: DocumentType<EventMessageChatGameModel> = await chat.sendEventMessage(text, imageUrl)
-
-        const test: EventMessageChatGameModel = messageDoc.toObject()
-
-        const message: Array<EventMessageChatGameModel> = [test]
+        const messageDoc: DocumentType<EventMessageChatGameModel> = await chat.sendEventMessage(text, imageUrl),
+            message: Array<EventMessageChatGameModel> = [messageDoc.toObject()]
 
         if (!this.namespace) throw new UndefinedNamespaceGameError
 
         const messageObj: any = instanceToPlain(message)
 
-        LogUtil.logger(TypeLogEnum.GAME).warn('sendevemessc', messageObj)
-
         this.namespace.to(TypeChatGameEnum.ALIVE).emit('getChat', messageObj)
-
-        return true
     }
 
     public onStateChange(callback: (game: GameModel) => void): Subscription {

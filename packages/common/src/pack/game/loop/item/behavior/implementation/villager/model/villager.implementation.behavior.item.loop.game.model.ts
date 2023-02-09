@@ -24,9 +24,9 @@ export class VillagerImplementationBehaviorItemLoopGameModel extends BehaviorIte
                 TypeCardGameEnum.GREY_WEREWOLF,
                 TypeCardGameEnum.VILLAGER
             ],
+            hierarchy: 2,
             chat: TypeChatGameEnum.ALIVE,
             chatMode: TypeModeChatGameEnum.DAY,
-            campHierarchy: 2,
             campStrategy: new VillagerImplementationStrategyCampPlayerGameModel
         })
     }

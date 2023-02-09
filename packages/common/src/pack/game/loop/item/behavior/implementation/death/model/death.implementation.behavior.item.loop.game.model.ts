@@ -18,6 +18,7 @@ export class DeathImplementationBehaviorItemLoopGameModel extends BehaviorItemLo
             // #achan
             timer: 0,
             cardTypeList: [],
+            hierarchy: 0,
             chat: TypeChatGameEnum.DEATH,
             chatMode: TypeModeChatGameEnum.NIGHT
         })

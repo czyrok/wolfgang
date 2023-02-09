@@ -23,9 +23,9 @@ export class WerewolfImplementationBehaviorItemLoopGameModel extends BehaviorIte
             cardTypeList: [
                 TypeCardGameEnum.GREY_WEREWOLF
             ],
+            hierarchy: 1,
             chat: TypeChatGameEnum.WEREWOLF,
             chatMode: TypeModeChatGameEnum.NIGHT,
-            campHierarchy: 1,
             campStrategy: new VillainImplementationStrategyCampPlayerGameModel
         })
     }

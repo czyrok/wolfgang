@@ -2,7 +2,10 @@ import { Exclude, Expose } from 'class-transformer'
 import { prop, getModelForClass } from '@typegoose/typegoose'
 
 import { MessageChatGameModel } from '../../model/message.chat.game.model'
+
 import { EventMessageChatGameInterface } from '../interface/event.message.chat.game.interface'
+
+import { TypeMessageChatGameEnum } from '../../type/enum/type.message.chat.game.enum'
 
 @Exclude()
 export class EventMessageChatGameModel extends MessageChatGameModel implements EventMessageChatGameInterface {
@@ -10,8 +13,8 @@ export class EventMessageChatGameModel extends MessageChatGameModel implements E
     @prop({ required: true })
     imageUrl!: string
 
-    public constructor(text: string, imageUrl: string) {
-        super(text)
+    public constructor(type: TypeMessageChatGameEnum, text: string, imageUrl: string) {
+        super(type, text)
 
         this.imageUrl = imageUrl
     }

@@ -18,6 +18,7 @@
     "@angular/platform-browser-dynamic": "^14.2.12",
     "@angular/router": "^14.2.12",
     "common": "file:../common",
+    "class-transformer": "^0.5.1",
     "ngx-cookie": "^6.0.1",
     "ngx-cookie-service": "^14.0.1",
     "rxjs": "~7.4.0",

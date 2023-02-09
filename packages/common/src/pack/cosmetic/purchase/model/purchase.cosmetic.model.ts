@@ -18,7 +18,7 @@ export class PurchaseCosmeticModel extends DocumentModel implements PurchaseCosm
     cosmetic!: Ref<CosmeticModel>
 
     @Expose()
-    @prop({ required: true, default: new Date() })
+    @prop({ required: true, default: Date.now() })
     releaseDate!: Date
 }
 

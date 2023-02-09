@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, EventEmitter, OnDestroy } from '@angular/core'
-import { TypeCardGameEnum, EventMessageChatGameModel, PlayerGameModel, MessageChatGameModel, ReceiverLinkSocketModel, SenderLinkSocketModel, StateGameModel, UserMessageChatGameModel, VotePlayerGameModel, MessageChatFormControllerModel, TypeChatGameEnum } from 'common'
+import { plainToInstance } from 'class-transformer'
+import { TypeCardGameEnum, EventMessageChatGameModel, TypeBehaviorItemLoopGameEnum, PlayerGameModel, MessageChatGameModel, ReceiverLinkSocketModel, SenderLinkSocketModel, StateGameModel, UserMessageChatGameModel, VotePlayerGameModel, MessageChatFormControllerModel, TypeChatGameEnum, TypeMessageChatGameEnum } from 'common'
 
 import { GameSharedService } from 'src/app/shared/game/service/game.shared.service'
 import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/display.alert.shared.service'
@@ -11,18 +12,20 @@ import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/
 })
 export class PlayViewComponent implements AfterViewInit, OnDestroy {
   displayChat: boolean = true
+
   start: boolean = false
   chrono: number = -1
   timeout?: any
 
   player?: PlayerGameModel
+  state?: StateGameModel
 
   message: string = ''
   sendMessageStatus: boolean = false
-  
+
   eventPlayerVote: EventEmitter<VotePlayerGameModel> = new EventEmitter
   //socketLinkPlayerVote!: ReceiverEventSocketModel<Array<VotePlayerGameModel>>
-  
+
   gameStateEvent: EventEmitter<StateGameModel> = new EventEmitter
   playerMessageEvent: EventEmitter<UserMessageChatGameModel> = new EventEmitter
   eventMessageEvent: EventEmitter<EventMessageChatGameModel> = new EventEmitter
@@ -77,6 +80,8 @@ export class PlayViewComponent implements AfterViewInit, OnDestroy {
     stateReceiverLink.subscribe((state: StateGameModel) => {
       this.gameStateEvent.emit(state)
 
+      this.state = state
+
       /* if (this.player) {
         let hisTurn: boolean = false
 
@@ -116,22 +121,7 @@ export class PlayViewComponent implements AfterViewInit, OnDestroy {
 
     stateSenderLink.emit()
 
-    const chatReceiverLink: ReceiverLinkSocketModel<Array<MessageChatGameModel>> = await this.gameSharedService.registerGameReceiver('', 'getChat'),
-      chatSenderLink: SenderLinkSocketModel<void> = await this.gameSharedService.registerGameSender('', 'getChat')
-
-    chatReceiverLink.subscribe((messages: Array<MessageChatGameModel>) => {
-      for (const message of messages) {
-        const trad: any = message
-
-        if (trad.imageUrl) {
-          this.eventMessageEvent.emit(message as EventMessageChatGameModel)
-        } else {
-          this.playerMessageEvent.emit(message as UserMessageChatGameModel)
-        }
-      }
-    })
-
-    chatSenderLink.emit()
+    this.loadChatEvent()
 
     /* let id: string | null = this.activatedRoute.snapshot.paramMap.get('gameId')
 
@@ -159,6 +149,28 @@ export class PlayViewComponent implements AfterViewInit, OnDestroy {
     await this.gameSharedService.quitParty()
   }
 
+  async loadChatEvent(): Promise<void> {
+    const chatReceiverLink: ReceiverLinkSocketModel<Array<MessageChatGameModel>> = await this.gameSharedService.registerGameReceiver('', 'getChat'),
+      chatSenderLink: SenderLinkSocketModel<void> = await this.gameSharedService.registerGameSender('', 'getChat')
+
+    chatReceiverLink.subscribe((messages: Array<MessageChatGameModel>) => {
+      for (const message of messages) {
+        switch (message.type) {
+          case TypeMessageChatGameEnum.EVENT:
+            this.eventMessageEvent.emit(message as EventMessageChatGameModel)
+
+            break
+          case TypeMessageChatGameEnum.USER:
+            this.playerMessageEvent.emit(message as UserMessageChatGameModel)
+
+            break
+        }
+      }
+    })
+
+    chatSenderLink.emit()
+  }
+
   changeDisplayChatButtonCallback: () => void = () => {
     this.displayChat = !this.displayChat
   }
@@ -169,20 +181,29 @@ export class PlayViewComponent implements AfterViewInit, OnDestroy {
 
       this.sendMessageStatus = true
 
-      const message: UserMessageChatGameModel = new UserMessageChatGameModel(this.message)
+      const message: UserMessageChatGameModel = new UserMessageChatGameModel(TypeMessageChatGameEnum.USER, this.message)
 
       message.user = this.player.user as any
 
       const emitReceiverLink: ReceiverLinkSocketModel<void> = await this.gameSharedService.registerGameReceiver('', 'emitMessage'),
+        emitErrorLink: ReceiverLinkSocketModel<any> = await this.gameSharedService.registerGameReceiver('', 'emitMessage-failed'),
         emitSenderLink: SenderLinkSocketModel<MessageChatFormControllerModel> = await this.gameSharedService.registerGameSender('', 'emitMessage')
 
       emitReceiverLink.subscribe(() => {
         emitReceiverLink.unsubscribe()
+        emitErrorLink.unsubscribe()
 
         this.sendMessageStatus = false
       })
 
-      emitSenderLink.emit(new MessageChatFormControllerModel(TypeChatGameEnum.ALIVE, this.message))
+      emitErrorLink.subscribe((error: any) => {
+        emitReceiverLink.unsubscribe()
+        emitErrorLink.unsubscribe()
+
+        this.alertSharedService.emitDanger(error)
+      })
+
+      emitSenderLink.emit(new MessageChatFormControllerModel(this.message))
 
       this.message = ''
     }

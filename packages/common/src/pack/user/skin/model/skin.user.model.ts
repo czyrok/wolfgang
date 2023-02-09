@@ -43,7 +43,8 @@ export class SkinUserModel extends DocumentModel implements SkinUserInterface {
     shoes!: Ref<CosmeticModel>
 
     @Expose()
-    @prop({ required: true, default: new Date() })
+    // #achan mettre default dans constructor
+    @prop({ required: true, default: Date.now() })
     lastReleaseDate!: Date
 
     public async setCosmetic(this: DocumentType<SkinUserModel>, cosmetic: DocumentType<CosmeticModel>): Promise<void> {

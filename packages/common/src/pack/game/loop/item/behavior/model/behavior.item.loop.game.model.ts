@@ -5,6 +5,9 @@ import { ContextGameModel } from '../../../../context/model/context.game.model'
 import { PlayerGameModel } from '../../../../player/model/player.game.model'
 import { CardGameModel } from '../../../../card/model/card.game.model'
 import { FactoryCardGameModel } from '../../../../card/factory/model/factory.card.game.model'
+import { StateGameModel } from '../../../../state/model/state.game.model'
+
+import { ChatGameModelDocument } from '../../../../chat/model/chat.game.model'
 
 import { ConfigBehaviorItemLoopGameInterface } from '../config/interface/config.behavior.item.loop.game.interface'
 import { SetupDistributionGameInterface } from '../../../../distribution/setup/interface/setup.distribution.game.interface'
@@ -14,11 +17,10 @@ import { StrategyItemLoopGameInterface } from '../../strategy/interface/strategy
 import { HandlerChatGameInterface } from '../../../../chat/handler/interface/handler.chat.game.interface'
 
 import { TypeLogEnum } from '../../../../../log/type/enum/type.log.enum'
+import { TypeModeChatGameEnum } from '../../../../chat/mode/type/enum/type.mode.chat.game.enum'
 import { TypeChatGameEnum } from '../../../../chat/type/enum/type.chat.game.enum'
 
 import { ResultSetGameType } from '../../../../set/result/type/result.set.game.type'
-import { ChatGameModelDocument } from '../../../../chat/model/chat.game.model'
-import { GameModel } from '../../../../model/game.model'
 
 export abstract class BehaviorItemLoopGameModel implements
     StrategyItemLoopGameInterface,
@@ -111,7 +113,28 @@ export abstract class BehaviorItemLoopGameModel implements
         return []
     }
 
-    async createChat(): Promise<void> {
-        if (this.config.chat && this.config.chatMode) await ChatGameModelDocument.createChat(GameModel.instance.gameId, this.config.chat, this.config.chatMode)
+    async createChat(gameId: string): Promise<void> {
+        if (this.config.chat && this.config.chatMode) await ChatGameModelDocument.createChat(gameId, this.config.chat, this.config.chatMode)
+    }
+
+    public static getFirstChatTypeAvailable(state: StateGameModel, behaviorList: Array<BehaviorItemLoopGameModel>): TypeChatGameEnum | null {
+        behaviorList = behaviorList.sort((behavior1: BehaviorItemLoopGameModel, behavior2: BehaviorItemLoopGameModel) => behavior1.config.hierarchy < behavior2.config.hierarchy ? 1 : -1)
+
+        for (const behavior of behaviorList) {
+            if (behavior.checkChatAvailable(state)) return behavior.config.chat ?? null
+        }
+
+        return null
+    }
+
+    public checkChatAvailable(state: StateGameModel): boolean {
+        if (!this.config.chatMode) return false
+
+        if (this.config.chatMode === TypeModeChatGameEnum.ALL) return true
+        if (this.config.chatMode === TypeModeChatGameEnum.DAY && !state.isNight) return true
+        if (this.config.chatMode === TypeModeChatGameEnum.NIGHT && state.isNight) return true
+        if (this.config.chatMode === TypeModeChatGameEnum.ONLY_BEHAVIOR_TURN && state.isCurrentBehavior(this)) return true
+
+        return false
     }
 }

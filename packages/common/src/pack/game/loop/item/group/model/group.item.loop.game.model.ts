@@ -118,9 +118,9 @@ export abstract class GroupItemLoopGameModel extends ItemLoopGameModel {
         return chatTypesArray
     }
 
-    async createChat(): Promise<void> {
+    async createChat(gameId: string): Promise<void> {
         for (const behavior of this.childBehaviorList) {
-            await behavior.createChat()
+            await behavior.createChat(gameId)
         }
     }
 }
