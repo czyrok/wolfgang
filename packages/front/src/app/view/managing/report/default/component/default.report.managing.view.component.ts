@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
-import { ReportModel, ReceiverLinkSocketModel, SenderLinkSocketModel } from 'common'
+import { ReportModel, ReceiverLinkSocketModel, SenderLinkSocketModel, UserModel, TypeReportEnum } from 'common'
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
+import { Ref } from '@typegoose/typegoose'
 
 @Component({
   selector: 'app-view-managing-report-default',
@@ -16,7 +17,7 @@ export class DefaultReportManagingViewComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     const reportListLink: ReceiverLinkSocketModel<Array<ReportModel>> = await this.socketSharedService.registerReceiver<Array<ReportModel>>('/managing/report', 'list')
-    
+
     reportListLink.subscribe((data: Array<ReportModel>) => {
       this.reportList = data
 
@@ -26,5 +27,20 @@ export class DefaultReportManagingViewComponent implements OnInit {
     const triggerLink: SenderLinkSocketModel<void> = await this.socketSharedService.registerSender<void>('/managing/report', 'list')
 
     triggerLink.emit()
+  }
+
+  getDate(report: ReportModel): string {
+    const date: Date = new Date(report.releaseDate)
+    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString()
+  }
+
+  isBasicUserReport(report: ReportModel): boolean {
+    if (report.type === TypeReportEnum.BASIC_USER) return true
+    return false
+  }
+
+  isOtherUserReport(report: ReportModel): boolean {
+    if (report.type === TypeReportEnum.OTHER_USER) return true
+    return false
   }
 }

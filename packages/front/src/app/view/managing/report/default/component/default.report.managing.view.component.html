@@ -5,22 +5,26 @@
 <ng-template #contentTemplate>
   <ng-template #contentTemplateLine let-report="report">
     <div class="field">
-      <app-shared-user-avatar-head></app-shared-user-avatar-head>
-      <p data-css-text data-css-color data-css-font>{{ report.user.username }}</p>
+      <app-shared-alert-text icofont="flag" text="{{ report?.type }}"></app-shared-alert-text>
+    </div>
+
+    <div class="field" *ngIf="isBasicUserReport(report)">
+      <app-shared-alert-text icofont="flag" text="{{ report?.reportType }}"></app-shared-alert-text>
+    </div>
+
+    <div class="field" *ngIf="isBasicUserReport(report) || isOtherUserReport(report)">
+      <app-shared-label text="{{ report?.thumbsUpCount }}" icofont="thumbs-up"></app-shared-label>
+      <app-shared-label text="{{ report?.thumbsDownCount }}" icofont="thumbs-down"></app-shared-label>
     </div>
 
     <div class="field">
-      <app-shared-alert-text icofont="flag" text="Type"></app-shared-alert-text>
-    </div>
-
-    <div class="field">
-      <p data-css-text data-css-color data-css-font>{{ report.releaseDate }}</p>
+      <p data-css-text data-css-color data-css-font>{{ getDate(report) }}</p>
     </div>
   </ng-template>
 
   <ng-container *ngFor="let report of reportList">
-    <app-shared-item-line link="./view/{{ report.id }}"
-      [contentTemplate]="contentTemplateLine" [context]="report"></app-shared-item-line>
+    <app-shared-item-line link="./view/{{ report._id.toString() }}" [contentTemplate]="contentTemplateLine"
+      [context]="{report: report}"></app-shared-item-line>
   </ng-container>
 </ng-template>
 

@@ -15,12 +15,18 @@ export class ReportModel extends DocumentModel implements ReportInterface {
     user!: Ref<UserModel>
 
     @Expose()
-    @prop({ required: true, default: new Date() })
+    @prop({ required: true })
     releaseDate!: Date
 
     @Expose()
     @prop({ required: true })
     type!: TypeReportEnum
+
+    public constructor(type: TypeReportEnum) {
+        super()
+        this.releaseDate = new Date()
+        this.type = type
+    }
 }
 
 export const ReportModelDocument = getModelForClass(ReportModel, { schemaOptions: { collection: 'report' } })
