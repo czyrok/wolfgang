@@ -12,7 +12,6 @@ import { ProfileGameController } from './game/profile/controller/profile.game.co
 import { ReportManagingController } from './managing/report/controller/report.managing.controller'
 import { ReportMainController } from './main/report/controller/report.main.controller'
 import { SkinCustomizationProfileGameController } from './game/profile/skin-customization/controller/skin-customization.profile.game.controller'
-import { ReportManagingController } from './managing/report/controller/report.managing.controller'
 import { GameController } from './game/controller/game.controller'
 
 async function run(): Promise<void> {
@@ -52,7 +51,7 @@ async function run(): Promise<void> {
             SkinCustomizationProfileGameController,
             CardsProposalGameController,
             ReportManagingController,
-            ReportMainController
+            ReportMainController,
             GameController
         ],
         middlewares: [
