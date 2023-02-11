@@ -4,7 +4,7 @@
       <h2 data-css-h2 data-css-font data-css-color data-css-dark data-css-accent>{{ modal.title }}</h2>
     </div>
 
-    <app-shared-interactive-button icofont="ui-close" [callback]="closeButtonCallback"></app-shared-interactive-button>
+    <app-shared-interactive-button icofont="ui-close" (clickEvent)="closeButtonCallback()"></app-shared-interactive-button>
   </div>
 </ng-template>
 

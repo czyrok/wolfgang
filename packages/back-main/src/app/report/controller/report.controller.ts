@@ -3,10 +3,10 @@ import { BasicUserReportModel, BasicUserReportModelDocument, NotFoundUserError, 
 import { DocumentType } from '@typegoose/typegoose';
 
 @SocketController({
-    namespace: '/main/report',
+    namespace: '/report',
     init: () => { }
 })
-export class ReportMainController {
+export class ReportController {
     @OnConnect()
     connection() {
         console.log('client connected');
