@@ -18,7 +18,7 @@ export class VoteCardsProposalUserModel extends DocumentModel {
     cardProposal!: Ref<CardsProposalUserModel>
 
     @Expose()
-    @prop({ required: true, default: new Date() })
+    @prop({ required: true, default: Date.now() })
     releaseDate!: Date
 
     @Expose()

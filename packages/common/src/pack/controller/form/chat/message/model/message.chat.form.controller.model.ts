@@ -4,24 +4,24 @@ import { TypeChatGameEnum } from '../../../../../game/chat/type/enum/type.chat.g
 @Exclude()
 export class MessageChatFormControllerModel {
     @Expose()
-    private _chat: TypeChatGameEnum
-
-    @Expose()
     private _text: string
 
-    public constructor(
-        chat: TypeChatGameEnum,
-        text: string
-    ) {
-        this._chat = chat
-        this._text = text
-    }
+    @Expose()
+    private _chat?: TypeChatGameEnum
 
-    public get chat(): TypeChatGameEnum {
-        return this._chat
+    public constructor(
+        text: string,
+        chat?: TypeChatGameEnum
+    ) {
+        this._text = text
+        this._chat = chat
     }
 
     public get text(): string {
         return this._text
+    }
+
+    public get chat(): TypeChatGameEnum | undefined {
+        return this._chat
     }
 }

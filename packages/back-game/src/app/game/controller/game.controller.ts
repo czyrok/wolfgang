@@ -3,7 +3,7 @@ import { instanceToPlain } from 'class-transformer'
 import { Request } from 'express'
 import { DocumentType } from '@typegoose/typegoose'
 import { OnMessage, EmitOnSuccess, SocketController, ConnectedSocket, OnDisconnect, EmitOnFail, MessageBody } from 'ts-socket.io-controller'
-import { GameModel, NotFoundUserError, HandlerVotePlayerGameModel, UserModel, InitializationGameError, AlreadyInGameUserError, LogUtil, TypeLogEnum, MessageChatFormControllerModel, PlayerGameModel, TypeChatGameEnum, MessageChatGameModel, ChatGameModel, ChatGameModelDocument, VotePlayerGameModel } from 'common'
+import { GameModel, NotFoundUserError, UserModelDocument, TypeMessageChatGameEnum, UserMessageChatGameModelDocument, NotFoundInGamePlayerGameError, UserModel, InitializationGameError, AlreadyInGameUserError, LogUtil, TypeLogEnum, MessageChatFormControllerModel, PlayerGameModel, TypeChatGameEnum, MessageChatGameModel, ChatGameModel, ChatGameModelDocument, VotePlayerGameModel, NotAllowedToSendMessagePlayerGameError, NotFoundChatGameError, EventMessageChatGameModelDocument, UserMessageChatGameModel } from 'common'
 
 @SocketController({
     namespace: `/game/${GameModel.instance.gameId}`,
@@ -106,43 +106,43 @@ export class GameController {
     @OnMessage()
     @EmitOnSuccess()
     async getChat(@ConnectedSocket() socket: Socket) {
-        LogUtil.logger(TypeLogEnum.GAME).warn('IL EST PASSE PAR LA1')
         const req: Request = socket.request as Request,
             userDoc: DocumentType<UserModel> | undefined = req.session.user
 
         if (!userDoc) throw new NotFoundUserError
 
         const game: GameModel = GameModel.instance,
-            // ne fonctione pas
             player: PlayerGameModel | null = game.checkPlayer(userDoc.id)
 
-        LogUtil.logger(TypeLogEnum.GAME).warn('IL EST PASSE PAR LA2', userDoc.id)
+        if (!player) throw new NotFoundInGamePlayerGameError
 
-        // #achan
-        if (!player) return []
+        const chatTypeList: Array<TypeChatGameEnum> = player.getAllChat()
 
-        LogUtil.logger(TypeLogEnum.GAME).warn('IL EST PASSE PAR LA3')
-
-        const chatTypeList: Array<TypeChatGameEnum> = game.getChatOfPlayer(player)
-
-        const messages: Array<MessageChatGameModel> = new Array
+        let messages: Array<MessageChatGameModel> = new Array
 
         for (const chatType of chatTypeList) {
-            const chatDoc: DocumentType<ChatGameModel> | null = await ChatGameModelDocument.getChat(GameModel.instance.id, chatType)
+            const chatDoc: DocumentType<ChatGameModel> | null = await ChatGameModelDocument.getChat(game.gameId, chatType)
 
-            // #achan
-            if (!chatDoc) throw new Error
+            if (!chatDoc) throw new NotFoundChatGameError
 
-            await chatDoc.populate('messages', 'user')
+            for (const messageDocId of chatDoc.messages) {
+                let messageDoc: DocumentType<MessageChatGameModel> | null = await UserMessageChatGameModelDocument.findById(messageDocId).exec()
 
-            const chat: ChatGameModel = chatDoc.toObject()
+                if (!messageDoc) messageDoc = await EventMessageChatGameModelDocument.findById(messageDocId).exec()
+                if (!messageDoc) continue
 
-            messages.push(...chat.messages as Array<MessageChatGameModel>)
+                if (messageDoc.type == TypeMessageChatGameEnum.USER) {
+                    const userDoc: DocumentType<UserModel> | null = await UserModelDocument.findById((messageDoc as DocumentType<UserMessageChatGameModel>).user)
+
+                    if (userDoc) (messageDoc as DocumentType<UserMessageChatGameModel>).user = userDoc
+                }
+
+                messages.push(messageDoc.toObject())
+            }
         }
 
-        LogUtil.logger(TypeLogEnum.GAME).warn('IL EST PASSE PAR LA8')
-
-        LogUtil.logger(TypeLogEnum.GAME).warn('IL EST PASSE PAR LA')
+        messages = messages.sort((message1: MessageChatGameModel, message2: MessageChatGameModel) =>
+            message1.releaseDate.getTime() - message2.releaseDate.getTime())
 
         return messages
     }
@@ -151,36 +151,28 @@ export class GameController {
     @EmitOnFail()
     @EmitOnSuccess()
     async emitMessage(@ConnectedSocket() socket: Socket, @MessageBody() messageForm: MessageChatFormControllerModel) {
-        LogUtil.logger(TypeLogEnum.GAME).fatal('playeremit')
         const req: Request = socket.request as Request,
             userDoc: DocumentType<UserModel> | undefined = req.session.user
 
         if (!userDoc) throw new NotFoundUserError
 
-        LogUtil.logger(TypeLogEnum.GAME).fatal('playeremit2')
-
         const game: GameModel = GameModel.instance,
-            player: PlayerGameModel | null = game.checkPlayer(userDoc.id)
+            player: PlayerGameModel | null = game.checkPlayer(userDoc._id)
 
-        // #achan
-        if (!player) throw new Error('Vous ne faites pas partie de la partie')
+        if (!player) throw new NotFoundInGamePlayerGameError
 
-        LogUtil.logger(TypeLogEnum.GAME).fatal('playeremit3', player.user._id)
+        try {
+            const test: boolean = await game.sendPlayerMessage(player, messageForm.text, messageForm.chat)
 
-        const test: boolean = await game.sendPlayerMessage(player, messageForm.chat, messageForm.text)
-
-        LogUtil.logger(TypeLogEnum.GAME).fatal('playeremit4', test)
-
-        // #achan
-        if (!test) throw new Error('Vous ne pouvez pas envoyer de message')
-
-        return true
+            if (!test) throw new NotAllowedToSendMessagePlayerGameError
+        } catch {
+            throw new NotAllowedToSendMessagePlayerGameError
+        }
     }
 
     @OnMessage()
     @EmitOnSuccess()
     async playerState(@ConnectedSocket() socket: Socket) {
-        LogUtil.logger(TypeLogEnum.GAME).warn('player')
         const req: Request = socket.request as Request,
             userDoc: DocumentType<UserModel> | undefined = req.session.user
 
@@ -189,10 +181,7 @@ export class GameController {
         const game: GameModel = GameModel.instance,
             player: PlayerGameModel | null = game.checkPlayer(userDoc.id)
 
-        LogUtil.logger(TypeLogEnum.GAME).warn('player2', player)
-
-        // #achan
-        if (!player) return undefined
+        if (!player) throw new NotFoundInGamePlayerGameError
 
         return player
     }

@@ -16,7 +16,8 @@ export class LogUserModel extends DocumentModel implements LogUserInterface {
     users!: Array<Ref<UserModel>>
 
     @Expose()
-    @prop({ required: true, default: new Date() })
+    // #achan mettre default dans constructor
+    @prop({ required: true, default: Date.now() })
     releaseDate!: Date
 
     @Expose()

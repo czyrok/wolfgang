@@ -76,7 +76,7 @@ export abstract class OneItemLoopGameModel extends ItemLoopGameModel {
         return this.behavior.getChatType()
     }
 
-    async createChat(): Promise<void> {
-        await this.behavior.createChat()
+    async createChat(gameId: string): Promise<void> {
+        await this.behavior.createChat(gameId)
     }
 }

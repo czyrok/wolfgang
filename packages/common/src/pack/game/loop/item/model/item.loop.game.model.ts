@@ -77,5 +77,5 @@ export abstract class ItemLoopGameModel implements
 
     abstract getChatType(): Array<TypeChatGameEnum>
 
-    abstract createChat(): Promise<void>
+    abstract createChat(gameId: string): Promise<void>
 }

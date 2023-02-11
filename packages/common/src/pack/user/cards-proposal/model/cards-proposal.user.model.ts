@@ -29,7 +29,7 @@ export class CardsProposalUserModel extends DocumentModel implements CardsPropos
     title!: string
 
     @Expose()
-    @prop({ required: true, default: new Date() })
+    @prop({ required: true })
     releaseDate!: Date
 
     public constructor(title: string, desc: string) {
@@ -37,6 +37,7 @@ export class CardsProposalUserModel extends DocumentModel implements CardsPropos
     
         this.desc = desc
         this.title = title
+        this.releaseDate = new Date()
     }
 }
 

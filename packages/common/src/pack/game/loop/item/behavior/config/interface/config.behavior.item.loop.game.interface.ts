@@ -9,10 +9,10 @@ import { TypeModeChatGameEnum } from '../../../../../chat/mode/type/enum/type.mo
 
 export interface ConfigBehaviorItemLoopGameInterface extends ConfigGameInterface<TypeBehaviorItemLoopGameEnum> {
     timer: number,
-    cardTypeList: Array<TypeCardGameEnum>,
     timerMode?: TimerModeBehaviorItemLoopGameEnum,
+    cardTypeList: Array<TypeCardGameEnum>,
+    hierarchy: number,
     chat?: TypeChatGameEnum,
     chatMode?: TypeModeChatGameEnum,
-    campHierarchy?: number,
-    campStrategy?: StrategyCampPlayerGameInterface,
+    campStrategy?: StrategyCampPlayerGameInterface
 }

@@ -19,7 +19,8 @@ export class FriendRequestUserModel extends DocumentModel implements FriendReque
     receiverUser!: Ref<UserModel>
 
     @Expose()
-    @prop({ required: true, default: new Date() })
+    // #achan mettre le default dans constructor
+    @prop({ required: true, default: Date.now() })
     releaseDate!: Date
 
     @Expose()

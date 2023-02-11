@@ -24,6 +24,7 @@ export class ReportModel extends DocumentModel implements ReportInterface {
 
     public constructor(type: TypeReportEnum) {
         super()
+        
         this.releaseDate = new Date()
         this.type = type
     }

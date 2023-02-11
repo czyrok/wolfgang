@@ -1,10 +1,12 @@
-import { Ref, prop, getModelForClass, DocumentType } from '@typegoose/typegoose'
+import { Ref, prop, getModelForClass } from '@typegoose/typegoose'
 import { Exclude, Expose } from 'class-transformer'
 
 import { UserModel } from '../../../../../user/model/user.model'
 import { MessageChatGameModel } from '../../model/message.chat.game.model'
 
 import { UserMessageChatGameInterface } from '../interface/user.message.chat.game.interface'
+
+import { TypeMessageChatGameEnum } from '../../type/enum/type.message.chat.game.enum'
 
 @Exclude()
 export class UserMessageChatGameModel extends MessageChatGameModel implements UserMessageChatGameInterface {
@@ -16,8 +18,8 @@ export class UserMessageChatGameModel extends MessageChatGameModel implements Us
     @prop({ required: true, ref: () => UserModel })
     user!: Ref<UserModel>
 
-    public constructor(text: string) {
-        super(text)
+    public constructor(type: TypeMessageChatGameEnum,text: string) {
+        super(type, text)
     }
 }
 

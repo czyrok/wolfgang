@@ -20,23 +20,23 @@ import { GameModel } from '../../model/game.model'
 
 @Exclude()
 export class ExecutorGameModel {
-    public async prelaunch(namespace: Namespace, state: StateGameModel): Promise<void> {
+    public async prelaunch(namespace: Namespace, game: GameModel): Promise<void> {
         let dist: RandomDistributionGameModel = new RandomDistributionGameModel
 
-        dist.processing(state.rules.choosingcardList, state.players).catch((error: CountCardRulesGameError) => {
+        dist.processing(game.state.rules.choosingcardList, game.state.players).catch((error: CountCardRulesGameError) => {
             LogUtil.logger(TypeLogEnum.GAME).fatal(error.message)
 
             // #achan
             throw error
         })
 
-        for (const player of state.players) {
+        for (const player of game.state.players) {
             RoomChatGameHelper.setRoom(player)
         }
 
         const loopIte: IteratorLoopGameModel = new IteratorLoopGameModel
 
-        for (const item of loopIte) await item.createChat()
+        for (const item of loopIte) await item.createChat(game.gameId)
 
         LogUtil.logger(TypeLogEnum.GAME).trace('Prelaunch game made')
     }

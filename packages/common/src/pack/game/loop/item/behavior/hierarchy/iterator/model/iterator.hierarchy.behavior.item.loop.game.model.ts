@@ -12,7 +12,7 @@ export class IteratorHierarchyBehaviorItemLoopGameModel implements IteratorChain
 
         loop : for (let item of ite) {
             for (let behavior of item.getBehavior()) {
-                if (behavior.config.campHierarchy == this._currentIndex) {
+                if (behavior.config.hierarchy == this._currentIndex) {
                     this._current = behavior
 
                     break loop
@@ -54,7 +54,7 @@ export class IteratorHierarchyBehaviorItemLoopGameModel implements IteratorChain
 
         loop: for (let item of iterator) {
             for (let behavior of item.getBehavior()) {
-                if (behavior.config.campHierarchy == this.currentIndex + 1) {
+                if (behavior.config.hierarchy == this.currentIndex + 1) {
                     this.currentIndex++
 
                     this.current = behavior

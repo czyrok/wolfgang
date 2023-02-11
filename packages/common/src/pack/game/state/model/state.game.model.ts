@@ -1,13 +1,14 @@
 import { Subject, Subscription } from 'rxjs'
+import { Exclude, Expose } from 'class-transformer'
 
 import { HandlerPlayerGameModel } from '../../player/handler/model/handler.player.game.model'
 import { PlayerGameModel } from '../../player/model/player.game.model'
 import { RulesGameModel } from '../../rules/model/rules.game.model'
+import { BehaviorItemLoopGameModel } from '../../loop/item/behavior/model/behavior.item.loop.game.model'
 
 import { ChangeInterface } from '../../change/interface/change.interface'
 
 import { TypeBehaviorItemLoopGameEnum } from '../../loop/item/behavior/type/enum/type.behavior.item.loop.game.enum'
-import { Exclude, Expose } from 'class-transformer'
 
 @Exclude()
 export class StateGameModel implements ChangeInterface<StateGameModel> {
@@ -103,11 +104,24 @@ export class StateGameModel implements ChangeInterface<StateGameModel> {
         return this._stateChange
     }
 
+    onChange(callback: (state: StateGameModel) => void): Subscription {
+        return this.stateChange.subscribe(callback)
+    }
+
     public notifyUpdate(): void {
         this.stateChange.next(this)
     }
 
-    onChange(callback: (state: StateGameModel) => void): Subscription {
-        return this.stateChange.subscribe(callback)
+    public isCurrentBehavior(behavior: BehaviorItemLoopGameModel): boolean
+    public isCurrentBehavior(behavior: TypeBehaviorItemLoopGameEnum): boolean
+    public isCurrentBehavior(behavior: BehaviorItemLoopGameModel | TypeBehaviorItemLoopGameEnum): boolean {
+        for (const behaviorType of this.currentBehaviorType) {
+            if (behavior instanceof BehaviorItemLoopGameModel && behavior.config.type !== behaviorType) continue
+            if (!(behavior instanceof BehaviorItemLoopGameModel) && behavior !== behaviorType) continue
+            
+            return true
+        }
+
+        return false
     }
 }
