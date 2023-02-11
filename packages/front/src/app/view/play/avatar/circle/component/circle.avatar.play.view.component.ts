@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, Renderer2, ViewChild, ViewContainerRef } from '@angular/core'
-import { PlayerGameModel, StateGameModel, VotePlayerGameModel } from 'common'
+import { StateGameModel, VotePlayerGameModel } from 'common'
 
 import { CircleAvatarPlayViewModel } from '../model/circle.avatar.play.view.model'
 
@@ -11,25 +11,44 @@ import { CircleAvatarPlayViewModel } from '../model/circle.avatar.play.view.mode
 export class CircleAvatarPlayViewComponent implements AfterViewInit {
   avatarsCircle!: CircleAvatarPlayViewModel
 
+  first: boolean = true
+
   constructor(
     private renderer: Renderer2,
     private changeDetectorRef: ChangeDetectorRef
   ) { }
 
   ngAfterViewInit(): void {
-    this.avatarsCircle = new CircleAvatarPlayViewModel(this.eventPlayerVote, this.renderer, this.changeDetectorRef, this.viewContainerRefTarget, this.elementRefTarget)
+    this.avatarsCircle = new CircleAvatarPlayViewModel(this.eventPlayerVote, this.renderer, this.changeDetectorRef, this.targetRef, this.boxContainerRef)
 
-    if (this.eventGameState !== undefined) this.eventGameState.subscribe((data: StateGameModel) => {
-      this.avatarsCircle.setPlayers((data as any)._players.map((player: PlayerGameModel) => player.userId))
-      this.avatarsCircle.update()
+    if (this.gameStateEvent !== undefined) this.gameStateEvent.subscribe((data: StateGameModel) => {
+      if (data.isStarted && this.first) {
+        this.avatarsCircle.removeAll()
+
+        this.avatarsCircle.setPlayers(data.players)
+
+        this.avatarsCircle.update()
+        this.avatarsCircle.update()
+
+        this.first = false
+      }
+
+      if (!data.isStarted) {
+        this.avatarsCircle.removeAll()
+
+        this.avatarsCircle.setPlayers(data.players)
+
+        this.avatarsCircle.update()
+        this.avatarsCircle.update()
+      }
     })
   }
 
   @Input() eventPlayerVote!: EventEmitter<VotePlayerGameModel>
-  @Input() eventGameState!: EventEmitter<StateGameModel>
+  @Input() gameStateEvent!: EventEmitter<StateGameModel>
 
-  @ViewChild('target', { read: ViewContainerRef }) viewContainerRefTarget!: ViewContainerRef
-  @ViewChild('widthTarget') elementRefTarget!: ElementRef<HTMLElement>
+  @ViewChild('target', { read: ViewContainerRef }) targetRef!: ViewContainerRef
+  @ViewChild('widthTarget') boxContainerRef!: ElementRef<HTMLElement>
 
   @HostListener('window:resize') resize(): void {
     this.avatarsCircle.update()

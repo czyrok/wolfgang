@@ -18,7 +18,7 @@ export class TextBarInteractiveSharedComponent {
     this.event.emit(this.filter)
   }
 
-  @Output() event: EventEmitter<string> = new EventEmitter();
+  @Output() event: EventEmitter<string> = new EventEmitter()
   @Input() id!: string
   @Input() placeholder!: string
   @Input() icofont!: string

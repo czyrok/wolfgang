@@ -43,7 +43,7 @@ export class HandlerPlayerGameModel implements ChangeInterface<Array<PlayerGameM
     }
 
     public getPlayer(userId: string): PlayerGameModel | undefined {
-        return this.players.find((player: PlayerGameModel) => player.userId == userId)
+        return this.players.find((player: PlayerGameModel) => player.user._id === userId)
     }
 
     onChange(callback: (state: Array<PlayerGameModel>) => void): Subscription {

@@ -20,6 +20,8 @@
         white-space: nowrap;
         cursor: pointer;
         font-family: property.get('font', 'regular');
+        display: flex;
+        justify-content: flex-end;
     }
 
     @include definition.definePropertyDisabled() {

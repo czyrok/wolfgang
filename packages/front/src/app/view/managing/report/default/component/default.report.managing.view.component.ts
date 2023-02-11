@@ -1,24 +1,46 @@
-import { Component } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
+import { ReportModel, ReceiverLinkSocketModel, SenderLinkSocketModel, UserModel, TypeReportEnum } from 'common'
 
-import { ReportModel } from 'common'
-import { ReceiverEventSocketModel } from 'src/app/socket/event/receiver/model/receiver.event.socket.model'
-import { EventSocketService } from 'src/app/socket/event/service/event.socket.service'
+import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
 
 @Component({
   selector: 'app-view-managing-report-default',
   templateUrl: './default.report.managing.view.component.html',
   styleUrls: ['./default.report.managing.view.component.scss']
 })
-export class DefaultReportManagingViewComponent {
+export class DefaultReportManagingViewComponent implements OnInit {
   reportList!: Array<ReportModel>
 
-  reportLink: ReceiverEventSocketModel<Array<ReportModel>> = this.eventSocketLink.registerReceiver<Array<ReportModel>>('/managing/report', 'list').subscribe({
-    callback: (data: Array<ReportModel>) => {
-      this.reportList = data
-    }
-  })
-
   constructor(
-    private eventSocketLink: EventSocketService
+    private socketSharedService: SocketSharedService
   ) { }
+  
+  async ngOnInit(): Promise<void> {
+    const reportListLink: ReceiverLinkSocketModel<Array<ReportModel>> = await this.socketSharedService.registerReceiver<Array<ReportModel>>('/managing/report', 'list')
+
+    reportListLink.subscribe((data: Array<ReportModel>) => {
+      this.reportList = data
+
+      reportListLink.unsubscribe()
+    })
+
+    const triggerLink: SenderLinkSocketModel<void> = await this.socketSharedService.registerSender<void>('/managing/report', 'list')
+
+    triggerLink.emit()
+  }
+
+  getDate(report: ReportModel): string {
+    const date: Date = new Date(report.releaseDate)
+    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString()
+  }
+
+  isBasicUserReport(report: ReportModel): boolean {
+    if (report.type === TypeReportEnum.BASIC_USER) return true
+    return false
+  }
+
+  isOtherUserReport(report: ReportModel): boolean {
+    if (report.type === TypeReportEnum.OTHER_USER) return true
+    return false
+  }
 }

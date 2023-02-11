@@ -9,11 +9,11 @@
     <app-shared-user-bubble-username [username]="user?.username" [detailed]="detailed"></app-shared-user-bubble-username>
 
     <div class="img" >
-        <img src="asset/img/user.svg" alt="a enlever">
-        <!-- <img src="" alt="chapeau">
-                    <img src="" alt="tete">
-                    <img src="" alt="je sais pas">
-                    <img src="" alt="je sais pas">
-                    <img src="" alt="je sais pas"> -->
+        <!-- <img src="asset/img/user.svg" alt="a enlever"> -->
+        <img class="hat" src="asset/img/cosmetics/{{ getHat()?.imageUrl }}.png" alt="{{ getHat()?.translateName }}">
+        <img class="head" src="asset/img/cosmetics/{{ getHead()?.imageUrl }}.png" alt="{{ getHead()?.translateName }}">
+        <img class="top" src="asset/img/cosmetics/{{ getTop()?.imageUrl }}.png" alt="{{ getTop()?.translateName }}">
+        <img class="pants" src="asset/img/cosmetics/{{ getPants()?.imageUrl }}.png" alt="{{ getPants()?.translateName }}">
+        <img class="shoes" src="asset/img/cosmetics/{{ getShoes()?.imageUrl }}.png" alt="{{ getShoes()?.translateName }}">
     </div>
 </div>

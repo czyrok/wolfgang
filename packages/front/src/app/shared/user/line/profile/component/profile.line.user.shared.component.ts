@@ -1,8 +1,7 @@
 import { Component, Input } from '@angular/core'
 import { ReceiverLinkSocketModel, SenderLinkSocketModel, UserModel } from 'common'
-import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
 
-import { AuthSharedService } from '../../../../../shared/auth/service/auth.shared.service'
+import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
 
 @Component({
   selector: 'app-shared-user-line-profile',
@@ -13,13 +12,13 @@ export class ProfileLineUserSharedComponent {
   user!: UserModel
 
   constructor(
-    private eventSocketLink: SocketSharedService,
-    private authSharedService: AuthSharedService
+    private socketSharedService: SocketSharedService
   ) { }
 
   async ngAfterViewInit(): Promise<void> {
     if (this.username !== undefined) {
-      const userLink: ReceiverLinkSocketModel<UserModel> = (await this.eventSocketLink.registerReceiver<UserModel>('/game/profile', 'view')).subscribe(
+
+      const userLink: ReceiverLinkSocketModel<UserModel> = (await this.socketSharedService.registerReceiver<UserModel>('/game/profile', 'view')).subscribe(
         (data: UserModel) => {
           this.user = data
 
@@ -27,14 +26,14 @@ export class ProfileLineUserSharedComponent {
         }
       )
 
-      const usernameLink: SenderLinkSocketModel<string> = await this.eventSocketLink.registerSender<string>('/game/profile', 'view')
+      const usernameLink: SenderLinkSocketModel<string> = await this.socketSharedService.registerSender<string>('/game/profile', 'view')
 
       usernameLink.emit(this.username)
     }
   }
 
   getUsername(): string | undefined{
-    return this.authSharedService.username
+    return this.user?.username
   }
 
   @Input() username?: string

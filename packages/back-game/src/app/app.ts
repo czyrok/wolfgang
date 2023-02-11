@@ -1,14 +1,9 @@
-import http from 'http'
-import { connect } from 'mongoose'
-import { Server } from 'socket.io'
-import { SocketIoController } from 'ts-socket.io-controller'
-import { LogUtil, LogHelper, TypeLogEnum, EnvUtil, VarEnvEnum } from 'common'
+import { setupMaster, fork, isMaster, workers } from 'cluster'
+import { join, dirname } from 'path'
+import { instanceToPlain, plainToInstance } from 'class-transformer'
+import { EnvUtil, VarEnvEnum, HandlerSocketLinkModel, ReceiverLinkSocketModel, SenderLinkSocketModel, LogUtil, LogHelper, TypeLogEnum, GameModel } from 'common'
 
-import { GameController } from './game/controller/game.controller'
-/* import { ChatGameController } from './game/chat/controller/chat.game.controller'
-import { VotePlayerGameController } from './game/player/vote/controller/vote.player.game.controller' */
-
-async function run(): Promise<void> {
+if (isMaster) {
     LogUtil.config = LogHelper.getConfig(
         TypeLogEnum.APP,
         TypeLogEnum.GAME,
@@ -18,34 +13,67 @@ async function run(): Promise<void> {
 
     LogUtil.logger(TypeLogEnum.APP).trace('App started')
 
-    await connect(`mongodb://${EnvUtil.get(VarEnvEnum.DB_URL)}:${EnvUtil.get(VarEnvEnum.DB_PORT)}/wolfgang`, {
-        authSource: EnvUtil.get(VarEnvEnum.DB_USER),
-        user: EnvUtil.get(VarEnvEnum.DB_USER),
-        pass: EnvUtil.get(VarEnvEnum.DB_PW)
+    const ioHandler: HandlerSocketLinkModel
+        = new HandlerSocketLinkModel(EnvUtil.get(VarEnvEnum.REGISTERY_URL), parseInt(EnvUtil.get(VarEnvEnum.REGISTERY_PORT)))
+
+    const createLink: ReceiverLinkSocketModel<string> = ioHandler.registerReceiver('/registery', 'create'),
+        triggerLink: SenderLinkSocketModel<void> = ioHandler.registerSender('/registery', 'trigger')
+
+    const updateLink: SenderLinkSocketModel<GameModel> = ioHandler.registerSender('/registery', 'update')
+
+    const readyLink: SenderLinkSocketModel<GameModel> = ioHandler.registerSender('/registery', 'ready')
+
+    setupMaster({
+        exec: join(dirname(__filename), 'worker.js'),
+        args: ['--use', 'http'],
+        silent: true,
     })
 
-    LogUtil.logger(TypeLogEnum.APP).trace('Database connection initialized')
+    createLink.subscribe((creationCode: string) => {
+        const worker = fork({
+            CREATION_CODE: creationCode
+        })
 
-    const server: http.Server = http.createServer()
-    const io = new Server(server)
+        let first: boolean = true
 
-    server.listen(EnvUtil.get(VarEnvEnum.GAME_PORT))
+        worker.on('message', (msg: any) => {
+            const game: GameModel = plainToInstance(GameModel, msg)
 
-    LogUtil.logger(TypeLogEnum.APP).info(`HTTP server listen on port ${EnvUtil.get(VarEnvEnum.GAME_PORT)}`)
+            if (game.gameId) {
+                const obj: any = instanceToPlain(game)
 
-    SocketIoController.useSocketIoServer(io, {
-        controllers: [
-            GameController,
-            /* ChatGameController,
-            VotePlayerGameController */
-        ],
-        middlewares: [],
-        useClassTransformer: true
+                if (first) readyLink.emit(obj)
+
+                updateLink.emit(obj)
+
+                first = false
+            }
+        })
     })
 
-    LogUtil.logger(TypeLogEnum.APP).trace('Socket engine initialized')
+    let first: boolean = true
+
+    ioHandler.socketManager.on('open', () => {
+        triggerLink.emit()
+
+        LogUtil.logger(TypeLogEnum.APP).trace('App connected to registery')
+
+        if (!first) {
+            for (const id in workers) {
+                const worker = workers[id]
+
+                if (worker) worker.send({ cmd: 'getGameData' })
+            }
+
+            LogUtil.logger(TypeLogEnum.APP).trace('Games data refreshed')
+        }
+
+        first = false
+    })
+
+    ioHandler.socketManager.on('close', () => {
+        LogUtil.logger(TypeLogEnum.APP).warn('App disconnected from registery')
+    })
+
+    ioHandler.socketManager.connect()
 }
-
-run().catch((error: Error) => {
-    LogUtil.logger(TypeLogEnum.APP).fatal(error.message)
-})

@@ -3,11 +3,13 @@ import { share } from 'rxjs/operators'
 
 import { Socket, Manager } from 'socket.io-client'
 
-import { MetadataHandlerLinkSocketInterface } from '../metadata/interface/metadata.handler.link.socket.interface'
 import { ReceiverLinkSocketModel } from '../../receiver/model/receiver.link.socket.model'
 import { SenderLinkSocketModel } from '../../sender/model/sender.link.socket.model'
 
-export class HandlerSocketLinkModel {
+import { MetadataHandlerLinkSocketInterface } from '../metadata/interface/metadata.handler.link.socket.interface'
+import { HandlerLinkSocketInterface } from '../interface/handler.link.socket.interface'
+
+export class HandlerSocketLinkModel implements HandlerLinkSocketInterface {
   private _socketManager: Manager
   private _metadata: MetadataHandlerLinkSocketInterface = {}
 
@@ -30,7 +32,7 @@ export class HandlerSocketLinkModel {
     return this._metadata
   }
 
-  public registerSender<T>(namespace: string, event: string): SenderLinkSocketModel<T> {
+  public registerSender<T>(namespace: string, eventType: string): SenderLinkSocketModel<T> {
     if (!this.metadata[namespace]) this.metadata[namespace] = {
       socket: this.getNamespace(namespace).connect(),
       events: {}
@@ -38,19 +40,19 @@ export class HandlerSocketLinkModel {
 
     const socket: Socket = this.metadata[namespace].socket
 
-    if (!this.metadata[namespace].events[event]) {
-      this.metadata[namespace].events[event] = {
+    if (!this.metadata[namespace].events[eventType]) {
+      this.metadata[namespace].events[eventType] = {
         usingCount: 0,
-        eventObservable: this.buildObservable(namespace, event, socket)
+        eventObservable: this.buildObservable(namespace, eventType, socket)
       }
     }
 
-    this.metadata[namespace].events[event].usingCount++;
+    this.metadata[namespace].events[eventType].usingCount++;
 
-    return new SenderLinkSocketModel(event, socket)
+    return new SenderLinkSocketModel(eventType, socket)
   }
 
-  public registerReceiver<T>(namespace: string, event: string): ReceiverLinkSocketModel<T> {
+  public registerReceiver<T>(namespace: string, eventType: string): ReceiverLinkSocketModel<T> {
     if (!this.metadata[namespace]) this.metadata[namespace] = {
       socket: this.getNamespace(namespace).connect(),
       events: {}
@@ -58,33 +60,33 @@ export class HandlerSocketLinkModel {
 
     const socket: Socket = this.metadata[namespace].socket
 
-    if (!this.metadata[namespace].events[event]) {
-      this.metadata[namespace].events[event] = {
+    if (!this.metadata[namespace].events[eventType]) {
+      this.metadata[namespace].events[eventType] = {
         usingCount: 0,
-        eventObservable: this.buildObservable(namespace, event, socket)
+        eventObservable: this.buildObservable(namespace, eventType, socket)
       }
     }
 
-    this.metadata[namespace].events[event].usingCount++;
+    this.metadata[namespace].events[eventType].usingCount++;
 
-    return new ReceiverLinkSocketModel(event, this.metadata[namespace].events[event].eventObservable)
+    return new ReceiverLinkSocketModel(eventType, this.metadata[namespace].events[eventType].eventObservable)
   }
 
-  private buildObservable<T>(namespace: string, event: string, socket: Socket): Observable<T> {
+  private buildObservable<T>(namespace: string, eventType: string, socket: Socket): Observable<T> {
     return new Observable((sub: Subscriber<T>) => {
       const listener = (data: T) => {
         sub.next(data)
       }
 
-      socket.on(event, listener)
+      socket.on(eventType, listener)
 
       return () => {
-        this.metadata[namespace].events[event].usingCount--;
+        this.metadata[namespace].events[eventType].usingCount--;
 
-        if (this.metadata[namespace].events[event].usingCount == 0) {
-          socket.removeListener(event, listener)
+        if (this.metadata[namespace].events[eventType].usingCount == 0) {
+          socket.removeListener(eventType, listener)
 
-          delete this.metadata[namespace].events[event]
+          delete this.metadata[namespace].events[eventType]
 
           if (Object.keys(this.metadata[namespace].events).length == 0) {
             socket.close()
@@ -96,7 +98,9 @@ export class HandlerSocketLinkModel {
     }).pipe(share())
   }
 
-  private getNamespace(namespace: string): Socket {
-    return this.socketManager.socket(namespace)
+  public getNamespace(namespace: string): Socket {
+    if (!this.metadata[namespace]) return this.socketManager.socket(namespace)
+
+    return this.metadata[namespace].socket
   }
 }

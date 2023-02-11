@@ -1,22 +1,26 @@
 <section>
   <ng-template #buttonTemplate>
-    <app-shared-interactive-button text="{{ cardProposal.thumbsDownCount }}" icofont="thumbs-down" [important]="true"></app-shared-interactive-button>
-    <app-shared-interactive-button text="{{ cardProposal.thumbsUpCount }}" icofont="thumbs-up" [accent]="true"
-      [important]="true"></app-shared-interactive-button>
+
+    <app-shared-interactive-button text="{{ cardProposal?.thumbsUpCount }}" icofont="thumbs-up" (clickEvent)="callbackThumbsUpCount()" [active]="getUserVoteType() == 'up' ? true : false" [accent]="true"
+    [important]="true"></app-shared-interactive-button>
+
+    <app-shared-interactive-button text="{{ cardProposal?.thumbsDownCount }}" icofont="thumbs-down" (clickEvent)="callbackThumbsDownCount()" [active]="getUserVoteType() == 'down' ? true : false"
+    [important]="true"></app-shared-interactive-button>
+
   </ng-template>
 
   <ng-template #contentTemplate>
-    <div class="lines-container all">
-      <app-shared-user-line-profile></app-shared-user-line-profile>
+    <div *ngIf="user" class="lines-container all">
+      <app-shared-user-line-profile [username]="user.username"></app-shared-user-line-profile>
     </div>
 
     <div class="box">
       <p class="text" data-css-text data-css-font data-css-color>
-        {{cardProposal.desc}}
+        {{ cardProposal?.desc }}
       </p>
     </div>
   </ng-template>
 
-  <app-view-page-scroll title="Proposition : {{ cardProposal.title }} {{ cardProposal.releaseDate }}" [buttonTemplate]="buttonTemplate" [contentTemplate]="contentTemplate"
+  <app-view-page-scroll title="Proposition : {{ cardProposal?.title }} {{ getDate() }}" [buttonTemplate]="buttonTemplate" [contentTemplate]="contentTemplate"
     [list]="false"></app-view-page-scroll>
 </section>

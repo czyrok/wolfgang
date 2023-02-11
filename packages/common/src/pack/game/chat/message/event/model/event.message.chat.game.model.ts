@@ -9,6 +9,12 @@ export class EventMessageChatGameModel extends MessageChatGameModel implements E
     @Expose()
     @prop({ required: true })
     imageUrl!: string
+
+    public constructor(text: string, imageUrl: string) {
+        super(text)
+
+        this.imageUrl = imageUrl
+    }
 }
 
 export const EventMessageChatGameModelDocument = getModelForClass(EventMessageChatGameModel, { schemaOptions: { collection: 'event_mesage_chat_game' } })

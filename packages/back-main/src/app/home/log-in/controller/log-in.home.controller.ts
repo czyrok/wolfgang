@@ -2,6 +2,7 @@ import { EmitOnFail, OnMessage, SocketController, EmitOnSuccess, MessageBody, Co
 import { DocumentType } from '@typegoose/typegoose'
 import { Socket } from 'socket.io'
 import { TypeLogEnum, JWTHelper, InvalidPasswordUserError, UserModelDocument, NotFoundUserError, UserModel, LogInFormControllerModel, LogUtil } from 'common'
+import { Request } from 'express'
 
 @SocketController({
     namespace: '/home/log-in',
@@ -12,7 +13,7 @@ export class LogInHomeController {
     @EmitOnSuccess()
     @EmitOnFail()
     async trigger(@ConnectedSocket() socket: Socket, @MessageBody() message: LogInFormControllerModel) {
-        const user: DocumentType<UserModel> | null = await UserModelDocument.findOne({ username: message.username })
+        const user: DocumentType<UserModel> | null = await UserModelDocument.findOne({ username: message.username }).exec()
 
         if (!user) throw new NotFoundUserError
 
@@ -22,6 +23,13 @@ export class LogInHomeController {
 
         LogUtil.logger(TypeLogEnum.LOG_IN).info(`${user.username} is connecting`)
 
-        return JWTHelper.generate(user, socket.handshake.address)
+        const req: Request = socket.request as Request
+
+        req.session.user = user
+        req.session.save()
+
+        const jwt: string = await JWTHelper.generate(user, socket.handshake.address)
+
+        return jwt
     }
 }

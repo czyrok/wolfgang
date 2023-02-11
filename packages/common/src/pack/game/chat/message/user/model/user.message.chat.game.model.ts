@@ -1,4 +1,4 @@
-import { Ref, prop, getModelForClass } from '@typegoose/typegoose'
+import { Ref, prop, getModelForClass, DocumentType } from '@typegoose/typegoose'
 import { Exclude, Expose } from 'class-transformer'
 
 import { UserModel } from '../../../../../user/model/user.model'
@@ -16,6 +16,9 @@ export class UserMessageChatGameModel extends MessageChatGameModel implements Us
     @prop({ required: true, ref: () => UserModel })
     user!: Ref<UserModel>
 
+    public constructor(text: string) {
+        super(text)
+    }
 }
 
 export const UserMessageChatGameModelDocument = getModelForClass(UserMessageChatGameModel, { schemaOptions: { collection: 'user_message_chat_game' } })
