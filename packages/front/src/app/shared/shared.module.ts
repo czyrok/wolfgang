@@ -8,6 +8,7 @@ import { AlertSharedModule } from './alert/alert.shared.module'
 import { ModalSharedModule } from './modal/modal.shared.module'
 import { UserSharedModule } from './user/user.shared.module'
 import { LabelSharedModule } from './label/label.shared.module'
+import { ReportSharedModule } from './report/report.shared.module'
 
 @NgModule({
     imports: [
@@ -18,7 +19,8 @@ import { LabelSharedModule } from './label/label.shared.module'
         AlertSharedModule,
         ModalSharedModule,
         UserSharedModule,
-        LabelSharedModule
+        LabelSharedModule,
+        ReportSharedModule
     ],
     exports: [
         InteractiveSharedModule,
@@ -27,7 +29,8 @@ import { LabelSharedModule } from './label/label.shared.module'
         AlertSharedModule,
         ModalSharedModule,
         UserSharedModule,
-        LabelSharedModule
+        LabelSharedModule,
+        ReportSharedModule
     ]
 })
 export class SharedModule { }
