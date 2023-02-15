@@ -1,6 +1,6 @@
 import { Component, Input, TemplateRef, ViewChild } from '@angular/core'
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
-import { OtherUserReportModel, ReportModel} from 'common'
+import { OtherUserReportModel, ReportModel, TypeReportEnum} from 'common'
 import { Subject, Subscription } from 'rxjs'
 import { ModalSharedService } from 'src/app/shared/modal/service/modal.shared.service'
 
@@ -42,9 +42,8 @@ export class OtherUserModalReportSharedComponent {
 
   callbackUserForm(): void {
     if (this.form.valid) {
-      let reportUser: OtherUserReportModel = new OtherUserReportModel
+      const reportUser: OtherUserReportModel = new OtherUserReportModel(this.form.get('description')?.value, TypeReportEnum.OTHER_USER)
 
-      reportUser.reason = this.form.get('description')?.value
       this.report = reportUser
     }
   }

@@ -1,5 +1,5 @@
 import { Component, Input, TemplateRef, ViewChild } from '@angular/core'
-import { BasicUserReportModel, ReportModel, TypeUserReportEnum } from 'common'
+import { BasicUserReportModel, ReportModel, TypeReportEnum, TypeUserReportEnum } from 'common'
 import { Subject, Subscription } from 'rxjs'
 import { ModalSharedService } from 'src/app/shared/modal/service/modal.shared.service'
 
@@ -40,37 +40,32 @@ export class UserModalReportSharedComponent {
 /*   @ViewChild('otherUserReportTemplate', { read: TemplateRef }) tatemplateAutherReportUser!: TemplateRef<any> */
 
   callbackNegativeTacticsReport(): void {
-    let reportUser: BasicUserReportModel = new BasicUserReportModel
+    const reportUser: BasicUserReportModel = new BasicUserReportModel(TypeUserReportEnum.NEGATIVE_TACTICS, TypeReportEnum.BASIC_USER)
 
-    reportUser.type = TypeUserReportEnum.NEGATIVE_TACTICS
     this.report = reportUser
   }
 
   callbackInapropriateWordsReport(): void {
-    let reportUser: BasicUserReportModel = new BasicUserReportModel
+    const reportUser: BasicUserReportModel = new BasicUserReportModel(TypeUserReportEnum.INAPROPRIATE_WORDS, TypeReportEnum.BASIC_USER)
 
-    reportUser.type = TypeUserReportEnum.INAPROPRIATE_WORDS
     this.report = reportUser
   }
 
   callbackFloodReport(): void {
-    let reportUser: BasicUserReportModel = new BasicUserReportModel
+    const reportUser: BasicUserReportModel = new BasicUserReportModel(TypeUserReportEnum.FLOOD, TypeReportEnum.BASIC_USER)
 
-    reportUser.type = TypeUserReportEnum.FLOOD
     this.report = reportUser
   }
 
   callbackAdvertisingReport(): void {
-    let reportUser: BasicUserReportModel = new BasicUserReportModel
+    const reportUser: BasicUserReportModel = new BasicUserReportModel(TypeUserReportEnum.ADVERTISING, TypeReportEnum.BASIC_USER)
 
-    reportUser.type = TypeUserReportEnum.ADVERTISING
     this.report = reportUser
   }
 
   callbackLinkReport(): void {
-    let reportUser: BasicUserReportModel = new BasicUserReportModel
+    const reportUser: BasicUserReportModel = new BasicUserReportModel(TypeUserReportEnum.LINK, TypeReportEnum.BASIC_USER)
 
-    reportUser.type = TypeUserReportEnum.LINK
     this.report = reportUser
   }
 
