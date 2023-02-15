@@ -32,7 +32,8 @@ export class ReportController {
     async tmp() {
         const basicReport: DocumentType<BasicUserReportModel> = new BasicUserReportModelDocument(new BasicUserReportModel(
             TypeUserReportEnum.ADVERTISING,
-            TypeReportEnum.BASIC_USER
+            TypeReportEnum.BASIC_USER,
+            '63e3c86ae28067d59adabaaf'
         ))
 
         await basicReport.save()
