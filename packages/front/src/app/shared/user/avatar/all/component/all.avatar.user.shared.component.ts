@@ -37,12 +37,9 @@ export class AllAvatarUserSharedComponent implements AfterViewInit, OnDestroy {
       }
     }) */
 
-    console.log(this.username)
-
     const cosmeticLink: ReceiverLinkSocketModel<Array<CosmeticModel>> = await this.socketSharedService.registerReceiver<Array<CosmeticModel>>('/game/profile', 'skin')
 
     cosmeticLink.subscribe((data: Array<CosmeticModel>) => {
-      console.log(data)
       this.cosmeticsList = data
     })
 
@@ -56,35 +53,35 @@ export class AllAvatarUserSharedComponent implements AfterViewInit, OnDestroy {
   }
 
   getHat(): CosmeticModel | undefined {
-    return this.hat || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.HAT)[0]
+    return this.hatOverride || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.HAT)[0]
   }
 
   getHead(): CosmeticModel | undefined {
-    return this.head || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.HEAD)[0]
+    return this.headOverride || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.HEAD)[0]
   }
 
   getTop(): CosmeticModel | undefined {
-    return this.top || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.TOP)[0]
+    return this.topOverride || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.TOP)[0]
   }
 
   getPants(): CosmeticModel | undefined {
-    return this.pants || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.PANTS)[0]
+    return this.pantsOverride || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.PANTS)[0]
   }
 
   getShoes(): CosmeticModel | undefined {
-    return this.shoes || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.SHOES)[0]
+    return this.shoesOverride || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.SHOES)[0]
   }
 
-  @Input() user?: UserModel
   @Input() username!: string
+  @Input() usernameBubble: boolean = true
   @Input() reduced: boolean = false
   @Input() detailed: boolean = false
 
-  @Input() hat!: CosmeticModel
-  @Input() head!: CosmeticModel
-  @Input() top!: CosmeticModel
-  @Input() pants!: CosmeticModel
-  @Input() shoes!: CosmeticModel
+  @Input() hatOverride!: CosmeticModel
+  @Input() headOverride!: CosmeticModel
+  @Input() topOverride!: CosmeticModel
+  @Input() pantsOverride!: CosmeticModel
+  @Input() shoesOverride!: CosmeticModel
 
   @Input() eventPlayerVote!: EventEmitter<VotePlayerGameModel>
 

@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core'
+import { UserModel } from 'common'
 
 @Component({
   selector: 'app-shared-user-avatar-head',
@@ -6,5 +7,5 @@ import { Component, Input } from '@angular/core'
   styleUrls: ['./head.avatar.user.shared.component.scss']
 })
 export class HeadAvatarUserSharedComponent {
-  @Input() id!: string
+  @Input() username!: string
 }

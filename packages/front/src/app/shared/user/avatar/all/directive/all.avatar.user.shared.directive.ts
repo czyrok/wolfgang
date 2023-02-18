@@ -21,7 +21,7 @@ export class AllAvatarUserSharedDirective implements AfterViewInit {
     observer.observe(this.elementRef.nativeElement)
   }
 
-  updateHeight(height: number) {
+  updateHeight(height: number): void {
     if (!this.active) return
     
     const width: number = (1280 * height) / 1866

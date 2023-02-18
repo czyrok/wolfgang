@@ -1,6 +1,6 @@
 <ng-template #contentTemplateProfile>
     <div class="field">
-        <app-shared-user-avatar-head></app-shared-user-avatar-head>
+        <app-shared-user-avatar-head *ngIf="user" [username]="user.username"></app-shared-user-avatar-head>
 
         <p data-css-text data-css-color data-css-font>{{ user?.username }}</p>
     </div>
