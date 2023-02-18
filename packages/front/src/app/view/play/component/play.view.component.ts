@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, EventEmitter, OnDestroy } from '@angular/core'
 import { plainToInstance } from 'class-transformer'
-import { TypeCardGameEnum, EventMessageChatGameModel, TypeBehaviorItemLoopGameEnum, PlayerGameModel, MessageChatGameModel, ReceiverLinkSocketModel, SenderLinkSocketModel, StateGameModel, UserMessageChatGameModel, VotePlayerGameModel, MessageChatFormControllerModel, TypeChatGameEnum, TypeMessageChatGameEnum } from 'common'
+import { TypeCardGameEnum, EventMessageChatGameModel, PlayerGameModel, MessageChatGameModel, ReceiverLinkSocketModel, SenderLinkSocketModel, StateGameModel, UserMessageChatGameModel, VotePlayerGameModel, MessageChatFormControllerModel, TypeChatGameEnum, TypeMessageChatGameEnum } from 'common'
 
 import { GameSharedService } from 'src/app/shared/game/service/game.shared.service'
 import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/display.alert.shared.service'
@@ -180,10 +180,6 @@ export class PlayViewComponent implements AfterViewInit, OnDestroy {
       if (this.sendMessageStatus) return
 
       this.sendMessageStatus = true
-
-      const message: UserMessageChatGameModel = new UserMessageChatGameModel(TypeMessageChatGameEnum.USER, this.message)
-
-      message.user = this.player.user as any
 
       const emitReceiverLink: ReceiverLinkSocketModel<void> = await this.gameSharedService.registerGameReceiver('', 'emitMessage'),
         emitErrorLink: ReceiverLinkSocketModel<any> = await this.gameSharedService.registerGameReceiver('', 'emitMessage-failed'),

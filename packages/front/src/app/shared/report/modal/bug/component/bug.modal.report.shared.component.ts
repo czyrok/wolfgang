@@ -1,6 +1,6 @@
 import { Component, Input, TemplateRef, ViewChild} from '@angular/core'
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
-import { BugReportModel, ReportModel } from 'common'
+import { BugReportModel, ReportModel, TypeReportEnum } from 'common'
 import { Subject, Subscription } from 'rxjs'
 import { ModalSharedService } from 'src/app/shared/modal/service/modal.shared.service'
 
@@ -41,9 +41,8 @@ export class BugModalReportSharedComponent {
 
   callbackBugForm(): void {
     if (this.form.valid) {
-      let reportBug: BugReportModel = new BugReportModel
+      let reportBug: BugReportModel = new BugReportModel(this.form.get('description')?.value, TypeReportEnum.BUG)
 
-      reportBug.desc = this.form.get('description')?.value
       this.report = reportBug
     }
   }

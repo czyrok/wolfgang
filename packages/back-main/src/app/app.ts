@@ -10,7 +10,6 @@ import { CurrentlyGameController } from './game/currently/controller/currently.g
 import { CardsProposalGameController } from './game/cards-proposal/controller/cards-proposal.game.controller'
 import { ProfileGameController } from './game/profile/controller/profile.game.controller'
 import { ReportManagingController } from './managing/report/controller/report.managing.controller'
-import { ReportMainController } from './main/report/controller/report.main.controller'
 import { SkinCustomizationProfileGameController } from './game/profile/skin-customization/controller/skin-customization.profile.game.controller'
 import { GameController } from './game/controller/game.controller'
 
@@ -51,7 +50,6 @@ async function run(): Promise<void> {
             SkinCustomizationProfileGameController,
             CardsProposalGameController,
             ReportManagingController,
-            ReportMainController,
             GameController
         ],
         middlewares: [

@@ -9,11 +9,9 @@ import { BugModalReportSharedComponent } from './modal/bug/component/bug.modal.r
 
 
 import { ModalSharedModule } from '../modal/modal.shared.module'
-import { ButtonInteractiveSharedModule } from '../interactive/button/button.interactive.shared.component'
+import { ButtonInteractiveSharedModule } from '../interactive/button/button.interactive.shared.module'
 import { UserModalReportSharedComponent } from './modal/user/component/user.modal.report.shared.component'
 import { OtherUserModalReportSharedComponent } from './modal/user/other/component/other.user.modal.report.shared.component'
-
-
 
 @NgModule({
   imports: [

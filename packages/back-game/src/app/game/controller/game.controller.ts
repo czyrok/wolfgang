@@ -47,12 +47,12 @@ export class GameController {
     @OnMessage()
     @EmitOnSuccess()
     async leave(@ConnectedSocket() socket: Socket) {
-        const game: GameModel = GameModel.instance
-
         const req: Request = socket.request as Request,
             userDoc: DocumentType<UserModel> | undefined = req.session.user
 
         if (!userDoc) throw new NotFoundUserError
+
+        const game: GameModel = GameModel.instance
 
         const user: UserModel = userDoc.toObject(),
             test: boolean = game.connectionLost(user, socket.id)
@@ -152,12 +152,12 @@ export class GameController {
     @EmitOnSuccess()
     async emitMessage(@ConnectedSocket() socket: Socket, @MessageBody() messageForm: MessageChatFormControllerModel) {
         const req: Request = socket.request as Request,
-            userDoc: DocumentType<UserModel> | undefined = req.session.user
+            user: DocumentType<UserModel> | undefined = req.session.user
 
-        if (!userDoc) throw new NotFoundUserError
+        if (!user) throw new NotFoundUserError
 
         const game: GameModel = GameModel.instance,
-            player: PlayerGameModel | null = game.checkPlayer(userDoc._id)
+            player: PlayerGameModel | null = game.checkPlayer(user._id)
 
         if (!player) throw new NotFoundInGamePlayerGameError
 
