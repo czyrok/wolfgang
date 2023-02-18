@@ -57,6 +57,7 @@ export class ReportController {
                 basic.thumbsUpCount = report.thumbsUpCount
                 basic.concernedUsers = report.concernedUsers
                 basic.reportType = report.reportType
+                basic.gameId = report.gameId
 
                 await basic.save()
                 break
@@ -88,6 +89,7 @@ export class ReportController {
                 other.thumbsUpCount = report.thumbsUpCount
                 other.concernedUsers = report.concernedUsers
                 other.reason = report.reason
+                other.gameId = report.gameId
 
                 await other.save()
                 break
