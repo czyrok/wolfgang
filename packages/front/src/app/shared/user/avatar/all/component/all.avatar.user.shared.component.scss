@@ -17,7 +17,7 @@
 }
 
 .container.reduced .img {
-  //width: property.get('size', 'avatar', 'width');
+  width: property.get('size', 'avatar', 'width');
   height: property.get('size', 'avatar', 'height');
 }
 
