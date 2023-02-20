@@ -13,44 +13,44 @@ export abstract class ChildBehaviorItemLoopGameModel extends BehaviorItemLoopGam
         super(config)
     }
 
-    override entryPoint(context: ContextGameModel): void {
+    override async entryPoint(context: ContextGameModel): Promise<void> {
         if (this.config.timerMode === undefined) throw new TimerModeNotDefinedBehaviorItemLoopGameError(this.config.type)
 
         switch (this.config.timerMode) {
             case TimerModeBehaviorItemLoopGameEnum.BEFORE:
-                let childContext1: ContextGameModel = ContextGameModel.buildContext(context)
+                const childContext1: ContextGameModel = ContextGameModel.buildContext(context)
 
-                childContext1.res.subscribeOne((result: ResultSetGameType) => {
-                    let childContext2: ContextGameModel = ContextGameModel.buildContext(context, result)
+                childContext1.res.subscribeOne(async (result: ResultSetGameType) => {
+                    const childContext2: ContextGameModel = ContextGameModel.buildContext(context, result)
 
                     childContext2.res.subscribeOne((result: ResultSetGameType) => {
                         context.next(result)
                     })
 
-                    this.doAtEnd(childContext2)
+                    await this.doAtEnd(childContext2)
                 })
 
-                setTimeout(() => {
-                    this.doAtBeginning(childContext1)
+                setTimeout(async () => {
+                    await this.doAtBeginning(childContext1)
                 }, this.config.timer * 1000)
 
                 break
             case TimerModeBehaviorItemLoopGameEnum.BETWEEN:
-                let childContext11: ContextGameModel = ContextGameModel.buildContext(context)
+                const childContext11: ContextGameModel = ContextGameModel.buildContext(context)
 
                 childContext11.res.subscribeOne((result: ResultSetGameType) => {
-                    let childContext22: ContextGameModel = ContextGameModel.buildContext(context, result)
+                    const childContext22: ContextGameModel = ContextGameModel.buildContext(context, result)
 
                     childContext22.res.subscribeOne((result: ResultSetGameType) => {
                         context.next(result)
                     })
 
-                    setTimeout(() => {
-                        this.doAtEnd(childContext22)
+                    setTimeout(async () => {
+                        await this.doAtEnd(childContext22)
                     }, this.config.timer * 1000)
                 })
 
-                this.doAtBeginning(childContext11)
+                await this.doAtBeginning(childContext11)
 
                 break
         }

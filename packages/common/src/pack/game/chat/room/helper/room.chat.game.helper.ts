@@ -27,6 +27,10 @@ export class RoomChatGameHelper {
             for (const chatType of chatTypeList) {
                 if (!socket.rooms.has(chatType)) socket.join(chatType)
             }
+
+            for (const behavior of behaviorList) {
+                if (!socket.rooms.has(behavior.config.type)) socket.join(behavior.config.type)
+            }
         }
     }
 }

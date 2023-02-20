@@ -1,55 +1,78 @@
-import { Component, EventEmitter, Input, HostListener, AfterViewInit, OnDestroy } from '@angular/core'
+import { Component, Input, HostListener, AfterViewInit } from '@angular/core'
+import { VoteFormControllerModel, CosmeticModel, ReceiverLinkSocketModel, SenderLinkSocketModel, TypeAlertEnum, TypeCosmeticEnum, VotePlayerGameModel, TypeVotePlayerGameEnum } from 'common'
 
-// #nsm
-import { CosmeticModel, ReceiverLinkSocketModel, SenderLinkSocketModel, TypeCosmeticEnum, UserModel, VotePlayerGameModel /*, TypeVotePlayerGameEnum */ } from 'common'
-import { Subscription } from 'rxjs'
+import { AuthSharedService } from 'src/app/shared/auth/service/auth.shared.service'
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
+
+import { EventVoteUserSharedModel } from '../../../vote/event/model/event.vote.user.shared.model'
 
 @Component({
   selector: 'app-shared-user-avatar-all',
   templateUrl: './all.avatar.user.shared.component.html',
   styleUrls: ['./all.avatar.user.shared.component.scss']
 })
-export class AllAvatarUserSharedComponent implements AfterViewInit, OnDestroy {
-  playerVotingList: Array<string> = new Array()
-  sub!: Subscription
+export class AllAvatarUserSharedComponent implements AfterViewInit {
+  voteTextAlertType: TypeAlertEnum = TypeAlertEnum.DANGER
+  playerVotingList: Array<string> = new Array
 
   cosmeticsList!: Array<CosmeticModel>
 
   constructor(
+    private authSharedService: AuthSharedService,
     private socketSharedService: SocketSharedService
   ) { }
 
   async ngAfterViewInit(): Promise<void> {
-    /* if (this.eventPlayerVote !== undefined) this.sub = this.eventPlayerVote.subscribe((value: VotePlayerGameModel) => {
-      if (value.votedUser == this.id) {
-        let index = this.playerVotingList.indexOf(value.votingUser)
+    await this.loadCosmetics()
 
-        if (index == -1) {
-          this.playerVotingList.push(value.votingUser)
-        }
-      } else {
-        let index = this.playerVotingList.indexOf(value.votingUser)
+    this.loadSubVoteEvent()
+  }
 
-        if (index != -1) {
-          this.playerVotingList.splice(index, 1)
-        }
+  loadSubVoteEvent(): void {
+    if (!this.voteEvent) return
+
+    this.voteEvent.playerVotingEvent.subscribe((vote: VoteFormControllerModel) => {
+      const index = this.playerVotingList.indexOf(vote.votingPlayer)
+
+      if (vote.votedPlayer === this.username && index === -1) {
+        this.playerVotingList.push(vote.votingPlayer)
       }
-    }) */
+    })
 
-    const cosmeticLink: ReceiverLinkSocketModel<Array<CosmeticModel>> = await this.socketSharedService.registerReceiver<Array<CosmeticModel>>('/game/profile', 'skin')
+    this.voteEvent.playerUnvotingEvent.subscribe((votingUsername: string) => {
+      const index = this.playerVotingList.indexOf(votingUsername)
 
-    cosmeticLink.subscribe((data: Array<CosmeticModel>) => {
+      if (index !== -1) this.playerVotingList.splice(index, 1)
+    })
+
+    this.voteEvent.playerVotesResetEvent.subscribe(_ => {
+      this.playerVotingList.splice(0, this.playerVotingList.length)
+    })
+  }
+
+  async loadCosmetics(): Promise<void> {
+    const cosmeticLinkReceiver: ReceiverLinkSocketModel<Array<CosmeticModel>> = await this.socketSharedService.registerReceiver<Array<CosmeticModel>>('/game/profile', 'skin'),
+      cosmeticLinkSender: SenderLinkSocketModel<string> = await this.socketSharedService.registerSender<string>('/game/profile', 'skin')
+
+    cosmeticLinkReceiver.subscribe((data: Array<CosmeticModel>) => {
       this.cosmeticsList = data
     })
 
-    const cosmeticLinkEmit: SenderLinkSocketModel<string> = await this.socketSharedService.registerSender<string>('/game/profile', 'skin')
-
-    cosmeticLinkEmit.emit(this.username)
+    cosmeticLinkSender.emit(this.username)
   }
 
-  ngOnDestroy(): void {
-    if (this.sub !== undefined) this.sub.unsubscribe()
+  isVotedBySelf(): boolean {
+    for (const username of this.playerVotingList) {
+      if (username === this.authSharedService.username) return true
+    }
+
+    return false
+  }
+
+  isSelf(): boolean {
+    if (this.username === this.authSharedService.username) return true
+
+    return false
   }
 
   getHat(): CosmeticModel | undefined {
@@ -83,11 +106,15 @@ export class AllAvatarUserSharedComponent implements AfterViewInit, OnDestroy {
   @Input() pantsOverride!: CosmeticModel
   @Input() shoesOverride!: CosmeticModel
 
-  @Input() eventPlayerVote!: EventEmitter<VotePlayerGameModel>
+  @Input() voteEvent!: EventVoteUserSharedModel
 
   @HostListener('click') click(): void {
-    /* if (this.eventPlayerVote !== undefined && this.userSharedService.username !== undefined) this.eventPlayerVote.emit(
-      new VotePlayerGameModel(this.userSharedService.username, this.id, '', TypeVotePlayerGameEnum.DEFAULT)
-    ) */
+    if (this.authSharedService.username && this.voteEvent.avatarSelectEvent && this.voteEvent.avatarUnselectEvent) {
+      if (this.playerVotingList.indexOf(this.authSharedService.username) === -1) {
+        this.voteEvent.avatarSelectEvent.emit(this.username)
+      } else {
+        this.voteEvent.avatarUnselectEvent.emit(this.username)
+      }
+    }
   }
 }

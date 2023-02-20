@@ -7,10 +7,11 @@
 
     <div class="field">
         <app-shared-user-label-level [level]="user?.level"></app-shared-user-label-level>
-        <ng-container *ngIf="getUsername()=== user?.username">
-          <app-shared-user-label-point [pointCount]="user?.gamePointCount"></app-shared-user-label-point>
+        <ng-container *ngIf="getUsername() === user?.username">
+            <app-shared-user-label-point [pointCount]="user?.gamePointCount"></app-shared-user-label-point>
         </ng-container>
     </div>
 </ng-template>
 
-<app-shared-item-line link="/game/profile/{{ username }}" [contentTemplate]="contentTemplateProfile"></app-shared-item-line>
+<app-shared-item-line link="/game/profile/{{ username }}"
+    [contentTemplate]="contentTemplateProfile"></app-shared-item-line>

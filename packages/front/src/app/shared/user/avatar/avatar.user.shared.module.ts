@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core'
 
 import { ItemSharedModule } from '../../item/item.shared.module'
 import { BubbleUserSharedModule } from '../bubble/bubble.user.shared.module'
+import { AlertSharedModule } from '../../alert/alert.shared.module'
 
 import { AllAvatarUserSharedDirective } from './all/directive/all.avatar.user.shared.directive'
 
@@ -13,7 +14,8 @@ import { HeadAvatarUserSharedComponent } from './head/component/head.avatar.user
     imports: [
         CommonModule,
         ItemSharedModule,
-        BubbleUserSharedModule
+        BubbleUserSharedModule,
+        AlertSharedModule
     ],
     declarations: [
         AllAvatarUserSharedDirective,

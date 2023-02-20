@@ -22,8 +22,6 @@ export class DefaultProfileMainViewComponent implements OnInit {
   ) {
     const username: string | null = this.activatedRoute.snapshot.paramMap.get('username')
 
-    console.log(username)
-
     if (username) this.username = username
   }
 
@@ -34,8 +32,6 @@ export class DefaultProfileMainViewComponent implements OnInit {
       const userLink: ReceiverLinkSocketModel<UserModel> = (await this.socketSharedService.registerReceiver<UserModel>('/game/profile', 'view')).subscribe(
         (data: UserModel) => {
           this.user = data
-
-          console.log(data)
 
           userLink.unsubscribe()
         }

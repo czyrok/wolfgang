@@ -4,6 +4,7 @@
   display: grid;
   justify-items: center;
   grid-template-rows: auto 1fr;
+  row-gap: property.get('borderLimit', 'small');
 }
 
 .container:not(.reduced) {
