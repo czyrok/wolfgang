@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef, ViewChild} from '@angular/core'
+import { Component, Input, TemplateRef, ViewChild } from '@angular/core'
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
 import { BugReportModel, ReportModel, TypeReportEnum } from 'common'
 import { Subject, Subscription } from 'rxjs'
@@ -24,7 +24,7 @@ export class BugModalReportSharedComponent {
     })
   }
 
-   ngAfterViewInit(): void {
+  ngAfterViewInit(): void {
     this.openingSignalSub = this.openingSignal.subscribe(() => {
       this.modalSharedService.close()
 
@@ -35,13 +35,13 @@ export class BugModalReportSharedComponent {
     })
   }
 
-  closeReport(): void{
+  closeReport(): void {
     this.modalSharedService.close()
   }
 
   callbackBugForm(): void {
     if (this.form.valid) {
-      let reportBug: BugReportModel = new BugReportModel(this.form.get('description')?.value, TypeReportEnum.BUG)
+      const reportBug: BugReportModel = new BugReportModel(this.form.get('description')?.value, TypeReportEnum.BUG)
 
       this.report = reportBug
     }

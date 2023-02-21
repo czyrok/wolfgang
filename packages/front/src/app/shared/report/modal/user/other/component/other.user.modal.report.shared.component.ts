@@ -42,7 +42,7 @@ export class OtherUserModalReportSharedComponent {
 
   callbackUserForm(): void {
     if (this.form.valid) {
-      let reportUser: OtherUserReportModel = new OtherUserReportModel(this.form.get('description')?.value, TypeReportEnum.OTHER_USER)
+      const reportUser: OtherUserReportModel = new OtherUserReportModel(this.form.get('description')?.value, TypeReportEnum.OTHER_USER, 'a completer')
 
       this.report = reportUser
     }
