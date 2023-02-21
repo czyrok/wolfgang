@@ -1,8 +1,10 @@
 import { Component, Input, TemplateRef, ViewChild } from '@angular/core'
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
-import { OtherUserReportModel, ReportModel, TypeReportEnum} from 'common'
+import { OtherUserReportModel, ReportModel, SenderLinkSocketModel, TypeReportEnum} from 'common'
 import { Subject, Subscription } from 'rxjs'
+import { GameSharedService } from 'src/app/shared/game/service/game.shared.service'
 import { ModalSharedService } from 'src/app/shared/modal/service/modal.shared.service'
+import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
 
 
 @Component({
@@ -18,7 +20,9 @@ export class OtherUserModalReportSharedComponent {
 
   constructor(
     private formBuilder: UntypedFormBuilder,
-    private modalSharedService: ModalSharedService
+    private gameSharedService: GameSharedService,
+    private modalSharedService: ModalSharedService,
+    private socketSharedService: SocketSharedService
   ) {
     this.form = this.formBuilder.group({
       description: [null, [Validators.minLength(20)]],
@@ -40,11 +44,16 @@ export class OtherUserModalReportSharedComponent {
     this.modalSharedService.close()
   }
 
-  callbackUserForm(): void {
+  async callbackUserForm(): Promise<void> {
     if (this.form.valid) {
-      const reportUser: OtherUserReportModel = new OtherUserReportModel(this.form.get('description')?.value, TypeReportEnum.OTHER_USER, 'a completer')
+      if(!this.gameSharedService.gameId) throw new Error
+
+      const reportUser: OtherUserReportModel = new OtherUserReportModel(this.form.get('description')?.value, TypeReportEnum.OTHER_USER, this.gameSharedService.gameId)
 
       this.report = reportUser
+
+      const triggerLink: SenderLinkSocketModel<OtherUserReportModel> = await this.socketSharedService.registerSender('/report', 'add')
+      triggerLink.emit(reportUser)
     }
   }
 

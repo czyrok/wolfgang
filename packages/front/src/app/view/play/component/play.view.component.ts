@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, OnDestroy } from '@angular/core'
-import { TypeCardGameEnum, EventMessageChatGameModel, PlayerGameModel, MessageChatGameModel, ReceiverLinkSocketModel, SenderLinkSocketModel, StateGameModel, UserMessageChatGameModel, VotePlayerGameModel, MessageChatFormControllerModel, TypeChatGameEnum, TypeMessageChatGameEnum, VoteFormControllerModel } from 'common'
+import { TypeCardGameEnum, EventMessageChatGameModel, PlayerGameModel, MessageChatGameModel, ReceiverLinkSocketModel, SenderLinkSocketModel, StateGameModel, UserMessageChatGameModel, VotePlayerGameModel, MessageChatFormControllerModel, TypeMessageChatGameEnum, VoteFormControllerModel } from 'common'
 
 import { GameSharedService } from 'src/app/shared/game/service/game.shared.service'
 import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/display.alert.shared.service'
@@ -76,6 +76,8 @@ export class PlayViewComponent implements AfterViewInit, OnDestroy {
       stateSenderLink: SenderLinkSocketModel<void> = await this.gameSharedService.registerGameSender('', 'state')
 
     stateReceiverLink.subscribe((state: StateGameModel) => {
+      this.gameSharedService.updateState(state)
+
       this.gameStateEvent.emit(state)
 
       this.state = state

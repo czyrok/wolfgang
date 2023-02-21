@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
-import { HandlerLinkSocketInterface, HandlerSocketLinkModel, ReceiverLinkSocketModel, SenderLinkSocketModel } from 'common'
+import { HandlerLinkSocketInterface, HandlerSocketLinkModel, ReceiverLinkSocketModel, SenderLinkSocketModel, StateGameModel } from 'common'
 
 import { DisplayAlertSharedService } from '../../alert/display/service/display.alert.shared.service'
 import { SessionSharedService } from '../../session/service/session.shared.service'
@@ -18,7 +18,7 @@ export class GameSharedService implements HandlerLinkSocketInterface {
     private _inGame: boolean = false
     private _gameId?: string
     private _alreadyInGameAlert?: DisplayAlertSharedInterface
-
+    private _gameState?: StateGameModel
     private _currentGameId?: string
 
     public constructor(
@@ -50,6 +50,10 @@ export class GameSharedService implements HandlerLinkSocketInterface {
 
     private set gameId(value: string | undefined) {
         this._gameId = value
+    }
+
+    public get gameState(): StateGameModel | undefined {
+        return this._gameState
     }
 
     public get alreadyInGameAlert(): DisplayAlertSharedInterface | undefined {
@@ -240,5 +244,9 @@ export class GameSharedService implements HandlerLinkSocketInterface {
             this.socketHandler = new HandlerSocketLinkModel('http://localhost', 5501)
 
         return this.socketHandler
+    }
+
+    public updateState(state: StateGameModel): void {
+        this._gameState = state
     }
 }
