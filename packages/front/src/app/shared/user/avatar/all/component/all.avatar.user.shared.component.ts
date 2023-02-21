@@ -1,5 +1,5 @@
 import { Component, Input, HostListener, AfterViewInit } from '@angular/core'
-import { VoteFormControllerModel, CosmeticModel, ReceiverLinkSocketModel, SenderLinkSocketModel, TypeAlertEnum, TypeCosmeticEnum, VotePlayerGameModel, TypeVotePlayerGameEnum } from 'common'
+import { PlayerGameModel, VoteFormControllerModel, CosmeticModel, ReceiverLinkSocketModel, SenderLinkSocketModel, TypeAlertEnum, TypeCosmeticEnum } from 'common'
 
 import { AuthSharedService } from 'src/app/shared/auth/service/auth.shared.service'
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
@@ -12,6 +12,8 @@ import { EventVoteUserSharedModel } from '../../../vote/event/model/event.vote.u
   styleUrls: ['./all.avatar.user.shared.component.scss']
 })
 export class AllAvatarUserSharedComponent implements AfterViewInit {
+  deathTextAlertType: TypeAlertEnum = TypeAlertEnum.WARNING
+
   voteTextAlertType: TypeAlertEnum = TypeAlertEnum.DANGER
   playerVotingList: Array<string> = new Array
 
@@ -69,12 +71,6 @@ export class AllAvatarUserSharedComponent implements AfterViewInit {
     return false
   }
 
-  isSelf(): boolean {
-    if (this.username === this.authSharedService.username) return true
-
-    return false
-  }
-
   getHat(): CosmeticModel | undefined {
     return this.hatOverride || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.HAT)[0]
   }
@@ -96,6 +92,9 @@ export class AllAvatarUserSharedComponent implements AfterViewInit {
   }
 
   @Input() username!: string
+  
+  @Input() player!: PlayerGameModel
+  
   @Input() usernameBubble: boolean = true
   @Input() reduced: boolean = false
   @Input() detailed: boolean = false

@@ -1,10 +1,14 @@
 import { AfterViewInit, Component, EventEmitter, OnDestroy } from '@angular/core'
-import { TypeCardGameEnum, EventMessageChatGameModel, PlayerGameModel, MessageChatGameModel, ReceiverLinkSocketModel, SenderLinkSocketModel, StateGameModel, UserMessageChatGameModel, VotePlayerGameModel, MessageChatFormControllerModel, TypeChatGameEnum, TypeMessageChatGameEnum, VoteFormControllerModel } from 'common'
+import { Router } from '@angular/router'
+import { StageStateGameEnum, TypeCardGameEnum, EventMessageChatGameModel, PlayerGameModel, MessageChatGameModel, ReceiverLinkSocketModel, SenderLinkSocketModel, StateGameModel, UserMessageChatGameModel, VotePlayerGameModel, MessageChatFormControllerModel, TypeMessageChatGameEnum, VoteFormControllerModel } from 'common'
 
 import { GameSharedService } from 'src/app/shared/game/service/game.shared.service'
 import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/display.alert.shared.service'
-import { EventVoteUserSharedModel } from 'src/app/shared/user/vote/event/model/event.vote.user.shared.model'
 import { AuthSharedService } from 'src/app/shared/auth/service/auth.shared.service'
+
+import { EventVoteUserSharedModel } from 'src/app/shared/user/vote/event/model/event.vote.user.shared.model'
+
+import { DisplayAlertSharedInterface } from 'src/app/shared/alert/display/interface/display.alert.shared.interface'
 
 @Component({
   selector: 'app-view-play',
@@ -21,6 +25,8 @@ export class PlayViewComponent implements AfterViewInit, OnDestroy {
   player?: PlayerGameModel
   state?: StateGameModel
 
+  cardAlert?: DisplayAlertSharedInterface
+
   message: string = ''
   sendMessageStatus: boolean = false
 
@@ -30,6 +36,7 @@ export class PlayViewComponent implements AfterViewInit, OnDestroy {
   eventMessageEvent: EventEmitter<EventMessageChatGameModel> = new EventEmitter
 
   constructor(
+    private router: Router,
     private authSharedService: AuthSharedService,
     private gameSharedService: GameSharedService,
     private alertSharedService: DisplayAlertSharedService
@@ -43,7 +50,7 @@ export class PlayViewComponent implements AfterViewInit, OnDestroy {
   }
 
   async ngOnDestroy(): Promise<void> {
-    await this.gameSharedService.quitParty()
+    await this.quit()
   }
 
   async loadPlayer(): Promise<void> {
@@ -59,9 +66,9 @@ export class PlayViewComponent implements AfterViewInit, OnDestroy {
 
       if (!this.start && player !== undefined) {
         if (player.card.config.type === TypeCardGameEnum.GREY_WEREWOLF) {
-          this.alertSharedService.emitInform('Votre rôle est loup-garou', undefined, false)
+          this.cardAlert = this.alertSharedService.emitWarning('Votre rôle est loup-garou', undefined, false)
         } else {
-          this.alertSharedService.emitInform('Votre rôle est villageois', undefined, false)
+          this.cardAlert = this.alertSharedService.emitWarning('Votre rôle est villageois', undefined, false)
         }
 
         this.start = true
@@ -75,7 +82,7 @@ export class PlayViewComponent implements AfterViewInit, OnDestroy {
     const stateReceiverLink: ReceiverLinkSocketModel<StateGameModel> = await this.gameSharedService.registerGameReceiver('', 'state'),
       stateSenderLink: SenderLinkSocketModel<void> = await this.gameSharedService.registerGameSender('', 'state')
 
-    stateReceiverLink.subscribe((state: StateGameModel) => {
+    stateReceiverLink.subscribe(async (state: StateGameModel) => {
       this.gameStateEvent.emit(state)
 
       this.state = state
@@ -99,6 +106,10 @@ export class PlayViewComponent implements AfterViewInit, OnDestroy {
             this.timeout = undefined
           }
         }, 1e3)
+      }
+
+      if (state.stage === StageStateGameEnum.FINISHED) {
+        this.alertSharedService.emitInform('Vous avez gagné 5 points de jeu')
       }
     })
 
@@ -205,6 +216,12 @@ export class PlayViewComponent implements AfterViewInit, OnDestroy {
 
       this.message = ''
     }
+  }
+
+  async quit(): Promise<void> {
+    await this.gameSharedService.quitParty()
+
+    this.cardAlert?.componentRef?.instance.click()
   }
 
   changeDisplayChatButtonCallback(): void {

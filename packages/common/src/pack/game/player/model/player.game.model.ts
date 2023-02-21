@@ -6,7 +6,7 @@ import { LogUtil } from '../../../log/util/log.util'
 import { FactoryBehaviorItemLoopGameModel } from '../../loop/item/behavior/factory/model/factory.behavior.item.loop.game.model'
 import { BehaviorItemLoopGameModel } from '../../loop/item/behavior/model/behavior.item.loop.game.model'
 import { StateGameModel } from '../../state/model/state.game.model'
-import { UserModel } from '../../../user/model/user.model'
+import { UserModel, UserModelDocument } from '../../../user/model/user.model'
 import { CardGameModel } from '../../card/model/card.game.model'
 
 import { TypeLogEnum } from '../../../log/type/enum/type.log.enum'
@@ -15,6 +15,8 @@ import { TypeChatGameEnum } from '../../chat/type/enum/type.chat.game.enum'
 import { TypeBehaviorItemLoopGameEnum } from '../../loop/item/behavior/type/enum/type.behavior.item.loop.game.enum'
 import { CampPlayerGameEnum } from '../camp/enum/camp.player.game.enum'
 import { GameModel } from '../../model/game.model'
+import { DocumentType } from '@typegoose/typegoose'
+import { NotFoundUserError } from '../../../user/error/not-found.user.error'
 
 @Exclude()
 export class PlayerGameModel {
@@ -153,7 +155,7 @@ export class PlayerGameModel {
         this.activityDate = new Date
     }
 
-    public hisTurn(currentBehaviorTypes: Array<TypeBehaviorItemLoopGameEnum>): TypeBehaviorItemLoopGameEnum | undefined {        
+    public hisTurn(currentBehaviorTypes: Array<TypeBehaviorItemLoopGameEnum>): TypeBehaviorItemLoopGameEnum | undefined {
         for (const behaviorType of currentBehaviorTypes) {
             for (const behavior of BehaviorItemLoopGameModel.getBehaviorOfPlayer(this)) {
                 if (behavior.config.type === behaviorType) return behaviorType
@@ -163,16 +165,25 @@ export class PlayerGameModel {
         return undefined
     }
 
+    public async end(): Promise<void> {
+        const user: DocumentType<UserModel> | null = await UserModelDocument.findById(this.user._id).exec()
+
+        if (!user) throw new NotFoundUserError
+
+        user.gamePointCount += this.gamePointAccumulated
+
+        this.gamePointAccumulated = 0
+
+        await user.updateOne({ gamePointCount: user.gamePointCount }).exec()
+    }
+
     public notifyUpdate(): void {
         let obj: any = undefined
 
         try {
             obj = instanceToPlain(this, { groups: [TypeGroupTransformEnum.SELF] })
+        } catch (_error: any) {
 
-            // #aret
-            LogUtil.logger(TypeLogEnum.GAME).warn('cet objettttt', obj)
-        } catch (error: any) {
-            LogUtil.logger(TypeLogEnum.GAME).error('cet objettttt11', error)
         }
 
         if (!obj) return

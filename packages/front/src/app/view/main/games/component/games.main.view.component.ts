@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
-import { GameModel, ReceiverLinkSocketModel, SenderLinkSocketModel } from 'common'
+import { TypeAlertEnum, GameModel, ReceiverLinkSocketModel, SenderLinkSocketModel } from 'common'
 
-import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/display.alert.shared.service'
 import { GameSharedService } from 'src/app/shared/game/service/game.shared.service'
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
 
@@ -19,8 +18,7 @@ export class GamesMainViewComponent implements OnInit {
   constructor(
     private router: Router,
     private socketSharedService: SocketSharedService,
-    private gameSharedService: GameSharedService,
-    private displayAlertSharedService: DisplayAlertSharedService
+    private gameSharedService: GameSharedService
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -57,5 +55,21 @@ export class GamesMainViewComponent implements OnInit {
         createSenderLink.emit()
       })
     })
+  }
+
+  getDurationText(game: GameModel): string {
+    if (game.state.rules.playerCountMax <= 4) return 'Très courte'
+    if (game.state.rules.playerCountMax <= 7) return 'Courte'
+    if (game.state.rules.playerCountMax <= 10) return 'Moyenne'
+
+    return 'Longue'
+  }
+
+  getDurationTextAlertType(game: GameModel): TypeAlertEnum {
+    if (game.state.rules.playerCountMax <= 4) return TypeAlertEnum.SUCCESS
+    if (game.state.rules.playerCountMax <= 7) return TypeAlertEnum.INFORM
+    if (game.state.rules.playerCountMax <= 10) return TypeAlertEnum.WARNING
+
+    return TypeAlertEnum.DANGER
   }
 }

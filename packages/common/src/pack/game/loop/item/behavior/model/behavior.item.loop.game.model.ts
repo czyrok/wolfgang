@@ -6,8 +6,9 @@ import { PlayerGameModel } from '../../../../player/model/player.game.model'
 import { CardGameModel } from '../../../../card/model/card.game.model'
 import { FactoryCardGameModel } from '../../../../card/factory/model/factory.card.game.model'
 import { StateGameModel } from '../../../../state/model/state.game.model'
-
 import { ChatGameModelDocument } from '../../../../chat/model/chat.game.model'
+import { FactoryItemLoopGameModel } from '../../factory/model/factory.item.loop.game.model'
+import { ItemLoopGameModel } from '../../model/item.loop.game.model'
 
 import { ConfigBehaviorItemLoopGameInterface } from '../config/interface/config.behavior.item.loop.game.interface'
 import { SetupDistributionGameInterface } from '../../../../distribution/setup/interface/setup.distribution.game.interface'
@@ -21,7 +22,6 @@ import { TypeModeChatGameEnum } from '../../../../chat/mode/type/enum/type.mode.
 import { TypeChatGameEnum } from '../../../../chat/type/enum/type.chat.game.enum'
 
 import { ResultSetGameType } from '../../../../set/result/type/result.set.game.type'
-import { IteratorLoopGameModel } from '../../../iterator/model/iterator.loop.game.model'
 
 export abstract class BehaviorItemLoopGameModel implements
     StrategyItemLoopGameInterface,
@@ -99,6 +99,10 @@ export abstract class BehaviorItemLoopGameModel implements
         return this.players
     }
 
+    getAlivePlayer(): Array<PlayerGameModel> {
+        return this.players.filter((player: PlayerGameModel) => !player.isDead)
+    }
+
     setup(): void {
         this.players.splice(0, this.players.length)
 
@@ -130,9 +134,11 @@ export abstract class BehaviorItemLoopGameModel implements
     public static getBehaviorOfPlayer(player: PlayerGameModel): Array<BehaviorItemLoopGameModel> {
         const result: Array<BehaviorItemLoopGameModel> = new Array
 
-        const ite: IteratorLoopGameModel = new IteratorLoopGameModel
+        const factory: FactoryItemLoopGameModel = FactoryItemLoopGameModel.instance
 
-        for (const item of ite) {
+        const itemList: Array<ItemLoopGameModel> = factory.getAll()
+
+        for (const item of itemList) {
             result.push(...item.getPlayerBehavior(player))
         }
 

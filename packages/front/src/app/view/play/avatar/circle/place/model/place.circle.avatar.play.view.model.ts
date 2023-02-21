@@ -72,8 +72,12 @@ export class PlaceCircleAvatarPlayViewModel {
   ): PlaceCircleAvatarPlayViewModel {
     const componentRef: ComponentRef<AllAvatarUserSharedComponent> = viewContainerRef.createComponent(AllAvatarUserSharedComponent)
 
-    componentRef.instance.reduced = true
     componentRef.instance.username = player.user.username
+    componentRef.instance.player = player
+    
+    componentRef.instance.reduced = true
+    componentRef.instance.detailed = true
+    
     componentRef.instance.voteEvent = voteEvent
 
     changeDetectorRef.detectChanges()

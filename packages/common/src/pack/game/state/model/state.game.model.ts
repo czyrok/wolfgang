@@ -9,14 +9,13 @@ import { BehaviorItemLoopGameModel } from '../../loop/item/behavior/model/behavi
 import { ChangeInterface } from '../../change/interface/change.interface'
 
 import { TypeBehaviorItemLoopGameEnum } from '../../loop/item/behavior/type/enum/type.behavior.item.loop.game.enum'
+import { HandlerPlayerGameInterface } from '../../player/handler/interface/handler.player.game.interface'
+import { StageStateGameEnum } from '../stage/enum/stage.state.game.enum'
 
 @Exclude()
-export class StateGameModel implements ChangeInterface<StateGameModel> {
+export class StateGameModel implements ChangeInterface<StateGameModel>, HandlerPlayerGameInterface {
     @Expose()
-    private _isStarted: boolean = false
-
-    @Expose()
-    private _isFinished: boolean = false
+    private _stage: StageStateGameEnum = StageStateGameEnum.AWAITING
 
     @Expose()
     private _currentBehaviorType: Array<TypeBehaviorItemLoopGameEnum> = new Array
@@ -38,25 +37,18 @@ export class StateGameModel implements ChangeInterface<StateGameModel> {
     public constructor() {
         HandlerPlayerGameModel.instance.onChange((players: Array<PlayerGameModel>) => {
             this.players = players
+
+            this.stateChange.next(this)
         })
     }
 
-    public set isStarted(value: boolean) {
-        this._isStarted = value
+    public set stage(value: StageStateGameEnum) {
+        this._stage = value
     }
 
     @Expose()
-    public get isStarted(): boolean {
-        return this._isStarted
-    }
-
-    public set isFinished(value: boolean) {
-        this._isFinished = value
-    }
-
-    @Expose()
-    public get isFinished(): boolean {
-        return this._isFinished
+    public get stage(): StageStateGameEnum {
+        return this._stage
     }
 
     public set isNight(value: boolean) {
@@ -106,6 +98,22 @@ export class StateGameModel implements ChangeInterface<StateGameModel> {
 
     onChange(callback: (state: StateGameModel) => void): Subscription {
         return this.stateChange.subscribe(callback)
+    }
+
+    hasPlayer(player: PlayerGameModel): boolean {
+        for (let currentPlayer of this.players) {
+            if (player == currentPlayer) return true
+        }
+
+        return false
+    }
+
+    getPlayer(): Array<PlayerGameModel> {
+        return this.players
+    }
+
+    getAlivePlayer(): Array<PlayerGameModel> {
+        return this.players.filter((player: PlayerGameModel) => !player.isDead)
     }
 
     public notifyUpdate(): void {

@@ -1,12 +1,17 @@
 <div class="container {{ reduced ? 'reduced' : '' }}" data-css-fix-aspect-ratio>
   <ng-template #contentTemplateVote>
-    <app-shared-alert-text icofont="dart" [text]="playerVotingList.length.toString() + (isVotedBySelf() ? ' (votre cible)' : '')" [type]="voteTextAlertType"></app-shared-alert-text>
+    <app-shared-alert-text *ngIf="playerVotingList.length > 0" icofont="dart"
+      [text]="playerVotingList.length.toString() + (isVotedBySelf() ? ' (votre cible)' : '')"
+      [type]="voteTextAlertType"></app-shared-alert-text>
+    <app-shared-alert-text *ngIf="player && player.isDead" icofont="skull-danger" text="Mort"
+      [type]="deathTextAlertType"></app-shared-alert-text>
   </ng-template>
 
-  <app-shared-item-bubble *ngIf="playerVotingList.length > 0" [contentTemplate]="contentTemplateVote"></app-shared-item-bubble>
+  <app-shared-item-bubble *ngIf="playerVotingList.length > 0 || player"
+    [contentTemplate]="contentTemplateVote"></app-shared-item-bubble>
 
-  <app-shared-user-bubble-username *ngIf="usernameBubble" [username]="username + (isSelf() ? ' (vous)' : '')"
-    [detailed]="detailed"></app-shared-user-bubble-username>
+  <app-shared-user-bubble-username *ngIf="usernameBubble" [username]="username"
+    [level]="detailed ? player.user.level : 0" [detailed]="detailed"></app-shared-user-bubble-username>
 
   <div class="img" appSharedUserAvatarAll [active]="!reduced">
     <div class="skin-hat skin">

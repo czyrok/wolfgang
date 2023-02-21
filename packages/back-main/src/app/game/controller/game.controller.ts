@@ -30,7 +30,7 @@ export class GameController {
         const test: boolean = await CheckConnectionRegisteryHelper.checkGame(gameId)
 
         if (!test) {
-            await user.updateOne({ currentGameId: null })
+            await user.updateOne({ currentGameId: null }).exec()
 
             return ''
         }

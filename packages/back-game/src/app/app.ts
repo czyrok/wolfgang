@@ -49,6 +49,10 @@ if (isMaster) {
                 first = false
             }
         })
+
+        worker.on('exit', () => {
+            LogUtil.logger(TypeLogEnum.APP).info(`Game worker killed "{ creationCode: "${creationCode}" }"`)
+        })
     })
 
     let first: boolean = true

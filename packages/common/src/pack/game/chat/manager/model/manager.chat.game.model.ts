@@ -45,8 +45,8 @@ export class ManagerChatGameModel {
         return true
     }
 
-    public async sendEventMessage(text: string, imageUrl: string): Promise<void> {
-        const chat: DocumentType<ChatGameModel> | null = await ChatGameModelDocument.getChat(this.game.gameId, TypeChatGameEnum.ALIVE)
+    public async sendEventMessage(text: string, imageUrl: string, chatType: TypeChatGameEnum = TypeChatGameEnum.ALIVE): Promise<void> {
+        const chat: DocumentType<ChatGameModel> | null = await ChatGameModelDocument.getChat(this.game.gameId, chatType)
 
         if (!chat) throw NotFoundChatGameError
 
@@ -57,6 +57,6 @@ export class ManagerChatGameModel {
 
         const messageObj: any = instanceToPlain(message)
 
-        this.game.namespace.to(TypeChatGameEnum.ALIVE).emit('getChat', messageObj)
+        this.game.namespace.to(chatType).emit('getChat', messageObj)
     }
 }

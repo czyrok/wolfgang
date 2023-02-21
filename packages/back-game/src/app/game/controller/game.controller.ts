@@ -3,7 +3,7 @@ import { instanceToPlain } from 'class-transformer'
 import { Request } from 'express'
 import { Namespace, Socket } from 'socket.io'
 import { ConnectedSocket, EmitOnFail, EmitOnSuccess, MessageBody, OnDisconnect, OnMessage, SkipEmitOnEmptyResult, SocketController } from 'ts-socket.io-controller'
-import { NotAllowedToVotePlayerGameError, NotAllowedToVoteHimPlayerGameError, NotHisTurnPlayerGameError, AlreadyInGameUserError, ChatGameModel, ChatGameModelDocument, EventMessageChatGameModelDocument, GameModel, InitializationGameError, LogUtil, MessageChatFormControllerModel, MessageChatGameModel, NotAllowedToSendMessagePlayerGameError, NotFoundChatGameError, NotFoundInGamePlayerGameError, NotFoundUserError, PlayerGameModel, TypeChatGameEnum, TypeLogEnum, TypeMessageChatGameEnum, TypeVotePlayerGameEnum, UserMessageChatGameModel, UserMessageChatGameModelDocument, UserModel, UserModelDocument, VoteFormControllerModel, VotePlayerGameModel, TypeBehaviorItemLoopGameEnum } from 'common'
+import { NotAllowedToVotePlayerGameError, NotAllowedToVoteHimPlayerGameError, NotHisTurnPlayerGameError, AlreadyInGameUserError, ChatGameModel, ChatGameModelDocument, EventMessageChatGameModelDocument, GameModel, InitializationGameError, MessageChatFormControllerModel, MessageChatGameModel, NotAllowedToSendMessagePlayerGameError, NotFoundChatGameError, NotFoundInGamePlayerGameError, NotFoundUserError, PlayerGameModel, TypeChatGameEnum, TypeMessageChatGameEnum, TypeVotePlayerGameEnum, UserMessageChatGameModel, UserMessageChatGameModelDocument, UserModel, UserModelDocument, VoteFormControllerModel, VotePlayerGameModel, TypeBehaviorItemLoopGameEnum } from 'common'
 
 @SocketController({
     namespace: `/game/${GameModel.instance.gameId}`,
@@ -34,7 +34,7 @@ export class GameController {
         if (!userDoc) throw new NotFoundUserError
 
         const user: UserModel = userDoc.toObject(),
-            test: boolean = game.connectionLost(user, socket.id)
+            test: boolean = game.leaveGame(user, socket.id)
 
         if (test) {
             await userDoc.updateOne({
@@ -54,7 +54,7 @@ export class GameController {
         const game: GameModel = GameModel.instance
 
         const user: UserModel = userDoc.toObject(),
-            test: boolean = game.connectionLost(user, socket.id)
+            test: boolean = game.leaveGame(user, socket.id)
 
         if (test) {
             await userDoc.updateOne({ currentGameId: null })
@@ -87,7 +87,7 @@ export class GameController {
         }
 
         const user: UserModel = userDoc.toObject(),
-            test: boolean = await game.newPlayer(user, socket)
+            test: boolean = await game.joinGame(user, socket)
 
         return test
     }

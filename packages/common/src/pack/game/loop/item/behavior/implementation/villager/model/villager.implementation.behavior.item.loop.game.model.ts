@@ -33,7 +33,7 @@ export class VillagerImplementationBehaviorItemLoopGameModel extends BehaviorIte
     }
 
     public async validCondition(_context: ContextGameModel): Promise<boolean> {
-        if (this.getPlayer().length > 0) {
+        if (this.getAlivePlayer().length > 0) {
             return true
         } else {
             return false

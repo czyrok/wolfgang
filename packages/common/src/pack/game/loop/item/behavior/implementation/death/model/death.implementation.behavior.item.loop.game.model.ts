@@ -14,6 +14,7 @@ import { ProcessContextGameEnum } from '../../../../../../context/process/enum/p
 import { ResultSetGameType } from '../../../../../../set/result/type/result.set.game.type'
 import { LogUtil } from '../../../../../../../log/util/log.util'
 import { TypeLogEnum } from '../../../../../../../log/type/enum/type.log.enum'
+import { TypeCardGameEnum } from '../../../../../../card/type/enum/type.card.game.enum'
 
 @InitFactoryRegistering()
 export class DeathImplementationBehaviorItemLoopGameModel extends BehaviorItemLoopGameModel {
@@ -30,8 +31,6 @@ export class DeathImplementationBehaviorItemLoopGameModel extends BehaviorItemLo
     }
 
     public async validCondition(context: ContextGameModel): Promise<boolean> {
-        LogUtil.logger(TypeLogEnum.APP).warn('iciwtf', context.previousResult == undefined)
-
         if (context.previousResult && context.previousResult[TypeProcessBehaviorItemLoopGameEnum.KILL]) {
             return true
         } else {
@@ -42,26 +41,18 @@ export class DeathImplementationBehaviorItemLoopGameModel extends BehaviorItemLo
     public async doAtBeginning(context: ContextGameModel): Promise<void> {
         const previousResult: ResultSetGameType = context.previousResult
 
-        LogUtil.logger(TypeLogEnum.APP).warn('ici1', context.previousResult === undefined)
-
         // #achan faire l'erreur de configuration
         if (!previousResult) throw new Error
 
-        LogUtil.logger(TypeLogEnum.APP).warn('ici2')
-
-        const chatManager: ManagerChatGameModel | undefined = context[ProcessContextGameEnum.CHAT_MANAGER]
+        const chatManager: ManagerChatGameModel | undefined = context[ProcessContextGameEnum.CHAT_MANAGER]
 
         // #achan faire l'erreur 
         if (!chatManager) throw new Error
-
-        LogUtil.logger(TypeLogEnum.APP).warn('ici3')
 
         const players: Array<PlayerGameModel> = previousResult[TypeProcessBehaviorItemLoopGameEnum.KILL]
 
         // #achan faire l'erreur 
         if (!players) throw new Error
-
-        LogUtil.logger(TypeLogEnum.APP).warn('ici4')
 
         if (players.length > 1) {
             await chatManager.sendEventMessage(`Plusieurs personnes sont mortes`, 'skull-danger')
@@ -74,7 +65,18 @@ export class DeathImplementationBehaviorItemLoopGameModel extends BehaviorItemLo
         for (const player of players) {
             player.isDead = true
 
-            await chatManager.sendEventMessage(`${player.user.username} est mort ! Son rôle était ${player.card.config.type}`, 'skull-danger')
+            let cardName: string = ''
+
+            switch (player.card.config.type) {
+                case TypeCardGameEnum.GREY_WEREWOLF:
+                    cardName = 'loup-garou'
+                    break
+                case TypeCardGameEnum.VILLAGER:
+                    cardName = 'villageois'
+                    break
+            }
+
+            await chatManager.sendEventMessage(`${player.user.username} est mort ! Son rôle était ${cardName}`, 'skull-danger')
 
             this.players.push(player)
         }
