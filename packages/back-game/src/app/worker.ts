@@ -6,8 +6,6 @@ import { SocketIoController } from 'ts-socket.io-controller'
 import { LogUtil, LogHelper, TypeLogEnum, EnvUtil, VarEnvEnum, GameModel, ScopeIoMiddleware, SessionIoMiddleware } from 'common'
 
 import { GameController } from './game/controller/game.controller'
-import { ChatGameController } from './game/chat/controller/chat.game.controller'
-/* import { VotePlayerGameController } from './game/player/vote/controller/vote.player.game.controller' */
 
 async function run(): Promise<void> {
     LogUtil.config = LogHelper.getConfig(
@@ -36,9 +34,7 @@ async function run(): Promise<void> {
 
     SocketIoController.useSocketIoServer(io, {
         controllers: [
-            GameController,
-            /* ChatGameController, */
-            /* VotePlayerGameController */
+            GameController
         ],
         middlewares: [
             SessionIoMiddleware,

@@ -1,7 +1,9 @@
-import { ChangeDetectorRef, ComponentRef, Renderer2, ViewContainerRef, EventEmitter } from '@angular/core'
-import { PlayerGameModel, VotePlayerGameModel } from 'common'
+import { ChangeDetectorRef, ComponentRef, Renderer2, ViewContainerRef } from '@angular/core'
+import { PlayerGameModel } from 'common'
 
 import { AllAvatarUserSharedComponent } from 'src/app/shared/user/avatar/all/component/all.avatar.user.shared.component'
+
+import { EventVoteUserSharedModel } from 'src/app/shared/user/vote/event/model/event.vote.user.shared.model'
 
 export class PlaceCircleAvatarPlayViewModel {
   private _x: number = 0
@@ -64,15 +66,15 @@ export class PlaceCircleAvatarPlayViewModel {
 
   public static create(
     player: PlayerGameModel,
-    voteEventEmitter: EventEmitter<VotePlayerGameModel>,
+    voteEvent: EventVoteUserSharedModel,
     renderer: Renderer2, changeDetectorRef: ChangeDetectorRef,
     viewContainerRef: ViewContainerRef
   ): PlaceCircleAvatarPlayViewModel {
     const componentRef: ComponentRef<AllAvatarUserSharedComponent> = viewContainerRef.createComponent(AllAvatarUserSharedComponent)
 
-    componentRef.instance.user = player.user
+    componentRef.instance.reduced = true
     componentRef.instance.username = player.user.username
-    componentRef.instance.eventPlayerVote = voteEventEmitter
+    componentRef.instance.voteEvent = voteEvent
 
     changeDetectorRef.detectChanges()
 

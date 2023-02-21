@@ -21,6 +21,7 @@ import { TypeModeChatGameEnum } from '../../../../chat/mode/type/enum/type.mode.
 import { TypeChatGameEnum } from '../../../../chat/type/enum/type.chat.game.enum'
 
 import { ResultSetGameType } from '../../../../set/result/type/result.set.game.type'
+import { IteratorLoopGameModel } from '../../../iterator/model/iterator.loop.game.model'
 
 export abstract class BehaviorItemLoopGameModel implements
     StrategyItemLoopGameInterface,
@@ -48,17 +49,17 @@ export abstract class BehaviorItemLoopGameModel implements
         this._players = value
     }
 
-    public abstract validCondition(context: ContextGameModel): boolean
-    public abstract doAtBeginning(context: ContextGameModel): void
-    public abstract doAtEnd(context: ContextGameModel): void
+    public abstract validCondition(context: ContextGameModel): Promise<boolean>
+    public abstract doAtBeginning(context: ContextGameModel): Promise<void>
+    public abstract doAtEnd(context: ContextGameModel): Promise<void>
 
-    entryPoint(context: ContextGameModel): void {
+    async entryPoint(context: ContextGameModel): Promise<void> {
         LogUtil.logger(TypeLogEnum.GAME).info(`${this.config.type} behavior entrypoint triggered`)
 
-        let childContext1: ContextGameModel = ContextGameModel.buildContext(context)
+        const childContext1: ContextGameModel = ContextGameModel.buildContext(context)
 
         childContext1.res.subscribeOne((result: ResultSetGameType) => {
-            let childContext2: ContextGameModel = ContextGameModel.buildContext(context, result)
+            const childContext2: ContextGameModel = ContextGameModel.buildContext(context, result)
 
             childContext2.res.subscribeOne((result: ResultSetGameType) => {
                 LogUtil.logger(TypeLogEnum.GAME).info(`${this.config.type} behavior ending`)
@@ -66,12 +67,12 @@ export abstract class BehaviorItemLoopGameModel implements
                 context.next(result)
             })
 
-            setTimeout(() => {
-                this.doAtEnd(childContext2)
+            setTimeout(async () => {
+                await this.doAtEnd(childContext2)
             }, this.config.timer * 1000)
         })
 
-        this.doAtBeginning(childContext1)
+        await this.doAtBeginning(childContext1)
     }
 
     hasCard(value: CardGameModel): boolean {
@@ -102,7 +103,6 @@ export abstract class BehaviorItemLoopGameModel implements
         this.players.splice(0, this.players.length)
 
         for (const card of FactoryCardGameModel.instance.getList(this.config.cardTypeList)) this.players.push(...card.getPlayer())
-        for (const player of this.players) player.addBehavior(this.config.type)
     }
 
     getChatType(): Array<TypeChatGameEnum> {
@@ -125,6 +125,18 @@ export abstract class BehaviorItemLoopGameModel implements
         }
 
         return null
+    }
+
+    public static getBehaviorOfPlayer(player: PlayerGameModel): Array<BehaviorItemLoopGameModel> {
+        const result: Array<BehaviorItemLoopGameModel> = new Array
+
+        const ite: IteratorLoopGameModel = new IteratorLoopGameModel
+
+        for (const item of ite) {
+            result.push(...item.getPlayerBehavior(player))
+        }
+
+        return result
     }
 
     public checkChatAvailable(state: StateGameModel): boolean {

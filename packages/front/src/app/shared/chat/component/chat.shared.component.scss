@@ -1,5 +1,0 @@
-@use '../../../../scss/lib/property';
-
-.wrapper .message:not(:first-child) {
-  margin-top: property.get('borderLimit', 'verySmall');
-}

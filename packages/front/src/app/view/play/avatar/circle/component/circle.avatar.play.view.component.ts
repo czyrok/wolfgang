@@ -1,6 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, Renderer2, ViewChild, ViewContainerRef } from '@angular/core'
-import { StateGameModel, VotePlayerGameModel } from 'common'
+import { StateGameModel } from 'common'
 
+import { EventVoteUserSharedModel } from 'src/app/shared/user/vote/event/model/event.vote.user.shared.model'
 import { CircleAvatarPlayViewModel } from '../model/circle.avatar.play.view.model'
 
 @Component({
@@ -19,7 +20,7 @@ export class CircleAvatarPlayViewComponent implements AfterViewInit {
   ) { }
 
   ngAfterViewInit(): void {
-    this.avatarsCircle = new CircleAvatarPlayViewModel(this.eventPlayerVote, this.renderer, this.changeDetectorRef, this.targetRef, this.boxContainerRef)
+    this.avatarsCircle = new CircleAvatarPlayViewModel(this.voteEvent, this.renderer, this.changeDetectorRef, this.targetRef, this.boxContainerRef)
 
     if (this.gameStateEvent !== undefined) this.gameStateEvent.subscribe((data: StateGameModel) => {
       if (data.isStarted && this.first) {
@@ -44,7 +45,7 @@ export class CircleAvatarPlayViewComponent implements AfterViewInit {
     })
   }
 
-  @Input() eventPlayerVote!: EventEmitter<VotePlayerGameModel>
+  @Input() voteEvent!: EventVoteUserSharedModel
   @Input() gameStateEvent!: EventEmitter<StateGameModel>
 
   @ViewChild('target', { read: ViewContainerRef }) targetRef!: ViewContainerRef

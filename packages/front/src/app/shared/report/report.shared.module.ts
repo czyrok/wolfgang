@@ -13,8 +13,6 @@ import { ButtonInteractiveSharedModule } from '../interactive/button/button.inte
 import { UserModalReportSharedComponent } from './modal/user/component/user.modal.report.shared.component'
 import { OtherUserModalReportSharedComponent } from './modal/user/other/component/other.user.modal.report.shared.component'
 
-
-
 @NgModule({
   imports: [
     CommonModule,

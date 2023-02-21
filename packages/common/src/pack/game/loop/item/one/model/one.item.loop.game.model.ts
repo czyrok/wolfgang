@@ -21,7 +21,7 @@ export abstract class OneItemLoopGameModel extends ItemLoopGameModel {
     public constructor(config: ConfigItemLoopGameInterface) {
         super(config)
 
-        let behavior = FactoryBehaviorItemLoopGameModel.instance.get(config.behaviorTypeList[0])
+        const behavior = FactoryBehaviorItemLoopGameModel.instance.get(config.behaviorTypeList[0])
 
         if (behavior === undefined) throw new BehaviorNotDefinedOneItemLoopGameError(this.config.type)
 
@@ -32,12 +32,12 @@ export abstract class OneItemLoopGameModel extends ItemLoopGameModel {
         return this._behavior
     }
 
-    entryPoint(context: ContextGameModel): boolean {
+    async entryPoint(context: ContextGameModel): Promise<boolean> {
         LogUtil.logger(TypeLogEnum.GAME).info(`${this.config.type} loop item entrypoint triggered`)
 
-        let childContext: ContextGameModel = ContextGameModel.buildContext(context, context.result)
+        const childContext: ContextGameModel = ContextGameModel.buildContext(context, context.previousResult)
 
-        if (!this.behavior.validCondition(childContext)) {
+        if (!(await this.behavior.validCondition(childContext))) {
             context.next()
 
             return false
@@ -47,7 +47,7 @@ export abstract class OneItemLoopGameModel extends ItemLoopGameModel {
             context.next(result)
         })
 
-        this.behavior.entryPoint(childContext)
+        await this.behavior.entryPoint(childContext)
 
         return true
     }

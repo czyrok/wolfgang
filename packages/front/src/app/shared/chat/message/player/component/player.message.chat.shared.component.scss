@@ -19,7 +19,6 @@
 .container .avatar {
   grid-area: a;
   display: flex;
-  width: property.get('size', 'chat', 'icon');
   aspect-ratio: 1 / 1;
   justify-content: center;
 }

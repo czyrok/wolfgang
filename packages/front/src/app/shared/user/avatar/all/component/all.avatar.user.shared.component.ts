@@ -1,96 +1,120 @@
-import { Component, EventEmitter, Input, HostListener, AfterViewInit, OnDestroy } from '@angular/core'
+import { Component, Input, HostListener, AfterViewInit } from '@angular/core'
+import { VoteFormControllerModel, CosmeticModel, ReceiverLinkSocketModel, SenderLinkSocketModel, TypeAlertEnum, TypeCosmeticEnum, VotePlayerGameModel, TypeVotePlayerGameEnum } from 'common'
 
-// #nsm
-import { CosmeticModel, ReceiverLinkSocketModel, SenderLinkSocketModel, TypeCosmeticEnum, UserModel, VotePlayerGameModel /*, TypeVotePlayerGameEnum */ } from 'common'
-import { Subscription } from 'rxjs'
+import { AuthSharedService } from 'src/app/shared/auth/service/auth.shared.service'
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
+
+import { EventVoteUserSharedModel } from '../../../vote/event/model/event.vote.user.shared.model'
 
 @Component({
   selector: 'app-shared-user-avatar-all',
   templateUrl: './all.avatar.user.shared.component.html',
   styleUrls: ['./all.avatar.user.shared.component.scss']
 })
-export class AllAvatarUserSharedComponent implements AfterViewInit, OnDestroy {
-  playerVotingList: Array<string> = new Array()
-  sub!: Subscription
+export class AllAvatarUserSharedComponent implements AfterViewInit {
+  voteTextAlertType: TypeAlertEnum = TypeAlertEnum.DANGER
+  playerVotingList: Array<string> = new Array
 
   cosmeticsList!: Array<CosmeticModel>
 
   constructor(
+    private authSharedService: AuthSharedService,
     private socketSharedService: SocketSharedService
   ) { }
 
   async ngAfterViewInit(): Promise<void> {
-    /* if (this.eventPlayerVote !== undefined) this.sub = this.eventPlayerVote.subscribe((value: VotePlayerGameModel) => {
-      if (value.votedUser == this.id) {
-        let index = this.playerVotingList.indexOf(value.votingUser)
+    await this.loadCosmetics()
 
-        if (index == -1) {
-          this.playerVotingList.push(value.votingUser)
-        }
-      } else {
-        let index = this.playerVotingList.indexOf(value.votingUser)
+    this.loadSubVoteEvent()
+  }
 
-        if (index != -1) {
-          this.playerVotingList.splice(index, 1)
-        }
+  loadSubVoteEvent(): void {
+    if (!this.voteEvent) return
+
+    this.voteEvent.playerVotingEvent.subscribe((vote: VoteFormControllerModel) => {
+      const index = this.playerVotingList.indexOf(vote.votingPlayer)
+
+      if (vote.votedPlayer === this.username && index === -1) {
+        this.playerVotingList.push(vote.votingPlayer)
       }
-    }) */
+    })
 
-    console.log(this.username)
+    this.voteEvent.playerUnvotingEvent.subscribe((votingUsername: string) => {
+      const index = this.playerVotingList.indexOf(votingUsername)
 
-    const cosmeticLink: ReceiverLinkSocketModel<Array<CosmeticModel>> = await this.socketSharedService.registerReceiver<Array<CosmeticModel>>('/game/profile', 'skin')
+      if (index !== -1) this.playerVotingList.splice(index, 1)
+    })
 
-    cosmeticLink.subscribe((data: Array<CosmeticModel>) => {
-      console.log(data)
+    this.voteEvent.playerVotesResetEvent.subscribe(_ => {
+      this.playerVotingList.splice(0, this.playerVotingList.length)
+    })
+  }
+
+  async loadCosmetics(): Promise<void> {
+    const cosmeticLinkReceiver: ReceiverLinkSocketModel<Array<CosmeticModel>> = await this.socketSharedService.registerReceiver<Array<CosmeticModel>>('/game/profile', 'skin'),
+      cosmeticLinkSender: SenderLinkSocketModel<string> = await this.socketSharedService.registerSender<string>('/game/profile', 'skin')
+
+    cosmeticLinkReceiver.subscribe((data: Array<CosmeticModel>) => {
       this.cosmeticsList = data
     })
 
-    const cosmeticLinkEmit: SenderLinkSocketModel<string> = await this.socketSharedService.registerSender<string>('/game/profile', 'skin')
-
-    cosmeticLinkEmit.emit(this.username)
+    cosmeticLinkSender.emit(this.username)
   }
 
-  ngOnDestroy(): void {
-    if (this.sub !== undefined) this.sub.unsubscribe()
+  isVotedBySelf(): boolean {
+    for (const username of this.playerVotingList) {
+      if (username === this.authSharedService.username) return true
+    }
+
+    return false
+  }
+
+  isSelf(): boolean {
+    if (this.username === this.authSharedService.username) return true
+
+    return false
   }
 
   getHat(): CosmeticModel | undefined {
-    return this.hat || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.HAT)[0]
+    return this.hatOverride || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.HAT)[0]
   }
 
   getHead(): CosmeticModel | undefined {
-    return this.head || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.HEAD)[0]
+    return this.headOverride || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.HEAD)[0]
   }
 
   getTop(): CosmeticModel | undefined {
-    return this.top || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.TOP)[0]
+    return this.topOverride || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.TOP)[0]
   }
 
   getPants(): CosmeticModel | undefined {
-    return this.pants || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.PANTS)[0]
+    return this.pantsOverride || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.PANTS)[0]
   }
 
   getShoes(): CosmeticModel | undefined {
-    return this.shoes || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.SHOES)[0]
+    return this.shoesOverride || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.SHOES)[0]
   }
 
-  @Input() user?: UserModel
   @Input() username!: string
+  @Input() usernameBubble: boolean = true
   @Input() reduced: boolean = false
   @Input() detailed: boolean = false
 
-  @Input() hat!: CosmeticModel
-  @Input() head!: CosmeticModel
-  @Input() top!: CosmeticModel
-  @Input() pants!: CosmeticModel
-  @Input() shoes!: CosmeticModel
+  @Input() hatOverride!: CosmeticModel
+  @Input() headOverride!: CosmeticModel
+  @Input() topOverride!: CosmeticModel
+  @Input() pantsOverride!: CosmeticModel
+  @Input() shoesOverride!: CosmeticModel
 
-  @Input() eventPlayerVote!: EventEmitter<VotePlayerGameModel>
+  @Input() voteEvent!: EventVoteUserSharedModel
 
   @HostListener('click') click(): void {
-    /* if (this.eventPlayerVote !== undefined && this.userSharedService.username !== undefined) this.eventPlayerVote.emit(
-      new VotePlayerGameModel(this.userSharedService.username, this.id, '', TypeVotePlayerGameEnum.DEFAULT)
-    ) */
+    if (this.authSharedService.username && this.voteEvent.avatarSelectEvent && this.voteEvent.avatarUnselectEvent) {
+      if (this.playerVotingList.indexOf(this.authSharedService.username) === -1) {
+        this.voteEvent.avatarSelectEvent.emit(this.username)
+      } else {
+        this.voteEvent.avatarUnselectEvent.emit(this.username)
+      }
+    }
   }
 }

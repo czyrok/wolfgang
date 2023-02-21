@@ -1,5 +1,6 @@
 import { Exclude, Expose } from 'class-transformer'
-import { CosmeticModel } from '../../../cosmetic/model/cosmetic.model'
+
+import { CosmeticModel } from '../../../../cosmetic/model/cosmetic.model'
 
 @Exclude()
 export class SeparatedCosmeticsListFormControllerModel {

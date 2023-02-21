@@ -125,10 +125,8 @@ export class GameSharedService implements HandlerLinkSocketInterface {
     }
 
     public async quitParty(): Promise<void> {
-        this.currentGameId = undefined
-
-        const leaveReceiverLink: ReceiverLinkSocketModel<boolean> = await this.registerGameReceiver('', 'leave')
-        const leaveSenderLink: SenderLinkSocketModel<void> = await this.registerGameSender('', 'leave')
+        const leaveReceiverLink: ReceiverLinkSocketModel<boolean> = await this.registerGameReceiver('', 'leave'),
+            leaveSenderLink: SenderLinkSocketModel<void> = await this.registerGameSender('', 'leave')
 
         return new Promise((resolve: (value: void) => void) => {
             leaveReceiverLink.subscribe((test: boolean) => {
@@ -137,9 +135,10 @@ export class GameSharedService implements HandlerLinkSocketInterface {
                     this.gameId = undefined
                 }
 
-                this.displayJoinYourGameAlert()
-
+                this.currentGameId = undefined
                 this.socketHandler = undefined
+
+                this.displayJoinYourGameAlert()
 
                 resolve()
             })
