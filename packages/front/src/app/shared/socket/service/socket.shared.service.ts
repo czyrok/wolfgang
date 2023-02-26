@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core'
 import { HandlerSocketLinkModel, SenderLinkSocketModel, ReceiverLinkSocketModel, HandlerLinkSocketInterface } from 'common'
 
+import { environment } from 'src/environments/environment'
+
 import { SessionSharedService } from '../../session/service/session.shared.service'
 
 @Injectable({
   providedIn: 'root'
 })
 export class SocketSharedService implements HandlerLinkSocketInterface {
-  private _handler: HandlerSocketLinkModel = new HandlerSocketLinkModel('http://localhost', 5500)
+  private _handler: HandlerSocketLinkModel = new HandlerSocketLinkModel(environment.MAIN_URL, environment.MAIN_PORT)
 
   public constructor(
     private sessionSharedService: SessionSharedService
