@@ -11,4 +11,4 @@ services:
     ports:
       - '60017:27017'
     volumes: 
-      - ./data:/data/db
+      - ~/wolfgang_data/:/data/db
