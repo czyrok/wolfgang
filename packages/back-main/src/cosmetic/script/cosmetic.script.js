@@ -1,15 +1,12 @@
-import { connect } from 'mongoose'
+const mongoose = require('mongoose')
+const common = require('common')
 
-import { CosmeticModel, CosmeticModelDocument } from 'common'
-
-import { TypeCosmeticEnum } from 'common'
-
-async function insertCosmetic(translateName: string, gamePointPrice: number, imageUrl: string, type: TypeCosmeticEnum): Promise<void> {
-    await new CosmeticModelDocument(new CosmeticModel(translateName, gamePointPrice, imageUrl, type)).save()
+async function insertCosmetic(translateName, gamePointPrice, imageUrl, type) {
+    await new common.CosmeticModelDocument(new common.CosmeticModel(translateName, gamePointPrice, imageUrl, type)).save()
 }
 
-async function run(): Promise<void> {
-    await connect('mongodb://localhost:60017/wolfgang', {
+async function run() {
+    await mongoose.connect('mongodb://localhost:60017/wolfgang', {
         authSource: 'admin',
         user: 'admin',
         pass: 'pass'
