@@ -1,13 +1,14 @@
-import { ChangeDetectorRef, ElementRef, Renderer2, ViewContainerRef, EventEmitter } from '@angular/core'
-import { PlayerGameModel, VotePlayerGameModel } from 'common'
+import { ChangeDetectorRef, ElementRef, Renderer2, ViewContainerRef } from '@angular/core'
+import { PlayerGameModel } from 'common'
 
+import { EventVoteUserSharedModel } from 'src/app/shared/user/vote/event/model/event.vote.user.shared.model'
 import { PlaceCircleAvatarPlayViewModel } from '../place/model/place.circle.avatar.play.view.model'
 
 export class CircleAvatarPlayViewModel {
   private _placesList: Array<PlaceCircleAvatarPlayViewModel> = new Array()
 
   public constructor(
-    private _voteEventEmitter: EventEmitter<VotePlayerGameModel>,
+    private _voteEvent: EventVoteUserSharedModel,
     private _renderer: Renderer2,
     private _changeDetectorRef: ChangeDetectorRef,
     private _targetRef: ViewContainerRef,
@@ -20,8 +21,8 @@ export class CircleAvatarPlayViewModel {
     return this._placesList
   }
 
-  public get voteEventEmitter(): EventEmitter<VotePlayerGameModel> {
-    return this._voteEventEmitter
+  public get voteEvent(): EventVoteUserSharedModel {
+    return this._voteEvent
   }
 
   public get renderer(): Renderer2 {
@@ -43,7 +44,7 @@ export class CircleAvatarPlayViewModel {
   public update(): void {
     const radius: number = Math.min(
       this.boxElementRef.nativeElement.offsetWidth,
-      this.boxElementRef.nativeElement.offsetHeight) / 2,
+      this.boxElementRef.nativeElement.offsetHeight) / 2.5,
       t: number = 2 * Math.PI / this.placesList.length
 
     let maxX: number = 0,
@@ -100,12 +101,12 @@ export class CircleAvatarPlayViewModel {
     this.placesList.splice(0, this.placesList.length)
 
     for (const player of playersList) {
-      this.placesList.push(PlaceCircleAvatarPlayViewModel.create(player, this.voteEventEmitter, this.renderer, this.changeDetectorRef, this.targetRef))
+      this.placesList.push(PlaceCircleAvatarPlayViewModel.create(player, this.voteEvent, this.renderer, this.changeDetectorRef, this.targetRef))
     }
   }
 
   public addPlayer(player: PlayerGameModel): void {
-    this.placesList.push(PlaceCircleAvatarPlayViewModel.create(player, this.voteEventEmitter, this.renderer, this.changeDetectorRef, this.targetRef))
+    this.placesList.push(PlaceCircleAvatarPlayViewModel.create(player, this.voteEvent, this.renderer, this.changeDetectorRef, this.targetRef))
   }
 
   public removePlayer(player: PlayerGameModel): void {

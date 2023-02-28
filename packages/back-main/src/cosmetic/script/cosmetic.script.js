@@ -1,14 +1,11 @@
 import { connect } from 'mongoose'
+import { CosmeticModelDocument, CosmeticModel, TypeCosmeticEnum } from 'common'
 
-import { CosmeticModel, CosmeticModelDocument } from 'common'
-
-import { TypeCosmeticEnum } from 'common'
-
-async function insertCosmetic(translateName: string, gamePointPrice: number, imageUrl: string, type: TypeCosmeticEnum): Promise<void> {
+async function insertCosmetic(translateName, gamePointPrice, imageUrl, type) {
     await new CosmeticModelDocument(new CosmeticModel(translateName, gamePointPrice, imageUrl, type)).save()
 }
 
-async function run(): Promise<void> {
+async function run() {
     await connect('mongodb://localhost:60017/wolfgang', {
         authSource: 'admin',
         user: 'admin',

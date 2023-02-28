@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
 import { HandlerLinkSocketInterface, HandlerSocketLinkModel, ReceiverLinkSocketModel, SenderLinkSocketModel } from 'common'
 
+import { environment } from 'src/environments/environment'
+
 import { DisplayAlertSharedService } from '../../alert/display/service/display.alert.shared.service'
-import { SessionSharedService } from '../../session/service/session.shared.service'
 import { SocketSharedService } from '../../socket/service/socket.shared.service'
 
 import { DisplayAlertSharedInterface } from '../../alert/display/interface/display.alert.shared.interface'
@@ -12,7 +13,6 @@ import { DisplayAlertSharedInterface } from '../../alert/display/interface/displ
     providedIn: 'root'
 })
 export class GameSharedService implements HandlerLinkSocketInterface {
-    // #achan
     private _socketHandler?: HandlerSocketLinkModel
 
     private _inGame: boolean = false
@@ -24,7 +24,6 @@ export class GameSharedService implements HandlerLinkSocketInterface {
     public constructor(
         private router: Router,
         private displayAlertSharedService: DisplayAlertSharedService,
-        private sessionSharedService: SessionSharedService,
         private socketSharedService: SocketSharedService
     ) { }
 
@@ -125,10 +124,8 @@ export class GameSharedService implements HandlerLinkSocketInterface {
     }
 
     public async quitParty(): Promise<void> {
-        this.currentGameId = undefined
-
-        const leaveReceiverLink: ReceiverLinkSocketModel<boolean> = await this.registerGameReceiver('', 'leave')
-        const leaveSenderLink: SenderLinkSocketModel<void> = await this.registerGameSender('', 'leave')
+        const leaveReceiverLink: ReceiverLinkSocketModel<boolean> = await this.registerGameReceiver('', 'leave'),
+            leaveSenderLink: SenderLinkSocketModel<void> = await this.registerGameSender('', 'leave')
 
         return new Promise((resolve: (value: void) => void) => {
             leaveReceiverLink.subscribe((test: boolean) => {
@@ -137,9 +134,10 @@ export class GameSharedService implements HandlerLinkSocketInterface {
                     this.gameId = undefined
                 }
 
-                this.displayJoinYourGameAlert()
-
+                this.currentGameId = undefined
                 this.socketHandler = undefined
+
+                this.displayJoinYourGameAlert()
 
                 resolve()
             })
@@ -238,7 +236,7 @@ export class GameSharedService implements HandlerLinkSocketInterface {
 
     public getSocketHandler(): HandlerSocketLinkModel {
         if (!this.socketHandler)
-            this.socketHandler = new HandlerSocketLinkModel('http://localhost', 5501)
+            this.socketHandler = new HandlerSocketLinkModel(environment.GAME_URL, environment.GAME_PORT)
 
         return this.socketHandler
     }

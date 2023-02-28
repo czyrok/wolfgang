@@ -22,7 +22,7 @@ export abstract class GroupItemLoopGameModel extends ItemLoopGameModel {
     public constructor(config: ConfigItemLoopGameInterface) {
         super(config)
 
-        for (let behaviorType of config.behaviorTypeList) {
+        for (const behaviorType of config.behaviorTypeList) {
             this._childBehaviorList.push(FactoryBehaviorItemLoopGameModel.instance.get(behaviorType))
         }
     }
@@ -31,10 +31,10 @@ export abstract class GroupItemLoopGameModel extends ItemLoopGameModel {
         return this._childBehaviorList
     }
 
-    entryPoint(context: ContextGameModel): boolean {
+    async entryPoint(context: ContextGameModel): Promise<boolean> {
         LogUtil.logger(TypeLogEnum.GAME).info(`${this.config.type} loop item entrypoint triggered`)
 
-        let childs: MapParamModel<{
+        const childs: MapParamModel<{
             context: ContextGameModel,
             self: ChildBehaviorItemLoopGameModel
         }> = new MapParamModel,
@@ -43,9 +43,9 @@ export abstract class GroupItemLoopGameModel extends ItemLoopGameModel {
         let testIfIsExecute: boolean = true
 
         for (let i = 0; i < this.childBehaviorList.length; i++) {
-            let childContext: ContextGameModel = ContextGameModel.buildContext(context, context.result)
+            const childContext: ContextGameModel = ContextGameModel.buildContext(context, context.previousResult)
 
-            if (this.childBehaviorList[i].validCondition(childContext)) {
+            if ((await this.childBehaviorList[i].validCondition(childContext))) {
                 testIfIsExecute = false
 
                 childs[i] = {
@@ -58,20 +58,24 @@ export abstract class GroupItemLoopGameModel extends ItemLoopGameModel {
         }
 
         if (childContexts.length > 0) {
-            let waiting: WaitingResContextGameModel = new WaitingResContextGameModel
+            const waiting: WaitingResContextGameModel = new WaitingResContextGameModel
+
             waiting.wait(childContexts)
+
             waiting.res.subscribeOne((result: ResultSetGameType) => {
                 context.next(result)
             })
 
             for (let i = 0; i < this.childBehaviorList.length; i++) {
-                if (childs[i] !== undefined) ((childs[i] as {
+                const child: {
                     context: ContextGameModel,
                     self: ChildBehaviorItemLoopGameModel
-                }).self).entryPoint((childs[i] as {
+                } = childs[i] as {
                     context: ContextGameModel,
                     self: ChildBehaviorItemLoopGameModel
-                }).context)
+                }
+
+                if (childs[i]) await child.self.entryPoint(child.context)
             }
         } else {
             context.next()

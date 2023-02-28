@@ -1,11 +1,10 @@
 import { Subject, Subscription } from 'rxjs'
 import { v4 } from 'uuid'
-import { DocumentType, getModelForClass, prop } from '@typegoose/typegoose'
-import { Exclude, Expose, instanceToPlain } from 'class-transformer'
+import { getModelForClass, prop } from '@typegoose/typegoose'
+import { Exclude, Expose } from 'class-transformer'
 import { Namespace, Socket } from 'socket.io'
 
 import { UndefinedNamespaceGameError } from '../error/undefined-namespace.game.error'
-import { NotFoundChatGameError } from '../chat/error/not-found.chat.game.error'
 
 import { LogUtil } from '../../log/util/log.util'
 
@@ -16,15 +15,12 @@ import { ExecutorGameModel } from '../executor/model/executor.game.model'
 import { StateGameModel } from '../state/model/state.game.model'
 import { PlayerGameModel } from '../player/model/player.game.model'
 import { HandlerPlayerGameModel } from '../player/handler/model/handler.player.game.model'
-import { UserModel, UserModelDocument } from '../../user/model/user.model'
-import { BehaviorItemLoopGameModel } from '../loop/item/behavior/model/behavior.item.loop.game.model'
-import { IteratorLoopGameModel } from '../loop/iterator/model/iterator.loop.game.model'
-import { UserMessageChatGameModel } from '../chat/message/user/model/user.message.chat.game.model'
-import { ChatGameModel, ChatGameModelDocument } from '../chat/model/chat.game.model'
-import { EventMessageChatGameModel } from '../chat/message/event/model/event.message.chat.game.model'
+import { UserModel } from '../../user/model/user.model'
+import { StorageVotePlayerGameModel } from '../player/vote/storage/model/storage.vote.player.game.model'
+import { ManagerChatGameModel } from '../chat/manager/model/manager.chat.game.model'
 
 import { TypeLogEnum } from '../../log/type/enum/type.log.enum'
-import { TypeChatGameEnum } from '../chat/type/enum/type.chat.game.enum'
+import { StageStateGameEnum } from '../state/stage/enum/stage.state.game.enum'
 
 @Exclude()
 export class GameModel extends DocumentModel {
@@ -51,6 +47,10 @@ export class GameModel extends DocumentModel {
     private _state: StateGameModel = new StateGameModel
 
     private _stateChange: Subject<GameModel> = new Subject()
+
+    private _voteStorage: StorageVotePlayerGameModel = new StorageVotePlayerGameModel
+
+    private _chatManager: ManagerChatGameModel = new ManagerChatGameModel(this)
 
     public constructor() {
         super()
@@ -102,12 +102,16 @@ export class GameModel extends DocumentModel {
         return this._executor
     }
 
-    public get isStarted(): boolean {
-        return this.state.isStarted
+    public get voteStorage(): StorageVotePlayerGameModel {
+        return this._voteStorage
     }
 
-    public get isFinished(): boolean {
-        return this.state.isFinished
+    public get chatManager(): ManagerChatGameModel {
+        return this._chatManager
+    }
+
+    public get stage(): StageStateGameEnum {
+        return this.state.stage
     }
 
     @Expose()
@@ -119,10 +123,8 @@ export class GameModel extends DocumentModel {
         return this._stateChange
     }
 
-    public async newPlayer(user: UserModel, socket: Socket): Promise<boolean> {
-        LogUtil.logger(TypeLogEnum.GAME).fatal(`ddd ${user._id}`)
+    public async joinGame(user: UserModel, socket: Socket): Promise<boolean> {
         const checkPlayer: PlayerGameModel | null = this.checkPlayer(user._id)
-        LogUtil.logger(TypeLogEnum.GAME).fatal(`ddd2 ${checkPlayer ? 'oui' : 'non'}`)
 
         if (checkPlayer) {
             checkPlayer.socketsList.push(socket)
@@ -137,12 +139,12 @@ export class GameModel extends DocumentModel {
         }
 
         if (this.state.rules.playerCountMax === this.state.players.length
-            || this.state.isStarted) return false
+            || this.stage !== StageStateGameEnum.AWAITING) return false
 
         const player: PlayerGameModel = new PlayerGameModel(user)
 
         player.socketsList.push(socket)
-
+        
         HandlerPlayerGameModel.instance.addPlayer(player)
 
         if (!this.namespace) throw new UndefinedNamespaceGameError
@@ -154,15 +156,15 @@ export class GameModel extends DocumentModel {
         if (this.state.rules.playerCountMax == HandlerPlayerGameModel.instance.players.length) {
             if (!this.namespace) throw new UndefinedNamespaceGameError
 
-            await this.executor.prelaunch(this.namespace, this)
+            await this.executor.prelaunch(this)
 
-            this.executor.start(this.state)
+            this.executor.start(this)
         }
 
         return true
     }
 
-    public connectionLost(user: UserModel, socketId: string): boolean {
+    public leaveGame(user: UserModel, socketId: string): boolean {
         const player: PlayerGameModel | null = this.checkPlayer(user._id)
 
         if (!player) return false
@@ -175,7 +177,7 @@ export class GameModel extends DocumentModel {
 
         player.socketsList.splice(index, 1)
 
-        if (this.isStarted || player.socketsList.length > 0) return false
+        if (this.stage === StageStateGameEnum.STARTED || player.socketsList.length > 0) return false
 
         HandlerPlayerGameModel.instance.removePlayer(player)
 
@@ -190,44 +192,6 @@ export class GameModel extends DocumentModel {
         }
 
         return null
-    }
-
-    public async sendPlayerMessage(player: PlayerGameModel, text: string, priorityChatType?: TypeChatGameEnum): Promise<boolean> {
-        const chatType: TypeChatGameEnum | null | boolean = player.getAvailableChatType(this.state, priorityChatType)
-
-        if (chatType === false || chatType === true) return false
-
-        if (!chatType) throw new NotFoundChatGameError
-
-        const chat: DocumentType<ChatGameModel> | null = await ChatGameModelDocument.getChat(this.gameId, chatType)
-
-        if (!chat) throw new NotFoundChatGameError
-
-        const messageDoc: DocumentType<UserMessageChatGameModel> = await chat.sendUserMessage(new UserModelDocument(player.user), text),
-            message: Array<UserMessageChatGameModel> = [messageDoc.toObject()]
-
-        if (!this.namespace) throw new UndefinedNamespaceGameError
-
-        const messageObj: any = instanceToPlain(message)
-
-        this.namespace.to(chatType).emit('getChat', messageObj)
-
-        return true
-    }
-
-    public async sendEventMessage(text: string, imageUrl: string): Promise<void> {
-        const chat: DocumentType<ChatGameModel> | null = await ChatGameModelDocument.getChat(this.gameId, TypeChatGameEnum.ALIVE)
-
-        if (!chat) throw NotFoundChatGameError
-
-        const messageDoc: DocumentType<EventMessageChatGameModel> = await chat.sendEventMessage(text, imageUrl),
-            message: Array<EventMessageChatGameModel> = [messageDoc.toObject()]
-
-        if (!this.namespace) throw new UndefinedNamespaceGameError
-
-        const messageObj: any = instanceToPlain(message)
-
-        this.namespace.to(TypeChatGameEnum.ALIVE).emit('getChat', messageObj)
     }
 
     public onStateChange(callback: (game: GameModel) => void): Subscription {

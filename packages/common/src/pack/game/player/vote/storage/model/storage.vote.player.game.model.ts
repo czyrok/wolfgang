@@ -1,35 +1,31 @@
 import { PlayerGameModel } from '../../../model/player.game.model'
 import { VotePlayerGameModel } from '../../model/vote.player.game.model'
 
-export class HandlerVotePlayerGameModel {
-    private static _instance: HandlerVotePlayerGameModel = new HandlerVotePlayerGameModel
-
+export class StorageVotePlayerGameModel {
     private _votesList: Array<VotePlayerGameModel> = new Array
-
-    private constructor() { }
-
-    public static get instance(): HandlerVotePlayerGameModel {
-        return this._instance
-    }
 
     public get votesList(): Array<VotePlayerGameModel> {
         return this._votesList
     }
 
-    public removeVoteOfPlayer(player: PlayerGameModel): void {
+    public removeVoteOfPlayer(player: PlayerGameModel): boolean {
         for (let i = 0; i < this.votesList.length; i++) {
             if (this.votesList[i].votingPlayer.user._id === player.user._id) {
                 this.votesList.splice(i, 1)
 
-                break
+                return true
             }
         }
+
+        return false
     }
 
-    public toVote(newVote: VotePlayerGameModel): void {
-        this.removeVoteOfPlayer(newVote.votingPlayer)
+    public toVote(newVote: VotePlayerGameModel): boolean {
+        const hasVotedBefore: boolean = this.removeVoteOfPlayer(newVote.votingPlayer)
 
         this.votesList.push(newVote)
+
+        return hasVotedBefore
     }
 
     public mostVotedOfPlayersGroup(players: Array<PlayerGameModel>): PlayerGameModel | null {
@@ -37,10 +33,12 @@ export class HandlerVotePlayerGameModel {
 
         for (const vote of this.votesList) {
             for (const player of players) {
+                if (player.isDead) continue
+
                 if (vote.votingPlayer.user._id === player.user._id) {
                     const votedPlayer: [PlayerGameModel, number] | undefined = votedPlayers.find(([a,]: [PlayerGameModel, number]) => a.user._id == vote.votedPlayer.user._id)
 
-                    if (votedPlayer !== undefined) {
+                    if (votedPlayer) {
                         votedPlayer[1]++
                     } else {
                         votedPlayers.push([vote.votedPlayer, 1])

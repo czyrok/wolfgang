@@ -3,12 +3,18 @@ import { InitFactoryRegistering } from '../../../../../../factory/decorator/fact
 import { PlayerGameModel } from '../../../../../../player/model/player.game.model'
 import { BehaviorItemLoopGameModel } from '../../../model/behavior.item.loop.game.model'
 import { ContextGameModel } from '../../../../../../context/model/context.game.model'
+import { ManagerChatGameModel } from '../../../../../../chat/manager/model/manager.chat.game.model'
 
 import { TypeChatGameEnum } from '../../../../../../chat/type/enum/type.chat.game.enum'
 import { TypeProcessBehaviorItemLoopGameEnum } from '../../../process/type/enum/type.process.behavior.item.loop.game.enum'
 import { TypeBehaviorItemLoopGameEnum } from '../../../type/enum/type.behavior.item.loop.game.enum'
-import { GameModel } from '../../../../../../model/game.model'
 import { TypeModeChatGameEnum } from '../../../../../../chat/mode/type/enum/type.mode.chat.game.enum'
+import { ProcessContextGameEnum } from '../../../../../../context/process/enum/process.context.game.enum'
+
+import { ResultSetGameType } from '../../../../../../set/result/type/result.set.game.type'
+import { LogUtil } from '../../../../../../../log/util/log.util'
+import { TypeLogEnum } from '../../../../../../../log/type/enum/type.log.enum'
+import { TypeCardGameEnum } from '../../../../../../card/type/enum/type.card.game.enum'
 
 @InitFactoryRegistering()
 export class DeathImplementationBehaviorItemLoopGameModel extends BehaviorItemLoopGameModel {
@@ -24,31 +30,53 @@ export class DeathImplementationBehaviorItemLoopGameModel extends BehaviorItemLo
         })
     }
 
-    public validCondition(context: ContextGameModel): boolean {
-        if (context[TypeProcessBehaviorItemLoopGameEnum.KILL] !== undefined) {
+    public async validCondition(context: ContextGameModel): Promise<boolean> {
+        if (context.previousResult && context.previousResult[TypeProcessBehaviorItemLoopGameEnum.KILL]) {
             return true
         } else {
             return false
         }
     }
 
-    public doAtBeginning(context: ContextGameModel): void {
-        const game: GameModel = GameModel.instance
+    public async doAtBeginning(context: ContextGameModel): Promise<void> {
+        const previousResult: ResultSetGameType = context.previousResult
 
-        const players: Array<PlayerGameModel> = context[TypeProcessBehaviorItemLoopGameEnum.KILL]
+        // #achan faire l'erreur de configuration
+        if (!previousResult) throw new Error
+
+        const chatManager: ManagerChatGameModel | undefined = context[ProcessContextGameEnum.CHAT_MANAGER]
+
+        // #achan faire l'erreur 
+        if (!chatManager) throw new Error
+
+        const players: Array<PlayerGameModel> = previousResult[TypeProcessBehaviorItemLoopGameEnum.KILL]
+
+        // #achan faire l'erreur 
+        if (!players) throw new Error
 
         if (players.length > 1) {
-            game.sendEventMessage(`Plusieurs personnes sont mortes`, 'skull-danger')
+            await chatManager.sendEventMessage(`Plusieurs personnes sont mortes`, 'skull-danger')
         } else if (players.length > 0) {
-            game.sendEventMessage(`Une personne est morte`, 'skull-danger')
+            await chatManager.sendEventMessage(`Une personne est morte`, 'skull-danger')
         } else {
-            game.sendEventMessage(`Personne n'est mort`, 'skull-danger')
+            await chatManager.sendEventMessage(`Personne n'est mort`, 'skull-danger')
         }
 
         for (const player of players) {
             player.isDead = true
 
-            game.sendEventMessage(`${player.user.username} est mort ! Son rôle était ${player.card.config.type}`, 'skull-danger')
+            let cardName: string = ''
+
+            switch (player.card.config.type) {
+                case TypeCardGameEnum.GREY_WEREWOLF:
+                    cardName = 'loup-garou'
+                    break
+                case TypeCardGameEnum.VILLAGER:
+                    cardName = 'villageois'
+                    break
+            }
+
+            await chatManager.sendEventMessage(`${player.user.username} est mort ! Son rôle était ${cardName}`, 'skull-danger')
 
             this.players.push(player)
         }
@@ -56,7 +84,7 @@ export class DeathImplementationBehaviorItemLoopGameModel extends BehaviorItemLo
         context.next()
     }
 
-    public doAtEnd(context: ContextGameModel): void {
+    public async doAtEnd(context: ContextGameModel): Promise<void> {
         context.next()
     }
 }

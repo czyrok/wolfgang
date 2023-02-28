@@ -21,11 +21,19 @@ export class ReportManagingController {
     @EmitOnSuccess()
     @EmitOnFail()
     async check(@MessageBody() reportId: string) {
-        const report: DocumentType<ReportModel> | null = await ReportModelDocument.findById(reportId).exec()
+        const bugReport: DocumentType<BugReportModel> | null = await BugReportModelDocument.findById(reportId).exec()
 
-        if (!report) throw new NotFoundReportError
+        if (bugReport) return true
 
-        return true
+        const basicReport: DocumentType<BasicUserReportModel> | null = await BasicUserReportModelDocument.findById(reportId).exec()
+        
+        if (basicReport) return true
+
+        const otherReport: DocumentType<OtherUserReportModel> | null = await OtherUserReportModelDocument.findById(reportId).exec()
+        
+        if (otherReport) return true
+
+        throw new NotFoundReportError
     }
 
     @EmitOnSuccess()
@@ -57,16 +65,18 @@ export class ReportManagingController {
     @EmitOnFail()
     @OnMessage()
     async view(@MessageBody() id: string) {
+        console.log('id', id)
         let reportDoc: DocumentType<BugReportModel> | DocumentType<BasicUserReportModel> | DocumentType<OtherUserReportModel> | null = await BugReportModelDocument.findById(id).exec()
 
         if (!reportDoc) reportDoc = await BasicUserReportModelDocument.findById(id).exec()
         if (!reportDoc) reportDoc = await OtherUserReportModelDocument.findById(id).exec()
-
+        
         if (!reportDoc) throw new NotFoundReportError
-
+        console.log('report trouvé')
         const user: DocumentType<UserModel> | null = await UserModelDocument.findById(reportDoc.user).exec()
-
+        
         if (user === null) throw new NotFoundUserError
+        console.log('user trouvé')
         reportDoc.user = user
 
         if (reportDoc.type === TypeReportEnum.BUG) return reportDoc.toObject()
@@ -83,7 +93,7 @@ export class ReportManagingController {
         }
 
         reportDoc.concernedUsers = usersList
-
+        console.log('report', reportDoc.toObject())
         return reportDoc.toObject()
     }
 }

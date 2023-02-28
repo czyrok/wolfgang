@@ -2,7 +2,7 @@ import { EmitOnFail, EmitOnSuccess, OnMessage, SocketController, ConnectedSocket
 import { Request } from 'express'
 import { Socket } from 'socket.io'
 import { DocumentType } from '@typegoose/typegoose'
-import { UserModel, NotFoundUserError } from 'common'
+import { UserModel, NotFoundUserError, UserModelDocument } from 'common'
 
 import { CheckConnectionRegisteryHelper } from '../../registery/connection/check/helper/check.connection.registery.helper'
 
@@ -15,8 +15,11 @@ export class GameController {
     @EmitOnSuccess()
     @EmitOnFail()
     async checkUserGame(@ConnectedSocket() socket: Socket) {
-        const req: Request = socket.request as Request,
-            user: DocumentType<UserModel> | undefined = req.session.user
+        const req: Request = socket.request as Request
+
+        let user: DocumentType<UserModel> | undefined | null = req.session.user
+
+        if (user) user = await UserModelDocument.findById(user._id).exec()
 
         if (!user) throw new NotFoundUserError
 
@@ -27,7 +30,7 @@ export class GameController {
         const test: boolean = await CheckConnectionRegisteryHelper.checkGame(gameId)
 
         if (!test) {
-            await user.updateOne({ currentGameId: null })
+            await user.updateOne({ currentGameId: null }).exec()
 
             return ''
         }

@@ -7,7 +7,6 @@ import { Component, HostListener, Input, Output, EventEmitter } from '@angular/c
 })
 export class ButtonInteractiveSharedComponent {
   @Input() link!: string
-  @Input() callback!: () => void
   @Input() text!: string
   @Input() count!: number
   @Input() icofont!: string
@@ -18,8 +17,6 @@ export class ButtonInteractiveSharedComponent {
   @Output() clickEvent: EventEmitter<void> = new EventEmitter
 
   @HostListener('click') click(): void {
-    if (this.callback !== undefined) this.callback()
-
     this.clickEvent.emit()
   }
 }

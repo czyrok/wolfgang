@@ -6,7 +6,7 @@ import { LogUtil } from '../../../log/util/log.util'
 import { FactoryBehaviorItemLoopGameModel } from '../../loop/item/behavior/factory/model/factory.behavior.item.loop.game.model'
 import { BehaviorItemLoopGameModel } from '../../loop/item/behavior/model/behavior.item.loop.game.model'
 import { StateGameModel } from '../../state/model/state.game.model'
-import { UserModel } from '../../../user/model/user.model'
+import { UserModel, UserModelDocument } from '../../../user/model/user.model'
 import { CardGameModel } from '../../card/model/card.game.model'
 
 import { TypeLogEnum } from '../../../log/type/enum/type.log.enum'
@@ -14,6 +14,9 @@ import { TypeGroupTransformEnum } from '../../../transform/group/type/enum/type.
 import { TypeChatGameEnum } from '../../chat/type/enum/type.chat.game.enum'
 import { TypeBehaviorItemLoopGameEnum } from '../../loop/item/behavior/type/enum/type.behavior.item.loop.game.enum'
 import { CampPlayerGameEnum } from '../camp/enum/camp.player.game.enum'
+import { GameModel } from '../../model/game.model'
+import { DocumentType } from '@typegoose/typegoose'
+import { NotFoundUserError } from '../../../user/error/not-found.user.error'
 
 @Exclude()
 export class PlayerGameModel {
@@ -42,9 +45,6 @@ export class PlayerGameModel {
 
     @Expose({ groups: [TypeGroupTransformEnum.SELF] })
     private _card!: CardGameModel
-
-    @Expose()
-    private _behaviorList: Array<TypeBehaviorItemLoopGameEnum> = new Array
 
     public constructor(user: UserModel) {
         this._user = user
@@ -122,14 +122,8 @@ export class PlayerGameModel {
         return this._card
     }
 
-    public get behaviorList(): Array<TypeBehaviorItemLoopGameEnum> {
-        return this._behaviorList
-    }
-
     public getAvailableChatType(state: StateGameModel, priorityChatType?: TypeChatGameEnum): TypeChatGameEnum | null | boolean {
-        const factory: FactoryBehaviorItemLoopGameModel = FactoryBehaviorItemLoopGameModel.instance
-
-        const behaviorList: Array<BehaviorItemLoopGameModel> = factory.getList(this.behaviorList)
+        const behaviorList: Array<BehaviorItemLoopGameModel> = BehaviorItemLoopGameModel.getBehaviorOfPlayer(this)
 
         if (priorityChatType) {
             for (const behavior of behaviorList) {
@@ -146,10 +140,9 @@ export class PlayerGameModel {
     }
 
     public getAllChat(): Array<TypeChatGameEnum> {
-        const factory: FactoryBehaviorItemLoopGameModel = FactoryBehaviorItemLoopGameModel.instance
+        const chatTypeList: Array<TypeChatGameEnum> = new Array
 
-        const chatTypeList: Array<TypeChatGameEnum> = new Array,
-            behaviorList: Array<BehaviorItemLoopGameModel> = factory.getList(this.behaviorList)
+        const behaviorList: Array<BehaviorItemLoopGameModel> = BehaviorItemLoopGameModel.getBehaviorOfPlayer(this)
 
         for (const behavior of behaviorList) {
             if (behavior.config.chat) chatTypeList.push(behavior.config.chat)
@@ -162,16 +155,26 @@ export class PlayerGameModel {
         this.activityDate = new Date
     }
 
-    public hasBehavior(behavior: TypeBehaviorItemLoopGameEnum): boolean {
-        const index: number = this.behaviorList.indexOf(behavior)
+    public hisTurn(currentBehaviorTypes: Array<TypeBehaviorItemLoopGameEnum>): TypeBehaviorItemLoopGameEnum | undefined {
+        for (const behaviorType of currentBehaviorTypes) {
+            for (const behavior of BehaviorItemLoopGameModel.getBehaviorOfPlayer(this)) {
+                if (behavior.config.type === behaviorType) return behaviorType
+            }
+        }
 
-        return index > 0 ? true : false
+        return undefined
     }
 
-    public addBehavior(behavior: TypeBehaviorItemLoopGameEnum): void {
-        const index: number = this.behaviorList.indexOf(behavior)
+    public async end(): Promise<void> {
+        const user: DocumentType<UserModel> | null = await UserModelDocument.findById(this.user._id).exec()
 
-        if (index < 0) this.behaviorList.push(behavior)
+        if (!user) throw new NotFoundUserError
+
+        user.gamePointCount += this.gamePointAccumulated
+
+        this.gamePointAccumulated = 0
+
+        await user.updateOne({ gamePointCount: user.gamePointCount }).exec()
     }
 
     public notifyUpdate(): void {
@@ -179,10 +182,8 @@ export class PlayerGameModel {
 
         try {
             obj = instanceToPlain(this, { groups: [TypeGroupTransformEnum.SELF] })
+        } catch (_error: any) {
 
-            LogUtil.logger(TypeLogEnum.GAME).warn('cet objettttt', obj)
-        } catch (error: any) {
-            LogUtil.logger(TypeLogEnum.GAME).error('cet objettttt11', error)
         }
 
         if (!obj) return

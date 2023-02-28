@@ -1,6 +1,6 @@
 <div class="container {{ self ? 'self' : 'fix right' }}" *ngIf="display">
   <div class="avatar">
-    <app-shared-user-avatar-head></app-shared-user-avatar-head>
+    <app-shared-user-avatar-head [username]="user.username"></app-shared-user-avatar-head>
   </div>
 
   <p data-css-text data-css-color data-css-font>{{ user.username }} {{ text }}</p>

@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core'
 import { CookieService } from 'ngx-cookie-service'
 import { ReceiverLinkSocketModel, SenderLinkSocketModel } from 'common'
 
+import { environment } from 'src/environments/environment'
+
 import { SessionSharedService } from '../../session/service/session.shared.service'
 import { SocketSharedService } from '../../socket/service/socket.shared.service'
 
@@ -35,8 +37,8 @@ export class AuthSharedService {
   }
 
   public async setToken(token: string): Promise<void> {
-    // #achan secure, et utiliser env
-    this.cookieService.set('token', token, 6, '/', undefined, false, 'Lax')
+    // #achan secure
+    this.cookieService.set(environment.JWT_COOKIE_NAME, token, environment.JWT_COOKIE_DURATION /60/60/24, '/', undefined, false, 'Lax')
 
     this.socketSharedService.handler.socketManager.engine.close()
     this.socketSharedService.handler.socketManager.connect()
@@ -45,8 +47,7 @@ export class AuthSharedService {
   }
 
   public async testAuth(): Promise<void> {
-    // #achan use env
-    if (!this.cookieService.check('token')) return
+    if (!this.cookieService.check(environment.JWT_COOKIE_NAME)) return
 
     this.disconnect()
 
@@ -91,7 +92,7 @@ export class AuthSharedService {
         this.socketSharedService.handler.getNamespace('/auth').disconnect()
 
         // #achan
-        this.cookieService.delete('token', '/', undefined, false, 'Lax')
+        this.cookieService.delete(environment.JWT_COOKIE_NAME, '/', undefined, false, 'Lax')
 
         resolve()
 

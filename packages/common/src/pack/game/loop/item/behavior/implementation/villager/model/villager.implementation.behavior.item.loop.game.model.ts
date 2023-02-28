@@ -1,25 +1,26 @@
 import { InitFactoryRegistering } from '../../../../../../factory/decorator/factory.game.decorator'
 
-import { GameModel } from '../../../../../../model/game.model'
 import { PlayerGameModel } from '../../../../../../player/model/player.game.model'
 import { BehaviorItemLoopGameModel } from '../../../model/behavior.item.loop.game.model'
 import { ContextGameModel } from '../../../../../../context/model/context.game.model'
-import { HandlerVotePlayerGameModel } from '../../../../../../player/vote/handler/model/handler.vote.player.game.model'
 import { VillagerImplementationStrategyCampPlayerGameModel } from '../../../../../../player/camp/strategy/implementation/villager/model/villager.implementation.strategy.camp.player.game.model'
 import { ResultSetGameModel } from '../../../../../../set/result/model/result.set.model'
+import { StorageVotePlayerGameModel } from '../../../../../../player/vote/storage/model/storage.vote.player.game.model'
+import { ManagerChatGameModel } from '../../../../../../chat/manager/model/manager.chat.game.model'
 
 import { TypeChatGameEnum } from '../../../../../../chat/type/enum/type.chat.game.enum'
 import { TypeCardGameEnum } from '../../../../../../card/type/enum/type.card.game.enum'
 import { TypeProcessBehaviorItemLoopGameEnum } from '../../../process/type/enum/type.process.behavior.item.loop.game.enum'
 import { TypeBehaviorItemLoopGameEnum } from '../../../type/enum/type.behavior.item.loop.game.enum'
 import { TypeModeChatGameEnum } from '../../../../../../chat/mode/type/enum/type.mode.chat.game.enum'
+import { ProcessContextGameEnum } from '../../../../../../context/process/enum/process.context.game.enum'
 
 @InitFactoryRegistering()
 export class VillagerImplementationBehaviorItemLoopGameModel extends BehaviorItemLoopGameModel {
     public constructor() {
         super({
             type: TypeBehaviorItemLoopGameEnum.VILLAGER,
-            timer: 60,
+            timer: 20,
             cardTypeList: [
                 TypeCardGameEnum.GREY_WEREWOLF,
                 TypeCardGameEnum.VILLAGER
@@ -31,28 +32,34 @@ export class VillagerImplementationBehaviorItemLoopGameModel extends BehaviorIte
         })
     }
 
-    public validCondition(context: ContextGameModel): boolean {
-        if (this.getPlayer().length > 0) {
+    public async validCondition(_context: ContextGameModel): Promise<boolean> {
+        if (this.getAlivePlayer().length > 0) {
             return true
         } else {
             return false
         }
     }
 
-    public doAtBeginning(context: ContextGameModel): void {
-        const game: GameModel = GameModel.instance
+    public async doAtBeginning(context: ContextGameModel): Promise<void> {
+        const chatManager: ManagerChatGameModel | undefined = context[ProcessContextGameEnum.CHAT_MANAGER]
 
-        game.sendEventMessage('C\'est au tour des villageois de désigner quelqu\'un !', 'sun-alt')
+        // #achan faire l'erreur 
+        if (!chatManager) throw new Error
+
+        await chatManager.sendEventMessage('C\'est au tour des villageois de désigner quelqu\'un !', 'sun-alt')
 
         context.next()
     }
 
-    public doAtEnd(context: ContextGameModel): void {
-        // #achan
-        const handler: HandlerVotePlayerGameModel = HandlerVotePlayerGameModel.instance,
-            player: PlayerGameModel | null = handler.mostVotedOfPlayersGroup(this.getPlayer())
+    public async doAtEnd(context: ContextGameModel): Promise<void> {
+        const voteStorage: StorageVotePlayerGameModel | undefined = context[ProcessContextGameEnum.VOTE_STORAGE]
 
-        if (player !== null) {
+        // #achan faire l'erreur
+        if (!voteStorage) throw new Error
+
+        const player: PlayerGameModel | null = voteStorage.mostVotedOfPlayersGroup(this.getPlayer())
+
+        if (player) {
             const result: ResultSetGameModel = new ResultSetGameModel
 
             result[TypeProcessBehaviorItemLoopGameEnum.KILL] = [player]

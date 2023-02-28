@@ -10,7 +10,7 @@
       </div>
 
       <!-- <div>
-        <app-shared-interactive-button icofont="chat" [active]="displayChat" [callback]="changeDisplayChatButtonCallback" [important]="true"></app-shared-interactive-button>
+        <app-shared-interactive-button icofont="chat" [active]="displayChat" (clickEvent)="changeDisplayChatButtonCallback()" [important]="true"></app-shared-interactive-button>
       </div> -->
     </div>
 
@@ -30,7 +30,7 @@
     </div>
 
     <div>
-      <app-view-play-avatar-circle [eventPlayerVote]="eventPlayerVote"
+      <app-view-play-avatar-circle [voteEvent]="voteEvent"
         [gameStateEvent]="gameStateEvent"></app-view-play-avatar-circle>
     </div>
   </div>

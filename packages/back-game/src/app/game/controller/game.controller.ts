@@ -1,9 +1,9 @@
-import { Socket, Namespace } from 'socket.io'
+import { DocumentType } from '@typegoose/typegoose'
 import { instanceToPlain } from 'class-transformer'
 import { Request } from 'express'
-import { DocumentType } from '@typegoose/typegoose'
-import { OnMessage, EmitOnSuccess, SocketController, ConnectedSocket, OnDisconnect, EmitOnFail, MessageBody } from 'ts-socket.io-controller'
-import { GameModel, NotFoundUserError, UserModelDocument, TypeMessageChatGameEnum, UserMessageChatGameModelDocument, NotFoundInGamePlayerGameError, UserModel, InitializationGameError, AlreadyInGameUserError, LogUtil, TypeLogEnum, MessageChatFormControllerModel, PlayerGameModel, TypeChatGameEnum, MessageChatGameModel, ChatGameModel, ChatGameModelDocument, VotePlayerGameModel, NotAllowedToSendMessagePlayerGameError, NotFoundChatGameError, EventMessageChatGameModelDocument, UserMessageChatGameModel } from 'common'
+import { Namespace, Socket } from 'socket.io'
+import { ConnectedSocket, EmitOnFail, EmitOnSuccess, MessageBody, OnDisconnect, OnMessage, SkipEmitOnEmptyResult, SocketController } from 'ts-socket.io-controller'
+import { NotAllowedToVotePlayerGameError, NotAllowedToVoteHimPlayerGameError, NotHisTurnPlayerGameError, AlreadyInGameUserError, ChatGameModel, ChatGameModelDocument, EventMessageChatGameModelDocument, GameModel, InitializationGameError, MessageChatFormControllerModel, MessageChatGameModel, NotAllowedToSendMessagePlayerGameError, NotFoundChatGameError, NotFoundInGamePlayerGameError, NotFoundUserError, PlayerGameModel, TypeChatGameEnum, TypeMessageChatGameEnum, TypeVotePlayerGameEnum, UserMessageChatGameModel, UserMessageChatGameModelDocument, UserModel, UserModelDocument, VoteFormControllerModel, VotePlayerGameModel, TypeBehaviorItemLoopGameEnum } from 'common'
 
 @SocketController({
     namespace: `/game/${GameModel.instance.gameId}`,
@@ -26,7 +26,6 @@ export class GameController {
 
     @OnDisconnect()
     async disconnect(@ConnectedSocket() socket: Socket) {
-        LogUtil.logger(TypeLogEnum.GAME).warn('WTF')
         const game: GameModel = GameModel.instance
 
         const req: Request = socket.request as Request,
@@ -35,7 +34,7 @@ export class GameController {
         if (!userDoc) throw new NotFoundUserError
 
         const user: UserModel = userDoc.toObject(),
-            test: boolean = game.connectionLost(user, socket.id)
+            test: boolean = game.leaveGame(user, socket.id)
 
         if (test) {
             await userDoc.updateOne({
@@ -47,15 +46,15 @@ export class GameController {
     @OnMessage()
     @EmitOnSuccess()
     async leave(@ConnectedSocket() socket: Socket) {
-        const game: GameModel = GameModel.instance
-
         const req: Request = socket.request as Request,
             userDoc: DocumentType<UserModel> | undefined = req.session.user
 
         if (!userDoc) throw new NotFoundUserError
 
+        const game: GameModel = GameModel.instance
+
         const user: UserModel = userDoc.toObject(),
-            test: boolean = game.connectionLost(user, socket.id)
+            test: boolean = game.leaveGame(user, socket.id)
 
         if (test) {
             await userDoc.updateOne({ currentGameId: null })
@@ -74,20 +73,12 @@ export class GameController {
 
         if (!userDoc) throw new NotFoundUserError
 
-        LogUtil.logger(TypeLogEnum.APP).warn('slt1')
-
         const game: GameModel = GameModel.instance,
             gameId: string | undefined = game.gameId
 
-        LogUtil.logger(TypeLogEnum.APP).warn('slt2')
-
         if (!gameId) throw new InitializationGameError
 
-        LogUtil.logger(TypeLogEnum.APP).warn('slt3', userDoc.currentGameId)
-
         if (userDoc.currentGameId && gameId !== userDoc.currentGameId) throw new AlreadyInGameUserError
-
-        LogUtil.logger(TypeLogEnum.APP).warn('slt4')
 
         if (userDoc.currentGameId !== gameId) {
             await userDoc.updateOne({
@@ -95,10 +86,8 @@ export class GameController {
             })
         }
 
-        LogUtil.logger(TypeLogEnum.APP).warn('slt5', socket.id)
-
         const user: UserModel = userDoc.toObject(),
-            test: boolean = await game.newPlayer(user, socket)
+            test: boolean = await game.joinGame(user, socket)
 
         return test
     }
@@ -152,17 +141,17 @@ export class GameController {
     @EmitOnSuccess()
     async emitMessage(@ConnectedSocket() socket: Socket, @MessageBody() messageForm: MessageChatFormControllerModel) {
         const req: Request = socket.request as Request,
-            userDoc: DocumentType<UserModel> | undefined = req.session.user
+            user: DocumentType<UserModel> | undefined = req.session.user
 
-        if (!userDoc) throw new NotFoundUserError
+        if (!user) throw new NotFoundUserError
 
         const game: GameModel = GameModel.instance,
-            player: PlayerGameModel | null = game.checkPlayer(userDoc._id)
+            player: PlayerGameModel | null = game.checkPlayer(user._id)
 
         if (!player) throw new NotFoundInGamePlayerGameError
 
         try {
-            const test: boolean = await game.sendPlayerMessage(player, messageForm.text, messageForm.chat)
+            const test: boolean = await game.chatManager.sendPlayerMessage(player, messageForm.text, messageForm.chat)
 
             if (!test) throw new NotAllowedToSendMessagePlayerGameError
         } catch {
@@ -174,32 +163,98 @@ export class GameController {
     @EmitOnSuccess()
     async playerState(@ConnectedSocket() socket: Socket) {
         const req: Request = socket.request as Request,
-            userDoc: DocumentType<UserModel> | undefined = req.session.user
+            user: DocumentType<UserModel> | undefined = req.session.user
 
-        if (!userDoc) throw new NotFoundUserError
+        if (!user) throw new NotFoundUserError
 
         const game: GameModel = GameModel.instance,
-            player: PlayerGameModel | null = game.checkPlayer(userDoc.id)
+            player: PlayerGameModel | null = game.checkPlayer(user._id)
 
         if (!player) throw new NotFoundInGamePlayerGameError
 
         return player
     }
 
-    /* @OnConnect()
-    @EmitOnSuccess('get')
-    getVote() {
-        let handler: HandlerVotePlayerGameModel =  HandlerVotePlayerGameModel.instance
-        
-        return handler.vote
+    @OnMessage()
+    @EmitOnSuccess()
+    getVote(@ConnectedSocket() socket: Socket) {
+        const req: Request = socket.request as Request,
+            user: DocumentType<UserModel> | undefined = req.session.user
+
+        if (!user) throw new NotFoundUserError
+
+        const game: GameModel = GameModel.instance,
+            player: PlayerGameModel | null = game.checkPlayer(user._id)
+
+        if (!player) throw new NotFoundInGamePlayerGameError
+
+        const test: TypeBehaviorItemLoopGameEnum | undefined = player.hisTurn(game.state.currentBehaviorType)
+
+        if (!test) throw new NotHisTurnPlayerGameError
+
+        return game.voteStorage.votesList
     }
 
-    @EmitNamespaceBroadcastOnSuccess('get')
     @OnMessage()
-    sendVote(@MessageBody() vote: VotePlayerGameModel) {
-        let handlervote: HandlerVotePlayerGameModel =  HandlerVotePlayerGameModel.instance
-        handlervote.toVote(vote)
+    @SkipEmitOnEmptyResult()
+    @EmitOnSuccess()
+    async votingAction(@ConnectedSocket() socket: Socket, @MessageBody() vote: VoteFormControllerModel) {
+        const votingUser: DocumentType<UserModel> | null = await UserModelDocument.findOne({ username: vote.votingPlayer }).exec(),
+            votedUser: DocumentType<UserModel> | null = await UserModelDocument.findOne({ username: vote.votedPlayer }).exec()
 
-        return [vote]
-    } */
+        if (!votingUser || !votedUser) throw new NotFoundUserError
+
+        const game: GameModel = GameModel.instance
+
+        const votingPlayer: PlayerGameModel | null = game.checkPlayer(votingUser._id),
+            votedPlayer: PlayerGameModel | null = game.checkPlayer(votedUser._id)
+
+        if (!votingPlayer || !votedPlayer) throw new NotFoundInGamePlayerGameError
+
+        const behaviorType: TypeBehaviorItemLoopGameEnum | undefined = votingPlayer.hisTurn(game.state.currentBehaviorType)
+
+        if (!behaviorType) throw new NotHisTurnPlayerGameError
+
+        if (votingPlayer.isDead) throw new NotAllowedToVotePlayerGameError
+        if (votedPlayer.isDead) throw new NotAllowedToVoteHimPlayerGameError
+
+        // #achan mettre en place la gestion du message
+        const hasVotedBefore: boolean = game.voteStorage.toVote(new VotePlayerGameModel(votingPlayer, votedPlayer, '', TypeVotePlayerGameEnum.DEFAULT))
+
+        if (game.state.currentBehaviorType.length > 1) {
+            if (hasVotedBefore) socket.emit('unvotingAction', instanceToPlain(votingPlayer.user.username))
+
+            return vote
+        }
+
+        game.namespace?.to(behaviorType).emit('unvotingAction', instanceToPlain(votingPlayer.user.username))
+        game.namespace?.to(behaviorType).emit('votingAction', instanceToPlain(vote))
+    }
+
+    @OnMessage()
+    @SkipEmitOnEmptyResult()
+    @EmitOnSuccess()
+    unvotingAction(@ConnectedSocket() socket: Socket) {
+        const req: Request = socket.request as Request,
+            user: DocumentType<UserModel> | undefined = req.session.user
+
+        if (!user) throw new NotFoundUserError
+
+        const game: GameModel = GameModel.instance,
+            player: PlayerGameModel | null = game.checkPlayer(user._id)
+
+        if (!player) throw new NotFoundInGamePlayerGameError
+
+        const behaviorType: TypeBehaviorItemLoopGameEnum | undefined = player.hisTurn(game.state.currentBehaviorType)
+
+        if (!behaviorType) throw new NotHisTurnPlayerGameError
+
+        const isRemoved: boolean = game.voteStorage.removeVoteOfPlayer(player)
+
+        if (!isRemoved) return
+
+        if (game.state.currentBehaviorType.length > 1) return player.user.username
+
+        game.namespace?.to(behaviorType).emit('unvotingAction', instanceToPlain(player.user.username))
+    }
 }

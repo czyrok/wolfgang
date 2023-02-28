@@ -19,13 +19,19 @@ export class UserReportModel extends ReportModel implements UserReportInterface 
     thumbsDownCount!: number
 
     @Expose()
+    @prop({ required: true, default: 0 })
+    gameId!: string
+
+    @Expose()
     @prop({ ref: () => UserModel, default: new Array })
     concernedUsers!: Array<Ref<UserModel>>
 
     public constructor(
-        type: TypeReportEnum
+        type: TypeReportEnum,
+        gameId: string
     ) {
         super(type)
+        this.gameId = gameId
     }
 }
 

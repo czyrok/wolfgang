@@ -13,9 +13,10 @@ export class BasicUserReportModel extends UserReportModel implements BasicUserRe
     reportType!: TypeUserReportEnum
 
     public constructor(reportType: TypeUserReportEnum,
-        type: TypeReportEnum
+        type: TypeReportEnum,
+        gameId: string
     ) {
-        super(type)
+        super(type, gameId)
         this.reportType = reportType
     }
 }

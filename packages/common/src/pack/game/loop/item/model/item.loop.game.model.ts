@@ -65,7 +65,7 @@ export abstract class ItemLoopGameModel implements
         }
     }
 
-    abstract entryPoint(context: ContextGameModel): boolean
+    abstract entryPoint(context: ContextGameModel): Promise<boolean>
 
     abstract getBehavior(): Array<BehaviorItemLoopGameModel>
 

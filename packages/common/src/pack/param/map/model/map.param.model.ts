@@ -1,6 +1,9 @@
 import { KeyNotFoundMapParamError } from '../key-not-found/error/key-not-found.map.param.error'
 
-export class MapParamModel<T> {
+import { IteratorMapParamInterface } from '../iterator/interface/iterator.map.param.interface'
+import { StorageMapParamInterface } from '../storage/interface/storage.map.param.interface'
+
+export class MapParamModel<T> implements IteratorMapParamInterface<T, MapParamModel<T>>, StorageMapParamInterface<MapParamModel<T>, string> {
     [key: string]: T | ((...keys: Array<string>) => void) | ((parent: MapParamModel<T>) => void)
 
     *[Symbol.iterator](): IterableIterator<[string, T]> {
@@ -13,7 +16,7 @@ export class MapParamModel<T> {
         }
     }
 
-    public has(...keys: Array<string>): void {
+    has(...keys: Array<string>): void {
         const currentKeys: Array<string> = Object.keys(this)
 
         for (const key of keys) {
@@ -23,7 +26,7 @@ export class MapParamModel<T> {
         }
     }
 
-    public setHeritage(parent: MapParamModel<T>) {
+    setHeritage(parent: MapParamModel<T>): void {
         const currentKeys: Array<string> = Object.keys(this),
             parentKeys: Array<string> = Object.keys(parent)
 
