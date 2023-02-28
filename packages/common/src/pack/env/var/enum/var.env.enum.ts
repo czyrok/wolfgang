@@ -1,4 +1,5 @@
 export enum VarEnvEnum {
+    PROTOCOL = 'PROTOCOL',
     MAIN_URL = 'MAIN_URL',
     MAIN_PORT = 'MAIN_PORT',
     GAME_URL = 'GAME_URL',
@@ -17,5 +18,6 @@ export enum VarEnvEnum {
     JWT_ISSUER = 'JWT_ISSUER',
     JWT_AUDIENCE = 'JWT_AUDIENCE',
     JWT_SECRET = 'JWT_SECRET',
-    JWT_EXPIRES = 'JWT_EXPIRES'
+    JWT_EXPIRES = 'JWT_EXPIRES',
+    PASSWORD_KEY = 'PASSWORD_KEY'
 }
