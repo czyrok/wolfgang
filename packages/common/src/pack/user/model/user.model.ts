@@ -1,10 +1,13 @@
 import { DocumentType, Ref, prop, getModelForClass } from '@typegoose/typegoose'
 import { Exclude, Expose } from 'class-transformer'
+import { HmacSHA512 } from 'crypto-js'
 
 import { DocumentModel } from '../../model/document.model'
 import { SkinUserModel } from '../skin/model/skin.user.model'
 
 import { UserInterface } from '../interface/user.interface'
+import { EnvUtil } from '../../env/util/env.util'
+import { VarEnvEnum } from '../../env/var/enum/var.env.enum'
 
 @Exclude()
 export class UserModel extends DocumentModel implements UserInterface {
@@ -47,11 +50,11 @@ export class UserModel extends DocumentModel implements UserInterface {
         this.skin = skin
         this.username = username
         this.email = email
-        this.password = password
+        this.password = HmacSHA512(password, EnvUtil.get(VarEnvEnum.PASSWORD_KEY)).toString()
     }
 
     public async verifyPassword(this: DocumentType<UserModel>, password: string): Promise<boolean> {
-        if (this.password === password) return true
+        if (this.password === HmacSHA512(password, EnvUtil.get(VarEnvEnum.PASSWORD_KEY)).toString()) return true
 
         return false
     }
