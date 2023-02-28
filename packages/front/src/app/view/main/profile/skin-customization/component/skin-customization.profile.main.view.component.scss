@@ -28,3 +28,13 @@ section .grid .area-b {
 section .grid .area-c {
     grid-area: c;
 }
+
+@media (max-width: 750px) {
+    section .grid {
+        grid-template-areas:
+            'b b'
+            'a c';
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+    }
+}

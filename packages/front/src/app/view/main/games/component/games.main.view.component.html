@@ -19,7 +19,11 @@
       </div>
 
       <div class="field">
-        <app-shared-alert-text icofont="clock-time" [text]="getDurationText(game)" [type]="getDurationTextAlertType(game)"></app-shared-alert-text>
+        <div class="time">
+
+          <app-shared-alert-text icofont="clock-time" [text]="getDurationText(game)"
+            [type]="getDurationTextAlertType(game)"></app-shared-alert-text>
+        </div>
 
         <app-shared-label [text]="game.state.players.length + '/' + game.state.rules.playerCountMax"></app-shared-label>
       </div>

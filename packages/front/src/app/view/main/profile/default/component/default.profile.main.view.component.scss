@@ -34,3 +34,13 @@ section {
 .wrapper .grid .area-c {
     grid-area: c;
 }
+
+@media (max-width: 600px) {
+    .wrapper .grid {
+        grid-template-areas:
+            'a'
+            'b'
+            'c';
+        grid-template-rows: minmax(0px, 1fr) auto auto;
+    }
+}
