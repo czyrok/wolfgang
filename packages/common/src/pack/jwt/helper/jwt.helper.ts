@@ -3,6 +3,8 @@ import { sign } from 'jsonwebtoken'
 
 import { EnvUtil } from '../../env/util/env.util'
 
+import { ScopeIoHelper } from '../../io/scope/helper/scope.io.helper'
+
 import { UserModel } from '../../user/model/user.model'
 import { TokenUserModel, TokenUserModelDocument } from '../../user/token/model/token.user.model'
 
@@ -13,13 +15,12 @@ export class JWTHelper {
         const token: DocumentType<TokenUserModel> = new TokenUserModelDocument(new TokenUserModel(user, EnvUtil.get(VarEnvEnum.JWT_EXPIRES), ip))
         
         await token.save()
+        
+        const scopeAccess: Array<string> = await ScopeIoHelper.getUserScopes(user)
 
         const jwt: string = sign({
             sub: token._id,
-            scopes: [
-                // #achan
-                'admin'
-            ]
+            scopes: scopeAccess
         },
             EnvUtil.get(VarEnvEnum.JWT_SECRET),
             {

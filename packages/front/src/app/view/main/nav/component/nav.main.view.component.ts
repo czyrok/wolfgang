@@ -18,6 +18,10 @@ export class NavMainViewComponent {
     return this.authSharedService.username ?? ''
   }
 
+  getIsAdmin(): boolean {
+    return this.authSharedService.scopeAccess.indexOf('admin') > -1
+  }
+
   getIsAuth(): boolean {
     return this.authSharedService.isAuth
   }
