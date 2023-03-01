@@ -7,5 +7,6 @@ declare module 'express-session' {
     interface SessionData {
         user?: DocumentType<UserModel>
         token?: DocumentType<TokenUserModel>
+        scopeAccess?: Array<string>
     }
 }

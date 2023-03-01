@@ -2,7 +2,7 @@ import { Socket } from 'socket.io'
 import { ConnectedSocket, EmitOnSuccess, OnMessage, SocketController } from 'ts-socket.io-controller'
 import { Request } from 'express'
 import { DocumentType } from '@typegoose/typegoose'
-import { LogUtil, NotFoundTokenUserError, NotFoundUserError, TokenUserModel, TypeLogEnum, UserModel } from 'common'
+import { LogUtil, NotFoundTokenUserError, NotFoundUserError, ScopeIoHelper, TokenUserModel, TypeLogEnum, UserModel } from 'common'
 
 @SocketController({
     namespace: '/auth',
@@ -39,5 +39,14 @@ export class AuthController {
         LogUtil.logger(TypeLogEnum.ACCESS).info(`${user.username} is disconnecting`)
 
         return true
+    }
+
+    @OnMessage()
+    @EmitOnSuccess()
+    async getScope(@ConnectedSocket() socket: Socket) {
+        const req: Request = socket.request as Request,
+            scopeAccess: Array<string> = req.session.scopeAccess ?? new Array
+
+        return scopeAccess
     }
 }

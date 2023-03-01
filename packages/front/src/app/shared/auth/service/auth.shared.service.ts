@@ -13,6 +13,7 @@ import { SocketSharedService } from '../../socket/service/socket.shared.service'
 export class AuthSharedService {
   private _isAuth: boolean = false
   private _username: string | undefined = undefined
+  private _scopeAccess: Array<string> = new Array
 
   public constructor(
     private cookieService: CookieService,
@@ -36,9 +37,17 @@ export class AuthSharedService {
     return this._username
   }
 
+  private set scopeAccess(value: Array<string>) {
+    this._scopeAccess = value
+  }
+
+  public get scopeAccess(): Array<string> {
+    return this._scopeAccess
+  }
+
   public async setToken(token: string): Promise<void> {
     // #achan secure
-    this.cookieService.set(environment.JWT_COOKIE_NAME, token, environment.JWT_COOKIE_DURATION /60/60/24, '/', undefined, false, 'Lax')
+    this.cookieService.set(environment.JWT_COOKIE_NAME, token, environment.JWT_COOKIE_DURATION / 60 / 60 / 24, '/', undefined, false, 'Lax')
 
     this.socketSharedService.handler.socketManager.engine.close()
     this.socketSharedService.handler.socketManager.connect()
@@ -63,16 +72,16 @@ export class AuthSharedService {
       testErrorLink: ReceiverLinkSocketModel<string> = await this.socketSharedService.registerReceiver('/auth', 'test')
 
     return new Promise((resolve: (value: void) => void) => {
-      testReceiverLink.subscribe((username: string) => {
+      testReceiverLink.subscribe(async (username: string) => {
         testReceiverLink.unsubscribe()
         testErrorLink.unsubscribe()
 
-        this.connect(username)
+        await this.connect(username)
 
         resolve()
       })
 
-      testErrorLink.subscribe((error: any) => {
+      testErrorLink.subscribe(() => {
         testReceiverLink.unsubscribe()
         testErrorLink.unsubscribe()
       })
@@ -103,13 +112,31 @@ export class AuthSharedService {
     })
   }
 
-  private connect(username: string): void {
+  private async connect(username: string): Promise<void> {
     this.isAuth = true
     this.username = username
+
+    const scopeSenderLink: SenderLinkSocketModel<void> = await this.socketSharedService.registerSender('/auth', 'getScope'),
+      scopeReceiverLink: ReceiverLinkSocketModel<Array<string>> = await this.socketSharedService.registerReceiver('/auth', 'getScope')
+
+    return new Promise((resolve: (value: void) => void) => {
+      scopeReceiverLink.subscribe((scopeAccess: Array<string>) => {
+        scopeReceiverLink.unsubscribe()
+
+        resolve()
+
+        this.scopeAccess = scopeAccess
+
+        console.log(this.scopeAccess)
+      })
+
+      scopeSenderLink.emit()
+    })
   }
 
   private disconnect(): void {
     this.isAuth = false
     this.username = undefined
+    this.scopeAccess.splice(0, this.scopeAccess.length)
   }
 }

@@ -54,6 +54,7 @@ export class ScopeIoMiddleware implements MiddlewareInterface {
 
         req.session.user = user
         req.session.token = token
+        req.session.scopeAccess = payload.scopes
         req.session.save()
 
         // #achan

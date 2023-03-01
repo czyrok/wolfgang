@@ -3,6 +3,7 @@ import { Exclude, Expose } from 'class-transformer'
 import { HmacSHA512 } from 'crypto-js'
 
 import { DocumentModel } from '../../model/document.model'
+import { ScopeModel } from '../../scope/model/scope.model'
 import { SkinUserModel } from '../skin/model/skin.user.model'
 
 import { UserInterface } from '../interface/user.interface'
@@ -12,14 +13,18 @@ import { VarEnvEnum } from '../../env/var/enum/var.env.enum'
 @Exclude()
 export class UserModel extends DocumentModel implements UserInterface {
     @Expose()
-    // #achan
-    @prop({ /* required: true,  */ref: () => SkinUserModel })
+    @prop({ ref: () => ScopeModel, default: new Array })
+    scopeAccess!: Array<Ref<ScopeModel>>
+
+    @Expose()
+    @prop({ required: true, ref: () => SkinUserModel })
     skin!: Ref<SkinUserModel>
 
     @Expose()
     @prop({ required: true })
     username!: string
 
+    @Exclude()
     @prop({ required: true })
     email!: string
 
