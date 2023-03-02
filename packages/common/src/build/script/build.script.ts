@@ -7,25 +7,17 @@ import { LogUtil } from '../../pack/log/util/log.util'
 
 import { LogHelper } from '../../pack/log/helper/log.helper'
 
+import { DependencyBuildInterface } from '../dependency/interface/dependency.build.interface'
+import { PropertyDependencyBuildInterface } from '../dependency/property/interface/property.dependency.build.interface'
+
 import { TypeLogEnum } from '../../pack/log/type/enum/type.log.enum'
 
 LogUtil.config = LogHelper.getConfig(TypeLogEnum.BUILD)
 
 const fnNameTemplate: string = '___require2___',
-    mapNameTemplate: string = '___Map___',
-    fnTemplate: string = `function ${fnNameTemplate}(name) { return require(name) }\n`
+    mapNameTemplate: string = '___DummyClass___'
 
-interface Property {
-    name: string
-    type: 'fn' | 'obj'
-}
-
-interface Dependency {
-    assignedName: string | undefined
-    properties: Array<Property>
-}
-
-type PropertiesMap = Map<string, Dependency>
+type PropertiesMap = Map<string, DependencyBuildInterface>
 
 function readDistFile(file: string, path: string): void {
     readFile(path, BuildConfig.fileFormat, (error: any, data: string) => {
@@ -157,55 +149,85 @@ function getDependencyAssignedName(data: string, dependency: string): string | u
     return line.split(' ')[1]
 }
 
-function getDependencyProperties(data: string, assignedName: string): Array<Property> {
+function getDependencyProperties(data: string, assignedName: string): Array<PropertyDependencyBuildInterface> {
     const regex: string = `${assignedName}[._a-zA-Z0-9]{1,}`,
         regexFn: RegExp = new RegExp(`\\(0, ${regex}\\)\\(`, 'gm'),
         fnPropertyUsingList: Array<string> = data.match(regexFn) ?? [],
         regexObj: RegExp = new RegExp(regex, 'gm'),
         ObjPropertyUsingList: Array<string> = data.match(regexObj) ?? []
 
-    const result: Array<Property> = new Array
+    const result: Array<PropertyDependencyBuildInterface> = new Array
 
     for (const propertyUsing of fnPropertyUsingList) {
         let name: string = propertyUsing.substring(assignedName.length + 5).split(')')[0]
 
-        if (result.filter((value: Property) => value.name === name).length === 0)
+        if (result.filter((value: PropertyDependencyBuildInterface) => value.name === name).length === 0)
             result.push({
                 name: name,
-                type: 'fn'
+                type: 'fn',
+                stage: 0
             })
     }
 
     for (const propertyUsing of ObjPropertyUsingList) {
         let name: string = propertyUsing.substring(assignedName.length + 1)
 
-        if (result.filter((value: Property) => value.name === name).length === 0)
+        if (result.filter((value: PropertyDependencyBuildInterface) => value.name === name).length === 0)
             result.push({
                 name: name,
-                type: 'obj'
+                type: 'obj',
+                stage: 0
             })
     }
 
     return result
 }
 
-function buildClassMap(dependency: Dependency): string {
+function buildClassMap(dependency: DependencyBuildInterface): string {
     let block: string = `class ${mapNameTemplate}${dependency.assignedName} {\n`
 
     for (const property of dependency.properties) {
-        switch (property.type) {
-            case 'fn':
-                block = `${block}${property.name} = () => {}\n`
-                break
-            case 'obj':
-                block = `${block}${property.name} = Object\n`
-                break
-        }
+        block = `${block}${buildObject(property)}`
     }
 
     block = `${block}}\n`
 
     return block
+}
+
+function buildObject(property: PropertyDependencyBuildInterface): string {
+    let separator: string = '='
+
+    if (property.stage > 0) separator = ':'
+
+    console.log(property.name)
+
+    if (property.name.indexOf('.') > -1) {
+        const [parent, ...children]: Array<string> = property.name.split('.')
+
+        return `${parent}${separator}{\n` + buildObject({
+            name: children.join('.'),
+            type: property.type,
+            stage: property.stage + 1
+        })
+    }
+
+    let result: string = ''
+
+    switch (property.type) {
+        case 'fn':
+            result = `${property.name}${separator}() => {}\n`
+            break
+        case 'obj':
+            result = `${property.name}${separator}Object\n`
+            break
+    }
+
+    for (let i = property.stage; i > 0; i--) {
+        result += '}\n'
+    }
+
+    return result
 }
 
 function setUsefulVar(data: string, index: number, propertiesMap: PropertiesMap): string {
@@ -218,7 +240,7 @@ function setUsefulVar(data: string, index: number, propertiesMap: PropertiesMap)
         data = data + buildClassMap(entry[1])
     }
 
-    data = data + fnTemplate + dataRest
+    data = data + `function ${fnNameTemplate}(name) { return require(name) }\n` + dataRest
 
     return data
 }
