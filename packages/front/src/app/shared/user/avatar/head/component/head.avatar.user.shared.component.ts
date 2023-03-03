@@ -5,6 +5,9 @@ import { Component, Input } from '@angular/core'
   templateUrl: './head.avatar.user.shared.component.html',
   styleUrls: ['./head.avatar.user.shared.component.scss']
 })
+/**
+ * @classdesc Gère le composant de la tête d'un utilisateur
+ */
 export class HeadAvatarUserSharedComponent {
   @Input() id!: string
 }

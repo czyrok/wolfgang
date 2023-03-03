@@ -12,9 +12,19 @@ import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/
   templateUrl: './log-in.home.view.component.html',
   styleUrls: ['./log-in.home.view.component.scss']
 })
+/**
+ * @classdesc Composant de la vue de connexion
+ */
 export class LogInHomeViewComponent {
   form: UntypedFormGroup
 
+  /**
+   * @param router Service qui permet de naviguer entre les vues et de manipuler les URLs.
+   * @param formBuilder Service qui permet de construire des formulaires
+   * @param socketSharedService Service qui permet d'utiliser des sockets
+   * @param authSharedService Service d'authentification des utilisateurs
+   * @param displayAlertSharedService Service qui permet de gérer l'affichage des alertes d'autentification
+   */
   constructor(
     private router: Router,
     private formBuilder: UntypedFormBuilder,
@@ -28,6 +38,9 @@ export class LogInHomeViewComponent {
     })
   }
 
+  /**
+   * Permet de gérer la redirection en fonction de l'autentification
+   */
   async onSubmitForm(): Promise<void> {
     if (this.form.valid) {
       const tokenLink: ReceiverLinkSocketModel<string>

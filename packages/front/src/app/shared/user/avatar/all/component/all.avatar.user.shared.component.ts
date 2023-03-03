@@ -10,16 +10,26 @@ import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared
   templateUrl: './all.avatar.user.shared.component.html',
   styleUrls: ['./all.avatar.user.shared.component.scss']
 })
+/**
+ * @classdesc Gère l'avatar complet de l'utilisateur
+ * @implements AfterViewInit, OnDestroy
+ */
 export class AllAvatarUserSharedComponent implements AfterViewInit, OnDestroy {
   playerVotingList: Array<string> = new Array()
   sub!: Subscription
 
   cosmeticsList!: Array<CosmeticModel>
 
+  /**
+   * @param socketSharedService  Service de sockets
+   */
   constructor(
     private socketSharedService: SocketSharedService
   ) { }
 
+  /**
+   * Permet de récuperer le skin d'un utilisateur
+   */
   async ngAfterViewInit(): Promise<void> {
     /* if (this.eventPlayerVote !== undefined) this.sub = this.eventPlayerVote.subscribe((value: VotePlayerGameModel) => {
       if (value.votedUser == this.id) {
@@ -51,26 +61,44 @@ export class AllAvatarUserSharedComponent implements AfterViewInit, OnDestroy {
     cosmeticLinkEmit.emit(this.username)
   }
 
+  /**
+   * Permet de désabonner l'élement en cas de déstruction
+   */
   ngOnDestroy(): void {
     if (this.sub !== undefined) this.sub.unsubscribe()
   }
 
+  /**
+   * @returns Renvoie un cosmetique de type chapeau
+   */
   getHat(): CosmeticModel | undefined {
     return this.hat || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.HAT)[0]
   }
 
+  /**
+   * @returns Renvoie un cosmetique de type tête
+   */
   getHead(): CosmeticModel | undefined {
     return this.head || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.HEAD)[0]
   }
 
+  /**
+   * @returns Renvoie un cosmetique de type haut
+   */
   getTop(): CosmeticModel | undefined {
     return this.top || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.TOP)[0]
   }
 
+  /**
+   * @returns Renvoie un cosmetique de type pantalon
+   */
   getPants(): CosmeticModel | undefined {
     return this.pants || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.PANTS)[0]
   }
 
+  /**
+   * @returns Renvoie un cosmetique de type chaussure
+   */
   getShoes(): CosmeticModel | undefined {
     return this.shoes || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.SHOES)[0]
   }

@@ -8,13 +8,22 @@ import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared
   templateUrl: './profile.line.user.shared.component.html',
   styleUrls: ['./profile.line.user.shared.component.scss']
 })
+/**
+ * @classdesc Gère le composant du profile, en ligne, d'un utilisateur
+ */
 export class ProfileLineUserSharedComponent {
   user!: UserModel
 
+  /**
+   * @param socketSharedService Service de sockets
+   */
   constructor(
     private socketSharedService: SocketSharedService
   ) { }
 
+  /**
+   * Permet de récuperer le model d'un utilisateur
+   */
   async ngAfterViewInit(): Promise<void> {
     if (this.username !== undefined) {
 
@@ -32,6 +41,9 @@ export class ProfileLineUserSharedComponent {
     }
   }
 
+  /**
+   * @returns Renvoie le nom de l'utilisateur
+   */
   getUsername(): string | undefined{
     return this.user?.username
   }

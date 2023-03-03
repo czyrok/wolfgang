@@ -10,9 +10,17 @@ import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared
   templateUrl: './add.cards-proposal.main.view.component.html',
   styleUrls: ['./add.cards-proposal.main.view.component.scss']
 })
+/**
+ * @classdesc Composant de la vue d'un ajout de proposition de carte
+ */
 export class AddCardsProposalMainViewComponent {
   form: UntypedFormGroup
 
+  /**
+   * @param router Service qui permet de naviguer entre les vues et de manipuler les URLs.
+   * @param formBuilder Service qui permet de construire des formulaires
+   * @param socketSharedService Service qui permet d'utiliser des sockets
+   */
   constructor(
     private router: Router,
     private formBuilder: UntypedFormBuilder,
@@ -24,6 +32,9 @@ export class AddCardsProposalMainViewComponent {
     })
   }
 
+  /**
+   * Si le formulaire est valide émet un modèle de proposition de carte et redirige l'utilisateur sur la page précédente
+   */
   async onSubmitForm(): Promise<void> {
     if (this.form.valid) {
       const addCardProposalLink: SenderLinkSocketModel<CardsProposalFormControllerModel> = await this.socketSharedService.registerSender('/game/cards-proposal', 'add')
