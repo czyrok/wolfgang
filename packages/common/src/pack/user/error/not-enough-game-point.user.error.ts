@@ -1,7 +1,5 @@
-import { ServerError } from 'ts-socket.io-controller'
-
-export class NotEnoughGamePointUserError extends ServerError {
+export class NotEnoughGamePointUserError extends Error {
     constructor() {
-        super(400, 'L\'utilisateur n\'a pas assez de point de jeu')
+        super('L\'utilisateur n\'a pas assez de point de jeu')
     }
 }

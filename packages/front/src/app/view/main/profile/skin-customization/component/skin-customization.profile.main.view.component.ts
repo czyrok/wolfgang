@@ -10,6 +10,7 @@ import { TabDetailedListInteractiveSharedModel } from 'src/app/shared/interactiv
 import { SubTabTabDetailedListInteractiveSharedModel } from 'src/app/shared/interactive/list/detailed/tab/sub-tab/model/sub-tab.tab.detailed.list.interactive.shared.model'
 import { ItemSubTabTabDetailedListInteractiveSharedModel } from 'src/app/shared/interactive/list/detailed/tab/sub-tab/item/model/item.sub-tab.tab.detailed.list.interactive.shared.model'
 import { ActivatedRoute, Router } from '@angular/router'
+import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/display.alert.shared.service'
 
 @Component({
   selector: 'app-view-main-profile-skin-customization',
@@ -30,7 +31,8 @@ export class SkinCustomizationProfileMainViewComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private eventSocketLink: SocketSharedService,
-    private authSharedService: AuthSharedService
+    private authSharedService: AuthSharedService,
+    private displayAlertSharedService: DisplayAlertSharedService
   ) {
     const username: string | null | undefined = this.activatedRoute.parent?.snapshot.paramMap.get('username')
 
@@ -164,14 +166,23 @@ export class SkinCustomizationProfileMainViewComponent implements OnInit {
   async purchaseButtonCallback(): Promise<void> {
     const purchaseSend: SenderLinkSocketModel<Array<CosmeticModel>> = await this.eventSocketLink.registerSender('/game/profile/skin-customization', 'purchase')
     const purchaseRec: ReceiverLinkSocketModel<void> = await this.eventSocketLink.registerReceiver('/game/profile/skin-customization', 'purchase')
+    const purchaseErrorRec: ReceiverLinkSocketModel<any> = await this.eventSocketLink.registerReceiver('/game/profile/skin-customization', 'purchase-failed')
     const cosmetics: Array<CosmeticModel> = new Array
 
     for (const cosmetic of this.list.selectedItems) {
       cosmetics.push(cosmetic.associedObject)
     }
 
+    purchaseErrorRec.subscribe((error: any) => {
+      purchaseErrorRec.unsubscribe()
+      purchaseRec.unsubscribe()
+
+      this.displayAlertSharedService.emitDanger(error)
+    })
+
     purchaseRec.subscribe(() => {
       purchaseRec.unsubscribe()
+      purchaseErrorRec.unsubscribe()
 
       this.router.navigateByUrl('/game/profile/' + this.user.username)
     })
