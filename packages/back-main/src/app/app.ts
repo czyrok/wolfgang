@@ -35,7 +35,7 @@ async function run(): Promise<void> {
         port: parseInt(EnvUtil.get(VarEnvEnum.MAIN_PORT)),
         cors: {
             // #achan
-            origin: 'http://localhost:4200',
+            // origin: 'http://localhost:4200',
             credentials: true
         },
         session: true
