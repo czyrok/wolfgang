@@ -8,15 +8,24 @@ import { ModalSharedService } from 'src/app/shared/modal/service/modal.shared.se
   templateUrl: './user.modal.report.shared.component.html',
   styleUrls: ['./user.modal.report.shared.component.scss']
 })
+/**
+ * @classdesc Gère les boites modales de signalements d'un utilisateur
+ */
 export class UserModalReportSharedComponent {
   report!: ReportModel
 
   openingSignalSub!: Subscription
 
+  /**
+   * @param modalSharedService Service de boite modale
+   */
   constructor(
     private modalSharedService: ModalSharedService
   ) { }
 
+  /**
+   * Effectue la souscription du signal d'ouverture de formulaire pour le signalement d'un joueur et ouvre une boite modale
+   */
   ngAfterViewInit(): void {
     this.openingSignalSub = this.openingSignal.subscribe(() => {
       this.modalSharedService.close()
@@ -30,6 +39,9 @@ export class UserModalReportSharedComponent {
 
   reportUserOpeningSignal: Subject<void> = new Subject
 
+  /**
+   * Ouvre la boite modale de signalement détailler d'un utilisateur
+   */
   callbackOtherReportUser() {
     this.reportUserOpeningSignal.next()
 
@@ -39,6 +51,9 @@ export class UserModalReportSharedComponent {
 
 /*   @ViewChild('otherUserReportTemplate', { read: TemplateRef }) tatemplateAutherReportUser!: TemplateRef<any> */
 
+  /**
+   * Crée un modèle de signalement basic d'un utilisateur pour movaises pratiques
+   */
   callbackNegativeTacticsReport(): void {
     let reportUser: BasicUserReportModel = new BasicUserReportModel
 
@@ -46,6 +61,9 @@ export class UserModalReportSharedComponent {
     this.report = reportUser
   }
 
+  /**
+   * Crée un modèle de signalement basic d'un utilisateur pour langage inapproprié
+   */
   callbackInapropriateWordsReport(): void {
     let reportUser: BasicUserReportModel = new BasicUserReportModel
 
@@ -53,6 +71,9 @@ export class UserModalReportSharedComponent {
     this.report = reportUser
   }
 
+  /**
+   * Crée un modèle de signalement basic d'un utilisateur pour spam
+   */
   callbackFloodReport(): void {
     let reportUser: BasicUserReportModel = new BasicUserReportModel
 
@@ -60,6 +81,9 @@ export class UserModalReportSharedComponent {
     this.report = reportUser
   }
 
+  /**
+   * Crée un modèle de signalement basic d'un utilisateur pour publicité
+   */
   callbackAdvertisingReport(): void {
     let reportUser: BasicUserReportModel = new BasicUserReportModel
 
@@ -67,6 +91,9 @@ export class UserModalReportSharedComponent {
     this.report = reportUser
   }
 
+  /**
+   * Crée un modèle de signalement basic d'un utilisateur pour partage de lien
+   */
   callbackLinkReport(): void {
     let reportUser: BasicUserReportModel = new BasicUserReportModel
 

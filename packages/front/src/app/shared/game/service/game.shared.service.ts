@@ -12,7 +12,7 @@ import { DisplayAlertSharedInterface } from '../../alert/display/interface/displ
     providedIn: 'root'
 })
 /**
- * @classdesc Gère les parties
+ * @classdesc Gère le service des parties
  * @implements HandlerLinkSocketInterface
  */
 export class GameSharedService implements HandlerLinkSocketInterface {

@@ -10,12 +10,19 @@ import { ModalSharedService } from 'src/app/shared/modal/service/modal.shared.se
   templateUrl: './other.user.modal.report.shared.component.html',
   styleUrls: ['./other.user.modal.report.shared.component.scss']
 })
+/**
+ * @classdesc Gère les boites modales de signalements détaillés d'un utilisateur
+ */
 export class OtherUserModalReportSharedComponent {
   report!: ReportModel
   form: UntypedFormGroup
 
   openingSignalSub!: Subscription
 
+  /**
+   * @param formBuilder Constructeur de formulaires
+   * @param modalSharedService Service de boite modale
+   */
   constructor(
     private formBuilder: UntypedFormBuilder,
     private modalSharedService: ModalSharedService
@@ -25,6 +32,9 @@ export class OtherUserModalReportSharedComponent {
     })
   }
 
+   /**
+   * Effectue la souscription du signal d'ouverture d'un formulaire de signalement détaillé d'un utilisateur
+   */
   ngAfterViewInit(): void {
     this.openingSignalSub = this.openingSignal.subscribe(() => {
       this.modalSharedService.close()
@@ -36,10 +46,16 @@ export class OtherUserModalReportSharedComponent {
     })
   }
 
+  /**
+   * Ferme le service de boite modale de signalement détaillé d'un utilisateur
+   */
   closeReport(): void{
     this.modalSharedService.close()
   }
 
+  /**
+   * Crée un modèle de signalement détaillé d'un utilisateur avec la description donné dans le formulaire
+   */
   callbackUserForm(): void {
     if (this.form.valid) {
       let reportUser: OtherUserReportModel = new OtherUserReportModel

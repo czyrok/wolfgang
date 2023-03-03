@@ -8,17 +8,24 @@ import { ModalSharedService } from 'src/app/shared/modal/service/modal.shared.se
   templateUrl: './modal.report.shared.component.html',
   styleUrls: ['./modal.report.shared.component.scss']
 })
+/**
+ * @classdesc Gère les boites modales de signalements
+ */
 export class ModalReportSharedComponent implements AfterViewInit {
   report!: ReportModel
 
-  // partout
   openingSignalSub!: Subscription
 
+  /**
+   * @param modalSharedService Service d'une boite modale
+   */
   constructor(
     private modalSharedService: ModalSharedService,
   ) {}
 
-  // partout
+  /**
+   * Effectue la souscription du signal d'ouverture d'un formulaire de signalement et ouvre une boite modale
+   */
   ngAfterViewInit(): void {
     this.openingSignalSub = this.openingSignal.subscribe(() => {
       console.log('ici')
@@ -31,9 +38,11 @@ export class ModalReportSharedComponent implements AfterViewInit {
     })
   }
 
-  // pour chaque callback ou faut ouvrir une modal
   reportBugOpeningSignal: Subject<void> = new Subject
 
+  /**
+   * Ouvre la boite modale de signalement d'un bug
+   */
   callbackReportBug() {
     this.reportBugOpeningSignal.next()
 
@@ -48,6 +57,9 @@ export class ModalReportSharedComponent implements AfterViewInit {
 
   reportUserOpeningSignal: Subject<void> = new Subject
 
+  /**
+   * Ouvre la boite modale de signalement d'un utilisateur
+   */
   callbackReportUser() {
     this.reportUserOpeningSignal.next()
 
@@ -60,7 +72,6 @@ export class ModalReportSharedComponent implements AfterViewInit {
   @ViewChild('userReportTemplate', { read: TemplateRef }) tatemplateReportUser!: TemplateRef<any> */
 
 
-  // partout
   @Input() openingSignal!: Subject<void>
 
   @ViewChild('chooseReportTemplate', { read: TemplateRef }) chooseReportTemplateRef!: TemplateRef<any>

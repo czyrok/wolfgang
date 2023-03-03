@@ -9,12 +9,19 @@ import { ModalSharedService } from 'src/app/shared/modal/service/modal.shared.se
   templateUrl: './bug.modal.report.shared.component.html',
   styleUrls: ['./bug.modal.report.shared.component.scss']
 })
+/**
+ * @classdesc Gère la boite modale de signalement des bugs
+ */
 export class BugModalReportSharedComponent {
   report!: ReportModel
   form: UntypedFormGroup
 
   openingSignalSub!: Subscription
 
+  /**
+   * @param modalSharedService Service de boite modale
+   * @param formBuilder Constructeur de formulaires
+   */
   constructor(
     private modalSharedService: ModalSharedService,
     private formBuilder: UntypedFormBuilder
@@ -24,6 +31,9 @@ export class BugModalReportSharedComponent {
     })
   }
 
+  /**
+   * Effectue la souscription du signal d'ouverture d'un formulaire de signalement d'un bug
+   */
    ngAfterViewInit(): void {
     this.openingSignalSub = this.openingSignal.subscribe(() => {
       this.modalSharedService.close()
@@ -35,10 +45,16 @@ export class BugModalReportSharedComponent {
     })
   }
 
+  /**
+   * Ferme le service de boite modale de signalement d'un bug
+   */
   closeReport(): void{
     this.modalSharedService.close()
   }
 
+  /**
+   * Crée un modèle de signalement d'un bug avec la description donné dans le formulaire
+   */
   callbackBugForm(): void {
     if (this.form.valid) {
       let reportBug: BugReportModel = new BugReportModel
