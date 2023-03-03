@@ -19,8 +19,8 @@ export class AddCardsProposalMainViewComponent {
     private socketSharedService: SocketSharedService
   ) {
     this.form = this.formBuilder.group({
-      title: [null, [Validators.minLength(4), Validators.maxLength(100)]],
-      description: [null, [Validators.minLength(10), Validators.maxLength(2000)]]
+      title: [null, [Validators.required, Validators.minLength(4), Validators.maxLength(100)]],
+      description: [null, [Validators.required, Validators.minLength(10), Validators.maxLength(2000)]]
     })
   }
 
