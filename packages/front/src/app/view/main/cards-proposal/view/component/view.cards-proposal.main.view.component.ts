@@ -9,6 +9,10 @@ import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared
   templateUrl: './view.cards-proposal.main.view.component.html',
   styleUrls: ['./view.cards-proposal.main.view.component.scss']
 })
+/**
+ * @classdesc Composant de la vue d'une proposition de carte
+ * @implements OnInit
+ */
 export class ViewCardsProposalMainViewComponent implements OnInit {
   cardProposalId: string | null = null
   cardProposal!: CardsProposalUserModel
@@ -16,11 +20,18 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
   user!: UserModel
   userVoteCardProposal!: VoteCardsProposalUserModel
 
+  /**
+   * @param socketSharedService Service qui permet d'utiliser des sockets
+   * @param activatedRoute Permet d'accéder aux informations sur un itinéraire associé à un composant chargé dans un outlet
+   */
   constructor(
     private socketSharedService: SocketSharedService,
     private activatedRoute: ActivatedRoute
   ) { }
 
+  /**
+   * Permet d'actualiser une proposition de carte
+   */
   async updateCardProposal(): Promise<void> {
     const cardProposalLink: ReceiverLinkSocketModel<CardsProposalUserModel> = await this.socketSharedService.registerReceiver<CardsProposalUserModel>('/game/cards-proposal', 'view')
 
@@ -36,6 +47,9 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
       triggerLink.emit(this.cardProposalId)
   }
 
+  /**
+   * Initialise une proposition de carte
+   */
   async ngOnInit(): Promise<void> {
     const id: string | null = this.activatedRoute.snapshot.paramMap.get('card_proposal_id')
 
@@ -47,6 +61,9 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
     this.setUser()
   }
 
+  /**
+   * Permet de modifier le conteur de pousse baissé d'une proposition de carte
+   */
   async callbackThumbsDownCount(): Promise<void> {
     if (!this.cardProposal) return
 
@@ -65,6 +82,9 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
       triggerLink.emit(this.cardProposalId)
   }
 
+  /**
+   * Permet de modifier le conteur de pousse en l'aire d'une proposition de carte
+   */
   async callbackThumbsUpCount(): Promise<void> {
     if (!this.cardProposal) return
 
@@ -82,6 +102,9 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
       triggerLink.emit(this.cardProposalId)
   }
 
+  /**
+   * Permet de définir l'utilisateur qui a fait la proposition de carte
+   */
   async setUser(): Promise<void> {
     const cardProposalLink: ReceiverLinkSocketModel<UserModel> = await this.socketSharedService.registerReceiver<UserModel>('/game/cards-proposal', 'user')
 
@@ -97,6 +120,9 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
       triggerLink.emit(this.cardProposalId)
   }
 
+  /**
+   * @returns Renvoie le type de vote effectuer par l'utilisateur connecté
+   */
   getUserVoteType(): string {
     let typeVote!: string
 
@@ -113,6 +139,9 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
     return typeVote
   }
 
+  /**
+   * Permet de définir le
+   */
   async setDefaultTypeUserVoteCardProposal(): Promise<void>{
     const voteUpCardProposalLink: ReceiverLinkSocketModel<VoteCardsProposalUserModel> = await this.socketSharedService.registerReceiver<VoteCardsProposalUserModel>('/game/cards-proposal', 'initTypeUserVoteCardProposal')
 
