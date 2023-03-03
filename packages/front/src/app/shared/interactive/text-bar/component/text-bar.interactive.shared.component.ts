@@ -5,13 +5,23 @@ import { Component, EventEmitter, Output, Input } from '@angular/core'
   templateUrl: './text-bar.interactive.shared.component.html',
   styleUrls: ['./text-bar.interactive.shared.component.scss']
 })
+/**
+ * @classdesc Gère les bars de texte
+ */
 export class TextBarInteractiveSharedComponent {
   _filter = ''
 
+  /**
+   * @returns Renvoie un filtre
+   */
   get filter(): string {
     return this._filter
   }
 
+  /**
+   * Attribue et émet un filtre
+   * @param value Le filtre à attribuer
+   */
   set filter(value: string) {
     this._filter = value
 

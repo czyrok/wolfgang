@@ -6,6 +6,10 @@ import { ItemTabListInteractiveSharedModel } from '../model/item.tab.list.intera
   templateUrl: './item.tab.list.interactive.shared.component.html',
   styleUrls: ['./item.tab.list.interactive.shared.component.scss']
 })
+
+/**
+ * @classdesc Gère les tableaux de listes d'items
+ */
 export class ItemTabListInteractiveSharedComponent {
   @Input() item!: ItemTabListInteractiveSharedModel;
   @Input() isIconOnly!: boolean

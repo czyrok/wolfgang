@@ -11,6 +11,10 @@ import { DisplayAlertSharedInterface } from '../../alert/display/interface/displ
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * @classdesc Gère les parties
+ * @implements HandlerLinkSocketInterface
+ */
 export class GameSharedService implements HandlerLinkSocketInterface {
     // #achan
     private _socketHandler?: HandlerSocketLinkModel
@@ -21,6 +25,12 @@ export class GameSharedService implements HandlerLinkSocketInterface {
 
     private _currentGameId?: string
 
+    /**
+     * @param router Permet de rediriger
+     * @param displayAlertSharedService Permet d'afficher des alertes
+     * @param sessionSharedService La session de l'utilisateur
+     * @param socketSharedService Service de socket
+     */
     public constructor(
         private router: Router,
         private displayAlertSharedService: DisplayAlertSharedService,
@@ -28,46 +38,85 @@ export class GameSharedService implements HandlerLinkSocketInterface {
         private socketSharedService: SocketSharedService
     ) { }
 
+    /**
+     * @returns Renvoie le gestionnaire de socket
+     */
     private get socketHandler(): HandlerSocketLinkModel | undefined {
         return this._socketHandler
     }
 
+    /**
+     * Modifie le gestionnaire de socket
+     * @param value Valeur à assigner
+     */
     private set socketHandler(value: HandlerSocketLinkModel | undefined) {
         this._socketHandler = value
     }
 
+    /**
+     * @returns Renvoie l'état d'une partie, vrai si elle a commencé sinon faux
+     */
     public get inGame(): boolean {
         return this._inGame
     }
 
+    /**
+     * Modifie l'état d'une partie
+     * @param value Valeur à assigner
+     */
     private set inGame(value: boolean) {
         this._inGame = value
     }
 
+    /**
+     * @returns Renvoie l'ID d'une partie
+     */
     public get gameId(): string | undefined {
         return this._gameId
     }
 
+    /**
+     * Assigne l'ID d'une partie
+     * @param Valeur à assigner
+     */
     private set gameId(value: string | undefined) {
         this._gameId = value
     }
 
+    /**
+     * @returns Renvoie une alerte "déja dans une partie"
+     */
     public get alreadyInGameAlert(): DisplayAlertSharedInterface | undefined {
         return this._alreadyInGameAlert
     }
 
+    /**
+     * Assigne l'affichage de l'alerte
+     * @param Valeur à assigner
+     */
     private set alreadyInGameAlert(value: DisplayAlertSharedInterface | undefined) {
         this._alreadyInGameAlert = value
     }
 
+    /**
+     * @returns Renvoie l'ID de la partie en cour
+     */
     public get currentGameId(): string | undefined {
         return this._currentGameId
     }
 
+    /**
+     * Assigne l'ID de la partie en cour
+     * @param Valeur à assigner
+     */
     private set currentGameId(value: string | undefined) {
         this._currentGameId = value
     }
 
+    /**
+     * @async Vérifie si l'utilisateur est dans une partie ou assigne une partie
+     * @returns
+     */
     public async checkStatus(): Promise<void> {
         const testSenderLink: SenderLinkSocketModel<void>
             = await this.socketSharedService.registerSender('/game', 'checkUserGame')
@@ -110,6 +159,11 @@ export class GameSharedService implements HandlerLinkSocketInterface {
         })
     }
 
+    /**
+     *
+     * @param gameId ID de la partie
+     * @returns Renvoie vrai si la partie a été rejointe sinon faux
+     */
     public async joinGame(gameId: string): Promise<boolean> {
         if (this.currentGameId === gameId) return true
 
@@ -124,6 +178,10 @@ export class GameSharedService implements HandlerLinkSocketInterface {
         return true
     }
 
+    /**
+     * Permet de quiter une partie
+     * @returns
+     */
     public async quitParty(): Promise<void> {
         this.currentGameId = undefined
 
@@ -148,6 +206,10 @@ export class GameSharedService implements HandlerLinkSocketInterface {
         })
     }
 
+    /**
+     *
+     * @returns
+     */
     public async joinGameAsPlayer(): Promise<boolean> {
         if (!this.currentGameId) return false
 
@@ -195,6 +257,9 @@ export class GameSharedService implements HandlerLinkSocketInterface {
         })
     }
 
+    /**
+     * Permet l'affichage de l'alerte "déja en partie"
+     */
     public displayJoinYourGameAlert(): void {
         this.alreadyInGameAlert?.componentRef?.instance.click()
         this.alreadyInGameAlert = undefined
@@ -211,31 +276,62 @@ export class GameSharedService implements HandlerLinkSocketInterface {
         }
     }
 
+    /**
+     * Permet de fermer l'alerte "déja en partie"
+     */
     public closeJoinYourGameAlert(): void {
         this.alreadyInGameAlert?.componentRef?.instance.click()
         this.alreadyInGameAlert = undefined
     }
 
+    /**
+     *
+     * @param namespace
+     * @param eventType
+     * @returns
+     */
     async registerGameSender<T>(namespace: string, eventType: string): Promise<SenderLinkSocketModel<T>> {
         return await this.registerSender(`/game/${this.currentGameId}${namespace}`, eventType)
     }
 
+    /**
+     *
+     * @param namespace
+     * @param event
+     * @returns
+     */
     async registerSender<T>(namespace: string, event: string): Promise<SenderLinkSocketModel<T>> {
         //await this.sessionSharedService.refreshSession()
 
         return this.getSocketHandler().registerSender<T>(namespace, event)
     }
 
+    /**
+     *
+     * @param namespace
+     * @param eventType
+     * @returns
+     */
     async registerGameReceiver<T>(namespace: string, eventType: string): Promise<ReceiverLinkSocketModel<T>> {
         return await this.registerReceiver(`/game/${this.currentGameId}${namespace}`, eventType)
     }
 
+    /**
+     *
+     * @param namespace
+     * @param event
+     * @returns
+     */
     async registerReceiver<T>(namespace: string, event: string): Promise<ReceiverLinkSocketModel<T>> {
         //await this.sessionSharedService.refreshSession()
 
         return this.getSocketHandler().registerReceiver<T>(namespace, event)
     }
 
+    /**
+     *
+     * @returns Renvoie le gestionnaire de socket
+     */
     public getSocketHandler(): HandlerSocketLinkModel {
         if (!this.socketHandler)
             this.socketHandler = new HandlerSocketLinkModel('http://localhost', 5501)
