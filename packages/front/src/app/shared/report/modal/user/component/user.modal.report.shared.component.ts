@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef, ViewChild } from '@angular/core'
+import { AfterViewInit, Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core'
 import { AbstractControl, FormArray, FormControl, FormGroup, UntypedFormGroup } from '@angular/forms'
 import { BasicUserReportModel, PlayerGameModel, ReceiverLinkSocketModel, ReportModel, SenderLinkSocketModel, StateGameModel, TypeReportEnum, TypeUserReportEnum, UserModel } from 'common'
 import { Subject, Subscription } from 'rxjs'
@@ -11,29 +11,31 @@ import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared
   templateUrl: './user.modal.report.shared.component.html',
   styleUrls: ['./user.modal.report.shared.component.scss']
 })
-export class UserModalReportSharedComponent {
-  form: UntypedFormGroup
+export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
+  form!: UntypedFormGroup
+
   openingSignalSub!: Subscription
+
+  players: Array<PlayerGameModel> = new Array
 
   constructor(
     private gameSharedService: GameSharedService,
     private modalSharedService: ModalSharedService,
     private socketSharedService: SocketSharedService
-  ) {
+  ) { }
+
+  ngOnInit(): void {
     this.form = new FormGroup({
-      users: new FormArray([])
-    });
+      players: new FormArray([])
+    })
 
-    const formArray = this.form.get('users') as FormArray
+    this.updateFormPlayerList()
 
-    if (this.gameSharedService.gameState) {
-      this.gameSharedService.gameState.players.forEach(player => {
-        formArray.push(new FormGroup({
-          name: new FormControl(player),
-          checked: new FormControl(false)
-        }))
-      })
-    }
+    this.gameSharedService.onStateChange((state: StateGameModel) => {
+      this.players = state.players
+
+      this.updateFormPlayerList()
+    })
   }
 
   ngAfterViewInit(): void {
@@ -41,7 +43,7 @@ export class UserModalReportSharedComponent {
       this.modalSharedService.close()
 
       this.modalSharedService.open({
-        title: 'Type de signalement',
+        title: 'Signalement de joueur',
         template: this.chooseUserReportTemplateRef
       })
     })
@@ -51,12 +53,18 @@ export class UserModalReportSharedComponent {
 
   callbackOtherReportUser() {
     this.reportUserOpeningSignal.next()
-
-    /* this.modalSharedService.close()
-    this.modalSharedService.open(this.tatemplateAutherReportUser.elementRef.nativeElement) */
   }
 
-  /*   @ViewChild('otherUserReportTemplate', { read: TemplateRef }) tatemplateAutherReportUser!: TemplateRef<any> */
+  updateFormPlayerList(): void {
+    const playersFormArray: FormArray = this.form.get('players') as FormArray
+
+    this.players.forEach(player => {
+      playersFormArray.push(new FormGroup({
+        name: new FormControl(player),
+        checked: new FormControl(false)
+      }))
+    })
+  }
 
   async callbackNegativeTacticsReport(): Promise<void> {
     if (!this.gameSharedService.currentGameId) return
@@ -70,7 +78,7 @@ export class UserModalReportSharedComponent {
     if (!this.gameSharedService.currentGameId) return
 
     const reportUser: BasicUserReportModel = new BasicUserReportModel(TypeUserReportEnum.INAPROPRIATE_WORDS, TypeReportEnum.BASIC_USER, this.gameSharedService.currentGameId)
-    
+
     this.setConcernedUsers(reportUser)
   }
 
@@ -78,7 +86,7 @@ export class UserModalReportSharedComponent {
     if (!this.gameSharedService.currentGameId) return
 
     const reportUser: BasicUserReportModel = new BasicUserReportModel(TypeUserReportEnum.FLOOD, TypeReportEnum.BASIC_USER, this.gameSharedService.currentGameId)
-    
+
     this.setConcernedUsers(reportUser)
   }
 
@@ -86,7 +94,7 @@ export class UserModalReportSharedComponent {
     if (!this.gameSharedService.currentGameId) return
 
     const reportUser: BasicUserReportModel = new BasicUserReportModel(TypeUserReportEnum.ADVERTISING, TypeReportEnum.BASIC_USER, this.gameSharedService.currentGameId)
-    
+
     this.setConcernedUsers(reportUser)
   }
 
@@ -94,7 +102,7 @@ export class UserModalReportSharedComponent {
     if (!this.gameSharedService.currentGameId) return
 
     const reportUser: BasicUserReportModel = new BasicUserReportModel(TypeUserReportEnum.LINK, TypeReportEnum.BASIC_USER, this.gameSharedService.currentGameId)
-    
+
     this.setConcernedUsers(reportUser)
   }
 
@@ -114,11 +122,11 @@ export class UserModalReportSharedComponent {
     triggerLink.emit(reportUser)
   }
 
+  getPlayersList(): Array<PlayerGameModel> | undefined {
+    return this.players
+  }
+
   @Input() openingSignal!: Subject<void>
 
   @ViewChild('userReportTemplate', { read: TemplateRef }) chooseUserReportTemplateRef!: TemplateRef<any>
-
-  getPlayersList(): Array<PlayerGameModel> | undefined {
-    return this.gameSharedService.gameState?.players
-  }
 }

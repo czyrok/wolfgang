@@ -5,6 +5,7 @@ import { GameSharedService } from 'src/app/shared/game/service/game.shared.servi
 import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/display.alert.shared.service'
 import { EventVoteUserSharedModel } from 'src/app/shared/user/vote/event/model/event.vote.user.shared.model'
 import { AuthSharedService } from 'src/app/shared/auth/service/auth.shared.service'
+import { Subject } from 'rxjs'
 
 @Component({
   selector: 'app-view-play',
@@ -28,6 +29,8 @@ export class PlayViewComponent implements AfterViewInit, OnDestroy {
   playerMessageEvent: EventEmitter<UserMessageChatGameModel> = new EventEmitter
   voteEvent: EventVoteUserSharedModel = new EventVoteUserSharedModel
   eventMessageEvent: EventEmitter<EventMessageChatGameModel> = new EventEmitter
+
+  reportOpeningSignal: Subject<void> = new Subject
 
   constructor(
     private authSharedService: AuthSharedService,
@@ -211,5 +214,9 @@ export class PlayViewComponent implements AfterViewInit, OnDestroy {
 
   changeDisplayChatButtonCallback(): void {
     this.displayChat = !this.displayChat
+  }
+
+  reportCallback() {
+    this.reportOpeningSignal.next()
   }
 }

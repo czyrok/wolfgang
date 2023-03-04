@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
+import { Subject } from 'rxjs'
 import { HandlerLinkSocketInterface, HandlerSocketLinkModel, ReceiverLinkSocketModel, SenderLinkSocketModel, StateGameModel } from 'common'
 
 import { DisplayAlertSharedService } from '../../alert/display/service/display.alert.shared.service'
@@ -17,9 +18,12 @@ export class GameSharedService implements HandlerLinkSocketInterface {
 
     private _inGame: boolean = false
     private _gameId?: string
-    private _alreadyInGameAlert?: DisplayAlertSharedInterface
-    private _gameState?: StateGameModel
     private _currentGameId?: string
+
+    private _alreadyInGameAlert?: DisplayAlertSharedInterface
+
+    private _stateChange: Subject<StateGameModel> = new Subject
+    private _gameState?: StateGameModel
 
     public constructor(
         private router: Router,
@@ -52,8 +56,20 @@ export class GameSharedService implements HandlerLinkSocketInterface {
         this._gameId = value
     }
 
+    public get currentGameId(): string | undefined {
+        return this._currentGameId
+    }
+
+    private set currentGameId(value: string | undefined) {
+        this._currentGameId = value
+    }
+
     public get gameState(): StateGameModel | undefined {
         return this._gameState
+    }
+
+    private get stateChange(): Subject<StateGameModel> {
+        return this._stateChange
     }
 
     public get alreadyInGameAlert(): DisplayAlertSharedInterface | undefined {
@@ -62,14 +78,6 @@ export class GameSharedService implements HandlerLinkSocketInterface {
 
     private set alreadyInGameAlert(value: DisplayAlertSharedInterface | undefined) {
         this._alreadyInGameAlert = value
-    }
-
-    public get currentGameId(): string | undefined {
-        return this._currentGameId
-    }
-
-    private set currentGameId(value: string | undefined) {
-        this._currentGameId = value
     }
 
     public async checkStatus(): Promise<void> {
@@ -248,5 +256,11 @@ export class GameSharedService implements HandlerLinkSocketInterface {
 
     public updateState(state: StateGameModel): void {
         this._gameState = state
+
+        this.stateChange.next(state)
+    }
+
+    public onStateChange(callback: (state: StateGameModel) => void) {
+        this.stateChange.subscribe(callback)
     }
 }

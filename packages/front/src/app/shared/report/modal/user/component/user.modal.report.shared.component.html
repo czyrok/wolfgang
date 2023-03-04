@@ -1,16 +1,16 @@
 <ng-template #userReportTemplate>
   <div class="box center">
+    <p data-css-text data-css-font data-css-color>Joueur(s) à signaler:</p>
+    
     <form [formGroup]="form" >
-      <p><b>Joueur(s) à signaler</b></p>
-    
-      <ul formArrayName="users">
-    
+      <ul formArrayName="players">
         <li [formGroupName]="i" *ngFor="let player of getPlayersList(); let i = index">
           <input type="checkbox" formControlName="checked" />  {{ player.user.username }}
         </li>
-    
       </ul>
     </form>
+
+    <p data-css-text data-css-font data-css-color>Type de signalement:</p>
 
     <app-shared-interactive-button text="Anti-jeu" (clickEvent)="callbackNegativeTacticsReport()">
     </app-shared-interactive-button>
