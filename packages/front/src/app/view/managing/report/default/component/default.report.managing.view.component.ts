@@ -47,7 +47,7 @@ export class DefaultReportManagingViewComponent implements OnInit {
   getType(type: TypeReportEnum): string {
     switch (type) {
       case TypeReportEnum.BASIC_USER:
-        return 'Basique'
+        return 'Utilisateur'
 
         break
       case TypeReportEnum.BUG:
@@ -55,7 +55,7 @@ export class DefaultReportManagingViewComponent implements OnInit {
 
         break
       case TypeReportEnum.OTHER_USER:
-        return 'Autre'
+        return 'Utilisateur'
 
         break
     }

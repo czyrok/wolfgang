@@ -34,7 +34,7 @@ export class OtherUserModalReportSharedComponent {
       this.modalSharedService.close()
 
       this.modalSharedService.open({
-        title: 'Signalement utilisateur',
+        title: 'Signalement de joueur',
         template: this.otherUserReportTemplateRef
       })
     })
