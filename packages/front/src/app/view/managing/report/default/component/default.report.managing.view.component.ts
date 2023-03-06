@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { ReportModel, ReceiverLinkSocketModel, SenderLinkSocketModel, UserModel, TypeReportEnum } from 'common'
+import { ReportModel, UserModel, TypeReportEnum, LinkNamespaceSocketModel } from 'common'
 
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
 
@@ -14,19 +14,18 @@ export class DefaultReportManagingViewComponent implements OnInit {
   constructor(
     private socketSharedService: SocketSharedService
   ) { }
-  
+
   async ngOnInit(): Promise<void> {
-    const reportListLink: ReceiverLinkSocketModel<Array<ReportModel>> = await this.socketSharedService.registerReceiver<Array<ReportModel>>('/managing/report', 'list')
+    const listLink: LinkNamespaceSocketModel<void, Array<ReportModel>>
+      = await this.socketSharedService.buildLink<void, Array<ReportModel>>('/managing/report', 'list')
 
-    reportListLink.subscribe((data: Array<ReportModel>) => {
+    listLink.on((data: Array<ReportModel>) => {
+      listLink.destroy()
+
       this.reportList = data
-
-      reportListLink.unsubscribe()
     })
 
-    const triggerLink: SenderLinkSocketModel<void> = await this.socketSharedService.registerSender<void>('/managing/report', 'list')
-
-    triggerLink.emit()
+    listLink.emit()
   }
 
   getDate(report: ReportModel): string {

@@ -1,5 +1,5 @@
 import { Component, Input, HostListener, AfterViewInit } from '@angular/core'
-import { PlayerGameModel, VoteFormControllerModel, CosmeticModel, ReceiverLinkSocketModel, SenderLinkSocketModel, TypeAlertEnum, TypeCosmeticEnum } from 'common'
+import { PlayerGameModel, VoteFormControllerModel, CosmeticModel, TypeAlertEnum, TypeCosmeticEnum, LinkNamespaceSocketModel } from 'common'
 
 import { AuthSharedService } from 'src/app/shared/auth/service/auth.shared.service'
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
@@ -53,14 +53,15 @@ export class AllAvatarUserSharedComponent implements AfterViewInit {
   }
 
   async loadCosmetics(): Promise<void> {
-    const cosmeticLinkReceiver: ReceiverLinkSocketModel<Array<CosmeticModel>> = await this.socketSharedService.registerReceiver<Array<CosmeticModel>>('/game/profile', 'skin'),
-      cosmeticLinkSender: SenderLinkSocketModel<string> = await this.socketSharedService.registerSender<string>('/game/profile', 'skin')
+    const cosmeticLink: LinkNamespaceSocketModel<string, Array<CosmeticModel>> = await this.socketSharedService.buildLink<string, Array<CosmeticModel>>('/game/profile', 'skin')
 
-    cosmeticLinkReceiver.subscribe((data: Array<CosmeticModel>) => {
+    cosmeticLink.on((data: Array<CosmeticModel>) => {
+      cosmeticLink.destroy()
+
       this.cosmeticsList = data
     })
 
-    cosmeticLinkSender.emit(this.username)
+    cosmeticLink.emit(this.username)
   }
 
   isVotedBySelf(): boolean {

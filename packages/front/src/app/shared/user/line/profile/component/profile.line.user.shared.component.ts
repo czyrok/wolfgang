@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core'
-import { ReceiverLinkSocketModel, SenderLinkSocketModel, UserModel } from 'common'
+import { LinkNamespaceSocketModel, UserModel } from 'common'
 
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
 import { AuthSharedService } from 'src/app/shared/auth/service/auth.shared.service'
@@ -20,17 +20,15 @@ export class ProfileLineUserSharedComponent {
   async ngAfterViewInit(): Promise<void> {
     if (this.username !== undefined) {
 
-      const userLink: ReceiverLinkSocketModel<UserModel> = (await this.socketSharedService.registerReceiver<UserModel>('/game/profile', 'view')).subscribe(
-        (data: UserModel) => {
-          this.user = data
+      const userLink: LinkNamespaceSocketModel<string, UserModel> = await this.socketSharedService.buildLink<string, UserModel>('/game/profile', 'view')
 
-          userLink.unsubscribe()
-        }
-      )
+      userLink.on((data: UserModel) => {
+        userLink.destroy()
 
-      const usernameLink: SenderLinkSocketModel<string> = await this.socketSharedService.registerSender<string>('/game/profile', 'view')
+        this.user = data
+      })
 
-      usernameLink.emit(this.username)
+      userLink.emit(this.username)
     }
   }
 

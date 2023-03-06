@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core'
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router'
-import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/display.alert.shared.service'
+import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router'
 
 import { AuthSharedService } from 'src/app/shared/auth/service/auth.shared.service'
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
+import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/display.alert.shared.service'
 
 @Injectable()
 export class ProfileMainViewGuard implements CanActivate {
@@ -14,7 +14,7 @@ export class ProfileMainViewGuard implements CanActivate {
         private displayAlertSharedService: DisplayAlertSharedService
     ) { }
 
-    async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean | UrlTree> {            
+    async canActivate(route: ActivatedRouteSnapshot): Promise<boolean | UrlTree> {            
         if (!route.firstChild) return this.router.parseUrl(`/game/profile/${this.authSharedService.username}`)
 
         const username: string | undefined = route.firstChild.params['username']

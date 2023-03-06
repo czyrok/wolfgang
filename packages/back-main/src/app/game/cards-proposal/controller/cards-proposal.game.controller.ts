@@ -24,6 +24,7 @@ export class CardsProposalGameController {
 
     @OnMessage()
     @EmitOnSuccess()
+    @EmitOnFail()
     async add(@ConnectedSocket() socket: Socket, @MessageBody() cardProposalForm: CardsProposalFormControllerModel) {
         const req: Request = socket.request as Request,
             user: DocumentType<UserModel> | undefined = req.session.user

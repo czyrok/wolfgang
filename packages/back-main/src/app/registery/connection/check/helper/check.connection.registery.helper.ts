@@ -1,22 +1,21 @@
-import { EnvUtil, HandlerSocketLinkModel, ReceiverLinkSocketModel, SenderLinkSocketModel, VarEnvEnum } from 'common'
+import { EnvUtil, LinkNamespaceSocketModel, ManagerSocketModel, VarEnvEnum } from 'common'
 
 export class CheckConnectionRegisteryHelper {
     public static async checkGame(gameId: string): Promise<boolean> {
-        const handler: HandlerSocketLinkModel = new HandlerSocketLinkModel(EnvUtil.get(VarEnvEnum.REGISTERY_URL), parseInt(EnvUtil.get(VarEnvEnum.REGISTERY_PORT)))
+        const handler: ManagerSocketModel = new ManagerSocketModel(EnvUtil.get(VarEnvEnum.REGISTERY_URL), parseInt(EnvUtil.get(VarEnvEnum.REGISTERY_PORT)))
 
-        const checkReceiverLink: ReceiverLinkSocketModel<boolean> = handler.registerReceiver(`/registery`, 'check'),
-            chechSenderLink: SenderLinkSocketModel<string> = handler.registerSender(`/registery`, 'check')
+        const checkLink: LinkNamespaceSocketModel<string, boolean> = handler.buildLink('/registery', 'check')
 
         return new Promise((resolve: (value: boolean) => void) => {
-            checkReceiverLink.subscribe((test: boolean) => {
-                checkReceiverLink.unsubscribe()
+            checkLink.on((test: boolean) => {
+                checkLink.destroy()
 
                 resolve(test)
             })
 
-            handler.socketManager.connect()
+            handler.connect()
 
-            chechSenderLink.emit(gameId)
+            checkLink.emit(gameId)
         })
     }
 }

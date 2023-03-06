@@ -26,11 +26,11 @@ export class SessionSharedService {
                         next: () => {
                             resolve()
                         },
-                        error: (error: Error) => {
+ /*                        error: (error: Error) => {
                             resolve()
 
                             this.displayAlertSharedService.emitDanger(error.message)
-                        }
+                        } */
                     }
                 )
             }

@@ -1,10 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { CosmeticModel, ReceiverLinkSocketModel, SenderLinkSocketModel, UserModel } from 'common'
+import { LinkNamespaceSocketModel, UserModel } from 'common'
+
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
 import { AuthSharedService } from '../../../../../shared/auth/service/auth.shared.service'
-
-
 
 @Component({
   selector: 'app-view-main-profile-default',
@@ -28,23 +27,21 @@ export class DefaultProfileMainViewComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     const username: string | null = this.activatedRoute.snapshot.paramMap.get('username')
 
-    if (username !== null) {
-      const userLink: ReceiverLinkSocketModel<UserModel> = (await this.socketSharedService.registerReceiver<UserModel>('/game/profile', 'view')).subscribe(
-        (data: UserModel) => {
-          this.user = data
+    if (!username) return
 
-          userLink.unsubscribe()
-        }
-      )
+    const viewLink: LinkNamespaceSocketModel<string, UserModel>
+      = await this.socketSharedService.buildLink<string, UserModel>('/game/profile', 'view')
 
-      const usernameLink: SenderLinkSocketModel<string> = await this.socketSharedService.registerSender<string>('/game/profile', 'view')
+    viewLink.on((data: UserModel) => {
+      viewLink.destroy()
 
-      usernameLink.emit(username)
-    }
+      this.user = data
+    })
+
+    viewLink.emit(username)
   }
 
   getUsername(): string | undefined {
     return this.authSharedService.username
   }
 }
-

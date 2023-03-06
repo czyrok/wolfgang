@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, OnDestroy } from '@angular/core'
-import { Router } from '@angular/router'
-import { StageStateGameEnum, TypeCardGameEnum, EventMessageChatGameModel, PlayerGameModel, MessageChatGameModel, ReceiverLinkSocketModel, SenderLinkSocketModel, StateGameModel, UserMessageChatGameModel, VotePlayerGameModel, MessageChatFormControllerModel, TypeMessageChatGameEnum, VoteFormControllerModel } from 'common'
+import { StageStateGameEnum, TypeCardGameEnum, EventMessageChatGameModel, PlayerGameModel, MessageChatGameModel, StateGameModel, UserMessageChatGameModel, VotePlayerGameModel, MessageChatFormControllerModel, TypeMessageChatGameEnum, VoteFormControllerModel, LinkNamespaceSocketModel } from 'common'
 
 import { GameSharedService } from 'src/app/shared/game/service/game.shared.service'
 import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/display.alert.shared.service'
@@ -36,7 +35,6 @@ export class PlayViewComponent implements AfterViewInit, OnDestroy {
   eventMessageEvent: EventEmitter<EventMessageChatGameModel> = new EventEmitter
 
   constructor(
-    private router: Router,
     private authSharedService: AuthSharedService,
     private gameSharedService: GameSharedService,
     private alertSharedService: DisplayAlertSharedService
@@ -58,13 +56,13 @@ export class PlayViewComponent implements AfterViewInit, OnDestroy {
 
     if (!test) return
 
-    const playerReceiverLink: ReceiverLinkSocketModel<PlayerGameModel> = await this.gameSharedService.registerGameReceiver('', 'playerState'),
-      playerSenderLink: SenderLinkSocketModel<void> = await this.gameSharedService.registerGameSender('', 'playerState')
+    const playerStateLink: LinkNamespaceSocketModel<void, PlayerGameModel>
+      = await this.gameSharedService.buildBaseLink<void, PlayerGameModel>('playerState')
 
-    playerReceiverLink.subscribe((player: PlayerGameModel) => {
+    playerStateLink.on((player: PlayerGameModel) => {
       if (player) this.player = player
 
-      if (!this.start && player !== undefined) {
+      if (this.state && this.state.stage !== StageStateGameEnum.AWAITING && !this.start && player !== undefined) {
         if (player.card.config.type === TypeCardGameEnum.GREY_WEREWOLF) {
           this.cardAlert = this.alertSharedService.emitWarning('Votre rôle est loup-garou', undefined, false)
         } else {
@@ -75,14 +73,14 @@ export class PlayViewComponent implements AfterViewInit, OnDestroy {
       }
     })
 
-    playerSenderLink.emit()
+    playerStateLink.emit()
   }
 
   async loadStateEvent(): Promise<void> {
-    const stateReceiverLink: ReceiverLinkSocketModel<StateGameModel> = await this.gameSharedService.registerGameReceiver('', 'state'),
-      stateSenderLink: SenderLinkSocketModel<void> = await this.gameSharedService.registerGameSender('', 'state')
+    const stateLink: LinkNamespaceSocketModel<void, StateGameModel>
+      = await this.gameSharedService.buildBaseLink<void, StateGameModel>('state')
 
-    stateReceiverLink.subscribe(async (state: StateGameModel) => {
+    stateLink.on(async (state: StateGameModel) => {
       this.gameStateEvent.emit(state)
 
       this.state = state
@@ -113,64 +111,62 @@ export class PlayViewComponent implements AfterViewInit, OnDestroy {
       }
     })
 
-    stateSenderLink.emit()
+    stateLink.emit()
   }
 
   async loadVoteEvent(): Promise<void> {
-    const getVoteReceiverLink: ReceiverLinkSocketModel<Array<VotePlayerGameModel>> = await this.gameSharedService.registerGameReceiver('', 'getVote'),
-      getVoteErrorLink: ReceiverLinkSocketModel<Array<VotePlayerGameModel>> = await this.gameSharedService.registerGameReceiver('', 'getVote-failed'),
-      getVoteSenderLink: SenderLinkSocketModel<void> = await this.gameSharedService.registerGameSender('', 'getVote')
+    const getVoteLink: LinkNamespaceSocketModel<void, Array<VotePlayerGameModel>>
+      = await this.gameSharedService.buildBaseLink<void, Array<VotePlayerGameModel>>('getVote')
 
-    getVoteReceiverLink.subscribe((votesList: Array<VotePlayerGameModel>) => {
-      getVoteReceiverLink.unsubscribe()
-      getVoteErrorLink.unsubscribe()
+    getVoteLink.on((votesList: Array<VotePlayerGameModel>) => {
+      getVoteLink.destroy()
 
       for (const vote of votesList) {
         this.voteEvent.playerVotingEvent.emit(new VoteFormControllerModel(vote.votingPlayer.user.username, vote.votedPlayer.user.username))
       }
     })
 
-    getVoteErrorLink.subscribe(() => {
-      getVoteErrorLink.unsubscribe()
-      getVoteReceiverLink.unsubscribe()
+    getVoteLink.onFail(() => {
+      getVoteLink.destroy()
     })
 
-    getVoteSenderLink.emit()
+    getVoteLink.emit()
 
-    const resetVoteReceiverLink: ReceiverLinkSocketModel<Array<VotePlayerGameModel>> = await this.gameSharedService.registerGameReceiver('', 'resetVote')
+    const resetVoteLink: LinkNamespaceSocketModel<void, void>
+      = await this.gameSharedService.buildBaseLink<void, void>('resetVote')
 
-    resetVoteReceiverLink.subscribe(() => {
+    resetVoteLink.on(() => {
       this.voteEvent.playerVotesResetEvent.emit()
     })
 
-    const votingActionReceiverLink: ReceiverLinkSocketModel<VoteFormControllerModel> = await this.gameSharedService.registerGameReceiver('', 'votingAction'),
-      votingActionSenderLink: SenderLinkSocketModel<VoteFormControllerModel> = await this.gameSharedService.registerGameSender('', 'votingAction'),
-      unvotingActionReceiverLink: ReceiverLinkSocketModel<string> = await this.gameSharedService.registerGameReceiver('', 'unvotingAction'),
-      unvotingActionSenderLink: SenderLinkSocketModel<void> = await this.gameSharedService.registerGameSender('', 'unvotingAction')
+    const votingActionLink: LinkNamespaceSocketModel<VoteFormControllerModel, VoteFormControllerModel>
+      = await this.gameSharedService.buildBaseLink<VoteFormControllerModel, VoteFormControllerModel>('votingAction'),
+      unvotingActionLink: LinkNamespaceSocketModel<void, string>
+        = await this.gameSharedService.buildBaseLink<void, string>('unvotingAction')
 
-    votingActionReceiverLink.subscribe((vote: VoteFormControllerModel) => {
+    votingActionLink.on((vote: VoteFormControllerModel) => {
       this.voteEvent.playerVotingEvent.emit(vote)
     })
 
     this.voteEvent.avatarSelectEvent.subscribe((votedUsername: string) => {
       if (this.authSharedService.username)
-        votingActionSenderLink.emit(new VoteFormControllerModel(this.authSharedService.username, votedUsername))
+        votingActionLink.emit(new VoteFormControllerModel(this.authSharedService.username, votedUsername))
     })
 
-    unvotingActionReceiverLink.subscribe((votingUsername: string) => {
+    unvotingActionLink.on((votingUsername: string) => {
       this.voteEvent.playerUnvotingEvent.emit(votingUsername)
     })
 
-    this.voteEvent.avatarUnselectEvent.subscribe((votedUsername: string) => {
-      unvotingActionSenderLink.emit()
+    this.voteEvent.avatarUnselectEvent.subscribe(() => {
+      unvotingActionLink.emit()
     })
   }
 
   async loadChatEvent(): Promise<void> {
-    const chatReceiverLink: ReceiverLinkSocketModel<Array<MessageChatGameModel>> = await this.gameSharedService.registerGameReceiver('', 'getChat'),
-      chatSenderLink: SenderLinkSocketModel<void> = await this.gameSharedService.registerGameSender('', 'getChat')
+    const getChatLink: LinkNamespaceSocketModel<void, Array<MessageChatGameModel>>
+      = await this.gameSharedService.buildBaseLink<void, Array<MessageChatGameModel>>('getChat')
 
-    chatReceiverLink.subscribe((messages: Array<MessageChatGameModel>) => {
+    getChatLink.on((messages: Array<MessageChatGameModel>) => {
       for (const message of messages) {
         switch (message.type) {
           case TypeMessageChatGameEnum.EVENT:
@@ -185,7 +181,7 @@ export class PlayViewComponent implements AfterViewInit, OnDestroy {
       }
     })
 
-    chatSenderLink.emit()
+    getChatLink.emit()
   }
 
   async sendMessage(event: KeyboardEvent): Promise<void> {
@@ -194,25 +190,22 @@ export class PlayViewComponent implements AfterViewInit, OnDestroy {
 
       this.sendMessageStatus = true
 
-      const emitReceiverLink: ReceiverLinkSocketModel<void> = await this.gameSharedService.registerGameReceiver('', 'emitMessage'),
-        emitErrorLink: ReceiverLinkSocketModel<any> = await this.gameSharedService.registerGameReceiver('', 'emitMessage-failed'),
-        emitSenderLink: SenderLinkSocketModel<MessageChatFormControllerModel> = await this.gameSharedService.registerGameSender('', 'emitMessage')
+      const emitMessageLink: LinkNamespaceSocketModel<MessageChatFormControllerModel, void>
+        = await this.gameSharedService.buildBaseLink('emitMessage')
 
-      emitReceiverLink.subscribe(() => {
-        emitReceiverLink.unsubscribe()
-        emitErrorLink.unsubscribe()
+      emitMessageLink.on(() => {
+        emitMessageLink.destroy()
 
         this.sendMessageStatus = false
       })
 
-      emitErrorLink.subscribe((error: any) => {
-        emitReceiverLink.unsubscribe()
-        emitErrorLink.unsubscribe()
+      emitMessageLink.onFail((error: any) => {
+        emitMessageLink.destroy()
 
         this.alertSharedService.emitDanger(error)
       })
 
-      emitSenderLink.emit(new MessageChatFormControllerModel(this.message))
+      emitMessageLink.emit(new MessageChatFormControllerModel(this.message))
 
       this.message = ''
     }

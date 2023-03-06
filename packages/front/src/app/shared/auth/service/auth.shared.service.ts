@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { CookieService } from 'ngx-cookie-service'
-import { ReceiverLinkSocketModel, SenderLinkSocketModel } from 'common'
+import { LinkNamespaceSocketModel } from 'common'
 
 import { environment } from 'src/environments/environment'
 
@@ -49,8 +49,8 @@ export class AuthSharedService {
     // #achan secure
     this.cookieService.set(environment.JWT_COOKIE_NAME, token, environment.JWT_COOKIE_DURATION / 60 / 60 / 24, '/', undefined, false, 'Lax')
 
-    this.socketSharedService.handler.socketManager.engine.close()
-    this.socketSharedService.handler.socketManager.connect()
+    this.socketSharedService.socketManager.close()
+    this.socketSharedService.socketManager.connect()
 
     await this.testAuth()
   }
@@ -65,50 +65,46 @@ export class AuthSharedService {
   }
 
   private async doAuth(): Promise<void> {
-    this.socketSharedService.handler.getNamespace('/auth').connect()
+    const testLink: LinkNamespaceSocketModel<void, string> = await this.socketSharedService.buildLink<void, string>('/auth', 'test')
 
-    const testSenderLink: SenderLinkSocketModel<void> = await this.socketSharedService.registerSender('/auth', 'test'),
-      testReceiverLink: ReceiverLinkSocketModel<string> = await this.socketSharedService.registerReceiver('/auth', 'test'),
-      testErrorLink: ReceiverLinkSocketModel<string> = await this.socketSharedService.registerReceiver('/auth', 'test')
-
-    return new Promise((resolve: (value: void) => void) => {
-      testReceiverLink.subscribe(async (username: string) => {
-        testReceiverLink.unsubscribe()
-        testErrorLink.unsubscribe()
+    return new Promise((resolve: () => void, reject: () => void) => {
+      testLink.on(async (username: string) => {
+        testLink.destroy()
 
         await this.connect(username)
 
         resolve()
       })
 
-      testErrorLink.subscribe(() => {
-        testReceiverLink.unsubscribe()
-        testErrorLink.unsubscribe()
+      testLink.onFail(() => {
+        testLink.destroy()
+
+        reject()
       })
 
-      testSenderLink.emit()
+      testLink.emit()
     })
   }
 
   public async logOut(): Promise<void> {
-    const logOutSenderLink: SenderLinkSocketModel<void> = await this.socketSharedService.registerSender('/auth', 'logOut'),
-      logOutReceiverLink: ReceiverLinkSocketModel<void> = await this.socketSharedService.registerReceiver('/auth', 'logOut')
+    const logOutLink: LinkNamespaceSocketModel<void, void> = await this.socketSharedService.buildLink('/auth', 'logOut')
 
     return new Promise((resolve: (value: void) => void) => {
-      logOutReceiverLink.subscribe(() => {
+      logOutLink.on(() => {
+        logOutLink.destroy()
+
         this.disconnect()
 
-        this.socketSharedService.handler.getNamespace('/auth').disconnect()
+        // #aret
+        // this.socketSharedService.manager.getNamespace('/auth').disconnect()
 
         // #achan
         this.cookieService.delete(environment.JWT_COOKIE_NAME, '/', undefined, false, 'Lax')
 
         resolve()
-
-        logOutReceiverLink.unsubscribe()
       })
 
-      logOutSenderLink.emit()
+      logOutLink.emit()
     })
   }
 
@@ -116,21 +112,18 @@ export class AuthSharedService {
     this.isAuth = true
     this.username = username
 
-    const scopeSenderLink: SenderLinkSocketModel<void> = await this.socketSharedService.registerSender('/auth', 'getScope'),
-      scopeReceiverLink: ReceiverLinkSocketModel<Array<string>> = await this.socketSharedService.registerReceiver('/auth', 'getScope')
+    const scopeLink: LinkNamespaceSocketModel<void, Array<string>> = await this.socketSharedService.buildLink('/auth', 'getScope')
 
     return new Promise((resolve: (value: void) => void) => {
-      scopeReceiverLink.subscribe((scopeAccess: Array<string>) => {
-        scopeReceiverLink.unsubscribe()
+      scopeLink.on((scopeAccess: Array<string>) => {
+        scopeLink.destroy()
 
         resolve()
 
         this.scopeAccess = scopeAccess
-
-        console.log(this.scopeAccess)
       })
 
-      scopeSenderLink.emit()
+      scopeLink.emit()
     })
   }
 

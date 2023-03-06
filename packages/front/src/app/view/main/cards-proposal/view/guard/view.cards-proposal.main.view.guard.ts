@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core'
 import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router'
-import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/display.alert.shared.service'
+
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
+import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/display.alert.shared.service'
 
 @Injectable()
 export class ViewCardsProposalMainViewGuard implements CanActivate {

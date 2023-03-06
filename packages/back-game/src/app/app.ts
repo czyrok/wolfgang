@@ -1,7 +1,7 @@
 import { setupMaster, fork, isMaster, workers } from 'cluster'
 import { join, dirname } from 'path'
 import { instanceToPlain, plainToInstance } from 'class-transformer'
-import { EnvUtil, VarEnvEnum, HandlerSocketLinkModel, ReceiverLinkSocketModel, SenderLinkSocketModel, LogUtil, LogHelper, TypeLogEnum, GameModel } from 'common'
+import { EnvUtil, VarEnvEnum, LogUtil, LogHelper, TypeLogEnum, GameModel, ManagerSocketModel, LinkNamespaceSocketModel, NamespaceSocketModel } from 'common'
 
 if (isMaster) {
     LogUtil.config = LogHelper.getConfig(
@@ -13,23 +13,23 @@ if (isMaster) {
 
     LogUtil.logger(TypeLogEnum.APP).trace('App started')
 
-    const ioHandler: HandlerSocketLinkModel
-        = new HandlerSocketLinkModel(EnvUtil.get(VarEnvEnum.REGISTERY_URL), parseInt(EnvUtil.get(VarEnvEnum.REGISTERY_PORT)))
-
-    const createLink: ReceiverLinkSocketModel<string> = ioHandler.registerReceiver('/registery', 'create'),
-        triggerLink: SenderLinkSocketModel<void> = ioHandler.registerSender('/registery', 'trigger')
-
-    const updateLink: SenderLinkSocketModel<GameModel> = ioHandler.registerSender('/registery', 'update')
-
-    const readyLink: SenderLinkSocketModel<GameModel> = ioHandler.registerSender('/registery', 'ready')
-
     setupMaster({
         exec: join(dirname(__filename), 'worker.js'),
         args: ['--use', 'http'],
         silent: true,
     })
 
-    createLink.subscribe((creationCode: string) => {
+    const registeryManager: ManagerSocketModel
+        = new ManagerSocketModel(EnvUtil.get(VarEnvEnum.REGISTERY_URL), parseInt(EnvUtil.get(VarEnvEnum.REGISTERY_PORT)))
+
+    const registeryNamespace: NamespaceSocketModel = registeryManager.buildNamespace('/registery')
+
+    const createLink: LinkNamespaceSocketModel<void, string> = registeryNamespace.buildBaseLink('create'),
+        triggerLink: LinkNamespaceSocketModel<void, void> = registeryNamespace.buildBaseLink('trigger'),
+        updateLink: LinkNamespaceSocketModel<GameModel, void> = registeryNamespace.buildBaseLink('update'),
+        readyLink: LinkNamespaceSocketModel<GameModel, void> = registeryNamespace.buildBaseLink('ready')
+
+    createLink.on((creationCode: string) => {
         const worker = fork({
             CREATION_CODE: creationCode
         })
@@ -57,7 +57,7 @@ if (isMaster) {
 
     let first: boolean = true
 
-    ioHandler.socketManager.on('open', () => {
+    registeryManager.socketIoManager.on('open', () => {
         triggerLink.emit()
 
         LogUtil.logger(TypeLogEnum.APP).trace('App connected to registery')
@@ -75,9 +75,9 @@ if (isMaster) {
         first = false
     })
 
-    ioHandler.socketManager.on('close', () => {
+    registeryManager.socketIoManager.on('close', () => {
         LogUtil.logger(TypeLogEnum.APP).warn('App disconnected from registery')
     })
 
-    ioHandler.socketManager.connect()
+    registeryManager.connect()
 }

@@ -12,9 +12,7 @@ export class AuthSharedGuard implements CanActivate {
     private authSharedService: AuthSharedService
   ) { }
 
-  async canActivate(): Promise<boolean | UrlTree> {
-    console.log(this.authSharedService.scopeAccess)
-    
+  async canActivate(): Promise<boolean | UrlTree> {    
     await this.authSharedService.testAuth()
 
     if (!this.authSharedService.isAuth) {

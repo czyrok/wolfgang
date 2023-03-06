@@ -1,19 +1,21 @@
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
-import { HandlerLinkSocketInterface, HandlerSocketLinkModel, ReceiverLinkSocketModel, SenderLinkSocketModel } from 'common'
+import { LinkNamespaceSocketModel, BuildManagerSocketInterface, AlternativeBuildManagerSocketInterface, ManagerSocketModel, NamespaceSocketModel } from 'common'
 
 import { environment } from 'src/environments/environment'
 
-import { DisplayAlertSharedService } from '../../alert/display/service/display.alert.shared.service'
 import { SocketSharedService } from '../../socket/service/socket.shared.service'
+import { SessionSharedService } from '../../session/service/session.shared.service'
+import { DisplayAlertSharedService } from '../../alert/display/service/display.alert.shared.service'
 
 import { DisplayAlertSharedInterface } from '../../alert/display/interface/display.alert.shared.interface'
 
 @Injectable({
     providedIn: 'root'
 })
-export class GameSharedService implements HandlerLinkSocketInterface {
-    private _socketHandler?: HandlerSocketLinkModel
+export class GameSharedService implements BuildManagerSocketInterface, AlternativeBuildManagerSocketInterface {
+    private _socketManager?: ManagerSocketModel
+    private _socketNamespace?: NamespaceSocketModel
 
     private _inGame: boolean = false
     private _gameId?: string
@@ -23,16 +25,33 @@ export class GameSharedService implements HandlerLinkSocketInterface {
 
     public constructor(
         private router: Router,
-        private displayAlertSharedService: DisplayAlertSharedService,
-        private socketSharedService: SocketSharedService
+        private socketSharedService: SocketSharedService,
+        private sessionSharedService: SessionSharedService,
+        private displayAlertSharedService: DisplayAlertSharedService
     ) { }
 
-    private get socketHandler(): HandlerSocketLinkModel | undefined {
-        return this._socketHandler
+    private set socketManager(value: ManagerSocketModel | undefined) {
+        this._socketManager = value
     }
 
-    private set socketHandler(value: HandlerSocketLinkModel | undefined) {
-        this._socketHandler = value
+    public get socketManager(): ManagerSocketModel {
+        if (!this._socketManager) {
+            this._socketManager = new ManagerSocketModel(environment.GAME_URL, environment.GAME_PORT)
+            this._socketManager.connect()
+        }
+
+        return this._socketManager
+    }
+
+    private set socketNamespace(value: NamespaceSocketModel | undefined) {
+        this._socketNamespace = value
+    }
+
+    private get socketNamespace(): NamespaceSocketModel {
+        if (!this._socketNamespace)
+            this._socketNamespace = this.socketManager.buildNamespace('/game/' + this.currentGameId)
+
+        return this._socketNamespace
     }
 
     public get inGame(): boolean {
@@ -67,24 +86,34 @@ export class GameSharedService implements HandlerLinkSocketInterface {
         this._currentGameId = value
     }
 
+    async buildNamespace(namespaceName: string): Promise<NamespaceSocketModel> {
+        await this.sessionSharedService.refreshSession()
+
+        return this.socketNamespace.buildNamespace(namespaceName)
+    }
+
+    async buildLink<S, R, E = any>(namespaceName: string, event: string): Promise<LinkNamespaceSocketModel<S, R, E>> {
+        await this.sessionSharedService.refreshSession()
+
+        return this.socketNamespace.buildLink(namespaceName, event)
+    }
+
+    async buildBaseLink<S, R, E = any>(event: string): Promise<LinkNamespaceSocketModel<S, R, E>> {
+        await this.sessionSharedService.refreshSession()
+
+        return this.socketNamespace.buildBaseLink(event)
+    }
+
     public async checkStatus(): Promise<void> {
-        const testSenderLink: SenderLinkSocketModel<void>
-            = await this.socketSharedService.registerSender('/game', 'checkUserGame')
-        const testReceiverLink: ReceiverLinkSocketModel<string>
-            = await this.socketSharedService.registerReceiver('/game', 'checkUserGame')
-        const testErrorLink: ReceiverLinkSocketModel<any>
-            = await this.socketSharedService.registerReceiver('/game', 'checkUserGame-failed')
+        const checkUserGameLink: LinkNamespaceSocketModel<void, string> = await this.socketSharedService.buildLink('/game', 'checkUserGame')
 
         return new Promise((resolve: (value: void) => void, reject: (error: any) => void) => {
-            testReceiverLink.subscribe((gameId: string) => {
-                testReceiverLink.unsubscribe()
-                testErrorLink.unsubscribe()
+            checkUserGameLink.on((gameId: string) => {
+                checkUserGameLink.destroy()
 
                 if (gameId === '') {
                     this.inGame = false
                     this.gameId = undefined
-
-                    resolve()
                 } else {
                     this.inGame = true
 
@@ -93,19 +122,18 @@ export class GameSharedService implements HandlerLinkSocketInterface {
 
                         this.displayJoinYourGameAlert()
                     }
-
-                    resolve()
                 }
+
+                resolve()
             })
 
-            testErrorLink.subscribe((error: any) => {
-                testReceiverLink.unsubscribe()
-                testErrorLink.unsubscribe()
+            checkUserGameLink.onFail((error: any) => {
+                checkUserGameLink.destroy()
 
                 reject(error)
             })
 
-            testSenderLink.emit()
+            checkUserGameLink.emit()
         })
     }
 
@@ -116,33 +144,35 @@ export class GameSharedService implements HandlerLinkSocketInterface {
 
         this.currentGameId = gameId
 
-        //await this.sessionSharedService.refreshSession()
-
-        this.getSocketHandler().socketManager.connect()
-
         return true
     }
 
     public async quitParty(): Promise<void> {
-        const leaveReceiverLink: ReceiverLinkSocketModel<boolean> = await this.registerGameReceiver('', 'leave'),
-            leaveSenderLink: SenderLinkSocketModel<void> = await this.registerGameSender('', 'leave')
+        const leaveLink: LinkNamespaceSocketModel<void, boolean> = await this.buildBaseLink('leave')
 
         return new Promise((resolve: (value: void) => void) => {
-            leaveReceiverLink.subscribe((test: boolean) => {
+            leaveLink.on((test: boolean) => {
+                leaveLink.destroy()
+
                 if (test) {
                     this.inGame = false
                     this.gameId = undefined
                 }
 
                 this.currentGameId = undefined
-                this.socketHandler = undefined
+
+                this.socketNamespace.destroy()
+                this.socketManager.close()
+
+                this.socketNamespace = undefined
+                this.socketManager = undefined
 
                 this.displayJoinYourGameAlert()
 
                 resolve()
             })
 
-            leaveSenderLink.emit()
+            leaveLink.emit()
         })
     }
 
@@ -157,12 +187,11 @@ export class GameSharedService implements HandlerLinkSocketInterface {
 
         this.closeJoinYourGameAlert()
 
-        const joinReceiverLink: ReceiverLinkSocketModel<boolean> = await this.registerGameReceiver('', 'join'),
-            joinSenderLink: SenderLinkSocketModel<void> = await this.registerGameSender('', 'join')
+        const joinLink: LinkNamespaceSocketModel<void, boolean> = await this.buildBaseLink('join')
 
         return new Promise((resolve: (value: boolean) => void) => {
-            joinReceiverLink.subscribe((test: boolean) => {
-                joinReceiverLink.unsubscribe()
+            joinLink.on((test: boolean) => {
+                joinLink.destroy()
 
                 if (test) {
                     this.inGame = true
@@ -172,25 +201,12 @@ export class GameSharedService implements HandlerLinkSocketInterface {
                 resolve(test)
             })
 
-            joinSenderLink.emit()
+            joinLink.emit()
         })
     }
 
     private async checkParty(gameId: string): Promise<boolean> {
-        const testSenderLink: SenderLinkSocketModel<string>
-            = await this.socketSharedService.registerSender('/game', 'check')
-        const testReceiverLink: ReceiverLinkSocketModel<boolean>
-            = await this.socketSharedService.registerReceiver('/game', 'check')
-
-        return new Promise((resolve: (value: boolean) => void, reject: (error: any) => void) => {
-            testReceiverLink.subscribe((test: boolean) => {
-                testReceiverLink.unsubscribe()
-
-                resolve(test)
-            })
-
-            testSenderLink.emit(gameId)
-        })
+        return this.socketSharedService.check<string>('/game', 'check', gameId)
     }
 
     public displayJoinYourGameAlert(): void {
@@ -212,32 +228,5 @@ export class GameSharedService implements HandlerLinkSocketInterface {
     public closeJoinYourGameAlert(): void {
         this.alreadyInGameAlert?.componentRef?.instance.click()
         this.alreadyInGameAlert = undefined
-    }
-
-    async registerGameSender<T>(namespace: string, eventType: string): Promise<SenderLinkSocketModel<T>> {
-        return await this.registerSender(`/game/${this.currentGameId}${namespace}`, eventType)
-    }
-
-    async registerSender<T>(namespace: string, event: string): Promise<SenderLinkSocketModel<T>> {
-        //await this.sessionSharedService.refreshSession()
-
-        return this.getSocketHandler().registerSender<T>(namespace, event)
-    }
-
-    async registerGameReceiver<T>(namespace: string, eventType: string): Promise<ReceiverLinkSocketModel<T>> {
-        return await this.registerReceiver(`/game/${this.currentGameId}${namespace}`, eventType)
-    }
-
-    async registerReceiver<T>(namespace: string, event: string): Promise<ReceiverLinkSocketModel<T>> {
-        //await this.sessionSharedService.refreshSession()
-
-        return this.getSocketHandler().registerReceiver<T>(namespace, event)
-    }
-
-    public getSocketHandler(): HandlerSocketLinkModel {
-        if (!this.socketHandler)
-            this.socketHandler = new HandlerSocketLinkModel(environment.GAME_URL, environment.GAME_PORT)
-
-        return this.socketHandler
     }
 }
