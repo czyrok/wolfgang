@@ -33,9 +33,9 @@ async function run(): Promise<void> {
 
     const io: Server = ConfigAppHelper.setup({
         port: parseInt(EnvUtil.get(VarEnvEnum.MAIN_PORT)),
+        // #achan
         cors: {
-            // #achan
-            // origin: 'http://localhost:4200',
+            origin: 'http://localhost:4200',
             credentials: true
         },
         session: true
