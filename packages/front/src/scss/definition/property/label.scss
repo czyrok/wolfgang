@@ -4,11 +4,6 @@
 @use '../../lib/definition';
 
 @include element.createElement('label') {
-    @include element.setAttrAccentContent() {
-        font-family: property.get('font', 'important') !important;
-        font-weight: bold;
-    }
-
     @include definition.setAttrBorderRadius() {
     }
 

@@ -15,7 +15,7 @@
     <ng-template #eventMessageTemplate let-message="message">
       <div class="message">
         <app-shared-chat-message-event [text]="message.text"
-          [imageUrl]="message.imageUrl"></app-shared-chat-message-event>
+          [imageUrl]="message.imageUrl" [type]="message.alertType"></app-shared-chat-message-event>
       </div>
     </ng-template>
   </div>

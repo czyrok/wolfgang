@@ -21,6 +21,7 @@ import { CampPlayerGameHelper } from '../../player/camp/helper/camp.player.game.
 import { PlayerGameModel } from '../../player/model/player.game.model'
 import { StageStateGameEnum } from '../../state/stage/enum/stage.state.game.enum'
 import { TypeCardGameEnum } from '../../card/type/enum/type.card.game.enum'
+import { TypeAlertEnum } from '../../../alert/type/enum/type.alert.enum'
 
 @Exclude()
 export class ExecutorGameModel {
@@ -54,7 +55,7 @@ export class ExecutorGameModel {
                 player.notifyUpdate()
             }
 
-            game.chatManager.sendEventMessage('La partie va commencer !', 'stopwatch')
+            game.chatManager.sendEventMessage('La partie va commencer !', 'stopwatch', TypeAlertEnum.INFORM)
         }, 1e3)
 
         setTimeout(async () => {
@@ -114,7 +115,7 @@ export class ExecutorGameModel {
         game.state.stage = StageStateGameEnum.FINISHED
         game.state.notifyUpdate()
 
-        await game.chatManager.sendEventMessage('La partie est terminée !', 'ui-power')
+        await game.chatManager.sendEventMessage('La partie est terminée !', 'ui-power', TypeAlertEnum.INFORM)
 
         let winningPlayerMessage: string = ''
 
@@ -144,7 +145,7 @@ export class ExecutorGameModel {
             if (i === winningPlayers.length - 2) winningPlayerMessage += ' et '
         }
 
-        await game.chatManager.sendEventMessage(`Bravo à ${winningPlayerMessage} !`, 'crown-king')
+        await game.chatManager.sendEventMessage(`Bravo à ${winningPlayerMessage} !`, 'crown-king', TypeAlertEnum.SUCCESS)
 
         const allPlayers: Array<PlayerGameModel> = game.state.players
 

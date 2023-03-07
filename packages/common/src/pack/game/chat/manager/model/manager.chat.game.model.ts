@@ -12,6 +12,7 @@ import { UserMessageChatGameModel } from "../../message/user/model/user.message.
 import { ChatGameModel, ChatGameModelDocument } from "../../model/chat.game.model"
 
 import { TypeChatGameEnum } from "../../type/enum/type.chat.game.enum"
+import { TypeAlertEnum } from "../../../../alert/type/enum/type.alert.enum"
 
 export class ManagerChatGameModel {
     public constructor(
@@ -45,12 +46,12 @@ export class ManagerChatGameModel {
         return true
     }
 
-    public async sendEventMessage(text: string, imageUrl: string, chatType: TypeChatGameEnum = TypeChatGameEnum.ALIVE): Promise<void> {
+    public async sendEventMessage(text: string, imageUrl: string, alertType: TypeAlertEnum, chatType: TypeChatGameEnum = TypeChatGameEnum.ALIVE): Promise<void> {
         const chat: DocumentType<ChatGameModel> | null = await ChatGameModelDocument.getChat(this.game.gameId, chatType)
 
         if (!chat) throw NotFoundChatGameError
 
-        const messageDoc: DocumentType<EventMessageChatGameModel> = await chat.sendEventMessage(text, imageUrl),
+        const messageDoc: DocumentType<EventMessageChatGameModel> = await chat.sendEventMessage(text, imageUrl, alertType),
             message: Array<EventMessageChatGameModel> = [messageDoc.toObject()]
 
         if (!this.game.namespace) throw new UndefinedNamespaceGameError

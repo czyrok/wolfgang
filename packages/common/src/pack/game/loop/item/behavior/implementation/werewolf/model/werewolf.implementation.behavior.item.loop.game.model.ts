@@ -14,6 +14,7 @@ import { TypeProcessBehaviorItemLoopGameEnum } from '../../../process/type/enum/
 import { TypeBehaviorItemLoopGameEnum } from '../../../type/enum/type.behavior.item.loop.game.enum'
 import { TypeModeChatGameEnum } from '../../../../../../chat/mode/type/enum/type.mode.chat.game.enum'
 import { ProcessContextGameEnum } from '../../../../../../context/process/enum/process.context.game.enum'
+import { TypeAlertEnum } from '../../../../../../../alert/type/enum/type.alert.enum'
 
 @InitFactoryRegistering()
 export class WerewolfImplementationBehaviorItemLoopGameModel extends BehaviorItemLoopGameModel {
@@ -54,8 +55,8 @@ export class WerewolfImplementationBehaviorItemLoopGameModel extends BehaviorIte
             if (i === this.players.length - 2) message += ' et '
         }
 
-        await chatManager.sendEventMessage(`C\'est au tour des loups garous de désigner quelqu\'un !`, 'cat-face')
-        await chatManager.sendEventMessage(`C'est à votre tour ${message} !`, 'cat-face', TypeChatGameEnum.WEREWOLF)
+        await chatManager.sendEventMessage(`C\'est au tour des loups garous de désigner quelqu\'un !`, 'cat-face', TypeAlertEnum.INFORM)
+        await chatManager.sendEventMessage(`C'est à votre tour ${message} !`, 'cat-face', TypeAlertEnum.SUCCESS)
 
         context.next()
     }

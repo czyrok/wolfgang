@@ -14,6 +14,7 @@ import { TypeProcessBehaviorItemLoopGameEnum } from '../../../process/type/enum/
 import { TypeBehaviorItemLoopGameEnum } from '../../../type/enum/type.behavior.item.loop.game.enum'
 import { TypeModeChatGameEnum } from '../../../../../../chat/mode/type/enum/type.mode.chat.game.enum'
 import { ProcessContextGameEnum } from '../../../../../../context/process/enum/process.context.game.enum'
+import { TypeAlertEnum } from '../../../../../../../alert/type/enum/type.alert.enum'
 
 @InitFactoryRegistering()
 export class VillagerImplementationBehaviorItemLoopGameModel extends BehaviorItemLoopGameModel {
@@ -46,7 +47,7 @@ export class VillagerImplementationBehaviorItemLoopGameModel extends BehaviorIte
         // #achan faire l'erreur 
         if (!chatManager) throw new Error
 
-        await chatManager.sendEventMessage('C\'est au tour des villageois de désigner quelqu\'un !', 'sun-alt')
+        await chatManager.sendEventMessage('C\'est au tour des villageois de désigner quelqu\'un !', 'sun-alt', TypeAlertEnum.INFORM)
 
         context.next()
     }
