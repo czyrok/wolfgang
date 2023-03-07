@@ -1,4 +1,4 @@
-import { Component, Input, HostListener, AfterViewInit } from '@angular/core'
+import { Component, Input, HostListener, OnChanges, SimpleChanges, AfterViewInit } from '@angular/core'
 import { PlayerGameModel, VoteFormControllerModel, CosmeticModel, TypeAlertEnum, TypeCosmeticEnum, LinkNamespaceSocketModel } from 'common'
 
 import { AuthSharedService } from 'src/app/shared/auth/service/auth.shared.service'
@@ -11,7 +11,7 @@ import { EventVoteUserSharedModel } from '../../../vote/event/model/event.vote.u
   templateUrl: './all.avatar.user.shared.component.html',
   styleUrls: ['./all.avatar.user.shared.component.scss']
 })
-export class AllAvatarUserSharedComponent implements AfterViewInit {
+export class AllAvatarUserSharedComponent implements OnChanges, AfterViewInit {
   deathTextAlertType: TypeAlertEnum = TypeAlertEnum.WARNING
 
   voteTextAlertType: TypeAlertEnum = TypeAlertEnum.DANGER
@@ -25,12 +25,16 @@ export class AllAvatarUserSharedComponent implements AfterViewInit {
   ) { }
 
   async ngAfterViewInit(): Promise<void> {
-    await this.loadCosmetics()
-
-    this.loadSubVoteEvent()
+    await this.loadCosmetics(this.username)
+    await this.loadSubVoteEvent()
   }
 
-  loadSubVoteEvent(): void {
+  async ngOnChanges(changes: SimpleChanges): Promise<void> {
+    await this.loadCosmetics(changes['username'].currentValue)
+    await this.loadSubVoteEvent()
+  }
+
+  async loadSubVoteEvent(): Promise<void> {
     if (!this.voteEvent) return
 
     this.voteEvent.playerVotingEvent.subscribe((vote: VoteFormControllerModel) => {
@@ -52,8 +56,8 @@ export class AllAvatarUserSharedComponent implements AfterViewInit {
     })
   }
 
-  async loadCosmetics(): Promise<void> {
-    const cosmeticLink: LinkNamespaceSocketModel<string, Array<CosmeticModel>> = await this.socketSharedService.buildLink<string, Array<CosmeticModel>>('/game/profile', 'skin')
+  async loadCosmetics(username: string): Promise<void> {
+    const cosmeticLink: LinkNamespaceSocketModel<void, Array<CosmeticModel>> = await this.socketSharedService.buildLink<void, Array<CosmeticModel>>('/game/profile/' + username, 'skin')
 
     cosmeticLink.on((data: Array<CosmeticModel>) => {
       cosmeticLink.destroy()
@@ -61,7 +65,7 @@ export class AllAvatarUserSharedComponent implements AfterViewInit {
       this.cosmeticsList = data
     })
 
-    cosmeticLink.emit(this.username)
+    cosmeticLink.emit()
   }
 
   isVotedBySelf(): boolean {
@@ -109,7 +113,7 @@ export class AllAvatarUserSharedComponent implements AfterViewInit {
   @Input() voteEvent!: EventVoteUserSharedModel
 
   @HostListener('click') click(): void {
-    if (this.authSharedService.username && this.voteEvent.avatarSelectEvent && this.voteEvent.avatarUnselectEvent) {
+    if (this.authSharedService.username && this.voteEvent?.avatarSelectEvent && this.voteEvent?.avatarUnselectEvent) {
       if (this.playerVotingList.indexOf(this.authSharedService.username) === -1) {
         this.voteEvent.avatarSelectEvent.emit(this.username)
       } else {

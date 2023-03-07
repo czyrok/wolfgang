@@ -66,8 +66,7 @@ export class RegisteryController {
 
         if (!instance) throw new NotFoundInstanceGameError
 
-        let found: boolean = false,
-            foundIndex: number = -1
+        let found: boolean = false
 
         for (let i = 0; i < instance.games.length; i++) {
             if (instance.games[i].gameId === game.gameId) {
@@ -78,7 +77,6 @@ export class RegisteryController {
                 }
 
                 found = true
-                foundIndex = i
 
                 break
             }

@@ -83,7 +83,7 @@ export class SkinCustomizationProfileMainViewComponent implements OnInit {
   }
 
   async setUser(username: string): Promise<void> {
-    const viewLink: LinkNamespaceSocketModel<string, UserModel> = await this.socketSharedService.buildLink<string, UserModel>('/game/profile', 'view')
+    const viewLink: LinkNamespaceSocketModel<void, UserModel> = await this.socketSharedService.buildLink<void, UserModel>('/game/profile/' + username, 'view')
 
     viewLink.on((data: UserModel) => {
       viewLink.destroy()
@@ -91,12 +91,12 @@ export class SkinCustomizationProfileMainViewComponent implements OnInit {
       this.user = data
     })
 
-    viewLink.emit(username)
+    viewLink.emit()
   }
 
   async setCosmeticsList(): Promise<void> {
     const cosmeticsLink: LinkNamespaceSocketModel<void, SeparatedCosmeticsListFormControllerModel>
-      = await this.socketSharedService.buildLink<void, SeparatedCosmeticsListFormControllerModel>('/game/profile/skin-customization', 'cosmetics')
+      = await this.socketSharedService.buildLink<void, SeparatedCosmeticsListFormControllerModel>('/game/profile/' + this.username + '/skin-customization', 'cosmetics')
 
     cosmeticsLink.on((data: SeparatedCosmeticsListFormControllerModel) => {
       this.cosmeticsList = data
@@ -159,7 +159,7 @@ export class SkinCustomizationProfileMainViewComponent implements OnInit {
 
   async purchaseButtonCallback(): Promise<void> {
     const purchaseLink: LinkNamespaceSocketModel<Array<CosmeticModel>, void>
-      = await this.socketSharedService.buildLink('/game/profile/skin-customization', 'purchase')
+      = await this.socketSharedService.buildLink('/game/profile/' + this.username + '/skin-customization', 'purchase')
 
     const cosmetics: Array<CosmeticModel> = new Array
 

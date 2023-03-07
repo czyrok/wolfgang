@@ -3,7 +3,7 @@ import { instanceToPlain } from 'class-transformer'
 import { Request } from 'express'
 import { Namespace, Socket } from 'socket.io'
 import { ConnectedSocket, EmitOnFail, EmitOnSuccess, MessageBody, OnDisconnect, OnMessage, SkipEmitOnEmptyResult, SocketController } from 'ts-socket.io-controller'
-import { NotAllowedToVotePlayerGameError, NotAllowedToVoteHimPlayerGameError, NotHisTurnPlayerGameError, AlreadyInGameUserError, ChatGameModel, ChatGameModelDocument, EventMessageChatGameModelDocument, GameModel, InitializationGameError, MessageChatFormControllerModel, MessageChatGameModel, NotAllowedToSendMessagePlayerGameError, NotFoundChatGameError, NotFoundInGamePlayerGameError, NotFoundUserError, PlayerGameModel, TypeChatGameEnum, TypeMessageChatGameEnum, TypeVotePlayerGameEnum, UserMessageChatGameModel, UserMessageChatGameModelDocument, UserModel, UserModelDocument, VoteFormControllerModel, VotePlayerGameModel, TypeBehaviorItemLoopGameEnum } from 'common'
+import { TypeGroupTransformEnum, NotAllowedToVotePlayerGameError, NotAllowedToVoteHimPlayerGameError, NotHisTurnPlayerGameError, AlreadyInGameUserError, ChatGameModel, ChatGameModelDocument, EventMessageChatGameModelDocument, GameModel, InitializationGameError, MessageChatFormControllerModel, MessageChatGameModel, NotAllowedToSendMessagePlayerGameError, NotFoundChatGameError, NotFoundInGamePlayerGameError, NotFoundUserError, PlayerGameModel, TypeChatGameEnum, TypeMessageChatGameEnum, TypeVotePlayerGameEnum, UserMessageChatGameModel, UserMessageChatGameModelDocument, UserModel, UserModelDocument, VoteFormControllerModel, VotePlayerGameModel, TypeBehaviorItemLoopGameEnum } from 'common'
 
 @SocketController({
     namespace: `/game/${GameModel.instance.gameId}`,
@@ -41,28 +41,6 @@ export class GameController {
                 currentGameId: null
             })
         }
-    }
-
-    @OnMessage()
-    @EmitOnSuccess()
-    async leave(@ConnectedSocket() socket: Socket) {
-        const req: Request = socket.request as Request,
-            userDoc: DocumentType<UserModel> | undefined = req.session.user
-
-        if (!userDoc) throw new NotFoundUserError
-
-        const game: GameModel = GameModel.instance
-
-        const user: UserModel = userDoc.toObject(),
-            test: boolean = game.leaveGame(user, socket.id)
-
-        if (test) {
-            await userDoc.updateOne({ currentGameId: null })
-
-            return true
-        }
-
-        return false
     }
 
     @OnMessage()
@@ -160,7 +138,6 @@ export class GameController {
     }
 
     @OnMessage()
-    @EmitOnSuccess()
     async playerState(@ConnectedSocket() socket: Socket) {
         const req: Request = socket.request as Request,
             user: DocumentType<UserModel> | undefined = req.session.user
@@ -172,7 +149,17 @@ export class GameController {
 
         if (!player) throw new NotFoundInGamePlayerGameError
 
-        return player
+        // #achan pas propre cf notifyUpdate() de PlayerGameModel
+
+        let plainObject: any = undefined
+
+        try {
+            plainObject = instanceToPlain(player, { groups: [TypeGroupTransformEnum.SELF] })
+        } catch (_error: any) { }
+
+        if (!plainObject) return
+
+        socket.emit('playerState', plainObject)
     }
 
     @OnMessage()

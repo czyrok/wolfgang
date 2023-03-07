@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, ParamMap } from '@angular/router'
 import { LinkNamespaceSocketModel, UserModel } from 'common'
 
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
@@ -11,26 +11,30 @@ import { AuthSharedService } from '../../../../../shared/auth/service/auth.share
   styleUrls: ['./default.profile.main.view.component.scss']
 })
 export class DefaultProfileMainViewComponent implements OnInit {
-  user!: UserModel
   username!: string
+  user!: UserModel
 
   constructor(
     private socketSharedService: SocketSharedService,
     private authSharedService: AuthSharedService,
     private activatedRoute: ActivatedRoute
-  ) {
-    const username: string | null = this.activatedRoute.snapshot.paramMap.get('username')
-
-    if (username) this.username = username
-  }
+  ) { }
 
   async ngOnInit(): Promise<void> {
-    const username: string | null = this.activatedRoute.snapshot.paramMap.get('username')
+    this.activatedRoute.paramMap.subscribe((paramMap: ParamMap) => {
+      const username: string | null = paramMap.get('username')
 
-    if (!username) return
+      if (!username) return
 
-    const viewLink: LinkNamespaceSocketModel<string, UserModel>
-      = await this.socketSharedService.buildLink<string, UserModel>('/game/profile', 'view')
+      this.username = username
+
+      this.setRender(username)
+    })
+  }
+
+  async setRender(username: string): Promise<void> {
+    const viewLink: LinkNamespaceSocketModel<void, UserModel>
+      = await this.socketSharedService.buildLink<void, UserModel>('/game/profile/' + username, 'view')
 
     viewLink.on((data: UserModel) => {
       viewLink.destroy()
@@ -38,10 +42,10 @@ export class DefaultProfileMainViewComponent implements OnInit {
       this.user = data
     })
 
-    viewLink.emit(username)
+    viewLink.emit()
   }
 
-  getUsername(): string | undefined {
-    return this.authSharedService.username
+  isAuthUser(): boolean {
+    return this.authSharedService.username === this.username
   }
 }

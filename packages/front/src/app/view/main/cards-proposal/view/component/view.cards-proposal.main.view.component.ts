@@ -35,7 +35,8 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
   async updateCardProposal(): Promise<void> {
     if (!this.cardProposalId) return
 
-    const cardProposalLink: LinkNamespaceSocketModel<string, CardsProposalUserModel> = await this.socketSharedService.buildLink<string, CardsProposalUserModel>('/game/cards-proposal', 'view')
+    const cardProposalLink: LinkNamespaceSocketModel<void, CardsProposalUserModel>
+      = await this.socketSharedService.buildLink<void, CardsProposalUserModel>('/game/cards-proposal/view/' + this.cardProposalId, 'view')
 
     cardProposalLink.on((data: CardsProposalUserModel) => {
       cardProposalLink.destroy()
@@ -43,14 +44,14 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
       this.cardProposal = data
     })
 
-    cardProposalLink.emit(this.cardProposalId)
+    cardProposalLink.emit()
   }
 
   async callbackThumbsDownCount(): Promise<void> {
     if (!this.cardProposalId) return
 
-    const voteDownCardProposalLink: LinkNamespaceSocketModel<string, VoteCardsProposalUserModel>
-      = await this.socketSharedService.buildLink<string, VoteCardsProposalUserModel>('/game/cards-proposal', 'upThumbsDownCount')
+    const voteDownCardProposalLink: LinkNamespaceSocketModel<void, VoteCardsProposalUserModel>
+      = await this.socketSharedService.buildLink<void, VoteCardsProposalUserModel>('/game/cards-proposal/view/' + this.cardProposalId, 'upThumbsDownCount')
 
     voteDownCardProposalLink.on((data: VoteCardsProposalUserModel) => {
       voteDownCardProposalLink.destroy()
@@ -60,14 +61,14 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
       this.updateCardProposal()
     })
 
-    voteDownCardProposalLink.emit(this.cardProposalId)
+    voteDownCardProposalLink.emit()
   }
 
   async callbackThumbsUpCount(): Promise<void> {
     if (!this.cardProposalId) return
 
-    const voteUpCardProposalLink: LinkNamespaceSocketModel<string, VoteCardsProposalUserModel>
-      = await this.socketSharedService.buildLink<string, VoteCardsProposalUserModel>('/game/cards-proposal', 'upThumbsUpCount')
+    const voteUpCardProposalLink: LinkNamespaceSocketModel<void, VoteCardsProposalUserModel>
+      = await this.socketSharedService.buildLink<void, VoteCardsProposalUserModel>('/game/cards-proposal/view/' + this.cardProposalId, 'upThumbsUpCount')
 
     voteUpCardProposalLink.on((data: VoteCardsProposalUserModel) => {
       voteUpCardProposalLink.destroy()
@@ -77,14 +78,14 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
       this.updateCardProposal()
     })
 
-    voteUpCardProposalLink.emit(this.cardProposalId)
+    voteUpCardProposalLink.emit()
   }
 
   async setUser(): Promise<void> {
     if (!this.cardProposalId) return
 
-    const userLink: LinkNamespaceSocketModel<string, UserModel>
-      = await this.socketSharedService.buildLink<string, UserModel>('/game/cards-proposal', 'user')
+    const userLink: LinkNamespaceSocketModel<void, UserModel>
+      = await this.socketSharedService.buildLink<void, UserModel>('/game/cards-proposal/view/' + this.cardProposalId, 'user')
 
     userLink.on((data: UserModel) => {
       userLink.destroy()
@@ -92,14 +93,14 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
       this.user = data
     })
 
-    userLink.emit(this.cardProposalId)
+    userLink.emit()
   }
 
   async setDefaultTypeUserVoteCardProposal(): Promise<void> {
     if (!this.cardProposalId) return
 
-    const voteUpCardProposalLink: LinkNamespaceSocketModel<string, VoteCardsProposalUserModel>
-      = await this.socketSharedService.buildLink<string, VoteCardsProposalUserModel>('/game/cards-proposal', 'initTypeUserVoteCardProposal')
+    const voteUpCardProposalLink: LinkNamespaceSocketModel<void, VoteCardsProposalUserModel>
+      = await this.socketSharedService.buildLink<void, VoteCardsProposalUserModel>('/game/cards-proposal/view/' + this.cardProposalId, 'initTypeUserVoteCardProposal')
 
     voteUpCardProposalLink.on((data: VoteCardsProposalUserModel) => {
       voteUpCardProposalLink.destroy()
@@ -107,7 +108,7 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
       this.userVoteCardProposal = data
     })
 
-    voteUpCardProposalLink.emit(this.cardProposalId)
+    voteUpCardProposalLink.emit()
   }
 
   getUserVoteType(): string {

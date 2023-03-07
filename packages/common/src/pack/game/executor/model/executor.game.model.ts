@@ -121,11 +121,15 @@ export class ExecutorGameModel {
         const winningPlayers: Array<PlayerGameModel> = game.state.getAlivePlayer()
 
         for (let i = 0; i < winningPlayers.length; i++) {
-            winningPlayers[i].gamePointAccumulated += 5
+            const player: PlayerGameModel = winningPlayers[i]
+
+            player.gamePointAccumulated += 5
+
+            player.emit<undefined>('winGamePoints', undefined)
 
             let cardName: string = ''
 
-            switch (winningPlayers[i].card.config.type) {
+            switch (player.card.config.type) {
                 case TypeCardGameEnum.GREY_WEREWOLF:
                     cardName = 'loug-garou'
                     break
@@ -134,7 +138,7 @@ export class ExecutorGameModel {
                     break
             }
 
-            winningPlayerMessage += `${winningPlayers[i].user.username} (${cardName})`
+            winningPlayerMessage += `${player.user.username} (${cardName})`
 
             if (i < winningPlayers.length - 2) winningPlayerMessage += ', '
             if (i === winningPlayers.length - 2) winningPlayerMessage += ' et '

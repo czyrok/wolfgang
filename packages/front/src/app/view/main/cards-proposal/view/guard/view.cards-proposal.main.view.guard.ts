@@ -19,7 +19,7 @@ export class ViewCardsProposalMainViewGuard implements CanActivate {
         
         if (!cardProposalId) return this.router.parseUrl('/game/cards-proposal')
 
-        const check: boolean = await this.socketSharedService.check<string>('/game/cards-proposal', 'check', cardProposalId)
+        const check: boolean = await this.socketSharedService.check<undefined>('/game/cards-proposal/view/' + cardProposalId, 'check', undefined)
 
         if (!check) {
             this.displayAlertSharedService.emitWarning('Cette proposition de carte n\'existe pas')

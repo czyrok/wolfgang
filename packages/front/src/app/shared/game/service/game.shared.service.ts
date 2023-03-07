@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
+import { Subject } from 'rxjs'
 import { LinkNamespaceSocketModel, BuildManagerSocketInterface, AlternativeBuildManagerSocketInterface, ManagerSocketModel, NamespaceSocketModel } from 'common'
 
 import { environment } from 'src/environments/environment'
@@ -23,6 +24,8 @@ export class GameSharedService implements BuildManagerSocketInterface, Alternati
 
     private _currentGameId?: string
 
+    private _joinEvent: Subject<void> = new Subject
+
     public constructor(
         private router: Router,
         private socketSharedService: SocketSharedService,
@@ -37,6 +40,7 @@ export class GameSharedService implements BuildManagerSocketInterface, Alternati
     public get socketManager(): ManagerSocketModel {
         if (!this._socketManager) {
             this._socketManager = new ManagerSocketModel(environment.GAME_URL, environment.GAME_PORT)
+            this._socketManager.socketIoManager.reconnection(true)
             this._socketManager.connect()
         }
 
@@ -84,6 +88,10 @@ export class GameSharedService implements BuildManagerSocketInterface, Alternati
 
     private set currentGameId(value: string | undefined) {
         this._currentGameId = value
+    }
+
+    public get joinEvent(): Subject<void> {
+        return this._joinEvent
     }
 
     async buildNamespace(namespaceName: string): Promise<NamespaceSocketModel> {
@@ -140,40 +148,27 @@ export class GameSharedService implements BuildManagerSocketInterface, Alternati
     public async joinGame(gameId: string): Promise<boolean> {
         if (this.currentGameId === gameId) return true
 
+        if (this.currentGameId) this.quitParty()
+
         if (!(await this.checkParty(gameId))) return false
 
         this.currentGameId = gameId
 
+        this.joinEvent.next()
+
         return true
     }
 
-    public async quitParty(): Promise<void> {
-        const leaveLink: LinkNamespaceSocketModel<void, boolean> = await this.buildBaseLink('leave')
+    public quitParty(): void {
+        this.inGame = false
+        this.gameId = undefined
+        this.currentGameId = undefined
 
-        return new Promise((resolve: (value: void) => void) => {
-            leaveLink.on((test: boolean) => {
-                leaveLink.destroy()
+        this.socketNamespace.destroy()
+        this.socketManager.close()
 
-                if (test) {
-                    this.inGame = false
-                    this.gameId = undefined
-                }
-
-                this.currentGameId = undefined
-
-                this.socketNamespace.destroy()
-                this.socketManager.close()
-
-                this.socketNamespace = undefined
-                this.socketManager = undefined
-
-                this.displayJoinYourGameAlert()
-
-                resolve()
-            })
-
-            leaveLink.emit()
-        })
+        this.socketNamespace = undefined
+        this.socketManager = undefined
     }
 
     public async joinGameAsPlayer(): Promise<boolean> {
@@ -206,7 +201,7 @@ export class GameSharedService implements BuildManagerSocketInterface, Alternati
     }
 
     private async checkParty(gameId: string): Promise<boolean> {
-        return this.socketSharedService.check<string>('/game', 'check', gameId)
+        return this.socketSharedService.check<undefined>('/play/' + gameId, 'check', undefined)
     }
 
     public displayJoinYourGameAlert(): void {

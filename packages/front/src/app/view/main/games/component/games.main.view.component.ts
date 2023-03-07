@@ -15,7 +15,7 @@ export class GamesMainViewComponent implements OnInit, OnDestroy {
 
   listLink!: LinkNamespaceSocketModel<void, Array<GameModel>>
 
-  creationProcess: boolean = false
+  buttonProcess: boolean = false
 
   constructor(
     private router: Router,
@@ -40,13 +40,13 @@ export class GamesMainViewComponent implements OnInit, OnDestroy {
   }
 
   async createGameButtonCallback(): Promise<void> {
-    if (this.creationProcess) return
+    if (this.buttonProcess) return
 
     await this.gameSharedService.checkStatus()
 
     if (this.gameSharedService.inGame) return
 
-    this.creationProcess = true
+    this.buttonProcess = true
 
     const createLink: LinkNamespaceSocketModel<void, string>
       = await this.socketSharedService.buildLink('/game/currently', 'create')
@@ -54,7 +54,7 @@ export class GamesMainViewComponent implements OnInit, OnDestroy {
     createLink.on((gameId: string) => {
       createLink.destroy()
 
-      this.creationProcess = false
+      this.buttonProcess = false
       
       if (!gameId) return
       
@@ -62,6 +62,22 @@ export class GamesMainViewComponent implements OnInit, OnDestroy {
     })
 
     createLink.emit()
+  }
+
+  async joinGameButtonCallback(): Promise<void> {
+    if (this.buttonProcess) return
+
+    await this.gameSharedService.checkStatus()
+
+    if (this.gameSharedService.inGame) return
+
+    this.buttonProcess = true
+
+    const game: GameModel = this.games[0]
+
+    if (!game) return
+
+    this.router.navigateByUrl(`/play/` + game.gameId)
   }
 
   getDurationText(game: GameModel): string {

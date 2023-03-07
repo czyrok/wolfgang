@@ -21,7 +21,7 @@ export class ProfileMainViewGuard implements CanActivate {
 
         if (!username) return this.router.parseUrl(`/game/profile/${this.authSharedService.username}`)
 
-        const check: boolean = await this.socketSharedService.check<string>('/game/profile', 'check', username)
+        const check: boolean = await this.socketSharedService.check<undefined>('/game/profile/' + username, 'check', undefined)
 
         if (!check) {
             this.displayAlertSharedService.emitWarning('Cet utilisateur n\'existe pas')

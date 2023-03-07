@@ -18,18 +18,17 @@ export class ProfileLineUserSharedComponent {
   ) { }
 
   async ngAfterViewInit(): Promise<void> {
-    if (this.username !== undefined) {
+    if (!this.username) return
 
-      const userLink: LinkNamespaceSocketModel<string, UserModel> = await this.socketSharedService.buildLink<string, UserModel>('/game/profile', 'view')
+    const viewLink: LinkNamespaceSocketModel<void, UserModel> = await this.socketSharedService.buildLink<void, UserModel>('/game/profile/' + this.username, 'view')
 
-      userLink.on((data: UserModel) => {
-        userLink.destroy()
+    viewLink.on((data: UserModel) => {
+      viewLink.destroy()
 
-        this.user = data
-      })
+      this.user = data
+    })
 
-      userLink.emit(this.username)
-    }
+    viewLink.emit()
   }
 
   getUsername(): string | undefined {

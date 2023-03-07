@@ -12,8 +12,8 @@
     "dotenv": "^16.0.3",
     "express": "~4.18.2",
     "mongoose": "~6.8.0",
-    "socket.io": "~4.5.4",
-    "socket.io-client": "~4.5.4",
+    "socket.io": "~4.6.1",
+    "socket.io-client": "~4.6.1",
     "ts-socket.io-controller": "^1.0.7",
     "validator": "^13.7.0"
   },

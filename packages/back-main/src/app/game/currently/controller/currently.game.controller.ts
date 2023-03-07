@@ -26,8 +26,11 @@ export class CurrentlyGameController {
     @OnMessage()
     @EmitOnSuccess()
     async create(@ConnectedSocket() socket: Socket) {
+        console.log('hého1')
         const req: Request = socket.request as Request,
             user: DocumentType<UserModel> | undefined = req.session.user
+
+        console.log('hého')
 
         if (!user) throw new NotFoundUserError
 

@@ -2,7 +2,7 @@
   <ng-template #buttonTemplate>
     <app-shared-interactive-button text="Créer une partie" [important]="true" (clickEvent)="createGameButtonCallback()">
     </app-shared-interactive-button>
-    <app-shared-interactive-button text="Rejoindre une partie" link="/play" [accent]="true" [important]="true">
+    <app-shared-interactive-button text="Rejoindre une partie" [accent]="true" [important]="true" (clickEvent)="joinGameButtonCallback()">
     </app-shared-interactive-button>
   </ng-template>
 

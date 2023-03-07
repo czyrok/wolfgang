@@ -1,6 +1,6 @@
 <section>
   <ng-template #buttonTemplate>
-    <ng-container *ngIf="getUsername() === user.username">
+    <ng-container *ngIf="isAuthUser()">
       <app-shared-interactive-button link="./skin-customization" text="Personnaliser le skin" [accent]="true"
         [important]="true">
       </app-shared-interactive-button>
@@ -9,7 +9,7 @@
 
   <ng-template #contentTemplate>
     <div class="wrapper">
-      <div class="grid {{ getUsername() === user.username ? 'show-game-points' : '' }}">
+      <div class="grid {{ isAuthUser() ? 'show-game-points' : '' }}">
         <div class="area-a">
           <app-shared-user-avatar-all [username]="username"></app-shared-user-avatar-all>
         </div>
@@ -18,7 +18,7 @@
           <app-shared-user-label-level [level]="user?.level"></app-shared-user-label-level>
         </div>
 
-        <div class="area-c" *ngIf="getUsername() === user.username">
+        <div class="area-c" *ngIf="isAuthUser()">
           <app-shared-user-label-point [pointCount]="user.gamePointCount"></app-shared-user-label-point>
         </div>
       </div>

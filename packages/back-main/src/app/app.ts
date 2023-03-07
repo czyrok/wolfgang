@@ -1,18 +1,20 @@
 import { connect } from 'mongoose'
 import { Server } from 'socket.io'
 import { SocketIoController } from 'ts-socket.io-controller'
-import { LogUtil, LogHelper, SessionIoMiddleware, ScopeIoMiddleware, AdminScopeIoMiddleware, ConfigAppHelper, TypeLogEnum, EnvUtil, VarEnvEnum, TestScopeIoMiddleware } from 'common'
+import { LogUtil, LogHelper, SessionIoMiddleware, ScopeIoMiddleware, AdminScopeIoMiddleware, ConfigAppHelper, TypeLogEnum, EnvUtil, VarEnvEnum, TestScopeIoMiddleware, PlayScopeIoMiddleware, ReportScopeIoMiddleware } from 'common'
 
 import { AuthController } from './auth/controller/auth.controller'
 import { LogInHomeController } from './home/log-in/controller/log-in.home.controller'
 import { SignUpHomeController } from './home/sign-up/controller/sign-up.home.controller'
 import { CurrentlyGameController } from './game/currently/controller/currently.game.controller'
 import { CardsProposalGameController } from './game/cards-proposal/controller/cards-proposal.game.controller'
+import { ViewCardsProposalGameController } from './game/cards-proposal/view/controller/view.cards-proposal.game.controller'
 import { ProfileGameController } from './game/profile/controller/profile.game.controller'
 import { ReportManagingController } from './managing/report/controller/report.managing.controller'
 import { ReportController } from './report/controller/report.controller'
 import { SkinCustomizationProfileGameController } from './game/profile/skin-customization/controller/skin-customization.profile.game.controller'
 import { GameController } from './game/controller/game.controller'
+import { PlayController } from './play/controller/play.controller'
 
 async function run(): Promise<void> {
     LogUtil.config = LogHelper.getConfig(
@@ -50,15 +52,19 @@ async function run(): Promise<void> {
             ProfileGameController,
             SkinCustomizationProfileGameController,
             CardsProposalGameController,
+            ViewCardsProposalGameController,
             ReportManagingController,
             ReportController,
-            GameController
+            GameController,
+            PlayController
         ],
         middlewares: [
             SessionIoMiddleware,
             TestScopeIoMiddleware,
             ScopeIoMiddleware,
-            AdminScopeIoMiddleware
+            AdminScopeIoMiddleware,
+            PlayScopeIoMiddleware,
+            ReportScopeIoMiddleware
         ],
         useClassTransformer: true
     })
