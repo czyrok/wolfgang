@@ -1,7 +1,8 @@
 import { AfterViewInit, Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core'
-import { AbstractControl, FormArray, FormControl, FormGroup, UntypedFormGroup } from '@angular/forms'
-import { BasicUserReportModel, PlayerGameModel, ReceiverLinkSocketModel, ReportModel, SenderLinkSocketModel, StateGameModel, TypeReportEnum, TypeUserReportEnum, UserModel } from 'common'
+import { FormArray, FormControl, FormGroup, UntypedFormGroup } from '@angular/forms'
 import { Subject, Subscription } from 'rxjs'
+import { BasicUserReportModel, PlayerGameModel, SenderLinkSocketModel, StateGameModel, TypeReportEnum, TypeUserReportEnum } from 'common'
+
 import { GameSharedService } from 'src/app/shared/game/service/game.shared.service'
 import { ModalSharedService } from 'src/app/shared/modal/service/modal.shared.service'
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'

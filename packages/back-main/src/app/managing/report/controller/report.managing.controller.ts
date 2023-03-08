@@ -1,24 +1,13 @@
-import { SocketController, EmitOnSuccess, EmitOnFail, OnConnect, OnDisconnect, SkipEmitOnEmptyResult, OnMessage, MessageBody, ConnectedSocket } from 'ts-socket.io-controller'
+import { SocketController, EmitOnSuccess, EmitOnFail, SkipEmitOnEmptyResult, OnMessage, MessageBody, ConnectedSocket } from 'ts-socket.io-controller'
 import { DocumentType } from '@typegoose/typegoose'
-import { BasicUserReportModel, BasicUserReportModelDocument, NotFoundReportError, BugReportModel, BugReportModelDocument, NotFoundUserError, OtherUserReportModel, OtherUserReportModelDocument, ReportModel, TypeReportEnum, UserModel, UserModelDocument, ReportModelDocument, GameModel, GameModelDocument, PlayerGameModel, NotFoundInGamePlayerGameError, TypeChatGameEnum, MessageChatGameModel, ChatGameModel, ChatGameModelDocument, NotFoundChatGameError, UserMessageChatGameModelDocument, EventMessageChatGameModelDocument, TypeMessageChatGameEnum, UserMessageChatGameModel } from 'common'
-import { Socket } from 'socket.io';
-import { Request } from 'express';
+import { Socket } from 'socket.io'
+import { BasicUserReportModel, BasicUserReportModelDocument, NotFoundReportError, BugReportModel, BugReportModelDocument, NotFoundUserError, OtherUserReportModel, OtherUserReportModelDocument, ReportModel, TypeReportEnum, UserModel, UserModelDocument, TypeChatGameEnum, MessageChatGameModel, ChatGameModel, ChatGameModelDocument, UserMessageChatGameModelDocument, EventMessageChatGameModelDocument, TypeMessageChatGameEnum, UserMessageChatGameModel } from 'common'
 
 @SocketController({
     namespace: '/managing/report',
     init: () => { }
 })
 export class ReportManagingController {
-    @OnConnect()
-    connection() {
-        console.log('client connected');
-    }
-
-    @OnDisconnect()
-    disconnect() {
-        console.log('client disconnected');
-    }
-
     @OnMessage()
     @EmitOnSuccess()
     @EmitOnFail()

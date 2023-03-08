@@ -1,24 +1,14 @@
-import { SocketController, EmitOnSuccess, EmitOnFail, SocketRequest, OnConnect, OnDisconnect, OnMessage, MessageBody, ConnectedSocket } from 'ts-socket.io-controller'
-import { BasicUserReportModel, BasicUserReportModelDocument, BugReportModel, BugReportModelDocument, NotFoundUserError, OtherUserReportModel, OtherUserReportModelDocument, ReportModel, ReportModelDocument, TypeReportEnum, TypeUserReportEnum, UserModel, UserModelDocument } from 'common'
-import { DocumentType } from '@typegoose/typegoose';
-import { Socket } from 'socket.io';
-import { Request } from 'express';
+import { SocketController, EmitOnSuccess, EmitOnFail, SocketRequest, OnMessage, MessageBody, ConnectedSocket } from 'ts-socket.io-controller'
+import { DocumentType } from '@typegoose/typegoose'
+import { Socket } from 'socket.io'
+import { Request } from 'express'
+import { BasicUserReportModel, BasicUserReportModelDocument, BugReportModel, BugReportModelDocument, NotFoundUserError, OtherUserReportModel, OtherUserReportModelDocument, ReportModel, ReportModelDocument, TypeReportEnum, UserModel, UserModelDocument } from 'common'
 
 @SocketController({
     namespace: '/report',
     init: () => { }
 })
 export class ReportController {
-    @OnConnect()
-    connection() {
-        console.log('client connected');
-    }
-
-    @OnDisconnect()
-    disconnect() {
-        console.log('client disconnected');
-    }
-
     @EmitOnSuccess()
     @EmitOnFail()
     @OnMessage()
@@ -31,27 +21,13 @@ export class ReportController {
     @EmitOnSuccess()
     @EmitOnFail()
     @OnMessage()
-    async tmp() {
-        const basicReport: DocumentType<BasicUserReportModel> = new BasicUserReportModelDocument(new BasicUserReportModel(
-            TypeUserReportEnum.ADVERTISING,
-            TypeReportEnum.BASIC_USER,
-            '63e3c86ae28067d59adabaaf'
-        ))
-
-        await basicReport.save()
-    }
-
-    @EmitOnSuccess()
-    @EmitOnFail()
-    @OnMessage()
     async add(@ConnectedSocket() socket: Socket, @MessageBody() report: BasicUserReportModel | OtherUserReportModel | BugReportModel) {
         const req: Request = socket.request as Request,
             user: DocumentType<UserModel> | undefined = req.session.user
 
         if (!user) throw new NotFoundUserError
 
-        const usersList: Array<DocumentType<UserModel>> = await UserModelDocument.find().exec()
-        const concernedUsersTmp: Array<string> = new Array
+        const concernedUsersId: Array<string> = new Array
 
         switch (report.type) {
             case TypeReportEnum.BASIC_USER:
@@ -63,13 +39,15 @@ export class ReportController {
                 basic.thumbsDownCount = 0
                 basic.thumbsUpCount = 0
 
-                for (let concernedUsers of report.concernedUsers) {
-                    for (const user of usersList) {
-                        if (concernedUsers.toString() == user.username) concernedUsersTmp.push(user._id)
-                    }
+                for (const username of report.concernedUsers) {
+                    const concernedUser: DocumentType<UserModel> | null = await UserModelDocument.findOne({ username: username }).exec()
+
+                    if (!concernedUser) continue
+
+                    concernedUsersId.push(concernedUser._id)
                 }
 
-                basic.concernedUsers = concernedUsersTmp
+                basic.concernedUsers = concernedUsersId
 
                 await basic.save()
 
@@ -95,15 +73,18 @@ export class ReportController {
                 other.thumbsDownCount = 0
                 other.thumbsUpCount = 0
 
-                for (let concernedUsers of report.concernedUsers) {
-                    for (const user of usersList) {
-                        if (concernedUsers.toString() == user.username) concernedUsersTmp.push(user._id)
-                    }
+                for (const username of report.concernedUsers) {
+                    const concernedUser: DocumentType<UserModel> | null = await UserModelDocument.findOne({ username: username }).exec()
+
+                    if (!concernedUser) continue
+
+                    concernedUsersId.push(concernedUser._id)
                 }
 
-                other.concernedUsers = concernedUsersTmp
-    
+                other.concernedUsers = concernedUsersId
+
                 await other.save()
+
                 break
         }
     }

@@ -1,7 +1,8 @@
 import { Component, Input, TemplateRef, ViewChild } from '@angular/core'
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
-import { OtherUserReportModel, ReportModel, SenderLinkSocketModel, TypeReportEnum} from 'common'
 import { Subject, Subscription } from 'rxjs'
+import { OtherUserReportModel, ReportModel, SenderLinkSocketModel, TypeReportEnum} from 'common'
+
 import { GameSharedService } from 'src/app/shared/game/service/game.shared.service'
 import { ModalSharedService } from 'src/app/shared/modal/service/modal.shared.service'
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
