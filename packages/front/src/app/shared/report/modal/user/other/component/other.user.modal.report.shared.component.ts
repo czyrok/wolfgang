@@ -15,6 +15,7 @@ import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared
 export class OtherUserModalReportSharedComponent {
   report!: ReportModel
   form: UntypedFormGroup
+  selectedUsersId!: Array<string>
 
   openingSignalSub!: Subscription
 
@@ -30,7 +31,9 @@ export class OtherUserModalReportSharedComponent {
   }
 
   ngAfterViewInit(): void {
-    this.openingSignalSub = this.openingSignal.subscribe(() => {
+    this.openingSignalSub = this.openingSignal.subscribe((selectedUsersId: Array<string>) => {
+      this.selectedUsersId = selectedUsersId
+
       this.modalSharedService.close()
 
       this.modalSharedService.open({
@@ -51,13 +54,15 @@ export class OtherUserModalReportSharedComponent {
       const reportUser: OtherUserReportModel = new OtherUserReportModel(this.form.get('description')?.value, TypeReportEnum.OTHER_USER, this.gameSharedService.gameId)
 
       this.report = reportUser
-
+      reportUser.concernedUsers = this.selectedUsersId
+    
       const triggerLink: SenderLinkSocketModel<OtherUserReportModel> = await this.socketSharedService.registerSender('/report', 'add')
+
       triggerLink.emit(reportUser)
     }
   }
 
-  @Input() openingSignal!: Subject<void>
+  @Input() openingSignal!: Subject<Array<string>>
 
   @ViewChild('otherUserReportTemplate', { read: TemplateRef }) otherUserReportTemplateRef!: TemplateRef<any>
 

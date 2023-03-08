@@ -49,10 +49,10 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
     })
   }
 
-  reportUserOpeningSignal: Subject<void> = new Subject
+  reportUserOpeningSignal: Subject<Array<string>> = new Subject
 
   callbackOtherReportUser() {
-    this.reportUserOpeningSignal.next()
+    this.reportUserOpeningSignal.next(this.getSelectedUsers())
   }
 
   updateFormPlayerList(): void {
@@ -60,7 +60,7 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
 
     this.players.forEach(player => {
       playersFormArray.push(new FormGroup({
-        name: new FormControl(player),
+        model: new FormControl(player),
         checked: new FormControl(false)
       }))
     })
@@ -106,16 +106,27 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
     this.setConcernedUsers(reportUser)
   }
 
-  async setConcernedUsers(reportUser: BasicUserReportModel): Promise<void> {
-    const selectedPlayers = this.form.get('users')?.value.filter((player: any) => player.checked) || []
+  getSelectedUsers(): Array<string> {
+    const selectedUsersId: Array<string> = new Array
 
-    for (const player of selectedPlayers) {
-      if (!this.gameSharedService.gameState) continue
+    const playersFormArray: FormArray = this.form.get('players') as FormArray
 
-      for (const user of this.gameSharedService.gameState.players) {
-        if (player.name === user.user.username) reportUser.concernedUsers.push(user.user._id)
-      }
+    for (const value of playersFormArray.value) {
+      const player: PlayerGameModel = value.model,
+        checked: boolean = value.checked
+
+      if (!player || !checked) continue
+
+      if (checked) selectedUsersId.push(player.user.username)
     }
+
+    return selectedUsersId
+  }
+
+  async setConcernedUsers(reportUser: BasicUserReportModel): Promise<void> {
+    const selectedUsersId: Array<string> = this.getSelectedUsers()
+
+    reportUser.concernedUsers = selectedUsersId
 
     const triggerLink: SenderLinkSocketModel<BasicUserReportModel> = await this.socketSharedService.registerSender('/report', 'add')
 
