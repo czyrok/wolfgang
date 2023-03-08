@@ -126,7 +126,7 @@ export class ExecutorGameModel {
 
             player.gamePointAccumulated += 5
 
-            player.emit<undefined>('winGamePoints', undefined)
+            await player.winngEnd()
 
             let cardName: string = ''
 
@@ -159,7 +159,9 @@ export class ExecutorGameModel {
             game.state.stage = StageStateGameEnum.KILLED
             game.state.notifyUpdate()
 
-            kill(pid)
+            setTimeout(() => {
+                kill(pid)
+            }, 1e3)
         }, 15e3)
     }
 }

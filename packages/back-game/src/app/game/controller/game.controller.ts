@@ -3,7 +3,7 @@ import { instanceToPlain } from 'class-transformer'
 import { Request } from 'express'
 import { Namespace, Socket } from 'socket.io'
 import { ConnectedSocket, EmitOnFail, EmitOnSuccess, MessageBody, OnDisconnect, OnMessage, SkipEmitOnEmptyResult, SocketController } from 'ts-socket.io-controller'
-import { TypeGroupTransformEnum, NotAllowedToVotePlayerGameError, NotAllowedToVoteHimPlayerGameError, NotHisTurnPlayerGameError, AlreadyInGameUserError, ChatGameModel, ChatGameModelDocument, EventMessageChatGameModelDocument, GameModel, InitializationGameError, MessageChatFormControllerModel, MessageChatGameModel, NotAllowedToSendMessagePlayerGameError, NotFoundChatGameError, NotFoundInGamePlayerGameError, NotFoundUserError, PlayerGameModel, TypeChatGameEnum, TypeMessageChatGameEnum, TypeVotePlayerGameEnum, UserMessageChatGameModel, UserMessageChatGameModelDocument, UserModel, UserModelDocument, VoteFormControllerModel, VotePlayerGameModel, TypeBehaviorItemLoopGameEnum } from 'common'
+import { TypeGroupTransformEnum, NotAllowedToVotePlayerGameError, NotAllowedToVoteHimPlayerGameError, NotHisTurnPlayerGameError, AlreadyInGameUserError, ChatGameModel, ChatGameModelDocument, EventMessageChatGameModelDocument, GameModel, InitializationGameError, MessageChatFormControllerModel, MessageChatGameModel, NotAllowedToSendMessagePlayerGameError, NotFoundChatGameError, NotFoundInGamePlayerGameError, NotFoundUserError, PlayerGameModel, TypeChatGameEnum, TypeMessageChatGameEnum, TypeVotePlayerGameEnum, UserMessageChatGameModel, UserMessageChatGameModelDocument, UserModel, UserModelDocument, VoteFormControllerModel, VotePlayerGameModel, TypeBehaviorItemLoopGameEnum, EmptyMessageChatGameError } from 'common'
 
 @SocketController({
     namespace: `/game/${GameModel.instance.gameId}`,
@@ -132,7 +132,10 @@ export class GameController {
             const test: boolean = await game.chatManager.sendPlayerMessage(player, messageForm.text, messageForm.chat)
 
             if (!test) throw new NotAllowedToSendMessagePlayerGameError
-        } catch {
+        } catch (error: EmptyMessageChatGameError | unknown) {
+            if (error instanceof EmptyMessageChatGameError)
+                throw error
+
             throw new NotAllowedToSendMessagePlayerGameError
         }
     }

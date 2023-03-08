@@ -168,9 +168,29 @@ export class PlayerGameModel {
 
         user.gamePointCount += this.gamePointAccumulated
 
+        if (this.gamePointAccumulated > 0) this.emit<undefined>('winGamePoints', undefined)
+
         this.gamePointAccumulated = 0
 
-        await user.updateOne({ gamePointCount: user.gamePointCount }).exec()
+        await user.save()
+        //await user.updateOne({ gamePointCount: user.gamePointCount }).exec()
+    }
+
+    public async winngEnd(): Promise<void> {
+        const user: DocumentType<UserModel> | null = await UserModelDocument.findById(this.user._id).exec()
+
+        if (!user) throw new NotFoundUserError
+
+        user.winnedGameCount += 1
+
+        if (user.winnedGameCount % 5 == 0) {
+            user.level += 1
+            
+            this.emit<undefined>('winLevel', undefined)
+        }
+
+        await user.save()
+        //await user.updateOne({ gamePointCount: user.gamePointCount }).exec()
     }
 
     public notifyUpdate(): void {

@@ -67,11 +67,11 @@ export class ChatGameModel extends DocumentModel implements ChatGameInterface {
 
         message.user = user
 
-        message.save()
+        await message.save()
 
         this.messages.push(message)
 
-        this.save()
+        await this.save()
 
         return message
     }
@@ -80,11 +80,11 @@ export class ChatGameModel extends DocumentModel implements ChatGameInterface {
         const message: DocumentType<EventMessageChatGameModel>
             = new EventMessageChatGameModelDocument(new EventMessageChatGameModel(TypeMessageChatGameEnum.EVENT, text, imageUrl, alertType))
 
-        message.save()
+        await message.save()
 
         this.messages.push(message)
 
-        this.save()
+        await this.save()
 
         return message
     }

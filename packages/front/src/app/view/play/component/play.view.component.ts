@@ -239,7 +239,7 @@ export class PlayViewComponent implements AfterViewInit, OnDestroy {
   }
 
   async sendMessage(event: KeyboardEvent): Promise<void> {
-    if (event.code === 'Enter' && this.player) {
+    if (event.code === 'Enter' && this.player && this.message !== '') {
       if (this.sendMessageStatus) return
 
       this.sendMessageStatus = true
@@ -255,6 +255,8 @@ export class PlayViewComponent implements AfterViewInit, OnDestroy {
 
       emitMessageLink.onFail((error: any) => {
         emitMessageLink.destroy()
+
+        this.sendMessageStatus = false
 
         this.alertSharedService.emitDanger(error)
       })

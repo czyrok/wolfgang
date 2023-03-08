@@ -41,6 +41,10 @@ export class UserModel extends DocumentModel implements UserInterface {
     level!: number
 
     @Expose()
+    @prop({ required: true, default: 0 })
+    winnedGameCount!: number
+
+    @Expose()
     @prop({ default: null })
     currentGameId!: string | null
 

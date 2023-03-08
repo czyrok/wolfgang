@@ -1,6 +1,7 @@
 import { DocumentType } from "@typegoose/typegoose"
 import { instanceToPlain } from "class-transformer"
 
+import { EmptyMessageChatGameError } from "../../message/error/empty.message.chat.game.error"
 import { UndefinedNamespaceGameError } from "../../../error/undefined-namespace.game.error"
 import { NotFoundChatGameError } from "../../error/not-found.chat.game.error"
 
@@ -33,6 +34,8 @@ export class ManagerChatGameModel {
         const chat: DocumentType<ChatGameModel> | null = await ChatGameModelDocument.getChat(this.game.gameId, chatType)
 
         if (!chat) throw new NotFoundChatGameError
+
+        if (text === '') throw new EmptyMessageChatGameError
 
         const messageDoc: DocumentType<UserMessageChatGameModel> = await chat.sendUserMessage(new UserModelDocument(player.user), text),
             message: Array<UserMessageChatGameModel> = [messageDoc.toObject()]

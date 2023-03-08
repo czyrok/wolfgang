@@ -56,7 +56,7 @@ export class WerewolfImplementationBehaviorItemLoopGameModel extends BehaviorIte
         }
 
         await chatManager.sendEventMessage(`C\'est au tour des loups garous de désigner quelqu\'un !`, 'cat-face', TypeAlertEnum.INFORM)
-        await chatManager.sendEventMessage(`C'est à votre tour ${message} !`, 'cat-face', TypeAlertEnum.SUCCESS)
+        await chatManager.sendEventMessage(`C'est à votre tour ${message} !`, 'cat-face', TypeAlertEnum.SUCCESS, this.config.chat)
 
         context.next()
     }

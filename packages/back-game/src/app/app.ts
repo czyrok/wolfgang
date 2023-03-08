@@ -27,9 +27,12 @@ if (isMaster) {
     const createLink: LinkNamespaceSocketModel<void, string> = registeryNamespace.buildBaseLink('create'),
         triggerLink: LinkNamespaceSocketModel<void, void> = registeryNamespace.buildBaseLink('trigger'),
         updateLink: LinkNamespaceSocketModel<GameModel, void> = registeryNamespace.buildBaseLink('update'),
-        readyLink: LinkNamespaceSocketModel<GameModel, void> = registeryNamespace.buildBaseLink('ready')
+        readyLink: LinkNamespaceSocketModel<GameModel, void> = registeryNamespace.buildBaseLink('ready'),
+        crashLink: LinkNamespaceSocketModel<string, void> = registeryNamespace.buildBaseLink('crash')
 
     createLink.on((creationCode: string) => {
+        let gameId: string | undefined = undefined
+
         const worker = fork({
             CREATION_CODE: creationCode
         })
@@ -40,6 +43,8 @@ if (isMaster) {
             const game: GameModel = plainToInstance(GameModel, msg)
 
             if (game.gameId) {
+                gameId = game.gameId
+
                 const obj: any = instanceToPlain(game)
 
                 if (first) readyLink.emit(obj)
@@ -50,8 +55,14 @@ if (isMaster) {
             }
         })
 
-        worker.on('exit', () => {
-            LogUtil.logger(TypeLogEnum.APP).info(`Game worker killed "{ creationCode: "${creationCode}" }"`)
+        worker.on('exit', (code: number) => {
+            if (code) {
+                LogUtil.logger(TypeLogEnum.APP).warn(`Game "{ gameId: "${gameId}",  creationCode: "${creationCode}" }" worker crashed with code ${code}`)
+            
+                if (gameId) crashLink.emit(gameId)
+            } else {
+                LogUtil.logger(TypeLogEnum.APP).info(`Game worker killed "{ gameId: "${gameId}",  creationCode: "${creationCode}" }"`)
+            }
         })
     })
 
