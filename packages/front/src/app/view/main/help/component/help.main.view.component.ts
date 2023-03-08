@@ -12,10 +12,16 @@ import cardsConfig from '../../../../../cards/config/cards.config.json'
   templateUrl: './help.main.view.component.html',
   styleUrls: ['./help.main.view.component.scss']
 })
+/**
+ * @classdesc Composant de la vue de la page d'aide
+ */
 export class HelpMainViewComponent {
   list: DetailedListInteractiveSharedModel = new DetailedListInteractiveSharedModel
   desc!: string
 
+  /**
+   * Initialise les camps des différentes cartes
+   */
   ngOnInit(): void {
     const gentilTab: TabDetailedListInteractiveSharedModel = new TabDetailedListInteractiveSharedModel
     const mechantTab: TabDetailedListInteractiveSharedModel = new TabDetailedListInteractiveSharedModel
@@ -31,6 +37,11 @@ export class HelpMainViewComponent {
     this.configureTabList(autreTab, cardsConfig.cards.filter((card: any) => card.type === 'autre'))
   }
 
+  /**
+   * Cunfigure le tableau avec les différentes listes de cartes
+   * @param tab Tableua de cartes
+   * @param cards Listes des cartes
+   */
   configureTabList(tab: TabDetailedListInteractiveSharedModel, cards: Array<any>): void {
     const tabUserCards: SubTabTabDetailedListInteractiveSharedModel = new SubTabTabDetailedListInteractiveSharedModel
     const tabBasicCards: SubTabTabDetailedListInteractiveSharedModel = new SubTabTabDetailedListInteractiveSharedModel

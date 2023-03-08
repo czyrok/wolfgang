@@ -140,7 +140,7 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
   }
 
   /**
-   * Permet de définir le
+   * Permet de définir un type de vote d'utilisateur par défaut
    */
   async setDefaultTypeUserVoteCardProposal(): Promise<void>{
     const voteUpCardProposalLink: ReceiverLinkSocketModel<VoteCardsProposalUserModel> = await this.socketSharedService.registerReceiver<VoteCardsProposalUserModel>('/game/cards-proposal', 'initTypeUserVoteCardProposal')
@@ -158,6 +158,9 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
     }
   }
 
+  /**
+   * @returns Renvoie la date de création de la proposition de carte sous forme de String
+   */
   getDate(): string {
     const date: Date = new Date(this.cardProposal?.releaseDate)
 

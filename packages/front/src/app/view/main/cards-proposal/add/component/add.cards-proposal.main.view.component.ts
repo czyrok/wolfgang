@@ -17,7 +17,7 @@ export class AddCardsProposalMainViewComponent {
   form: UntypedFormGroup
 
   /**
-   * @param router Service qui permet de naviguer entre les vues et de manipuler les URLs.
+   * @param router Service qui permet de naviguer entre les vues et de manipuler les URLs
    * @param formBuilder Service qui permet de construire des formulaires
    * @param socketSharedService Service qui permet d'utiliser des sockets
    */

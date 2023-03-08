@@ -8,20 +8,36 @@ import { AuthSharedService } from 'src/app/shared/auth/service/auth.shared.servi
   templateUrl: './nav.main.view.component.html',
   styleUrls: ['./nav.main.view.component.scss']
 })
+/**
+ * @classdesc Composant de vue de la bar de navigation
+ */
 export class NavMainViewComponent {
+  /**
+   * @param router Service qui permet de naviguer entre les vues et de manipuler les URLs.
+   * @param socketSharedService Service qui permet d'utiliser des sockets
+   */
   constructor(
     private router: Router,
     private authSharedService: AuthSharedService
   ) { }
 
+  /**
+   * @returns Renvoie le nom de l'utilisateur connecté
+   */
   getUsername(): string {
     return this.authSharedService.username ?? ''
   }
 
+  /**
+   * @returns Renvoie vrai si l'utilisateur est connecté et faux sinon
+   */
   getIsAuth(): boolean {
     return this.authSharedService.isAuth
   }
 
+  /**
+   * Permet de déconnecter l'utilisateur et de le rediriger
+   */
   async logoutCallback(): Promise<void> {
     await this.authSharedService.logOut()
 

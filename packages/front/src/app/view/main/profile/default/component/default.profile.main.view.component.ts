@@ -11,10 +11,18 @@ import { AuthSharedService } from '../../../../../shared/auth/service/auth.share
   templateUrl: './default.profile.main.view.component.html',
   styleUrls: ['./default.profile.main.view.component.scss']
 })
+/**
+ * @classdesc Composant par défault de la vue du profil
+ */
 export class DefaultProfileMainViewComponent implements OnInit {
   user!: UserModel
   username!: string
 
+  /**
+   * @param socketSharedService Service qui permet d'utiliser des sockets
+   * @param authSharedService Service d'authentification des utilisateurs
+   * @param activatedRoute Permet d'accéder aux informations sur un itinéraire associé à un composant chargé dans un outlet
+   */
   constructor(
     private socketSharedService: SocketSharedService,
     private authSharedService: AuthSharedService,
@@ -27,6 +35,9 @@ export class DefaultProfileMainViewComponent implements OnInit {
     if (username) this.username = username
   }
 
+  /**
+   * Initialisation de l'utilisateur pour le profil
+   */
   async ngOnInit(): Promise<void> {
     const username: string | null = this.activatedRoute.snapshot.paramMap.get('username')
 
@@ -34,8 +45,6 @@ export class DefaultProfileMainViewComponent implements OnInit {
       const userLink: ReceiverLinkSocketModel<UserModel> = (await this.socketSharedService.registerReceiver<UserModel>('/game/profile', 'view')).subscribe(
         (data: UserModel) => {
           this.user = data
-
-          console.log(data)
 
           userLink.unsubscribe()
         }
@@ -47,6 +56,9 @@ export class DefaultProfileMainViewComponent implements OnInit {
     }
   }
 
+  /**
+   * @returns Renvoie le nom de l'utilisateur
+   */
   getUsername(): string | undefined {
     return this.authSharedService.username
   }
