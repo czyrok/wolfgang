@@ -11,28 +11,28 @@ export class SubTabTabDetailedListInteractiveSharedModel {
   private _clickedItemEvent!: Subject<ItemSubTabTabDetailedListInteractiveSharedModel<any>>
 
   /**
-   * @returns Renvoie le titre
+   * @returns Renvois le titre
    */
   public get title(): string {
     return this._title
   }
 
   /**
-   * @returns Renvoie s'il est affiché en icône uniquement
+   * @returns Renvois s'il est affiché en icône uniquement
    */
   public get isIconOnly(): boolean {
     return this._isIconOnly
   }
 
   /**
-   * @returns Renvoie une liste d'item
+   * @returns Renvois une liste d'item
    */
   public get itemList(): Array<ItemSubTabTabDetailedListInteractiveSharedModel<any>> {
     return this._itemList
   }
 
   /**
-   * @returns Renvoie l'événement d'un item cliqué
+   * @returns Renvois l'événement d'un item cliqué
    */
   public get clickedItemEvent(): Subject<ItemSubTabTabDetailedListInteractiveSharedModel<any>> {
     return this._clickedItemEvent

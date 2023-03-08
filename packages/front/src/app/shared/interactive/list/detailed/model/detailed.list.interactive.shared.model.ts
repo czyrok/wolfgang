@@ -44,28 +44,28 @@ export class DetailedListInteractiveSharedModel {
     }
 
     /**
-     * @returns Renvoie l'événement d'un item sélectionné
+     * @returns Renvois l'événement d'un item sélectionné
      */
     public get clickedItemEvent(): Subject<ItemSubTabTabDetailedListInteractiveSharedModel<any>> {
         return this._clickedItemEvent
     }
 
     /**
-     * @returns Renvoie un tableau de listes détaillées
+     * @returns Renvois un tableau de listes détaillées
      */
     public get tabList(): Array<TabDetailedListInteractiveSharedModel> {
         return this._tabList
     }
 
     /**
-     * @returns Renvoie la visibilité d'un événement
+     * @returns Renvois la visibilité d'un événement
      */
     public get visibilityEvent(): EventEmitter<string> {
         return this._visibilityEvent
     }
 
     /**
-     * @returns Renvoie une liste de sous-tables du tableau de listes détaillées
+     * @returns Renvois une liste de sous-tables du tableau de listes détaillées
      */
     public get selectedItems(): Array<ItemSubTabTabDetailedListInteractiveSharedModel<any>> {
         return this._selectedItems
@@ -74,7 +74,7 @@ export class DetailedListInteractiveSharedModel {
     /**
      * Ajoute un tableau de listes détaillées dans un tableau de sous-tables
      * @param value tableau de listes détaillées à ajouter
-     * @returns Renvoie le model
+     * @returns Renvois le model
      */
     public addTab(value: TabDetailedListInteractiveSharedModel): this {
         value.setClickedItemEvent(this.clickedItemEvent)

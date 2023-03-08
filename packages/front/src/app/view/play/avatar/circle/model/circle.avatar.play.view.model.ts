@@ -3,9 +3,19 @@ import { PlayerGameModel, VotePlayerGameModel } from 'common'
 
 import { PlaceCircleAvatarPlayViewModel } from '../place/model/place.circle.avatar.play.view.model'
 
+/**
+ * @classdesc Model de l'fichage des avatars en cercle l'or d'une partie
+ */
 export class CircleAvatarPlayViewModel {
   private _placesList: Array<PlaceCircleAvatarPlayViewModel> = new Array()
 
+  /**
+   * @param _voteEventEmitter Emet un évenement de vote
+   * @param _renderer Permet d'implémenter un rendu personnalisé
+   * @param _changeDetectorRef Classe de base qui fournit la fonctionnalité de détection des changements
+   * @param _targetRef Représente un conteneur dans lequel une ou plusieurs vues peuvent être attachées à un composant
+   * @param _boxElementRef Une boite autour d'un élément natif à l'intérieur d'une vue
+   */
   public constructor(
     private _voteEventEmitter: EventEmitter<VotePlayerGameModel>,
     private _renderer: Renderer2,
@@ -16,30 +26,51 @@ export class CircleAvatarPlayViewModel {
     this.update()
   }
 
+  /**
+   * @returns Renvois la liste des emplacements des avatars pour l'affichage en cercle
+   */
   public get placesList(): Array<PlaceCircleAvatarPlayViewModel> {
     return this._placesList
   }
 
+  /**
+   * @returns Renvois un évenement de vote d'un joueur
+   */
   public get voteEventEmitter(): EventEmitter<VotePlayerGameModel> {
     return this._voteEventEmitter
   }
 
+  /**
+   * @returns Renvois le rendue personnalisé
+   */
   public get renderer(): Renderer2 {
     return this._renderer
   }
 
+  /**
+   * @returns Renvois le détecteur de changements
+   */
   public get changeDetectorRef(): ChangeDetectorRef {
     return this._changeDetectorRef
   }
 
+  /**
+   * @returns Renvois un conteneur dans lequel une ou plusieurs vues peuvent être attachées à un composant
+   */
   public get targetRef(): ViewContainerRef {
     return this._targetRef
   }
 
+  /**
+   * @returns Renvois la boite autour d'un élément natif à l'intérieur d'une vue
+   */
   public get boxElementRef(): ElementRef<HTMLElement> {
     return this._boxElementRef
   }
 
+  /**
+   * Fonction de mise à jour du cercle en fonction du nombre de joueur
+   */
   public update(): void {
     const radius: number = Math.min(
       this.boxElementRef.nativeElement.offsetWidth,
@@ -96,6 +127,10 @@ export class CircleAvatarPlayViewModel {
     }
   }
 
+  /**
+   * Assigne une place sur le cercle à chaque utilisateur
+   * @param playersList Liste des joueurs dans la partie
+   */
   public setPlayers(playersList: Array<PlayerGameModel>) {
     this.placesList.splice(0, this.placesList.length)
 
@@ -104,10 +139,18 @@ export class CircleAvatarPlayViewModel {
     }
   }
 
+  /**
+   * Ajoute un utilisateur au cercle
+   * @param player Un utilisateur
+   */
   public addPlayer(player: PlayerGameModel): void {
     this.placesList.push(PlaceCircleAvatarPlayViewModel.create(player, this.voteEventEmitter, this.renderer, this.changeDetectorRef, this.targetRef))
   }
 
+  /**
+   * Supprime un utilisateur du cercle
+   * @param player Un utlisateur
+   */
   public removePlayer(player: PlayerGameModel): void {
     for (let i = 0; i < this.placesList.length; i++) {
       if (this.placesList[i].player.user.id == player.user.id) {
@@ -119,6 +162,9 @@ export class CircleAvatarPlayViewModel {
     }
   }
 
+  /**
+   * Supprime tous les utilisateurs du cercle
+   */
   public removeAll(): void {
     for (const place of this.placesList) {
       place.destroy()

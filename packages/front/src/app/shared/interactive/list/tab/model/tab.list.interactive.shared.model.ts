@@ -10,28 +10,28 @@ export class TabListInteractiveSharedModel {
   private _itemList: Array<ItemTabListInteractiveSharedModel> = new Array
 
   /**
-   * @returns Renvoie le titre
+   * @returns Renvois le titre
    */
   public get title(): string {
     return this._title
   }
 
   /**
-   * @returns Renvoie l'état de la visibilité
+   * @returns Renvois l'état de la visibilité
    */
   public get visibility(): boolean {
     return this._visibility
   }
 
   /**
-   * @returns Renvoie s'il est affiché en icône uniquement
+   * @returns Renvois s'il est affiché en icône uniquement
    */
   public get isIconOnly(): boolean {
     return this._isIconOnly
   }
 
   /**
-   * @returns Renvoie une liste d'item
+   * @returns Renvois une liste d'item
    */
   public get itemList(): Array<ItemTabListInteractiveSharedModel> {
     return this._itemList

@@ -15,35 +15,35 @@ export class TabDetailedListInteractiveSharedModel {
   private _clickedItemEvent!: Subject<ItemSubTabTabDetailedListInteractiveSharedModel<any>>
 
   /**
-   * @returns Renvoie le titre
+   * @returns Renvois le titre
    */
   public get title(): string {
     return this._title
   }
 
   /**
-   * @returns Renvoie l'état de la visibilité
+   * @returns Renvois l'état de la visibilité
    */
   public get visibility(): boolean {
     return this._visibility
   }
 
   /**
-   * @returns Renvoie une sous-table de listes interactives détaillées
+   * @returns Renvois une sous-table de listes interactives détaillées
    */
   public get subTabList(): Array<SubTabTabDetailedListInteractiveSharedModel> {
     return this._subTabList
   }
 
   /**
-   * @returns Renvoie un événement de visibilité
+   * @returns Renvois un événement de visibilité
    */
   public get visibilityEvent(): EventEmitter<string> {
     return this._visibilityEvent
   }
 
   /**
-   * @returns Renvoie des événements d'item cliqué
+   * @returns Renvois des événements d'item cliqué
    */
   public get clickedItemEvent(): Subject<ItemSubTabTabDetailedListInteractiveSharedModel<any>> {
     return this._clickedItemEvent

@@ -121,7 +121,7 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
   }
 
   /**
-   * @returns Renvoie le type de vote effectuer par l'utilisateur connecté
+   * @returns Renvois le type de vote effectuer par l'utilisateur connecté
    */
   getUserVoteType(): string {
     let typeVote!: string
@@ -159,7 +159,7 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
   }
 
   /**
-   * @returns Renvoie la date de création de la proposition de carte sous forme de String
+   * @returns Renvois la date de création de la proposition de carte sous forme de String
    */
   getDate(): string {
     const date: Date = new Date(this.cardProposal?.releaseDate)

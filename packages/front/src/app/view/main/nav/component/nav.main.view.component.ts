@@ -22,14 +22,14 @@ export class NavMainViewComponent {
   ) { }
 
   /**
-   * @returns Renvoie le nom de l'utilisateur connecté
+   * @returns Renvois le nom de l'utilisateur connecté
    */
   getUsername(): string {
     return this.authSharedService.username ?? ''
   }
 
   /**
-   * @returns Renvoie vrai si l'utilisateur est connecté et faux sinon
+   * @returns Renvois vrai si l'utilisateur est connecté et faux sinon
    */
   getIsAuth(): boolean {
     return this.authSharedService.isAuth

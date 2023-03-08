@@ -9,35 +9,35 @@ export class ItemTabListInteractiveSharedModel {
   private _count: number = -1
 
   /**
-   * @returns Renvoie le nom
+   * @returns Renvois le nom
    */
   public get name(): string {
     return this._name
   }
 
   /**
-   * @returns Renvoie un callBack sur le model
+   * @returns Renvois un callBack sur le model
    */
   public get callBack(): () => void {
     return this._callBack
   }
 
   /**
-   * @returns Renvoie s'il est désactivé
+   * @returns Renvois s'il est désactivé
    */
   public get isDisabled(): boolean {
     return this._isDisabled
   }
 
   /**
-   * @returns Renvoie l'URL d'une image
+   * @returns Renvois l'URL d'une image
    */
   public get imgURL(): string {
     return this._imgURL
   }
 
   /**
-   * @returns Renvoie un compteur
+   * @returns Renvois un compteur
    */
   public get count(): number {
     return this._count

@@ -6,7 +6,7 @@ export class ListInteractiveSharedModel {
     private _tabList: Array<TabListInteractiveSharedModel> = new Array
 
     /**
-     * @returns Renvoie une liste de tableau
+     * @returns Renvois une liste de tableau
      */
     public get tabList(): Array<TabListInteractiveSharedModel> {
         return this._tabList

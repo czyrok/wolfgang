@@ -8,16 +8,26 @@ import { CircleAvatarPlayViewModel } from '../model/circle.avatar.play.view.mode
   templateUrl: './circle.avatar.play.view.component.html',
   styleUrls: ['./circle.avatar.play.view.component.scss']
 })
+/**
+ * @classdesc Composant permettant l'fichage des avatars en cercle l'or d'une partie
+ */
 export class CircleAvatarPlayViewComponent implements AfterViewInit {
   avatarsCircle!: CircleAvatarPlayViewModel
 
   first: boolean = true
 
+  /**
+   * @param renderer Permet d'implémenter un rendu personnalisé
+   * @param changeDetectorRef Classe de base qui fournit la fonctionnalité de détection des changements
+   */
   constructor(
     private renderer: Renderer2,
     private changeDetectorRef: ChangeDetectorRef
   ) { }
 
+  /**
+   * Met en place l'affichage en cercle après l'initialisation de la vue
+   */
   ngAfterViewInit(): void {
     this.avatarsCircle = new CircleAvatarPlayViewModel(this.eventPlayerVote, this.renderer, this.changeDetectorRef, this.targetRef, this.boxContainerRef)
 

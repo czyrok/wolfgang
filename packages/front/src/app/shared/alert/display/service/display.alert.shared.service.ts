@@ -27,7 +27,7 @@ export class DisplayAlertSharedService {
      * @param detailed Modifie l'affichage de l'alerte
      * @param timer Dis si l'alerte est temporaire ou permanente
      * @param buttonList Permet de modifier le bouton par défaut d'une alerte
-     * @returns Elle renvoie l'objet de l'alerte émise
+     * @returns Elle renvois l'objet de l'alerte émise
      */
     public emitSuccess(
         text: string,
@@ -44,7 +44,7 @@ export class DisplayAlertSharedService {
      * @param detailed Modifie l'affichage de l'alerte
      * @param timer Dis si l'alerte est temporaire ou permanente
      * @param buttonList Permet de modifier le bouton par défaut d'une alerte
-     * @returns Elle renvoie l'objet de l'alerte émise
+     * @returns Elle renvois l'objet de l'alerte émise
      */
     public emitInform(
         text: string,
@@ -61,7 +61,7 @@ export class DisplayAlertSharedService {
      * @param detailed Modifie l'affichage de l'alerte
      * @param timer Dis si l'alerte est temporaire ou permanente
      * @param buttonList Permet de modifier le bouton par défaut d'une alerte
-     * @returns Elle renvoie l'objet de l'alerte émise
+     * @returns Elle renvois l'objet de l'alerte émise
      */
     public emitWarning(
         text: string,
@@ -78,7 +78,7 @@ export class DisplayAlertSharedService {
      * @param detailed Modifie l'affichage de l'alerte
      * @param timer Dis si l'alerte est temporaire ou permanente
      * @param buttonList Permet de modifier le bouton par défaut d'une alerte
-     * @returns Elle renvoie l'objet de l'alerte émise
+     * @returns Elle renvois l'objet de l'alerte émise
      */
     public emitDanger(
         text: string,

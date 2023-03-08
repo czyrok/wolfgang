@@ -35,7 +35,7 @@ export class AuthSharedService {
   }
 
   /**
-   * @returns Renvoie vraie si l'utilisateur est connecté faux sinon
+   * @returns Renvois vraie si l'utilisateur est connecté faux sinon
    */
   public get isAuth(): boolean {
     return this._isAuth
@@ -50,7 +50,7 @@ export class AuthSharedService {
   }
 
   /**
-   * @returns Renvoie le nom de l'utilisateur
+   * @returns Renvois le nom de l'utilisateur
    */
   public get username(): string | undefined {
     return this._username

@@ -39,7 +39,7 @@ export class GameSharedService implements HandlerLinkSocketInterface {
     ) { }
 
     /**
-     * @returns Renvoie le gestionnaire de socket
+     * @returns Renvois le gestionnaire de socket
      */
     private get socketHandler(): HandlerSocketLinkModel | undefined {
         return this._socketHandler
@@ -54,7 +54,7 @@ export class GameSharedService implements HandlerLinkSocketInterface {
     }
 
     /**
-     * @returns Renvoie l'état d'une partie, vrai si elle a commencé sinon faux
+     * @returns Renvois l'état d'une partie, vrai si elle a commencé sinon faux
      */
     public get inGame(): boolean {
         return this._inGame
@@ -69,7 +69,7 @@ export class GameSharedService implements HandlerLinkSocketInterface {
     }
 
     /**
-     * @returns Renvoie l'ID d'une partie
+     * @returns Renvois l'ID d'une partie
      */
     public get gameId(): string | undefined {
         return this._gameId
@@ -84,7 +84,7 @@ export class GameSharedService implements HandlerLinkSocketInterface {
     }
 
     /**
-     * @returns Renvoie une alerte "déja dans une partie"
+     * @returns Renvois une alerte "déja dans une partie"
      */
     public get alreadyInGameAlert(): DisplayAlertSharedInterface | undefined {
         return this._alreadyInGameAlert
@@ -99,7 +99,7 @@ export class GameSharedService implements HandlerLinkSocketInterface {
     }
 
     /**
-     * @returns Renvoie l'ID de la partie en cour
+     * @returns Renvois l'ID de la partie en cour
      */
     public get currentGameId(): string | undefined {
         return this._currentGameId
@@ -162,7 +162,7 @@ export class GameSharedService implements HandlerLinkSocketInterface {
     /**
      *
      * @param gameId ID de la partie
-     * @returns Renvoie vrai si la partie a été rejointe sinon faux
+     * @returns Renvois vrai si la partie a été rejointe sinon faux
      */
     public async joinGame(gameId: string): Promise<boolean> {
         if (this.currentGameId === gameId) return true
@@ -330,7 +330,7 @@ export class GameSharedService implements HandlerLinkSocketInterface {
 
     /**
      *
-     * @returns Renvoie le gestionnaire de socket
+     * @returns Renvois le gestionnaire de socket
      */
     public getSocketHandler(): HandlerSocketLinkModel {
         if (!this.socketHandler)

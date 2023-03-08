@@ -12,7 +12,7 @@ export class TextBarInteractiveSharedComponent {
   _filter = ''
 
   /**
-   * @returns Renvoie un filtre
+   * @returns Renvois un filtre
    */
   get filter(): string {
     return this._filter

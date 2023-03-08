@@ -63,7 +63,7 @@ export class SkinCustomizationProfileMainViewComponent implements OnInit {
   }
 
   /**
-   * @returns Renvoie le nom de l'utilisateur
+   * @returns Renvois le nom de l'utilisateur
    */
   getUsername(): string | undefined {
     return this.authSharedService.username

@@ -14,56 +14,56 @@ export class ItemSubTabTabDetailedListInteractiveSharedModel<T> {
   private _associedObject!: T
 
   /**
-   * @returns Renvoie le nom de l'item
+   * @returns Renvois le nom de l'item
    */
   public get name(): string {
     return this._name
   }
 
   /**
-   * @returns Renvoie un callBack sur le model
+   * @returns Renvois un callBack sur le model
    */
   public get callBack(): () => void {
     return this._callBack
   }
 
   /**
-   * @returns Renvoie vrai s'il est désactivé sinon faux
+   * @returns Renvois vrai s'il est désactivé sinon faux
    */
   public get isDisabled(): boolean {
     return this._isDisabled
   }
 
   /**
-   * @returns Renvoie l'url d'une image
+   * @returns Renvois l'url d'une image
    */
   public get imgURL(): string {
     return this._imgURL
   }
 
   /**
-   * @returns Renvoie un compteur
+   * @returns Renvois un compteur
    */
   public get count(): number {
     return this._count
   }
 
   /**
-   * @returns Renvoie l'événement d'un item cliqué
+   * @returns Renvois l'événement d'un item cliqué
    */
   public get clickedItemEvent(): Subject<ItemSubTabTabDetailedListInteractiveSharedModel<T>> {
     return this._clickedItemEvent
   }
 
   /**
-   * @returns Renvoie vrai l'item est sélectionné sinon faux
+   * @returns Renvois vrai l'item est sélectionné sinon faux
    */
   public get isSelected(): boolean {
     return this._isSelected
   }
 
   /**
-   * @returns Renvoie un objet associé
+   * @returns Renvois un objet associé
    */
   public get associedObject(): T {
     return this._associedObject

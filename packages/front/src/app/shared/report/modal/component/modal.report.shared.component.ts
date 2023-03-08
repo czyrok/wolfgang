@@ -28,7 +28,6 @@ export class ModalReportSharedComponent implements AfterViewInit {
    */
   ngAfterViewInit(): void {
     this.openingSignalSub = this.openingSignal.subscribe(() => {
-      console.log('ici')
       this.modalSharedService.close()
 
       this.modalSharedService.open({

@@ -30,8 +30,6 @@ export class DefaultProfileMainViewComponent implements OnInit {
   ) {
     const username: string | null = this.activatedRoute.snapshot.paramMap.get('username')
 
-    console.log(username)
-
     if (username) this.username = username
   }
 
@@ -57,7 +55,7 @@ export class DefaultProfileMainViewComponent implements OnInit {
   }
 
   /**
-   * @returns Renvoie le nom de l'utilisateur
+   * @returns Renvois le nom de l'utilisateur
    */
   getUsername(): string | undefined {
     return this.authSharedService.username

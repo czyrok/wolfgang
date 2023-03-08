@@ -16,14 +16,14 @@ export class ModalSharedService {
     private _modalClosingEvent: Subject<boolean> = new Subject
 
     /**
-     * @returns Renvoie l'évenement d'ouverture d'une boite modale
+     * @returns Renvois l'évenement d'ouverture d'une boite modale
      */
     public get modalOpeningEvent(): Subject<ModalSharedInterface> {
         return this._modalOpeningEvent
     }
 
     /**
-     * @returns Renvoie l'évenement de fermeture d'une boite modale
+     * @returns Renvois l'évenement de fermeture d'une boite modale
      */
     public get modalClosingEvent(): Subject<boolean> {
         return this._modalClosingEvent
@@ -43,7 +43,6 @@ export class ModalSharedService {
      */
     public open(modal: ModalSharedInterface): void {
         if (!this.oneOpened) {
-          console.log(modal.template)
             this.modalOpeningEvent.next(modal)
 
             this.oneOpened = true

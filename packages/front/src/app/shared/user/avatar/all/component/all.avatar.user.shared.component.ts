@@ -47,12 +47,10 @@ export class AllAvatarUserSharedComponent implements AfterViewInit, OnDestroy {
       }
     }) */
 
-    console.log(this.username)
 
     const cosmeticLink: ReceiverLinkSocketModel<Array<CosmeticModel>> = await this.socketSharedService.registerReceiver<Array<CosmeticModel>>('/game/profile', 'skin')
 
     cosmeticLink.subscribe((data: Array<CosmeticModel>) => {
-      console.log(data)
       this.cosmeticsList = data
     })
 
@@ -69,35 +67,35 @@ export class AllAvatarUserSharedComponent implements AfterViewInit, OnDestroy {
   }
 
   /**
-   * @returns Renvoie un cosmetique de type chapeau
+   * @returns Renvois un cosmetique de type chapeau
    */
   getHat(): CosmeticModel | undefined {
     return this.hat || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.HAT)[0]
   }
 
   /**
-   * @returns Renvoie un cosmetique de type tête
+   * @returns Renvois un cosmetique de type tête
    */
   getHead(): CosmeticModel | undefined {
     return this.head || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.HEAD)[0]
   }
 
   /**
-   * @returns Renvoie un cosmetique de type haut
+   * @returns Renvois un cosmetique de type haut
    */
   getTop(): CosmeticModel | undefined {
     return this.top || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.TOP)[0]
   }
 
   /**
-   * @returns Renvoie un cosmetique de type pantalon
+   * @returns Renvois un cosmetique de type pantalon
    */
   getPants(): CosmeticModel | undefined {
     return this.pants || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.PANTS)[0]
   }
 
   /**
-   * @returns Renvoie un cosmetique de type chaussure
+   * @returns Renvois un cosmetique de type chaussure
    */
   getShoes(): CosmeticModel | undefined {
     return this.shoes || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.SHOES)[0]

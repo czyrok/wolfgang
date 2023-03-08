@@ -10,6 +10,10 @@ import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/
   templateUrl: './play.view.component.html',
   styleUrls: ['./play.view.component.scss']
 })
+/**
+ * @classdesc Composant de la vue d'une partie
+ * @implements AfterViewInit, OnDestroy
+ */
 export class PlayViewComponent implements AfterViewInit, OnDestroy {
   displayChat: boolean = true
 
@@ -30,6 +34,11 @@ export class PlayViewComponent implements AfterViewInit, OnDestroy {
   playerMessageEvent: EventEmitter<UserMessageChatGameModel> = new EventEmitter
   eventMessageEvent: EventEmitter<EventMessageChatGameModel> = new EventEmitter
 
+  /**
+   *
+   * @param gameSharedService Service regroupant les informations d'une partie
+   * @param alertSharedService Service qui permet de gérer l'affichage des alertes d'autentification
+   */
   constructor(
     private gameSharedService: GameSharedService,
     private alertSharedService: DisplayAlertSharedService
