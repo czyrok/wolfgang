@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core'
 import { FormArray, FormControl, FormGroup, UntypedFormGroup } from '@angular/forms'
 import { Subject, Subscription } from 'rxjs'
-import { BasicUserReportModel, PlayerGameModel, SenderLinkSocketModel, StateGameModel, TypeReportEnum, TypeUserReportEnum } from 'common'
+import { BasicUserReportModel, PlayerGameModel, LinkNamespaceSocketModel, StateGameModel, TypeReportEnum, TypeUserReportEnum } from 'common'
 
 import { GameSharedService } from 'src/app/shared/game/service/game.shared.service'
 import { ModalSharedService } from 'src/app/shared/modal/service/modal.shared.service'
@@ -129,9 +129,9 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
 
     reportUser.concernedUsers = selectedUsersId
 
-    const triggerLink: SenderLinkSocketModel<BasicUserReportModel> = await this.socketSharedService.registerSender('/report', 'add')
+    const addLink: LinkNamespaceSocketModel<BasicUserReportModel, void> = await this.socketSharedService.buildLink('/report', 'add')
 
-    triggerLink.emit(reportUser)
+    addLink.emit(reportUser)
   }
 
   getPlayersList(): Array<PlayerGameModel> | undefined {

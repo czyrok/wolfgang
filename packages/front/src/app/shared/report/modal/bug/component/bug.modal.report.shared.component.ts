@@ -1,7 +1,7 @@
 import { Component, Input, TemplateRef, ViewChild } from '@angular/core'
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
 import { Subject, Subscription } from 'rxjs'
-import { BugReportModel, ReportModel, SenderLinkSocketModel, TypeReportEnum } from 'common'
+import { BugReportModel, ReportModel, LinkNamespaceSocketModel, TypeReportEnum } from 'common'
 
 import { ModalSharedService } from 'src/app/shared/modal/service/modal.shared.service'
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
@@ -48,8 +48,9 @@ export class BugModalReportSharedComponent {
 
       this.report = reportBug
       
-      const triggerLink: SenderLinkSocketModel<BugReportModel> = await this.socketSharedService.registerSender('/report', 'add')
-      triggerLink.emit(reportBug)
+      const addLink: LinkNamespaceSocketModel<BugReportModel, void> = await this.socketSharedService.buildLink('/report', 'add')
+      
+      addLink.emit(reportBug)
     }
   }
 

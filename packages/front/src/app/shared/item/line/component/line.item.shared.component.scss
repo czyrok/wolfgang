@@ -24,7 +24,8 @@
     }
 }
 
-::ng-deep .lines-container:not(.all) :has(.line):nth-child(2n - 1) .line {
+::ng-deep .lines-container:not(.all) > :nth-child(2n - 1):has(.line) > .line,
+::ng-deep .lines-container:not(.all) > :nth-child(2n):has(.line) > :has(.line) > .line {
     box-shadow: property.get('shadow', 'box', 'lite');
 
     @include theme.themeHandler(false, 'containerElement2') {

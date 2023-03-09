@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { ReportModel, UserModel, TypeReportEnum, LinkNamespaceSocketModel, TypeReportEnum, TypeUserReportEnum } from 'common'
+import { ReportModel, TypeReportEnum, LinkNamespaceSocketModel, TypeUserReportEnum, TypeAlertEnum } from 'common'
 
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
 
@@ -43,45 +43,55 @@ export class DefaultReportManagingViewComponent implements OnInit {
     return false
   }
 
-  getType(type: TypeReportEnum): string {
+  getReportName(type: TypeReportEnum): string {
     switch (type) {
-      case TypeReportEnum.BASIC_USER:
-        return 'Utilisateur'
-
-        break
       case TypeReportEnum.BUG:
         return 'Bug'
-
-        break
+      case TypeReportEnum.BASIC_USER:
+        return 'Utilisateur'
       case TypeReportEnum.OTHER_USER:
         return 'Utilisateur'
-
-        break
     }
   }
 
-  getUserReportType(type: TypeUserReportEnum): string {
+  getReportTextAlertType(type: TypeReportEnum): TypeAlertEnum {
+    switch (type) {
+      case TypeReportEnum.BUG:
+        return TypeAlertEnum.WARNING
+      case TypeReportEnum.BASIC_USER:
+        return TypeAlertEnum.DANGER
+      case TypeReportEnum.OTHER_USER:
+        return TypeAlertEnum.DANGER
+    }
+  }
+
+  getUserReportName(type: TypeUserReportEnum): string {
     switch (type) {
       case TypeUserReportEnum.ADVERTISING:
         return 'Publicité'
-
-        break
       case TypeUserReportEnum.FLOOD:
         return 'Spam'
-
-        break
       case TypeUserReportEnum.INAPROPRIATE_WORDS:
-        return 'Language grossié'
-
-        break
+        return 'Language inapproprié'
       case TypeUserReportEnum.LINK:
-        return 'Lien'
-
-        break
+        return 'Partage de liens'
       case TypeUserReportEnum.NEGATIVE_TACTICS:
-        return 'Joue contre son camp'
+        return 'Anti-jeu'
+    }
+  }
 
-        break
+  getUserReportTextAlertType(type: TypeUserReportEnum): TypeAlertEnum {
+    switch (type) {
+      case TypeUserReportEnum.ADVERTISING:
+        return TypeAlertEnum.INFORM
+      case TypeUserReportEnum.FLOOD:
+        return TypeAlertEnum.DANGER
+      case TypeUserReportEnum.INAPROPRIATE_WORDS:
+        return TypeAlertEnum.DANGER
+      case TypeUserReportEnum.LINK:
+        return TypeAlertEnum.INFORM
+      case TypeUserReportEnum.NEGATIVE_TACTICS:
+        return TypeAlertEnum.WARNING
     }
   }
 }

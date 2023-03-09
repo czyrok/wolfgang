@@ -1,7 +1,7 @@
 import { Component, Input, TemplateRef, ViewChild } from '@angular/core'
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
 import { Subject, Subscription } from 'rxjs'
-import { OtherUserReportModel, ReportModel, SenderLinkSocketModel, TypeReportEnum} from 'common'
+import { OtherUserReportModel, ReportModel, LinkNamespaceSocketModel, TypeReportEnum} from 'common'
 
 import { GameSharedService } from 'src/app/shared/game/service/game.shared.service'
 import { ModalSharedService } from 'src/app/shared/modal/service/modal.shared.service'
@@ -57,9 +57,9 @@ export class OtherUserModalReportSharedComponent {
       this.report = reportUser
       reportUser.concernedUsers = this.selectedUsersId
     
-      const triggerLink: SenderLinkSocketModel<OtherUserReportModel> = await this.socketSharedService.registerSender('/report', 'add')
+      const addLink: LinkNamespaceSocketModel<OtherUserReportModel, void> = await this.socketSharedService.buildLink('/report', 'add')
 
-      triggerLink.emit(reportUser)
+      addLink.emit(reportUser)
     }
   }
 

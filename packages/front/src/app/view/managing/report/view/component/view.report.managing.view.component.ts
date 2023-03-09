@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, EventEmitter, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { ReportModel, UserModel, OtherUserReportModel, TypeReportEnum, BugReportModel, BasicUserReportModel, LinkNamespaceSocketModel, MessageChatGameModel, TypeMessageChatGameEnum, UserMessageChatGameModel, EventMessageChatGameModel, TypeUserReportEnum } from 'common'
+import { ReportModel, UserModel, OtherUserReportModel, TypeReportEnum, BugReportModel, BasicUserReportModel, LinkNamespaceSocketModel, MessageChatGameModel, TypeMessageChatGameEnum, UserMessageChatGameModel, EventMessageChatGameModel, TypeUserReportEnum, TypeAlertEnum } from 'common'
 
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
 
@@ -68,11 +68,11 @@ export class ViewReportManagingViewComponent implements OnInit, AfterViewInit {
 
     if (!id) return
 
-    const chatReceiverLink: ReceiverLinkSocketModel<Array<MessageChatGameModel>> = await this.socketSharedService.registerReceiver('/managing/report', 'getChat'),
-      chatSenderLink: SenderLinkSocketModel<string> = await this.socketSharedService.registerSender('/managing/report', 'getChat')
+    const getChatLink: LinkNamespaceSocketModel<string, Array<MessageChatGameModel>> = await this.socketSharedService.buildLink('/managing/report', 'getChat')
 
-    chatReceiverLink.subscribe((messages: Array<MessageChatGameModel>) => {
-      console.log(messages)
+    getChatLink.on((messages: Array<MessageChatGameModel>) => {
+      getChatLink.destroy()
+
       for (const message of messages) {
         switch (message.type) {
           case TypeMessageChatGameEnum.EVENT:
@@ -87,7 +87,7 @@ export class ViewReportManagingViewComponent implements OnInit, AfterViewInit {
       }
     })
 
-    chatSenderLink.emit(id)
+    getChatLink.emit(id)
   }
 
   getDate(report: ReportModel): string {
@@ -101,8 +101,9 @@ export class ViewReportManagingViewComponent implements OnInit, AfterViewInit {
 
     if (!id) return
 
-    const reportSenderLink: SenderLinkSocketModel<string> = await this.socketSharedService.registerSender('/managing/report', 'delete')
-    reportSenderLink.emit(id)
+    const deleteLink: LinkNamespaceSocketModel<string, void> = await this.socketSharedService.buildLink('/managing/report', 'delete')
+
+    deleteLink.emit(id)
 
     this.router.navigateByUrl('/managing/report')
   }
@@ -112,50 +113,62 @@ export class ViewReportManagingViewComponent implements OnInit, AfterViewInit {
 
     if (!id) return
 
-    const reportSenderLink: SenderLinkSocketModel<string> = await this.socketSharedService.registerSender('/managing/report', 'update')
-    reportSenderLink.emit(id)
-    
+    const updateLink: LinkNamespaceSocketModel<string, void> = await this.socketSharedService.buildLink('/managing/report', 'update')
+
+    updateLink.emit(id)
+
     this.router.navigateByUrl('/managing/report')
   }
 
-  getType(type: TypeReportEnum): string {
+  getReportName(type: TypeReportEnum): string {
     switch (type) {
-      case TypeReportEnum.BASIC_USER:
-        return 'Utilisateur'
-
-        break
       case TypeReportEnum.BUG:
         return 'Bug'
-
-        break
+      case TypeReportEnum.BASIC_USER:
+        return 'Utilisateur'
       case TypeReportEnum.OTHER_USER:
         return 'Utilisateur'
-
-        break
     }
   }
-  getUserReportType(type: TypeUserReportEnum): string {
+
+  getReportTextAlertType(type: TypeReportEnum): TypeAlertEnum {
+    switch (type) {
+      case TypeReportEnum.BUG:
+        return TypeAlertEnum.WARNING
+      case TypeReportEnum.BASIC_USER:
+        return TypeAlertEnum.DANGER
+      case TypeReportEnum.OTHER_USER:
+        return TypeAlertEnum.DANGER
+    }
+  }
+
+  getUserReportName(type: TypeUserReportEnum): string {
     switch (type) {
       case TypeUserReportEnum.ADVERTISING:
         return 'Publicité'
-
-        break
       case TypeUserReportEnum.FLOOD:
         return 'Spam'
-
-        break
       case TypeUserReportEnum.INAPROPRIATE_WORDS:
-        return 'Language grossié'
-
-        break
+        return 'Language inapproprié'
       case TypeUserReportEnum.LINK:
-        return 'Lien'
-
-        break
+        return 'Partage de liens'
       case TypeUserReportEnum.NEGATIVE_TACTICS:
-        return 'Joue contre son camp'
+        return 'Anti-jeu'
+    }
+  }
 
-        break
+  getUserReportTextAlertType(type: TypeUserReportEnum): TypeAlertEnum {
+    switch (type) {
+      case TypeUserReportEnum.ADVERTISING:
+        return TypeAlertEnum.INFORM
+      case TypeUserReportEnum.FLOOD:
+        return TypeAlertEnum.DANGER
+      case TypeUserReportEnum.INAPROPRIATE_WORDS:
+        return TypeAlertEnum.DANGER
+      case TypeUserReportEnum.LINK:
+        return TypeAlertEnum.INFORM
+      case TypeUserReportEnum.NEGATIVE_TACTICS:
+        return TypeAlertEnum.WARNING
     }
   }
 }
