@@ -23,6 +23,10 @@ export class UserReportModel extends ReportModel implements UserReportInterface 
     gameId!: string
 
     @Expose()
+    @prop({ required: true, default: false })
+    punished!: boolean
+
+    @Expose()
     @prop({ ref: () => UserModel, default: new Array })
     concernedUsers!: Array<Ref<UserModel>>
 

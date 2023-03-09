@@ -1,72 +1,141 @@
-import { Component, Input, TemplateRef, ViewChild } from '@angular/core'
-import { BasicUserReportModel, ReportModel, TypeReportEnum, TypeUserReportEnum } from 'common'
+import { AfterViewInit, Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core'
+import { FormArray, FormControl, FormGroup, UntypedFormGroup } from '@angular/forms'
 import { Subject, Subscription } from 'rxjs'
+import { BasicUserReportModel, PlayerGameModel, SenderLinkSocketModel, StateGameModel, TypeReportEnum, TypeUserReportEnum } from 'common'
+
+import { GameSharedService } from 'src/app/shared/game/service/game.shared.service'
 import { ModalSharedService } from 'src/app/shared/modal/service/modal.shared.service'
+import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
 
 @Component({
   selector: 'app-shared-report-modal-user',
   templateUrl: './user.modal.report.shared.component.html',
   styleUrls: ['./user.modal.report.shared.component.scss']
 })
-export class UserModalReportSharedComponent {
-  report!: ReportModel
+export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
+  form!: UntypedFormGroup
 
   openingSignalSub!: Subscription
 
+  players: Array<PlayerGameModel> = new Array
+
   constructor(
-    private modalSharedService: ModalSharedService
+    private gameSharedService: GameSharedService,
+    private modalSharedService: ModalSharedService,
+    private socketSharedService: SocketSharedService
   ) { }
+
+  ngOnInit(): void {
+    this.form = new FormGroup({
+      players: new FormArray([])
+    })
+
+    this.updateFormPlayerList()
+
+    this.gameSharedService.onStateChange((state: StateGameModel) => {
+      this.players = state.players
+
+      this.updateFormPlayerList()
+    })
+  }
 
   ngAfterViewInit(): void {
     this.openingSignalSub = this.openingSignal.subscribe(() => {
       this.modalSharedService.close()
 
       this.modalSharedService.open({
-        title: 'Type de signalement',
+        title: 'Signalement de joueur',
         template: this.chooseUserReportTemplateRef
       })
     })
   }
 
-  reportUserOpeningSignal: Subject<void> = new Subject
+  reportUserOpeningSignal: Subject<Array<string>> = new Subject
 
   callbackOtherReportUser() {
-    this.reportUserOpeningSignal.next()
-
-    /* this.modalSharedService.close()
-    this.modalSharedService.open(this.tatemplateAutherReportUser.elementRef.nativeElement) */
+    this.reportUserOpeningSignal.next(this.getSelectedUsers())
   }
 
-/*   @ViewChild('otherUserReportTemplate', { read: TemplateRef }) tatemplateAutherReportUser!: TemplateRef<any> */
+  updateFormPlayerList(): void {
+    const playersFormArray: FormArray = this.form.get('players') as FormArray
 
-  callbackNegativeTacticsReport(): void {
-    const reportUser: BasicUserReportModel = new BasicUserReportModel(TypeUserReportEnum.NEGATIVE_TACTICS, TypeReportEnum.BASIC_USER, 'a completer')
-
-    this.report = reportUser
+    this.players.forEach(player => {
+      playersFormArray.push(new FormGroup({
+        model: new FormControl(player),
+        checked: new FormControl(false)
+      }))
+    })
   }
 
-  callbackInapropriateWordsReport(): void {
-    const reportUser: BasicUserReportModel = new BasicUserReportModel(TypeUserReportEnum.INAPROPRIATE_WORDS, TypeReportEnum.BASIC_USER, 'a completer')
+  async callbackNegativeTacticsReport(): Promise<void> {
+    if (!this.gameSharedService.currentGameId) return
 
-    this.report = reportUser
+    const reportUser: BasicUserReportModel = new BasicUserReportModel(TypeUserReportEnum.NEGATIVE_TACTICS, TypeReportEnum.BASIC_USER, this.gameSharedService.currentGameId)
+
+    this.setConcernedUsers(reportUser)
   }
 
-  callbackFloodReport(): void {
-    const reportUser: BasicUserReportModel = new BasicUserReportModel(TypeUserReportEnum.FLOOD, TypeReportEnum.BASIC_USER, 'a completer')
+  async callbackInapropriateWordsReport(): Promise<void> {
+    if (!this.gameSharedService.currentGameId) return
 
-    this.report = reportUser
+    const reportUser: BasicUserReportModel = new BasicUserReportModel(TypeUserReportEnum.INAPROPRIATE_WORDS, TypeReportEnum.BASIC_USER, this.gameSharedService.currentGameId)
+
+    this.setConcernedUsers(reportUser)
   }
 
-  callbackAdvertisingReport(): void {
-    const reportUser: BasicUserReportModel = new BasicUserReportModel(TypeUserReportEnum.ADVERTISING, TypeReportEnum.BASIC_USER, 'a completer')
+  async callbackFloodReport(): Promise<void> {
+    if (!this.gameSharedService.currentGameId) return
 
-    this.report = reportUser
+    const reportUser: BasicUserReportModel = new BasicUserReportModel(TypeUserReportEnum.FLOOD, TypeReportEnum.BASIC_USER, this.gameSharedService.currentGameId)
+
+    this.setConcernedUsers(reportUser)
   }
 
-  callbackLinkReport(): void {
-    const reportUser: BasicUserReportModel = new BasicUserReportModel(TypeUserReportEnum.LINK, TypeReportEnum.BASIC_USER, 'a completer')
+  async callbackAdvertisingReport(): Promise<void> {
+    if (!this.gameSharedService.currentGameId) return
 
-    this.report = reportUser
+    const reportUser: BasicUserReportModel = new BasicUserReportModel(TypeUserReportEnum.ADVERTISING, TypeReportEnum.BASIC_USER, this.gameSharedService.currentGameId)
+
+    this.setConcernedUsers(reportUser)
+  }
+
+  async callbackLinkReport(): Promise<void> {
+    if (!this.gameSharedService.currentGameId) return
+
+    const reportUser: BasicUserReportModel = new BasicUserReportModel(TypeUserReportEnum.LINK, TypeReportEnum.BASIC_USER, this.gameSharedService.currentGameId)
+
+    this.setConcernedUsers(reportUser)
+  }
+
+  getSelectedUsers(): Array<string> {
+    const selectedUsersId: Array<string> = new Array
+
+    const playersFormArray: FormArray = this.form.get('players') as FormArray
+
+    for (const value of playersFormArray.value) {
+      const player: PlayerGameModel = value.model,
+        checked: boolean = value.checked
+
+      if (!player || !checked) continue
+
+      if (checked) selectedUsersId.push(player.user.username)
+    }
+
+    return selectedUsersId
+  }
+
+  async setConcernedUsers(reportUser: BasicUserReportModel): Promise<void> {
+    const selectedUsersId: Array<string> = this.getSelectedUsers()
+
+    reportUser.concernedUsers = selectedUsersId
+
+    const triggerLink: SenderLinkSocketModel<BasicUserReportModel> = await this.socketSharedService.registerSender('/report', 'add')
+
+    triggerLink.emit(reportUser)
+  }
+
+  getPlayersList(): Array<PlayerGameModel> | undefined {
+    return this.players
   }
 
   @Input() openingSignal!: Subject<void>

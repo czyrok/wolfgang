@@ -5,6 +5,7 @@ import { StageStateGameEnum, TypeCardGameEnum, EventMessageChatGameModel, Player
 import { GameSharedService } from 'src/app/shared/game/service/game.shared.service'
 import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/display.alert.shared.service'
 import { AuthSharedService } from 'src/app/shared/auth/service/auth.shared.service'
+import { Subject } from 'rxjs'
 
 import { EventVoteUserSharedModel } from 'src/app/shared/user/vote/event/model/event.vote.user.shared.model'
 
@@ -38,6 +39,8 @@ export class PlayViewComponent implements AfterViewInit, OnDestroy {
   playerMessageEvent: EventEmitter<UserMessageChatGameModel> = new EventEmitter
   voteEvent: EventVoteUserSharedModel = new EventVoteUserSharedModel
   eventMessageEvent: EventEmitter<EventMessageChatGameModel> = new EventEmitter
+
+  reportOpeningSignal: Subject<void> = new Subject
 
   constructor(
     private router: Router,
@@ -124,6 +127,8 @@ export class PlayViewComponent implements AfterViewInit, OnDestroy {
       = await this.gameSharedService.buildBaseLink<void, StateGameModel>('state')
 
     stateLink.on(async (state: StateGameModel) => {
+      this.gameSharedService.updateState(state)
+    
       this.gameStateEvent.emit(state)
 
       this.state = state
@@ -281,5 +286,9 @@ export class PlayViewComponent implements AfterViewInit, OnDestroy {
 
   changeDisplayChatButtonCallback(): void {
     this.displayChat = !this.displayChat
+  }
+
+  reportCallback() {
+    this.reportOpeningSignal.next()
   }
 }

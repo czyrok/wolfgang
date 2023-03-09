@@ -1,8 +1,10 @@
 import { Component, Input, TemplateRef, ViewChild } from '@angular/core'
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
-import { BugReportModel, ReportModel, TypeReportEnum } from 'common'
 import { Subject, Subscription } from 'rxjs'
+import { BugReportModel, ReportModel, SenderLinkSocketModel, TypeReportEnum } from 'common'
+
 import { ModalSharedService } from 'src/app/shared/modal/service/modal.shared.service'
+import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
 
 @Component({
   selector: 'app-shared-report-modal-bug',
@@ -17,7 +19,8 @@ export class BugModalReportSharedComponent {
 
   constructor(
     private modalSharedService: ModalSharedService,
-    private formBuilder: UntypedFormBuilder
+    private formBuilder: UntypedFormBuilder,
+    private socketSharedService: SocketSharedService
   ) {
     this.form = this.formBuilder.group({
       description: [null, [Validators.minLength(20)]],
@@ -39,11 +42,14 @@ export class BugModalReportSharedComponent {
     this.modalSharedService.close()
   }
 
-  callbackBugForm(): void {
+  async callbackBugForm(): Promise<void> {
     if (this.form.valid) {
       const reportBug: BugReportModel = new BugReportModel(this.form.get('description')?.value, TypeReportEnum.BUG)
 
       this.report = reportBug
+      
+      const triggerLink: SenderLinkSocketModel<BugReportModel> = await this.socketSharedService.registerSender('/report', 'add')
+      triggerLink.emit(reportBug)
     }
   }
 

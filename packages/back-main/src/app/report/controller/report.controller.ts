@@ -1,22 +1,14 @@
-import { SocketController, EmitOnSuccess, EmitOnFail, SocketRequest, OnConnect, OnDisconnect, OnMessage, MessageBody } from 'ts-socket.io-controller'
-import { BasicUserReportModel, BasicUserReportModelDocument, BugReportModel, BugReportModelDocument, OtherUserReportModel, OtherUserReportModelDocument, ReportModel, ReportModelDocument, TypeReportEnum, TypeUserReportEnum } from 'common'
-import { DocumentType } from '@typegoose/typegoose';
+import { SocketController, EmitOnSuccess, EmitOnFail, SocketRequest, OnMessage, MessageBody, ConnectedSocket } from 'ts-socket.io-controller'
+import { DocumentType } from '@typegoose/typegoose'
+import { Socket } from 'socket.io'
+import { Request } from 'express'
+import { BasicUserReportModel, BasicUserReportModelDocument, BugReportModel, BugReportModelDocument, NotFoundUserError, OtherUserReportModel, OtherUserReportModelDocument, ReportModel, ReportModelDocument, TypeReportEnum, UserModel, UserModelDocument } from 'common'
 
 @SocketController({
     namespace: '/report',
     init: () => { }
 })
 export class ReportController {
-    @OnConnect()
-    connection() {
-        console.log('client connected');
-    }
-
-    @OnDisconnect()
-    disconnect() {
-        console.log('client disconnected');
-    }
-
     @EmitOnSuccess()
     @EmitOnFail()
     @OnMessage()
@@ -29,69 +21,70 @@ export class ReportController {
     @EmitOnSuccess()
     @EmitOnFail()
     @OnMessage()
-    async tmp() {
-        const basicReport: DocumentType<BasicUserReportModel> = new BasicUserReportModelDocument(new BasicUserReportModel(
-            TypeUserReportEnum.ADVERTISING,
-            TypeReportEnum.BASIC_USER,
-            '63e3c86ae28067d59adabaaf'
-        ))
+    async add(@ConnectedSocket() socket: Socket, @MessageBody() report: BasicUserReportModel | OtherUserReportModel | BugReportModel) {
+        const req: Request = socket.request as Request,
+            user: DocumentType<UserModel> | undefined = req.session.user
 
-        await basicReport.save()
-    }
+        if (!user) throw new NotFoundUserError
 
-    @EmitOnSuccess()
-    @EmitOnFail()
-    @OnMessage()
-    async add(@MessageBody() report: BasicUserReportModel | OtherUserReportModel | BugReportModel) {
+        const concernedUsersId: Array<string> = new Array
+
         switch (report.type) {
             case TypeReportEnum.BASIC_USER:
                 report = report as BasicUserReportModel
 
-                const basic: DocumentType<BasicUserReportModel> = new BasicUserReportModelDocument()
+                const basic: DocumentType<BasicUserReportModel> = new BasicUserReportModelDocument(report)
 
-                basic._id = report._id
-                basic.releaseDate = report.releaseDate
-                basic.type = report.type
-                basic.user = report.user
-                basic.thumbsDownCount = report.thumbsDownCount
-                basic.thumbsUpCount = report.thumbsUpCount
-                basic.concernedUsers = report.concernedUsers
-                basic.reportType = report.reportType
-                basic.gameId = report.gameId
+                basic.user = user
+                basic.thumbsDownCount = 0
+                basic.thumbsUpCount = 0
+
+                for (const username of report.concernedUsers) {
+                    const concernedUser: DocumentType<UserModel> | null = await UserModelDocument.findOne({ username: username }).exec()
+
+                    if (!concernedUser) continue
+
+                    concernedUsersId.push(concernedUser._id)
+                }
+
+                basic.concernedUsers = concernedUsersId
 
                 await basic.save()
+
                 break
 
             case TypeReportEnum.BUG:
                 report = report as BugReportModel
 
-                const bug: DocumentType<BugReportModel> = new BugReportModelDocument()
+                const bug: DocumentType<BugReportModel> = new BugReportModelDocument(report)
 
-                bug._id = report._id
-                bug.releaseDate = report.releaseDate
-                bug.type = report.type
-                bug.user = report.user
-                bug.desc = report.desc
+                bug.user = user
 
                 await bug.save()
+
                 break
 
             case TypeReportEnum.OTHER_USER:
                 report = report as OtherUserReportModel
 
-                const other: DocumentType<OtherUserReportModel> = new OtherUserReportModelDocument()
+                const other: DocumentType<OtherUserReportModel> = new OtherUserReportModelDocument(report)
 
-                other._id = report._id
-                other.releaseDate = report.releaseDate
-                other.type = report.type
-                other.user = report.user
-                other.thumbsDownCount = report.thumbsDownCount
-                other.thumbsUpCount = report.thumbsUpCount
-                other.concernedUsers = report.concernedUsers
-                other.reason = report.reason
-                other.gameId = report.gameId
+                other.user = user
+                other.thumbsDownCount = 0
+                other.thumbsUpCount = 0
+
+                for (const username of report.concernedUsers) {
+                    const concernedUser: DocumentType<UserModel> | null = await UserModelDocument.findOne({ username: username }).exec()
+
+                    if (!concernedUser) continue
+
+                    concernedUsersId.push(concernedUser._id)
+                }
+
+                other.concernedUsers = concernedUsersId
 
                 await other.save()
+
                 break
         }
     }

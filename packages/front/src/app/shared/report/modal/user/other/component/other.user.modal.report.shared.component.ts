@@ -1,8 +1,11 @@
 import { Component, Input, TemplateRef, ViewChild } from '@angular/core'
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
-import { OtherUserReportModel, ReportModel, TypeReportEnum} from 'common'
 import { Subject, Subscription } from 'rxjs'
+import { OtherUserReportModel, ReportModel, SenderLinkSocketModel, TypeReportEnum} from 'common'
+
+import { GameSharedService } from 'src/app/shared/game/service/game.shared.service'
 import { ModalSharedService } from 'src/app/shared/modal/service/modal.shared.service'
+import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
 
 
 @Component({
@@ -13,12 +16,15 @@ import { ModalSharedService } from 'src/app/shared/modal/service/modal.shared.se
 export class OtherUserModalReportSharedComponent {
   report!: ReportModel
   form: UntypedFormGroup
+  selectedUsersId!: Array<string>
 
   openingSignalSub!: Subscription
 
   constructor(
     private formBuilder: UntypedFormBuilder,
-    private modalSharedService: ModalSharedService
+    private gameSharedService: GameSharedService,
+    private modalSharedService: ModalSharedService,
+    private socketSharedService: SocketSharedService
   ) {
     this.form = this.formBuilder.group({
       description: [null, [Validators.minLength(20)]],
@@ -26,11 +32,13 @@ export class OtherUserModalReportSharedComponent {
   }
 
   ngAfterViewInit(): void {
-    this.openingSignalSub = this.openingSignal.subscribe(() => {
+    this.openingSignalSub = this.openingSignal.subscribe((selectedUsersId: Array<string>) => {
+      this.selectedUsersId = selectedUsersId
+
       this.modalSharedService.close()
 
       this.modalSharedService.open({
-        title: 'Signalement utilisateur',
+        title: 'Signalement de joueur',
         template: this.otherUserReportTemplateRef
       })
     })
@@ -40,15 +48,22 @@ export class OtherUserModalReportSharedComponent {
     this.modalSharedService.close()
   }
 
-  callbackUserForm(): void {
+  async callbackUserForm(): Promise<void> {
     if (this.form.valid) {
-      const reportUser: OtherUserReportModel = new OtherUserReportModel(this.form.get('description')?.value, TypeReportEnum.OTHER_USER, 'a completer')
+      if(!this.gameSharedService.gameId) throw new Error
+
+      const reportUser: OtherUserReportModel = new OtherUserReportModel(this.form.get('description')?.value, TypeReportEnum.OTHER_USER, this.gameSharedService.gameId)
 
       this.report = reportUser
+      reportUser.concernedUsers = this.selectedUsersId
+    
+      const triggerLink: SenderLinkSocketModel<OtherUserReportModel> = await this.socketSharedService.registerSender('/report', 'add')
+
+      triggerLink.emit(reportUser)
     }
   }
 
-  @Input() openingSignal!: Subject<void>
+  @Input() openingSignal!: Subject<Array<string>>
 
   @ViewChild('otherUserReportTemplate', { read: TemplateRef }) otherUserReportTemplateRef!: TemplateRef<any>
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { ReportModel, UserModel, TypeReportEnum, LinkNamespaceSocketModel } from 'common'
+import { ReportModel, UserModel, TypeReportEnum, LinkNamespaceSocketModel, TypeReportEnum, TypeUserReportEnum } from 'common'
 
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
 
@@ -41,5 +41,47 @@ export class DefaultReportManagingViewComponent implements OnInit {
   isOtherUserReport(report: ReportModel): boolean {
     if (report.type === TypeReportEnum.OTHER_USER) return true
     return false
+  }
+
+  getType(type: TypeReportEnum): string {
+    switch (type) {
+      case TypeReportEnum.BASIC_USER:
+        return 'Utilisateur'
+
+        break
+      case TypeReportEnum.BUG:
+        return 'Bug'
+
+        break
+      case TypeReportEnum.OTHER_USER:
+        return 'Utilisateur'
+
+        break
+    }
+  }
+
+  getUserReportType(type: TypeUserReportEnum): string {
+    switch (type) {
+      case TypeUserReportEnum.ADVERTISING:
+        return 'Publicité'
+
+        break
+      case TypeUserReportEnum.FLOOD:
+        return 'Spam'
+
+        break
+      case TypeUserReportEnum.INAPROPRIATE_WORDS:
+        return 'Language grossié'
+
+        break
+      case TypeUserReportEnum.LINK:
+        return 'Lien'
+
+        break
+      case TypeUserReportEnum.NEGATIVE_TACTICS:
+        return 'Joue contre son camp'
+
+        break
+    }
   }
 }
