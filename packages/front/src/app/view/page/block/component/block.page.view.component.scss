@@ -23,6 +23,8 @@
   width: 100%;
   box-sizing: border-box;
   backdrop-filter: blur(property.get('blur', 'regular'));
+  column-gap: property.get('borderLimit', 'big');
+  row-gap: property.get('borderLimit', 'big');
 }
 
 .wrapper .container-1.ghost {
@@ -41,4 +43,10 @@
   overflow-x: hidden;
   overflow-y: auto;
   padding: property.get('borderLimit', 'regular');
+}
+
+@media (max-width: 700px) {
+  .wrapper .container-1 {
+    flex-direction: column;
+  }
 }

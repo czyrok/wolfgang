@@ -23,7 +23,7 @@
   justify-content: center;
 }
 
-.container p {
+.container .text {
   grid-area: b;
   border-top-left-radius: property.get('borderRadius', 'regular');
   border-bottom-left-radius: property.get('borderRadius', 'regular');
@@ -35,6 +35,6 @@
   }
 }
 
-.container.self p {
+.container.self .text {
   border-radius: property.get('borderRadius', 'rounded');
 }

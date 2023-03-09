@@ -1,7 +1,7 @@
 import { Component } from '@angular/core'
 import { Router } from '@angular/router'
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
-import { SignUpFormControllerModel, ReceiverLinkSocketModel, SenderLinkSocketModel } from 'common'
+import { SignUpFormControllerModel, LinkNamespaceSocketModel } from 'common'
 
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
 import { AuthSharedService } from 'src/app/shared/auth/service/auth.shared.service'
@@ -31,32 +31,23 @@ export class SignUpHomeViewComponent {
 
   async onSubmitForm(): Promise<void> {
     if (this.form.valid) {
-      const tokenLink: ReceiverLinkSocketModel<string>
-        = await this.socketSharedService.registerReceiver<string>('/home/sign-up', 'trigger')
+      const signUpLink: LinkNamespaceSocketModel<SignUpFormControllerModel, string> = await this.socketSharedService.buildLink('/home/sign-up', 'trigger')
 
-      tokenLink.subscribe(async (token: string) => {
+      signUpLink.on(async (token: string) => {
+        signUpLink.destroy()
+
         await this.authSharedService.setToken(token)
 
         this.router.navigateByUrl('/game')
-
-        tokenLink.unsubscribe()
-        errorLink.unsubscribe()
       })
 
-      const errorLink: ReceiverLinkSocketModel<any>
-        = await this.socketSharedService.registerReceiver<any>('/home/sign-up', 'trigger-failed')
+      signUpLink.onFail((error: any) => {
+        signUpLink.destroy()
 
-      errorLink.subscribe((error: any) => {
         this.displayAlertSharedService.emitDanger(error)
-
-        tokenLink.unsubscribe()
-        errorLink.unsubscribe()
       })
 
-      const triggerLink: SenderLinkSocketModel<SignUpFormControllerModel>
-        = await this.socketSharedService.registerSender<SignUpFormControllerModel>('/home/sign-up', 'trigger')
-
-      triggerLink.emit(new SignUpFormControllerModel(
+      signUpLink.emit(new SignUpFormControllerModel(
         this.form.get('username')?.value,
         this.form.get('email')?.value,
         this.form.get('password')?.value

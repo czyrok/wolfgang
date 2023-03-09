@@ -20,6 +20,7 @@ import { StorageVotePlayerGameModel } from '../player/vote/storage/model/storage
 import { ManagerChatGameModel } from '../chat/manager/model/manager.chat.game.model'
 
 import { TypeLogEnum } from '../../log/type/enum/type.log.enum'
+import { StageStateGameEnum } from '../state/stage/enum/stage.state.game.enum'
 
 @Exclude()
 export class GameModel extends DocumentModel {
@@ -109,12 +110,8 @@ export class GameModel extends DocumentModel {
         return this._chatManager
     }
 
-    public get isStarted(): boolean {
-        return this.state.isStarted
-    }
-
-    public get isFinished(): boolean {
-        return this.state.isFinished
+    public get stage(): StageStateGameEnum {
+        return this.state.stage
     }
 
     @Expose()
@@ -126,7 +123,7 @@ export class GameModel extends DocumentModel {
         return this._stateChange
     }
 
-    public async newPlayer(user: UserModel, socket: Socket): Promise<boolean> {
+    public async joinGame(user: UserModel, socket: Socket): Promise<boolean> {
         const checkPlayer: PlayerGameModel | null = this.checkPlayer(user._id)
 
         if (checkPlayer) {
@@ -142,12 +139,12 @@ export class GameModel extends DocumentModel {
         }
 
         if (this.state.rules.playerCountMax === this.state.players.length
-            || this.state.isStarted) return false
+            || this.stage !== StageStateGameEnum.AWAITING) return false
 
         const player: PlayerGameModel = new PlayerGameModel(user)
 
         player.socketsList.push(socket)
-
+        
         HandlerPlayerGameModel.instance.addPlayer(player)
 
         if (!this.namespace) throw new UndefinedNamespaceGameError
@@ -167,7 +164,7 @@ export class GameModel extends DocumentModel {
         return true
     }
 
-    public connectionLost(user: UserModel, socketId: string): boolean {
+    public leaveGame(user: UserModel, socketId: string): boolean {
         const player: PlayerGameModel | null = this.checkPlayer(user._id)
 
         if (!player) return false
@@ -180,7 +177,7 @@ export class GameModel extends DocumentModel {
 
         player.socketsList.splice(index, 1)
 
-        if (this.isStarted || player.socketsList.length > 0) return false
+        if (this.stage === StageStateGameEnum.STARTED || player.socketsList.length > 0) return false
 
         HandlerPlayerGameModel.instance.removePlayer(player)
 

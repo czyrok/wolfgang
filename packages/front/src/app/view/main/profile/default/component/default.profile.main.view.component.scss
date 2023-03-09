@@ -15,12 +15,18 @@ section {
     height: 100%;
     display: grid;
     grid-template-areas:
-        'a a'
-        'b c';
+        'a'
+        'b';
     grid-template-rows: minmax(0px, 1fr) auto;
     justify-items: center;
     row-gap: property.get('borderLimit', 'big');
     column-gap: property.get('borderLimit', 'big');
+}
+
+.wrapper .grid.show-game-points {
+    grid-template-areas:
+        'a a'
+        'b c';
 }
 
 .wrapper .grid .area-a {
@@ -33,4 +39,14 @@ section {
 
 .wrapper .grid .area-c {
     grid-area: c;
+}
+
+@media (max-width: 600px) {
+    .wrapper .grid.show-game-points {
+        grid-template-areas:
+            'a'
+            'b'
+            'c';
+        grid-template-rows: minmax(0px, 1fr) auto auto;
+    }
 }

@@ -4,8 +4,8 @@ import { LogUtil } from '../../../../log/util/log.util'
 
 import { RandomHelper } from '../../../../random/helper/random.helper'
 
+import { FactoryItemLoopGameModel } from '../../../loop/item/factory/model/factory.item.loop.game.model'
 import { FactoryCardGameModel } from '../../../card/factory/model/factory.card.game.model'
-import { IteratorLoopGameModel } from '../../../loop/iterator/model/iterator.loop.game.model'
 import { PlayerGameModel } from '../../../player/model/player.game.model'
 import { CardChoosingRulesModel } from '../../../rules/card/choosing/model/card-choosing.rules.model'
 import { CardGameModel } from '../../../card/model/card.game.model'
@@ -37,8 +37,9 @@ export class RandomDistributionGameModel {
 
         LogUtil.logger(TypeLogEnum.GAME).trace('Card player defined')
 
-        let ite: IteratorLoopGameModel = new IteratorLoopGameModel
-        for (let item of ite) item.setup()
+        const factory: FactoryItemLoopGameModel = FactoryItemLoopGameModel.instance
+
+        for (const item of factory.getAll()) item.setup()
 
         LogUtil.logger(TypeLogEnum.GAME).trace('Behavior players defined')
     }

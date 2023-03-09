@@ -14,6 +14,7 @@ import { TypeProcessBehaviorItemLoopGameEnum } from '../../../process/type/enum/
 import { TypeBehaviorItemLoopGameEnum } from '../../../type/enum/type.behavior.item.loop.game.enum'
 import { TypeModeChatGameEnum } from '../../../../../../chat/mode/type/enum/type.mode.chat.game.enum'
 import { ProcessContextGameEnum } from '../../../../../../context/process/enum/process.context.game.enum'
+import { TypeAlertEnum } from '../../../../../../../alert/type/enum/type.alert.enum'
 
 @InitFactoryRegistering()
 export class VillagerImplementationBehaviorItemLoopGameModel extends BehaviorItemLoopGameModel {
@@ -33,7 +34,7 @@ export class VillagerImplementationBehaviorItemLoopGameModel extends BehaviorIte
     }
 
     public async validCondition(_context: ContextGameModel): Promise<boolean> {
-        if (this.getPlayer().length > 0) {
+        if (this.getAlivePlayer().length > 0) {
             return true
         } else {
             return false
@@ -41,12 +42,12 @@ export class VillagerImplementationBehaviorItemLoopGameModel extends BehaviorIte
     }
 
     public async doAtBeginning(context: ContextGameModel): Promise<void> {
-        const chatManager: ManagerChatGameModel | undefined = context[ProcessContextGameEnum.CHAT_MANAGER]
+        const chatManager: ManagerChatGameModel | undefined = context[ProcessContextGameEnum.CHAT_MANAGER]
 
         // #achan faire l'erreur 
         if (!chatManager) throw new Error
 
-        await chatManager.sendEventMessage('C\'est au tour des villageois de désigner quelqu\'un !', 'sun-alt')
+        await chatManager.sendEventMessage('C\'est au tour des villageois de désigner quelqu\'un !', 'sun-alt', TypeAlertEnum.INFORM)
 
         context.next()
     }
@@ -59,14 +60,16 @@ export class VillagerImplementationBehaviorItemLoopGameModel extends BehaviorIte
 
         const player: PlayerGameModel | null = voteStorage.mostVotedOfPlayersGroup(this.getPlayer())
 
-        if (player) {
-            const result: ResultSetGameModel = new ResultSetGameModel
+        const result: ResultSetGameModel = new ResultSetGameModel
 
+        if (player) {
             result[TypeProcessBehaviorItemLoopGameEnum.KILL] = [player]
 
             context.next(result)
         } else {
-            context.next()
+            result[TypeProcessBehaviorItemLoopGameEnum.KILL] = []
+
+            context.next(result)
         }
     }
 }

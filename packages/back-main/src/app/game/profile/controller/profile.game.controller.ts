@@ -1,18 +1,18 @@
 import { DocumentType } from '@typegoose/typegoose'
 import { plainToInstance } from 'class-transformer'
+import { EmitOnFail, EmitOnSuccess, MessageBody, OnMessage, SocketController, NamespaceParam } from 'ts-socket.io-controller'
 import { CosmeticModel, CosmeticModelDocument, NotFoundUserError, SkinUserModel, SkinUserModelDocument, UserModel, UserModelDocument, NotFoundSkinUserError, NotFoundCosmeticError } from 'common'
-import { EmitOnFail, EmitOnSuccess, MessageBody, OnConnect, OnDisconnect, OnMessage, SocketController } from 'ts-socket.io-controller'
 
 
 @SocketController({
-    namespace: '/game/profile',
+    namespace: '/game/profile/:username',
     init: () => { }
 })
 export class ProfileGameController {
     @OnMessage()
     @EmitOnSuccess()
     @EmitOnFail()
-    async check(@MessageBody() username: string) {
+    async check(@NamespaceParam('username') username: string) {
         const user: DocumentType<UserModel> | null = await UserModelDocument.findOne({
             username: username
         }).exec()
@@ -25,7 +25,7 @@ export class ProfileGameController {
     @EmitOnSuccess()
     @EmitOnFail()
     @OnMessage()
-    async view(@MessageBody() username: string) {
+    async view(@NamespaceParam('username') username: string) {
         const obj = await UserModelDocument.findOne({
             username: username
         }).populate('skin').lean().exec()
@@ -38,7 +38,7 @@ export class ProfileGameController {
     @EmitOnSuccess()
     @EmitOnFail()
     @OnMessage()
-    async skin(@MessageBody() username: string) {
+    async skin(@NamespaceParam('username') username: string) {
         const user = await UserModelDocument.findOne({
             username: username
         }).populate('skin').lean().exec()

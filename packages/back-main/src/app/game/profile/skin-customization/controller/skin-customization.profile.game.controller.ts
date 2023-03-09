@@ -6,7 +6,7 @@ import { Socket } from 'socket.io'
 import { Request } from 'express'
 
 @SocketController({
-    namespace: '/game/profile/skin-customization',
+    namespace: '/game/profile/:username/skin-customization',
     init: () => { }
 })
 export class SkinCustomizationProfileGameController {

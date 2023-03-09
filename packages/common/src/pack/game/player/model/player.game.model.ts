@@ -1,20 +1,18 @@
 import { Exclude, Expose, instanceToPlain } from 'class-transformer'
 import { Socket } from 'socket.io'
+import { DocumentType } from '@typegoose/typegoose'
 
-import { LogUtil } from '../../../log/util/log.util'
+import { NotFoundUserError } from '../../../user/error/not-found.user.error'
 
-import { FactoryBehaviorItemLoopGameModel } from '../../loop/item/behavior/factory/model/factory.behavior.item.loop.game.model'
 import { BehaviorItemLoopGameModel } from '../../loop/item/behavior/model/behavior.item.loop.game.model'
 import { StateGameModel } from '../../state/model/state.game.model'
-import { UserModel } from '../../../user/model/user.model'
+import { UserModel, UserModelDocument } from '../../../user/model/user.model'
 import { CardGameModel } from '../../card/model/card.game.model'
 
-import { TypeLogEnum } from '../../../log/type/enum/type.log.enum'
 import { TypeGroupTransformEnum } from '../../../transform/group/type/enum/type.group.transform.enum'
 import { TypeChatGameEnum } from '../../chat/type/enum/type.chat.game.enum'
 import { TypeBehaviorItemLoopGameEnum } from '../../loop/item/behavior/type/enum/type.behavior.item.loop.game.enum'
 import { CampPlayerGameEnum } from '../camp/enum/camp.player.game.enum'
-import { GameModel } from '../../model/game.model'
 
 @Exclude()
 export class PlayerGameModel {
@@ -153,7 +151,7 @@ export class PlayerGameModel {
         this.activityDate = new Date
     }
 
-    public hisTurn(currentBehaviorTypes: Array<TypeBehaviorItemLoopGameEnum>): TypeBehaviorItemLoopGameEnum | undefined {        
+    public hisTurn(currentBehaviorTypes: Array<TypeBehaviorItemLoopGameEnum>): TypeBehaviorItemLoopGameEnum | undefined {
         for (const behaviorType of currentBehaviorTypes) {
             for (const behavior of BehaviorItemLoopGameModel.getBehaviorOfPlayer(this)) {
                 if (behavior.config.type === behaviorType) return behaviorType
@@ -163,22 +161,65 @@ export class PlayerGameModel {
         return undefined
     }
 
-    public notifyUpdate(): void {
-        let obj: any = undefined
+    public async end(): Promise<void> {
+        const user: DocumentType<UserModel> | null = await UserModelDocument.findById(this.user._id).exec()
 
-        try {
-            obj = instanceToPlain(this, { groups: [TypeGroupTransformEnum.SELF] })
+        if (!user) throw new NotFoundUserError
 
-            // #aret
-            LogUtil.logger(TypeLogEnum.GAME).warn('cet objettttt', obj)
-        } catch (error: any) {
-            LogUtil.logger(TypeLogEnum.GAME).error('cet objettttt11', error)
+        user.gamePointCount += this.gamePointAccumulated
+
+        if (this.gamePointAccumulated > 0) this.emit<undefined>('winGamePoints', undefined)
+
+        this.gamePointAccumulated = 0
+
+        await user.save()
+        //await user.updateOne({ gamePointCount: user.gamePointCount }).exec()
+    }
+
+    public async winngEnd(): Promise<void> {
+        const user: DocumentType<UserModel> | null = await UserModelDocument.findById(this.user._id).exec()
+
+        if (!user) throw new NotFoundUserError
+
+        user.winnedGameCount += 1
+
+        if (user.winnedGameCount % 5 == 0) {
+            user.level += 1
+            
+            this.emit<undefined>('winLevel', undefined)
         }
 
-        if (!obj) return
+        await user.save()
+        //await user.updateOne({ gamePointCount: user.gamePointCount }).exec()
+    }
+
+    public notifyUpdate(): void {
+        let plainObject: any = undefined
+
+        try {
+            plainObject = instanceToPlain(this, { groups: [TypeGroupTransformEnum.SELF] })
+        } catch (_error: any) { }
+
+        if (!plainObject) return
 
         for (const socket of this.socketsList) {
-            socket.emit('playerState', obj)
+            socket.emit('playerState', plainObject)
+        }
+    }
+
+    public emit<T>(event: string, object: T): void {
+        if (object) {
+            let plainObject: any = undefined
+
+            try {
+                plainObject = instanceToPlain(object)
+            } catch (_error: any) { }
+
+            if (!plainObject) return
+        }
+
+        for (const socket of this.socketsList) {
+            socket.emit(event)
         }
     }
 }

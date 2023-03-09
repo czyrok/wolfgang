@@ -1,9 +1,10 @@
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
 import { Component } from '@angular/core'
 import { Router } from '@angular/router'
-import { CardsProposalUserModel, SenderLinkSocketModel, CardsProposalFormControllerModel } from 'common'
+import { CardsProposalFormControllerModel, LinkNamespaceSocketModel } from 'common'
 
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
+import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/display.alert.shared.service'
 
 @Component({
   selector: 'app-view-main-cards-proposal-add',
@@ -16,7 +17,8 @@ export class AddCardsProposalMainViewComponent {
   constructor(
     private router: Router,
     private formBuilder: UntypedFormBuilder,
-    private socketSharedService: SocketSharedService
+    private socketSharedService: SocketSharedService,
+    private displayAlertSharedService: DisplayAlertSharedService
   ) {
     this.form = this.formBuilder.group({
       title: [null, [Validators.minLength(4), Validators.maxLength(100)]],
@@ -26,12 +28,22 @@ export class AddCardsProposalMainViewComponent {
 
   async onSubmitForm(): Promise<void> {
     if (this.form.valid) {
-      const addCardProposalLink: SenderLinkSocketModel<CardsProposalFormControllerModel> = await this.socketSharedService.registerSender('/game/cards-proposal', 'add')
-      const cardsproposalusermodel = new CardsProposalFormControllerModel(this.form.get('title')?.value, this.form.get('description')?.value)
+      const cardsProposalLink: LinkNamespaceSocketModel<CardsProposalFormControllerModel, void>
+        = await this.socketSharedService.buildLink('/game/cards-proposal', 'add')
 
-      addCardProposalLink.emit(cardsproposalusermodel)
+      cardsProposalLink.on(() => {
+        cardsProposalLink.destroy()
 
-      this.router.navigateByUrl('/game/cards-proposal')
+        this.router.navigateByUrl('/game/cards-proposal')
+      })
+
+      cardsProposalLink.onFail((error: any) => {
+        cardsProposalLink.destroy()
+
+        this.displayAlertSharedService.emitDanger(error)
+      })
+
+      cardsProposalLink.emit(new CardsProposalFormControllerModel(this.form.get('title')?.value, this.form.get('description')?.value))
     }
   }
 }

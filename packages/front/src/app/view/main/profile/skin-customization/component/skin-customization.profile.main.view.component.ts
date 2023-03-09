@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
-
-import { CosmeticModel, ReceiverLinkSocketModel, SenderLinkSocketModel, SeparatedCosmeticsListFormControllerModel, TypeCosmeticEnum, UserModel } from 'common'
+import { ActivatedRoute, Router } from '@angular/router'
+import { CosmeticModel, LinkNamespaceSocketModel, SeparatedCosmeticsListFormControllerModel, TypeCosmeticEnum, UserModel } from 'common'
 
 import { AuthSharedService } from 'src/app/shared/auth/service/auth.shared.service'
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
@@ -9,7 +9,7 @@ import { DetailedListInteractiveSharedModel } from 'src/app/shared/interactive/l
 import { TabDetailedListInteractiveSharedModel } from 'src/app/shared/interactive/list/detailed/tab/model/tab.detailed.list.interactive.shared.model'
 import { SubTabTabDetailedListInteractiveSharedModel } from 'src/app/shared/interactive/list/detailed/tab/sub-tab/model/sub-tab.tab.detailed.list.interactive.shared.model'
 import { ItemSubTabTabDetailedListInteractiveSharedModel } from 'src/app/shared/interactive/list/detailed/tab/sub-tab/item/model/item.sub-tab.tab.detailed.list.interactive.shared.model'
-import { ActivatedRoute, Router } from '@angular/router'
+import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/display.alert.shared.service'
 
 @Component({
   selector: 'app-view-main-profile-skin-customization',
@@ -29,8 +29,9 @@ export class SkinCustomizationProfileMainViewComponent implements OnInit {
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private eventSocketLink: SocketSharedService,
-    private authSharedService: AuthSharedService
+    private socketSharedService: SocketSharedService,
+    private authSharedService: AuthSharedService,
+    private displayAlertSharedService: DisplayAlertSharedService
   ) {
     const username: string | null | undefined = this.activatedRoute.parent?.snapshot.paramMap.get('username')
 
@@ -82,37 +83,32 @@ export class SkinCustomizationProfileMainViewComponent implements OnInit {
   }
 
   async setUser(username: string): Promise<void> {
-    const userLink: ReceiverLinkSocketModel<UserModel> = (await this.eventSocketLink.registerReceiver<UserModel>('/game/profile', 'view')).subscribe(
-      (data: UserModel) => {
-        this.user = data
-        userLink.unsubscribe()
-      }
-    )
+    const viewLink: LinkNamespaceSocketModel<void, UserModel> = await this.socketSharedService.buildLink<void, UserModel>('/game/profile/' + username, 'view')
 
-    const usernameLink: SenderLinkSocketModel<string> = await this.eventSocketLink.registerSender<string>('/game/profile', 'view')
+    viewLink.on((data: UserModel) => {
+      viewLink.destroy()
 
-    usernameLink.emit(username)
+      this.user = data
+    })
+
+    viewLink.emit()
   }
 
   async setCosmeticsList(): Promise<void> {
-    const cosmeticsLink: ReceiverLinkSocketModel<SeparatedCosmeticsListFormControllerModel>
-      = await this.eventSocketLink.registerReceiver<SeparatedCosmeticsListFormControllerModel>('/game/profile/skin-customization', 'cosmetics')
+    const cosmeticsLink: LinkNamespaceSocketModel<void, SeparatedCosmeticsListFormControllerModel>
+      = await this.socketSharedService.buildLink<void, SeparatedCosmeticsListFormControllerModel>('/game/profile/' + this.username + '/skin-customization', 'cosmetics')
 
-    cosmeticsLink.subscribe(
-      (data: SeparatedCosmeticsListFormControllerModel) => {
-        this.cosmeticsList = data
+    cosmeticsLink.on((data: SeparatedCosmeticsListFormControllerModel) => {
+      this.cosmeticsList = data
 
-        this.configureList(data, TypeCosmeticEnum.HAT)
-        this.configureList(data, TypeCosmeticEnum.HEAD)
-        this.configureList(data, TypeCosmeticEnum.TOP)
-        this.configureList(data, TypeCosmeticEnum.PANTS)
-        this.configureList(data, TypeCosmeticEnum.SHOES)
-      }
-    )
+      this.configureList(data, TypeCosmeticEnum.HAT)
+      this.configureList(data, TypeCosmeticEnum.HEAD)
+      this.configureList(data, TypeCosmeticEnum.TOP)
+      this.configureList(data, TypeCosmeticEnum.PANTS)
+      this.configureList(data, TypeCosmeticEnum.SHOES)
+    })
 
-    const cosmeticsSend: SenderLinkSocketModel<void> = await this.eventSocketLink.registerSender<void>('/game/profile/skin-customization', 'cosmetics')
-
-    cosmeticsSend.emit()
+    cosmeticsLink.emit()
   }
 
   configureList(cosmetics: SeparatedCosmeticsListFormControllerModel, type: TypeCosmeticEnum): void {
@@ -162,21 +158,28 @@ export class SkinCustomizationProfileMainViewComponent implements OnInit {
   }
 
   async purchaseButtonCallback(): Promise<void> {
-    const purchaseSend: SenderLinkSocketModel<Array<CosmeticModel>> = await this.eventSocketLink.registerSender('/game/profile/skin-customization', 'purchase')
-    const purchaseRec: ReceiverLinkSocketModel<void> = await this.eventSocketLink.registerReceiver('/game/profile/skin-customization', 'purchase')
+    const purchaseLink: LinkNamespaceSocketModel<Array<CosmeticModel>, void>
+      = await this.socketSharedService.buildLink('/game/profile/' + this.username + '/skin-customization', 'purchase')
+
     const cosmetics: Array<CosmeticModel> = new Array
 
     for (const cosmetic of this.list.selectedItems) {
       cosmetics.push(cosmetic.associedObject)
     }
 
-    purchaseRec.subscribe(() => {
-      purchaseRec.unsubscribe()
+    purchaseLink.on(() => {
+      purchaseLink.destroy()
 
       this.router.navigateByUrl('/game/profile/' + this.user.username)
     })
 
-    purchaseSend.emit(cosmetics)
+    purchaseLink.onFail((error: any) => {
+      purchaseLink.destroy()
+
+      this.displayAlertSharedService.emitDanger(error)
+    })
+
+    purchaseLink.emit(cosmetics)
   }
 
   hat!: CosmeticModel

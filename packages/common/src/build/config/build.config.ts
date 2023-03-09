@@ -16,6 +16,7 @@ export const BuildConfig: ConfigBuildInterface = {
         'express',
         'express-session',
         'socket.io',
-        'http'
+        'http',
+        'process'
     ]
 }

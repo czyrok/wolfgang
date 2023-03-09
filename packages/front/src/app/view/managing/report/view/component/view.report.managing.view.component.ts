@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, EventEmitter, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { ReportModel, ReceiverLinkSocketModel, SenderLinkSocketModel, UserModel, OtherUserReportModel, TypeReportEnum, BugReportModel, BasicUserReportModel, MessageChatGameModel, TypeMessageChatGameEnum, UserMessageChatGameModel, EventMessageChatGameModel, TypeUserReportEnum } from 'common'
+import { ReportModel, UserModel, OtherUserReportModel, TypeReportEnum, BugReportModel, BasicUserReportModel, LinkNamespaceSocketModel, MessageChatGameModel, TypeMessageChatGameEnum, UserMessageChatGameModel, EventMessageChatGameModel, TypeUserReportEnum } from 'common'
 
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
 
@@ -10,10 +10,12 @@ import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared
   styleUrls: ['./view.report.managing.view.component.scss']
 })
 export class ViewReportManagingViewComponent implements OnInit, AfterViewInit {
+  user!: UserModel
+
   bugReport?: BugReportModel
   basicReport?: BasicUserReportModel
   otherReport?: OtherUserReportModel
-  user!: UserModel
+
   concernedUsers!: Array<UserModel>
 
   playerMessageEvent: EventEmitter<UserMessageChatGameModel> = new EventEmitter
@@ -28,33 +30,33 @@ export class ViewReportManagingViewComponent implements OnInit, AfterViewInit {
   async ngOnInit(): Promise<void> {
     const id: string | null = this.activatedRoute.snapshot.paramMap.get('report_id')
 
-    if (id !== null) {
-      const reportLink: ReceiverLinkSocketModel<ReportModel> = await this.socketSharedService.registerReceiver('/managing/report', 'view')
+    if (!id) return
 
-      reportLink.subscribe((data: ReportModel) => {
-        switch (data.type) {
-          case TypeReportEnum.BASIC_USER:
-            this.basicReport = data as BasicUserReportModel
-            this.user = this.basicReport.user.valueOf() as UserModel
-            this.concernedUsers = this.basicReport.concernedUsers as Array<UserModel>
-            break
-          case TypeReportEnum.BUG:
-            this.bugReport = data as BugReportModel
-            this.user = this.bugReport.user.valueOf() as UserModel
-            break
-          case TypeReportEnum.OTHER_USER:
-            this.otherReport = data as OtherUserReportModel
-            this.user = this.otherReport.user.valueOf() as UserModel
-            this.concernedUsers = this.otherReport.concernedUsers as Array<UserModel>
-            break
-        }
+    const viewLink: LinkNamespaceSocketModel<string, ReportModel>
+      = await this.socketSharedService.buildLink<string, ReportModel>('/managing/report', 'view')
 
-        reportLink.unsubscribe()
-      })
+    viewLink.on((data: ReportModel) => {
+      viewLink.destroy()
 
-      const triggerLink: SenderLinkSocketModel<string> = await this.socketSharedService.registerSender<string>('/managing/report', 'view')
-      triggerLink.emit(id)
-    }
+      switch (data.type) {
+        case TypeReportEnum.BASIC_USER:
+          this.basicReport = data as BasicUserReportModel
+          this.user = this.basicReport.user.valueOf() as UserModel
+          this.concernedUsers = this.basicReport.concernedUsers as Array<UserModel>
+          break
+        case TypeReportEnum.BUG:
+          this.bugReport = data as BugReportModel
+          this.user = this.bugReport.user.valueOf() as UserModel
+          break
+        case TypeReportEnum.OTHER_USER:
+          this.otherReport = data as OtherUserReportModel
+          this.user = this.otherReport.user.valueOf() as UserModel
+          this.concernedUsers = this.otherReport.concernedUsers as Array<UserModel>
+          break
+      }
+    })
+
+    viewLink.emit(id)
   }
 
   async ngAfterViewInit(): Promise<void> {
@@ -90,6 +92,7 @@ export class ViewReportManagingViewComponent implements OnInit, AfterViewInit {
 
   getDate(report: ReportModel): string {
     const date: Date = new Date(report.releaseDate)
+
     return date.toLocaleDateString() + ' ' + date.toLocaleTimeString()
   }
 

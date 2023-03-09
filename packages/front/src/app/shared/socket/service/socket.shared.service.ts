@@ -1,62 +1,65 @@
 import { Injectable } from '@angular/core'
-import { HandlerSocketLinkModel, SenderLinkSocketModel, ReceiverLinkSocketModel, HandlerLinkSocketInterface } from 'common'
+import { LinkNamespaceSocketModel, ManagerSocketModel, BuildManagerSocketInterface, AlternativeBuildManagerSocketInterface, NamespaceSocketModel } from 'common'
+
+import { environment } from 'src/environments/environment'
 
 import { SessionSharedService } from '../../session/service/session.shared.service'
 
 @Injectable({
   providedIn: 'root'
 })
-export class SocketSharedService implements HandlerLinkSocketInterface {
-  private _handler: HandlerSocketLinkModel = new HandlerSocketLinkModel('http://localhost', 5500)
+export class SocketSharedService implements BuildManagerSocketInterface, AlternativeBuildManagerSocketInterface {
+  private _socketManager: ManagerSocketModel = new ManagerSocketModel(environment.MAIN_URL, environment.MAIN_PORT)
 
   public constructor(
     private sessionSharedService: SessionSharedService
   ) {
-    /* this.sessionSharedService.refreshSession().then(() => {
-      this.handler.socketManager.connect()
-    }) */
+    this.socketManager.socketIoManager.reconnection(true)
 
-    this.handler.socketManager.reconnection(true)
-    this.handler.socketManager.connect()
-  }
-
-  public get handler(): HandlerSocketLinkModel {
-    return this._handler
-  }
-
-  public async check<T>(namespace: string, eventType: string, object: T): Promise<boolean> {
-    const checkSenderLink: SenderLinkSocketModel<T> = await this.registerSender(namespace, eventType),
-      checkReceiverLink: ReceiverLinkSocketModel<boolean> = await this.registerReceiver(namespace, eventType),
-      checkErrorLink: ReceiverLinkSocketModel<any> = await this.registerReceiver(namespace, `${eventType}-failed`)
-
-    return new Promise((resolve: (value: boolean) => void) => {
-      checkReceiverLink.subscribe((test: boolean) => {
-        resolve(test)
-
-        checkReceiverLink.unsubscribe()
-        checkErrorLink.unsubscribe()
-      })
-
-      checkErrorLink.subscribe(() => {
-        resolve(false)
-
-        checkReceiverLink.unsubscribe()
-        checkErrorLink.unsubscribe()
-      })
-
-      checkSenderLink.emit(object)
+    this.sessionSharedService.refreshSession().then(() => {
+      this.socketManager.connect()
     })
   }
 
-  async registerSender<T>(namespace: string, eventType: string): Promise<SenderLinkSocketModel<T>> {
-    //await this.sessionSharedService.refreshSession()
-
-    return this.handler.registerSender<T>(namespace, eventType)
+  public get socketManager(): ManagerSocketModel {
+    return this._socketManager
   }
 
-  async registerReceiver<T>(namespace: string, eventType: string): Promise<ReceiverLinkSocketModel<T>> {
-    //await this.sessionSharedService.refreshSession()
+  public async check<T>(namespace: string, event: string, object: T): Promise<boolean> {
+    const checkLink: LinkNamespaceSocketModel<T, boolean> = await this.buildLink(namespace, event)
 
-    return this.handler.registerReceiver<T>(namespace, eventType)
+    return new Promise((resolve: (value: boolean) => void) => {
+      checkLink.on((test: boolean) => {
+        checkLink.destroy()
+
+        resolve(test)
+      })
+
+      checkLink.onFail(() => {
+        checkLink.destroy()
+
+        resolve(false)
+      })
+
+      checkLink.emit(object)
+    })
+  }
+
+  async buildNamespace(namespaceName: string): Promise<NamespaceSocketModel> {
+    await this.sessionSharedService.refreshSession()
+
+    return this.socketManager.buildNamespace(namespaceName)
+  }
+
+  async buildLink<S, R, E = any>(namespaceName: string, event: string): Promise<LinkNamespaceSocketModel<S, R, E>> {
+    await this.sessionSharedService.refreshSession()
+
+    return this.socketManager.buildLink<S, R, E>(namespaceName, event)
+  }
+
+  async buildBaseLink<S, R, E = any>(event: string): Promise<LinkNamespaceSocketModel<S, R, E>> {
+    await this.sessionSharedService.refreshSession()
+
+    return this.socketManager.buildBaseLink(event)
   }
 }

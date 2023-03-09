@@ -5,7 +5,7 @@
         <p data-css-text data-css-color data-css-font>{{ user?.username }}</p>
     </div>
 
-    <div class="field">
+    <div class="field details">
         <app-shared-user-label-level [level]="user?.level"></app-shared-user-label-level>
         <ng-container *ngIf="getUsername() === user?.username">
             <app-shared-user-label-point [pointCount]="user?.gamePointCount"></app-shared-user-label-point>

@@ -1,32 +1,30 @@
-import { EnvUtil, GameModel, HandlerSocketLinkModel, LogUtil, ReceiverLinkSocketModel, SenderLinkSocketModel, TypeLogEnum, VarEnvEnum } from 'common'
+import { EnvUtil, GameModel, LinkNamespaceSocketModel, LogUtil, ManagerSocketModel, TypeLogEnum, VarEnvEnum } from 'common'
 
 export class GetConnectionRegisteryModel {
     private static _instance?: GetConnectionRegisteryModel
 
-    private _connection: HandlerSocketLinkModel
-        = new HandlerSocketLinkModel(EnvUtil.get(VarEnvEnum.REGISTERY_URL), parseInt(EnvUtil.get(VarEnvEnum.REGISTERY_PORT)))
+    private _connection: ManagerSocketModel
+        = new ManagerSocketModel(EnvUtil.get(VarEnvEnum.REGISTERY_URL), parseInt(EnvUtil.get(VarEnvEnum.REGISTERY_PORT)))
 
-    private _getLink: ReceiverLinkSocketModel<Array<GameModel>>
-        = this.connection.registerReceiver<Array<GameModel>>('/registery', 'get').subscribe()
+    private _getLink: LinkNamespaceSocketModel<void, Array<GameModel>>
+        = this.connection.buildLink<void, Array<GameModel>>('/registery', 'get').onDefault()
 
     private constructor() {
-        this.connection.socketManager.on('open', () => {
+        this.connection.socketIoManager.on('open', () => {
             LogUtil.logger(TypeLogEnum.APP).trace('App connected to registery')
 
             this.getLink.data = new Array
 
-            sender.emit()
+            this.getLink.emit()
         })
 
-        this.connection.socketManager.on('close', () => {
+        this.connection.socketIoManager.on('close', () => {
             LogUtil.logger(TypeLogEnum.APP).warn('App disconnected from registery')
 
             this.getLink.data = new Array
         })
 
-        this.connection.socketManager.connect()
-
-        const sender: SenderLinkSocketModel<void> = this.connection.registerSender('/registery', 'get')
+        this.connection.connect()
     }
 
     public static get instance(): GetConnectionRegisteryModel {
@@ -35,11 +33,11 @@ export class GetConnectionRegisteryModel {
         return this._instance
     }
 
-    private get connection(): HandlerSocketLinkModel {
+    private get connection(): ManagerSocketModel {
         return this._connection
     }
 
-    public get getLink(): ReceiverLinkSocketModel<Array<GameModel>> {
+    public get getLink(): LinkNamespaceSocketModel<void, Array<GameModel>> {
         return this._getLink
     }
 }

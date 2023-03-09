@@ -14,6 +14,7 @@ import { TypeProcessBehaviorItemLoopGameEnum } from '../../../process/type/enum/
 import { TypeBehaviorItemLoopGameEnum } from '../../../type/enum/type.behavior.item.loop.game.enum'
 import { TypeModeChatGameEnum } from '../../../../../../chat/mode/type/enum/type.mode.chat.game.enum'
 import { ProcessContextGameEnum } from '../../../../../../context/process/enum/process.context.game.enum'
+import { TypeAlertEnum } from '../../../../../../../alert/type/enum/type.alert.enum'
 
 @InitFactoryRegistering()
 export class WerewolfImplementationBehaviorItemLoopGameModel extends BehaviorItemLoopGameModel {
@@ -32,7 +33,7 @@ export class WerewolfImplementationBehaviorItemLoopGameModel extends BehaviorIte
     }
 
     public async validCondition(_context: ContextGameModel): Promise<boolean> {
-        if (this.getPlayer().length > 0) {
+        if (this.getAlivePlayer().length > 0) {
             return true
         } else {
             return false
@@ -40,12 +41,22 @@ export class WerewolfImplementationBehaviorItemLoopGameModel extends BehaviorIte
     }
 
     public async doAtBeginning(context: ContextGameModel): Promise<void> {
-        const chatManager: ManagerChatGameModel | undefined = context[ProcessContextGameEnum.CHAT_MANAGER]
+        const chatManager: ManagerChatGameModel | undefined = context[ProcessContextGameEnum.CHAT_MANAGER]
 
         // #achan faire l'erreur 
         if (!chatManager) throw new Error
 
-        await chatManager.sendEventMessage('C\'est au tour des loups garous de désigner quelqu\'un !', 'cat-face')
+        let message: string = ''
+
+        for (let i = 0; i < this.players.length; i++) {
+            message += this.players[i].user.username
+
+            if (i < this.players.length - 2) message += ', '
+            if (i === this.players.length - 2) message += ' et '
+        }
+
+        await chatManager.sendEventMessage(`C\'est au tour des loups garous de désigner quelqu\'un !`, 'cat-face', TypeAlertEnum.INFORM)
+        await chatManager.sendEventMessage(`C'est à votre tour ${message} !`, 'cat-face', TypeAlertEnum.SUCCESS, this.config.chat)
 
         context.next()
     }
@@ -60,7 +71,7 @@ export class WerewolfImplementationBehaviorItemLoopGameModel extends BehaviorIte
 
         if (player) {
             const result: ResultSetGameModel = new ResultSetGameModel
-            
+
             result[TypeProcessBehaviorItemLoopGameEnum.KILL] = [player]
 
             context.next(result)

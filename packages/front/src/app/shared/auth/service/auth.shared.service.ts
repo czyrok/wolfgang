@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core'
 import { CookieService } from 'ngx-cookie-service'
-import { ReceiverLinkSocketModel, SenderLinkSocketModel } from 'common'
+import { LinkNamespaceSocketModel } from 'common'
+
+import { environment } from 'src/environments/environment'
 
 import { SessionSharedService } from '../../session/service/session.shared.service'
 import { SocketSharedService } from '../../socket/service/socket.shared.service'
@@ -11,6 +13,7 @@ import { SocketSharedService } from '../../socket/service/socket.shared.service'
 export class AuthSharedService {
   private _isAuth: boolean = false
   private _username: string | undefined = undefined
+  private _scopeAccess: Array<string> = new Array
 
   public constructor(
     private cookieService: CookieService,
@@ -34,19 +37,26 @@ export class AuthSharedService {
     return this._username
   }
 
-  public async setToken(token: string): Promise<void> {
-    // #achan secure, et utiliser env
-    this.cookieService.set('token', token, 6, '/', undefined, false, 'Lax')
+  private set scopeAccess(value: Array<string>) {
+    this._scopeAccess = value
+  }
 
-    this.socketSharedService.handler.socketManager.engine.close()
-    this.socketSharedService.handler.socketManager.connect()
+  public get scopeAccess(): Array<string> {
+    return this._scopeAccess
+  }
+
+  public async setToken(token: string): Promise<void> {
+    // #achan secure
+    this.cookieService.set(environment.JWT_COOKIE_NAME, token, environment.JWT_COOKIE_DURATION / 60 / 60 / 24, '/', undefined, false, 'Lax')
+
+    this.socketSharedService.socketManager.close()
+    this.socketSharedService.socketManager.connect()
 
     await this.testAuth()
   }
 
   public async testAuth(): Promise<void> {
-    // #achan use env
-    if (!this.cookieService.check('token')) return
+    if (!this.cookieService.check(environment.JWT_COOKIE_NAME)) return
 
     this.disconnect()
 
@@ -55,60 +65,71 @@ export class AuthSharedService {
   }
 
   private async doAuth(): Promise<void> {
-    this.socketSharedService.handler.getNamespace('/auth').connect()
+    const testLink: LinkNamespaceSocketModel<void, string> = await this.socketSharedService.buildLink<void, string>('/auth', 'test')
 
-    const testSenderLink: SenderLinkSocketModel<void> = await this.socketSharedService.registerSender('/auth', 'test'),
-      testReceiverLink: ReceiverLinkSocketModel<string> = await this.socketSharedService.registerReceiver('/auth', 'test'),
-      testErrorLink: ReceiverLinkSocketModel<string> = await this.socketSharedService.registerReceiver('/auth', 'test')
+    return new Promise((resolve: () => void, reject: () => void) => {
+      testLink.on(async (username: string) => {
+        testLink.destroy()
 
-    return new Promise((resolve: (value: void) => void) => {
-      testReceiverLink.subscribe((username: string) => {
-        testReceiverLink.unsubscribe()
-        testErrorLink.unsubscribe()
-
-        this.connect(username)
+        await this.connect(username)
 
         resolve()
       })
 
-      testErrorLink.subscribe((error: any) => {
-        testReceiverLink.unsubscribe()
-        testErrorLink.unsubscribe()
+      testLink.onFail(() => {
+        testLink.destroy()
+
+        reject()
       })
 
-      testSenderLink.emit()
+      testLink.emit()
     })
   }
 
   public async logOut(): Promise<void> {
-    const logOutSenderLink: SenderLinkSocketModel<void> = await this.socketSharedService.registerSender('/auth', 'logOut'),
-      logOutReceiverLink: ReceiverLinkSocketModel<void> = await this.socketSharedService.registerReceiver('/auth', 'logOut')
+    const logOutLink: LinkNamespaceSocketModel<void, void> = await this.socketSharedService.buildLink('/auth', 'logOut')
 
     return new Promise((resolve: (value: void) => void) => {
-      logOutReceiverLink.subscribe(() => {
+      logOutLink.on(() => {
+        logOutLink.destroy()
+
         this.disconnect()
 
-        this.socketSharedService.handler.getNamespace('/auth').disconnect()
+        // #aret
+        // this.socketSharedService.manager.getNamespace('/auth').disconnect()
 
         // #achan
-        this.cookieService.delete('token', '/', undefined, false, 'Lax')
+        this.cookieService.delete(environment.JWT_COOKIE_NAME, '/', undefined, false, 'Lax')
 
         resolve()
-
-        logOutReceiverLink.unsubscribe()
       })
 
-      logOutSenderLink.emit()
+      logOutLink.emit()
     })
   }
 
-  private connect(username: string): void {
+  private async connect(username: string): Promise<void> {
     this.isAuth = true
     this.username = username
+
+    const scopeLink: LinkNamespaceSocketModel<void, Array<string>> = await this.socketSharedService.buildLink('/auth', 'getScope')
+
+    return new Promise((resolve: (value: void) => void) => {
+      scopeLink.on((scopeAccess: Array<string>) => {
+        scopeLink.destroy()
+
+        resolve()
+
+        this.scopeAccess = scopeAccess
+      })
+
+      scopeLink.emit()
+    })
   }
 
   private disconnect(): void {
     this.isAuth = false
     this.username = undefined
+    this.scopeAccess.splice(0, this.scopeAccess.length)
   }
 }

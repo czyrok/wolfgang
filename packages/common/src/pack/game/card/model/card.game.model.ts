@@ -42,4 +42,8 @@ export class CardGameModel implements HandlerPlayerGameInterface {
     getPlayer(): Array<PlayerGameModel> {
         return this.playerList
     }
+
+    getAlivePlayer(): Array<PlayerGameModel> {
+        return this.playerList.filter((player: PlayerGameModel) => !player.isDead)
+    }
 }

@@ -1,4 +1,4 @@
-import { EmitOnFail, EmitOnSuccess, OnMessage, SocketController, ConnectedSocket, MessageBody } from 'ts-socket.io-controller'
+import { EmitOnFail, EmitOnSuccess, OnMessage, SocketController, ConnectedSocket } from 'ts-socket.io-controller'
 import { Request } from 'express'
 import { Socket } from 'socket.io'
 import { DocumentType } from '@typegoose/typegoose'
@@ -30,22 +30,11 @@ export class GameController {
         const test: boolean = await CheckConnectionRegisteryHelper.checkGame(gameId)
 
         if (!test) {
-            await user.updateOne({ currentGameId: null })
+            await user.updateOne({ currentGameId: null }).exec()
 
             return ''
         }
 
         return gameId
-    }
-
-    @OnMessage()
-    @EmitOnSuccess()
-    @EmitOnFail()
-    async check(@MessageBody() gameId: string) {
-        const test: boolean = await CheckConnectionRegisteryHelper.checkGame(gameId)
-
-        if (test) return true
-
-        return false
     }
 }

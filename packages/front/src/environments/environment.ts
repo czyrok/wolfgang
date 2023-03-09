@@ -3,7 +3,15 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  PROTOCOL: 'http',
+  MAIN_URL: 'localhost',
+  MAIN_PORT: 5500,
+  GAME_URL: 'localhost',
+  GAME_PORT: 5501,
+  SESSION_COOKIE_NAME: 'sid',
+  JWT_COOKIE_NAME: 'token',
+  JWT_COOKIE_DURATION: 518400
 };
 
 /*
