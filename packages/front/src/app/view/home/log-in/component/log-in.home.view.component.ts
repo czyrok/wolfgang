@@ -23,8 +23,8 @@ export class LogInHomeViewComponent {
     private displayAlertSharedService: DisplayAlertSharedService
   ) {
     this.form = this.formBuilder.group({
-      username: [null, [Validators.minLength(4)]],
-      password: [null, null]
+      username: [null, [Validators.required, Validators.minLength(4)]],
+      password: [null, [Validators.required]]
     })
   }
 

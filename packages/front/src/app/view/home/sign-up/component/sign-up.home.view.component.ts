@@ -23,9 +23,9 @@ export class SignUpHomeViewComponent {
     private displayAlertSharedService: DisplayAlertSharedService
   ) {
     this.form = this.formBuilder.group({
-      username: [null, [Validators.minLength(4)]],
-      email: [null, [Validators.email]],
-      password: [null, null]
+      username: [null, [Validators.required, Validators.minLength(4)]],
+      email: [null, [Validators.required, Validators.email]],
+      password: [null, [Validators.required]]
     })
   }
 
