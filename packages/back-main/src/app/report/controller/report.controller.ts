@@ -1,26 +1,17 @@
-import { SocketController, EmitOnSuccess, EmitOnFail, SocketRequest, OnMessage, MessageBody, ConnectedSocket } from 'ts-socket.io-controller'
+import { SocketController, EmitOnSuccess, EmitOnFail, OnMessage, MessageBody, ConnectedSocket } from 'ts-socket.io-controller'
 import { DocumentType } from '@typegoose/typegoose'
 import { Socket } from 'socket.io'
 import { Request } from 'express'
-import { BasicUserReportModel, BasicUserReportModelDocument, BugReportModel, BugReportModelDocument, NotFoundUserError, OtherUserReportModel, OtherUserReportModelDocument, ReportModel, ReportModelDocument, TypeReportEnum, UserModel, UserModelDocument } from 'common'
+import { NoSelectedUserReportError, BasicUserReportModel, BasicUserReportModelDocument, BugReportModel, BugReportModelDocument, NotFoundUserError, OtherUserReportModel, OtherUserReportModelDocument, TypeReportEnum, UserModel, UserModelDocument } from 'common'
 
 @SocketController({
     namespace: '/report',
     init: () => { }
 })
 export class ReportController {
+    @OnMessage()
     @EmitOnSuccess()
     @EmitOnFail()
-    @OnMessage()
-    async insertReport(@SocketRequest() req: any, report: ReportModel) {
-        report.user = req.session.user
-
-        await new ReportModelDocument(report).save()
-    }
-
-    @EmitOnSuccess()
-    @EmitOnFail()
-    @OnMessage()
     async add(@ConnectedSocket() socket: Socket, @MessageBody() report: BasicUserReportModel | OtherUserReportModel | BugReportModel) {
         const req: Request = socket.request as Request,
             user: DocumentType<UserModel> | undefined = req.session.user
@@ -30,6 +21,16 @@ export class ReportController {
         const concernedUsersId: Array<string> = new Array
 
         switch (report.type) {
+            case TypeReportEnum.BUG:
+                report = report as BugReportModel
+
+                const bug: DocumentType<BugReportModel> = new BugReportModelDocument(report)
+
+                bug.user = user
+
+                await bug.save()
+
+                break
             case TypeReportEnum.BASIC_USER:
                 report = report as BasicUserReportModel
 
@@ -38,6 +39,8 @@ export class ReportController {
                 basic.user = user
                 basic.thumbsDownCount = 0
                 basic.thumbsUpCount = 0
+
+                if (report.concernedUsers.length == 0) throw new NoSelectedUserReportError
 
                 for (const username of report.concernedUsers) {
                     const concernedUser: DocumentType<UserModel> | null = await UserModelDocument.findOne({ username: username }).exec()
@@ -52,18 +55,6 @@ export class ReportController {
                 await basic.save()
 
                 break
-
-            case TypeReportEnum.BUG:
-                report = report as BugReportModel
-
-                const bug: DocumentType<BugReportModel> = new BugReportModelDocument(report)
-
-                bug.user = user
-
-                await bug.save()
-
-                break
-
             case TypeReportEnum.OTHER_USER:
                 report = report as OtherUserReportModel
 
@@ -72,6 +63,8 @@ export class ReportController {
                 other.user = user
                 other.thumbsDownCount = 0
                 other.thumbsUpCount = 0
+
+                if (report.concernedUsers.length == 0) throw new NoSelectedUserReportError
 
                 for (const username of report.concernedUsers) {
                     const concernedUser: DocumentType<UserModel> | null = await UserModelDocument.findOne({ username: username }).exec()
