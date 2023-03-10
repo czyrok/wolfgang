@@ -1,7 +1,7 @@
 import { Component, TemplateRef, ViewChild, Input, AfterViewInit } from '@angular/core'
 import { Subject, Subscription } from 'rxjs'
+
 import { ModalSharedService } from 'src/app/shared/modal/service/modal.shared.service'
-import { ReportModel } from 'common'
 
 @Component({
   selector: 'app-shared-report-modal',
@@ -9,9 +9,10 @@ import { ReportModel } from 'common'
   styleUrls: ['./modal.report.shared.component.scss']
 })
 export class ModalReportSharedComponent implements AfterViewInit {
-  report!: ReportModel
-
   openingSignalSub!: Subscription
+
+  reportBugOpeningSignal: Subject<void> = new Subject
+  reportUserOpeningSignal: Subject<void> = new Subject
 
   constructor(
     private modalSharedService: ModalSharedService,
@@ -28,20 +29,19 @@ export class ModalReportSharedComponent implements AfterViewInit {
     })
   }
 
-  reportBugOpeningSignal: Subject<void> = new Subject
-
   callbackReportBug() {
     this.reportBugOpeningSignal.next()
   }
-
-  reportUserOpeningSignal: Subject<void> = new Subject
 
   callbackReportUser() {
     this.reportUserOpeningSignal.next()
   }
 
+  closeModalCallback(): void {
+    this.modalSharedService.close()
+  }
+
   @Input() openingSignal!: Subject<void>
 
   @ViewChild('chooseReportTemplate', { read: TemplateRef }) chooseReportTemplateRef!: TemplateRef<any>
-
 }

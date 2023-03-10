@@ -3,9 +3,10 @@ import { FormArray, FormControl, FormGroup, UntypedFormGroup } from '@angular/fo
 import { Subject, Subscription } from 'rxjs'
 import { BasicUserReportModel, PlayerGameModel, LinkNamespaceSocketModel, StateGameModel, TypeReportEnum, TypeUserReportEnum } from 'common'
 
+import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
 import { GameSharedService } from 'src/app/shared/game/service/game.shared.service'
 import { ModalSharedService } from 'src/app/shared/modal/service/modal.shared.service'
-import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
+import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/display.alert.shared.service'
 
 @Component({
   selector: 'app-shared-report-modal-user',
@@ -20,9 +21,10 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
   players: Array<PlayerGameModel> = new Array
 
   constructor(
+    private socketSharedService: SocketSharedService,
     private gameSharedService: GameSharedService,
     private modalSharedService: ModalSharedService,
-    private socketSharedService: SocketSharedService
+    private displayAlertSharedService: DisplayAlertSharedService
   ) { }
 
   ngOnInit(): void {
@@ -72,7 +74,7 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
 
     const reportUser: BasicUserReportModel = new BasicUserReportModel(TypeUserReportEnum.NEGATIVE_TACTICS, TypeReportEnum.BASIC_USER, this.gameSharedService.currentGameId)
 
-    this.setConcernedUsers(reportUser)
+    this.sendReport(reportUser)
   }
 
   async callbackInapropriateWordsReport(): Promise<void> {
@@ -80,7 +82,7 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
 
     const reportUser: BasicUserReportModel = new BasicUserReportModel(TypeUserReportEnum.INAPROPRIATE_WORDS, TypeReportEnum.BASIC_USER, this.gameSharedService.currentGameId)
 
-    this.setConcernedUsers(reportUser)
+    this.sendReport(reportUser)
   }
 
   async callbackFloodReport(): Promise<void> {
@@ -88,7 +90,7 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
 
     const reportUser: BasicUserReportModel = new BasicUserReportModel(TypeUserReportEnum.FLOOD, TypeReportEnum.BASIC_USER, this.gameSharedService.currentGameId)
 
-    this.setConcernedUsers(reportUser)
+    this.sendReport(reportUser)
   }
 
   async callbackAdvertisingReport(): Promise<void> {
@@ -96,7 +98,7 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
 
     const reportUser: BasicUserReportModel = new BasicUserReportModel(TypeUserReportEnum.ADVERTISING, TypeReportEnum.BASIC_USER, this.gameSharedService.currentGameId)
 
-    this.setConcernedUsers(reportUser)
+    this.sendReport(reportUser)
   }
 
   async callbackLinkReport(): Promise<void> {
@@ -104,7 +106,7 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
 
     const reportUser: BasicUserReportModel = new BasicUserReportModel(TypeUserReportEnum.LINK, TypeReportEnum.BASIC_USER, this.gameSharedService.currentGameId)
 
-    this.setConcernedUsers(reportUser)
+    this.sendReport(reportUser)
   }
 
   getSelectedUsers(): Array<string> {
@@ -124,18 +126,38 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
     return selectedUsersId
   }
 
-  async setConcernedUsers(reportUser: BasicUserReportModel): Promise<void> {
+  async sendReport(reportUser: BasicUserReportModel): Promise<void> {
     const selectedUsersId: Array<string> = this.getSelectedUsers()
 
     reportUser.concernedUsers = selectedUsersId
 
     const addLink: LinkNamespaceSocketModel<BasicUserReportModel, void> = await this.socketSharedService.buildLink('/report', 'add')
 
+    addLink.on(() => {
+      addLink.destroy()
+
+      this.displayAlertSharedService.emitSuccess('Votre signalement a bien été enregistré')
+
+      this.modalSharedService.close()
+    })
+
+    addLink.onFail((error: any) => {
+      addLink.destroy()
+
+      this.displayAlertSharedService.emitDanger(error)
+
+      this.modalSharedService.close()
+    })
+
     addLink.emit(reportUser)
   }
 
   getPlayersList(): Array<PlayerGameModel> | undefined {
     return this.players
+  }
+
+  closeModalCallback(): void {
+    this.modalSharedService.close()
   }
 
   @Input() openingSignal!: Subject<void>

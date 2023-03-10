@@ -1,12 +1,11 @@
 <ng-template #otherUserReportTemplate>
   <form class="box center" [formGroup]="form">
-
     <div class="field">
-      <label for="description" data-css-h2 data-css-font data-css-color>Description</label>
+      <label for="description" data-css-h3 data-css-font data-css-color>Description</label>
 
-      <div data-css-text-bar data-css-label data-css-border-radius="rounded">
-        <textarea id="description" name="description" rows="10" cols="50" placeholder="Saisissez votre signalement"
-          formControlName="description"></textarea>
+      <div>
+        <textarea id="description" name="description" rows="5" cols="30" placeholder="Saisissez la description du bug"
+          formControlName="description" data-css-textarea data-css-border-radius="regular"></textarea>
       </div>
     </div>
 
