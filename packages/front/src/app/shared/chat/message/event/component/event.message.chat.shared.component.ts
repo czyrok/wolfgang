@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core'
-
+import { TypeAlertEnum } from 'common'
 
 @Component({
   selector: 'app-shared-chat-message-event',
@@ -12,4 +12,5 @@ import { Component, Input } from '@angular/core'
 export class EventMessageChatSharedComponent {
   @Input() text!: string
   @Input() imageUrl!: string
+  @Input() type!: TypeAlertEnum
 }

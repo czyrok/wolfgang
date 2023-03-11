@@ -1,10 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
-import { CosmeticModel, ReceiverLinkSocketModel, SenderLinkSocketModel, UserModel } from 'common'
+import { Component, OnInit } from '@angular/core'
+import { ActivatedRoute, ParamMap } from '@angular/router'
+import { LinkNamespaceSocketModel, UserModel } from 'common'
+
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
 import { AuthSharedService } from '../../../../../shared/auth/service/auth.shared.service'
-
-
 
 @Component({
   selector: 'app-view-main-profile-default',
@@ -15,8 +14,8 @@ import { AuthSharedService } from '../../../../../shared/auth/service/auth.share
  * @classdesc Composant par défault de la vue du profil
  */
 export class DefaultProfileMainViewComponent implements OnInit {
-  user!: UserModel
   username!: string
+  user!: UserModel
 
   /**
    * @param socketSharedService Service qui permet d'utiliser des sockets
@@ -27,38 +26,45 @@ export class DefaultProfileMainViewComponent implements OnInit {
     private socketSharedService: SocketSharedService,
     private authSharedService: AuthSharedService,
     private activatedRoute: ActivatedRoute
-  ) {
-    const username: string | null = this.activatedRoute.snapshot.paramMap.get('username')
-
-    if (username) this.username = username
-  }
+  ) { }
 
   /**
-   * Initialisation de l'utilisateur pour le profil
+   * Permet de s'abonner au changement de routes afin de mettre à jour le pseudo de l'utilisateur du profile
    */
   async ngOnInit(): Promise<void> {
-    const username: string | null = this.activatedRoute.snapshot.paramMap.get('username')
+    this.activatedRoute.paramMap.subscribe((paramMap: ParamMap) => {
+      const username: string | null = paramMap.get('username')
 
-    if (username !== null) {
-      const userLink: ReceiverLinkSocketModel<UserModel> = (await this.socketSharedService.registerReceiver<UserModel>('/game/profile', 'view')).subscribe(
-        (data: UserModel) => {
-          this.user = data
+      if (!username) return
 
-          userLink.unsubscribe()
-        }
-      )
+      this.username = username
 
-      const usernameLink: SenderLinkSocketModel<string> = await this.socketSharedService.registerSender<string>('/game/profile', 'view')
-
-      usernameLink.emit(username)
-    }
+      this.setRender(username)
+    })
   }
 
   /**
-   * @returns Renvois le nom de l'utilisateur
+   * Permet de charger l'utilisateur associé au pseudo
+   * @param username Le pseudo
    */
-  getUsername(): string | undefined {
-    return this.authSharedService.username
+  async setRender(username: string): Promise<void> {
+    const viewLink: LinkNamespaceSocketModel<void, UserModel>
+      = await this.socketSharedService.buildLink<void, UserModel>('/game/profile/' + username, 'view')
+
+    viewLink.on((data: UserModel) => {
+      viewLink.destroy()
+
+      this.user = data
+    })
+
+    viewLink.emit()
+  }
+
+  /**
+   * Permet de savoir si ce profile correspond à l'utilisateur connecté
+   * @returns Vrai si l'utilisateur l'est, faux sinon
+   */
+  isAuthUser(): boolean {
+    return this.authSharedService.username === this.username
   }
 }
-

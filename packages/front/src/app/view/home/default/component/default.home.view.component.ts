@@ -1,6 +1,4 @@
 import { Component } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
-import { Subject } from 'rxjs'
 
 import { AuthSharedService } from '../../../../shared/auth/service/auth.shared.service'
 
@@ -35,11 +33,4 @@ export class DefaultHomeViewComponent {
   getUsername(): string | undefined{
     return this.authSharedService.username
   }
-
-  reportOpeningSignal: Subject<void> = new Subject
-
-  callbackReportBug() {
-    this.reportOpeningSignal.next()
-  }
-
 }

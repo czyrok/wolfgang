@@ -15,6 +15,11 @@
     "type": "git",
     "url": "https://github.com/czyrok/wolfgang.git"
   },
+  "scripts": {
+    "createDatabaseDockerContainer": "cd ./src/docker/database && docker-compose up -d",
+    "buildFrontDockerImage": "docker image build ./ -t front -f ./src/docker/front/Dockerfile",
+    "createFrontDockerContainer": "nohup docker run --publish 80:80 front"
+  },
   "workspaces": [
     "packages/front",
     "packages/back-main",

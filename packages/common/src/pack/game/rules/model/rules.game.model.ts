@@ -31,14 +31,17 @@ export class RulesGameModel {
         this._playerCountMax = value
     }
 
+    @Expose()
     public get isPrivate(): boolean {
         return this._isPrivate
     }
 
+    @Expose()
     public get playerCountMax(): number {
         return this._playerCountMax
     }
 
+    @Expose()
     public get choosingcardList(): Array<CardChoosingRulesModel> {
         return this._choosingcardList
     }

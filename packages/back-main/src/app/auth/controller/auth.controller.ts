@@ -40,4 +40,13 @@ export class AuthController {
 
         return true
     }
+
+    @OnMessage()
+    @EmitOnSuccess()
+    async getScope(@ConnectedSocket() socket: Socket) {
+        const req: Request = socket.request as Request,
+            scopeAccess: Array<string> = req.session.scopeAccess ?? new Array
+
+        return scopeAccess
+    }
 }

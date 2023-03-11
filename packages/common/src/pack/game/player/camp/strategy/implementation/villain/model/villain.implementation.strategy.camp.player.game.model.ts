@@ -5,9 +5,9 @@ import { StrategyCampPlayerGameInterface } from '../../../interface/strategy.cam
 import { CampPlayerGameEnum } from '../../../../enum/camp.player.game.enum'
 
 export class VillainImplementationStrategyCampPlayerGameModel implements StrategyCampPlayerGameInterface {
-    setCampToPlayer(list: Array<PlayerGameModel>): void {
-        for (let player of list) {
-            if (player.camp != CampPlayerGameEnum.UNDEFINED)
+    setCampToPlayer(playerList: Array<PlayerGameModel>): void {
+        for (const player of playerList) {
+            if (player.camp === CampPlayerGameEnum.UNDEFINED)
                 player.camp = CampPlayerGameEnum.VILLAIN
         }
     }

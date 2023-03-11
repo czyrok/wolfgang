@@ -5,14 +5,9 @@
 @use '../../lib/definition';
 
 @include element.createElement('text-bar') {
-    @include element.setAttrAccentContent() {
-        font-family: property.get('font', 'important') !important;
-        font-weight: bold;
-    }
-
     @include definition.setAttrBorderRadius() {
     }
-        
+
     @include element.defineContent() {
         display: inline-grid;
         grid-template-areas:
@@ -73,11 +68,6 @@
     }
 
     @include element.defineAttrCondition('type', 'text', 'password', 'email') {
-        @include element.setAttrAccentContent() {
-            font-family: property.get('font', 'important') !important;
-            font-weight: bold;
-        }
-
         @include element.defineContent() {
             padding: property.get('borderLimit', 'verySmall');
             width: 100%;
@@ -161,11 +151,6 @@
 }
 
 @include element.createElement('select') {
-    @include element.setAttrAccentContent() {
-        font-family: property.get('font', 'important') !important;
-        font-weight: bold;
-    }
-
     @include definition.setAttrBorderRadius() {
     }
 
@@ -177,5 +162,50 @@
     }
 
     @include definition.definePropertyDisabled() {
+    }
+}
+
+@include element.createElement('textarea') {
+    @include definition.setAttrBorderRadius() {
+    }
+
+    @include element.defineContent() {
+        resize: none;
+        font-size: property.get('fontSize', 'sideElement', 'text');
+        padding: property.get('borderLimit', 'verySmall');
+        font-family: property.get('font', 'regular');
+        transition: property.get('transition', 'short');
+        transition-property: border;
+    }
+
+    @include element.defineWithBefore('.ng-submitted') {
+        @include element.defineProperty('.ng-invalid') {
+            @include element.defineContent() {
+                border: property.get('size', 'input', 'underline') solid color.get(alert, red, a);
+            }
+        }
+    }
+
+    @include element.definePropertyFocus {
+        @include element.defineProperty('.ng-invalid') {
+            @include element.defineContent() {
+                border: property.get('size', 'input', 'underline') solid color.get(alert, red, a);
+            }
+        }
+    }
+
+    @include element.defineProperty('::placeholder') {
+        opacity: property.get('opacity', 'placeholder');
+    }
+
+    @include definition.definePropertyDisabled() {
+    }
+}
+
+@include element.createElement('error') {
+    @include element.defineContent() {
+        font-size: property.get('fontSize', 'comment');
+        font-family: property.get('font', 'regular');
+        color: color.get(alert, red, a);
     }
 }

@@ -1,34 +1,52 @@
 <section>
   <ng-template #buttonTemplate>
-    <app-shared-interactive-button text="Annuler" [important]="true"></app-shared-interactive-button>
-    <app-shared-interactive-button text="Sanctionner" [accent]="true"
-      [important]="true"></app-shared-interactive-button>
+    <app-shared-interactive-button text="Supprimer" [important]="true"
+      (clickEvent)="cancel()"></app-shared-interactive-button>
+    <app-shared-interactive-button *ngIf="!bugReport" text="Sanctionner" [accent]="true" [important]="true"
+      (clickEvent)="update()"></app-shared-interactive-button>
   </ng-template>
 
   <ng-template #contentTemplate>
-    <div class="lines-container all">
-      <ng-container *ngFor="let concernedUser of concernedUsers">
-        <app-shared-user-line-profile [username]="concernedUser.username"></app-shared-user-line-profile>
-      </ng-container>
-    </div>
-
     <div class="box">
       <div class="grid">
         <div class="area-a">
-          <app-shared-alert-text *ngIf="bugReport" icofont="flag" text="{{ bugReport.type }}"></app-shared-alert-text>
-          <app-shared-alert-text *ngIf="basicReport" icofont="flag" text="{{ basicReport.type }}"></app-shared-alert-text>
-          <app-shared-alert-text *ngIf="otherReport" icofont="flag" text="{{ otherReport.type }}"></app-shared-alert-text>
+          <div class="details">
+            <div class="area">
+              <app-shared-alert-text *ngIf="bugReport" icofont="flag" text="{{ getReportName(bugReport.type) }}"
+                [type]="getReportTextAlertType(bugReport.type)"></app-shared-alert-text>
+              <app-shared-alert-text *ngIf="basicReport" icofont="flag" text="{{ getReportName(basicReport.type) }}"
+                [type]="getReportTextAlertType(basicReport.type)"></app-shared-alert-text>
+              <app-shared-alert-text *ngIf="otherReport" icofont="flag" text="{{ getReportName(otherReport.type) }}"
+                [type]="getReportTextAlertType(otherReport.type)"></app-shared-alert-text>
 
-          <app-shared-alert-text *ngIf="basicReport" icofont="flag" text="{{ basicReport.reportType }}"></app-shared-alert-text>
+              <app-shared-alert-text *ngIf="basicReport" icofont="flag"
+                text="{{ getUserReportName(basicReport.reportType) }}"
+                [type]="getUserReportTextAlertType(basicReport.reportType)"></app-shared-alert-text>
+            </div>
 
-          <app-shared-label *ngIf="basicReport" text="{{ basicReport.thumbsUpCount }}" icofont="thumbs-up"></app-shared-label>
-          <app-shared-label *ngIf="basicReport" text="{{ basicReport.thumbsDownCount }}" icofont="thumbs-down"></app-shared-label>
+            <div class="area" *ngIf="basicReport || otherReport">
+              <app-shared-label *ngIf="basicReport" text="{{ basicReport.thumbsUpCount }}"
+                icofont="thumbs-up"></app-shared-label>
+              <app-shared-label *ngIf="basicReport" text="{{ basicReport.thumbsDownCount }}"
+                icofont="thumbs-down"></app-shared-label>
 
-          <app-shared-label *ngIf="otherReport" text="{{ otherReport.thumbsUpCount }}" icofont="thumbs-up"></app-shared-label>
-          <app-shared-label *ngIf="otherReport" text="{{ otherReport.thumbsDownCount }}" icofont="thumbs-down"></app-shared-label>
+              <app-shared-label *ngIf="otherReport" text="{{ otherReport.thumbsUpCount }}"
+                icofont="thumbs-up"></app-shared-label>
+              <app-shared-label *ngIf="otherReport" text="{{ otherReport.thumbsDownCount }}"
+                icofont="thumbs-down"></app-shared-label>
+            </div>
+          </div>
+
+          <div *ngIf="basicReport || otherReport" class="concerned-users lines-container">
+            <ng-container *ngFor="let concernedUser of concernedUsers">
+              <app-shared-user-line-profile [username]="concernedUser.username"></app-shared-user-line-profile>
+            </ng-container>
+          </div>
         </div>
 
-        <div class="area-b">
+        <div class="area-b" *ngIf="bugReport || otherReport">
+          <h2 data-css-h2 data-css-font data-css-color> Description</h2>
+          
           <p data-css-text data-css-font data-css-color *ngIf="bugReport">
             {{ bugReport.desc }}
           </p>
@@ -37,18 +55,19 @@
           </p>
         </div>
 
-        <div class="area-c">
-          <app-shared-chat title="Retranscription du chat"></app-shared-chat>
+        <div class="area-c" *ngIf="!bugReport">
+          <app-shared-chat title="Retranscription du chat" [eventMessageEvent]="eventMessageEvent"
+            [playerMessageEvent]="playerMessageEvent"></app-shared-chat>
         </div>
       </div>
     </div>
   </ng-template>
 
 
-  <app-view-page-scroll *ngIf="bugReport" title="Signalement : {{ getDate(bugReport) }}" [buttonTemplate]="buttonTemplate"
-    [contentTemplate]="contentTemplate" [list]="false"></app-view-page-scroll>
-  <app-view-page-scroll *ngIf="basicReport" title="Signalement : {{ getDate(basicReport) }}" [buttonTemplate]="buttonTemplate"
-    [contentTemplate]="contentTemplate" [list]="false"></app-view-page-scroll>
-  <app-view-page-scroll *ngIf="otherReport" title="Signalement : {{ getDate(otherReport) }}" [buttonTemplate]="buttonTemplate"
-    [contentTemplate]="contentTemplate" [list]="false"></app-view-page-scroll>
+  <app-view-page-scroll *ngIf="bugReport" title="Signalement : {{ getDate(bugReport) }}"
+    [buttonTemplate]="buttonTemplate" [contentTemplate]="contentTemplate" [list]="false"></app-view-page-scroll>
+  <app-view-page-scroll *ngIf="basicReport" title="Signalement : {{ getDate(basicReport) }}"
+    [buttonTemplate]="buttonTemplate" [contentTemplate]="contentTemplate" [list]="false"></app-view-page-scroll>
+  <app-view-page-scroll *ngIf="otherReport" title="Signalement : {{ getDate(otherReport) }}"
+    [buttonTemplate]="buttonTemplate" [contentTemplate]="contentTemplate" [list]="false"></app-view-page-scroll>
 </section>

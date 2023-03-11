@@ -10,6 +10,7 @@
     padding: property.get('borderLimit', 'verySmall') * 2;
     column-gap: property.get('borderLimit', 'verySmall') * 2;
     align-items: center;
+    white-space: nowrap;
 
     @include theme.themeHandler(false, 'containerElement2') {
         background-color: adjust-color(theme.get('background'), $alpha: -1 + property.get('opacity', 'float'));

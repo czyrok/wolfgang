@@ -15,7 +15,6 @@
     }
 }
 
-
 @include element.createElement('input') {
     @include element.defineAttrCondition('type', 'text', 'password', 'email') {
         @include theme.themeHandler(true, 'accent', 'sideElement') {
@@ -77,6 +76,19 @@
     @include element.defineContent() {
         @include theme.themeHandler(true, 'sideElement') {
             background-color: theme.get('background', 'regular');
+            color: theme.get('font', 'regular');
+        }
+    }
+}
+
+@include element.createElement('textarea') {
+    @include theme.themeHandler(true, 'sideElement') {
+        @include element.defineContent() {
+            background-color: theme.get('background', 'regular');
+            color: theme.get('font', 'active');
+        }
+
+        @include element.defineProperty('::placeholder') {
             color: theme.get('font', 'regular');
         }
     }

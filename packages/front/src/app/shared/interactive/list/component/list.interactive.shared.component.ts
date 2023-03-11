@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input } from '@angular/core'
+import { Component, Input } from '@angular/core'
 import { ListInteractiveSharedModel } from '../model/list.interactive.shared.model'
 
 @Component({
@@ -7,13 +7,8 @@ import { ListInteractiveSharedModel } from '../model/list.interactive.shared.mod
   styleUrls: ['./list.interactive.shared.component.scss']
 })
 /**
- * @classdesc Gère les listes interactives
- * @implements AfterViewInit
+ * Correspond au composant associé au modèle d'une liste intéractive
  */
-export class ListInteractiveSharedComponent implements AfterViewInit {
-  ngAfterViewInit(): void {
-    console.log(this.list)
-  }
-
+export class ListInteractiveSharedComponent {
   @Input() list!: ListInteractiveSharedModel;
 }

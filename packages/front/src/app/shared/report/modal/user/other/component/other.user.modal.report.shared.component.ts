@@ -1,9 +1,12 @@
 import { Component, Input, TemplateRef, ViewChild } from '@angular/core'
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
-import { OtherUserReportModel, ReportModel} from 'common'
 import { Subject, Subscription } from 'rxjs'
-import { ModalSharedService } from 'src/app/shared/modal/service/modal.shared.service'
+import { OtherUserReportModel, LinkNamespaceSocketModel, TypeReportEnum} from 'common'
 
+import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
+import { GameSharedService } from 'src/app/shared/game/service/game.shared.service'
+import { ModalSharedService } from 'src/app/shared/modal/service/modal.shared.service'
+import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/display.alert.shared.service'
 
 @Component({
   selector: 'app-shared-report-modal-user-other',
@@ -14,8 +17,9 @@ import { ModalSharedService } from 'src/app/shared/modal/service/modal.shared.se
  * @classdesc Gère les boites modales de signalements détaillés d'un utilisateur
  */
 export class OtherUserModalReportSharedComponent {
-  report!: ReportModel
   form: UntypedFormGroup
+
+  selectedUsersId!: Array<string>
 
   openingSignalSub!: Subscription
 
@@ -25,10 +29,13 @@ export class OtherUserModalReportSharedComponent {
    */
   constructor(
     private formBuilder: UntypedFormBuilder,
-    private modalSharedService: ModalSharedService
+    private socketSharedService: SocketSharedService,
+    private gameSharedService: GameSharedService,
+    private modalSharedService: ModalSharedService,
+    private displayAlertSharedService: DisplayAlertSharedService
   ) {
     this.form = this.formBuilder.group({
-      description: [null, [Validators.minLength(20)]],
+      description: [null, [Validators.required, Validators.minLength(10)]],
     })
   }
 
@@ -36,11 +43,15 @@ export class OtherUserModalReportSharedComponent {
    * Effectue la souscription du signal d'ouverture d'un formulaire de signalement détaillé d'un utilisateur
    */
   ngAfterViewInit(): void {
-    this.openingSignalSub = this.openingSignal.subscribe(() => {
+    this.openingSignalSub = this.openingSignal.subscribe((selectedUsersId: Array<string>) => {
+      this.selectedUsersId = selectedUsersId
+
       this.modalSharedService.close()
 
+      this.form.reset()
+
       this.modalSharedService.open({
-        title: 'Signalement utilisateur',
+        title: 'Signalement de joueur',
         template: this.otherUserReportTemplateRef
       })
     })
@@ -56,17 +67,37 @@ export class OtherUserModalReportSharedComponent {
   /**
    * Crée un modèle de signalement détaillé d'un utilisateur avec la description donné dans le formulaire
    */
-  callbackUserForm(): void {
+  async callbackUserForm(): Promise<void> {
     if (this.form.valid) {
-      let reportUser: OtherUserReportModel = new OtherUserReportModel
+      if(!this.gameSharedService.gameId) throw new Error
 
-      reportUser.reason = this.form.get('description')?.value
-      this.report = reportUser
+      const reportUser: OtherUserReportModel = new OtherUserReportModel(this.form.get('description')?.value, TypeReportEnum.OTHER_USER, this.gameSharedService.gameId)
+
+      reportUser.concernedUsers = this.selectedUsersId
+    
+      const addLink: LinkNamespaceSocketModel<OtherUserReportModel, void> = await this.socketSharedService.buildLink('/report', 'add')
+
+      addLink.on(() => {
+        addLink.destroy()
+
+        this.displayAlertSharedService.emitSuccess('Votre signalement a bien été enregistré')
+
+        this.modalSharedService.close()
+      })
+
+      addLink.onFail((error: any) => {
+        addLink.destroy()
+
+        this.displayAlertSharedService.emitDanger(error)
+
+        this.modalSharedService.close()
+      })
+
+      addLink.emit(reportUser)
     }
   }
 
-  @Input() openingSignal!: Subject<void>
+  @Input() openingSignal!: Subject<Array<string>>
 
   @ViewChild('otherUserReportTemplate', { read: TemplateRef }) otherUserReportTemplateRef!: TemplateRef<any>
-
 }

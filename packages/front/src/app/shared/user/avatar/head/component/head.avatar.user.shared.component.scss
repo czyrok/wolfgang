@@ -1,5 +1,15 @@
+@use '../../../../../app.scss';
+
 @use '../../../../../../scss/lib/property';
+
+@use 'scss-toolkit/src/mixin/theme';
 
 .container {
     width: property.get('size', 'img', 'item');
+    overflow: hidden;
+    border-radius: 50%;
+
+    @include theme.themeHandler(false, 'containerElement2', 'item') {
+        border: property.get('size', 'outline') solid theme.get('background');
+    }
 }

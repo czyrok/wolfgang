@@ -3,21 +3,23 @@
 </ng-template>
 
 <ng-template #contentTemplate>
-  <div class="box">
-    <div class="wrapper" #target>
-      <ng-template #playerMessageTemplate let-message="message">
-        <div class="message">
-          <app-shared-chat-message-player [user]="message.user" [text]="message.text"></app-shared-chat-message-player>
-        </div>
-      </ng-template>
+  <div class="box" #scrollTarget [scrollTop]="scrollTarget.scrollHeight">
+    <div #target></div>
 
-      <ng-template #eventMessageTemplate let-message="message">
-        <div class="message">
-          <app-shared-chat-message-event [text]="message.text" [imageUrl]="message.imageUrl"></app-shared-chat-message-event>
-        </div>
-      </ng-template>
-    </div>
+    <ng-template #playerMessageTemplate let-message="message">
+      <div class="message">
+        <app-shared-chat-message-player [user]="message.user" [text]="message.text"></app-shared-chat-message-player>
+      </div>
+    </ng-template>
+
+    <ng-template #eventMessageTemplate let-message="message">
+      <div class="message">
+        <app-shared-chat-message-event [text]="message.text"
+          [imageUrl]="message.imageUrl" [type]="message.alertType"></app-shared-chat-message-event>
+      </div>
+    </ng-template>
   </div>
 </ng-template>
 
-<app-shared-item-form [titleTemplate]="title !== undefined ? titleTemplate : undefined" [contentTemplate]="contentTemplate" [aside]="true"></app-shared-item-form>
+<app-shared-item-form [titleTemplate]="title !== undefined ? titleTemplate : undefined"
+  [contentTemplate]="contentTemplate" [aside]="true"></app-shared-item-form>

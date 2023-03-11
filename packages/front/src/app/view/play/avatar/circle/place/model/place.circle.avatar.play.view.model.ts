@@ -1,10 +1,12 @@
-import { ChangeDetectorRef, ComponentRef, Renderer2, ViewContainerRef, EventEmitter } from '@angular/core'
-import { PlayerGameModel, VotePlayerGameModel } from 'common'
+import { ChangeDetectorRef, ComponentRef, Renderer2, ViewContainerRef } from '@angular/core'
+import { PlayerGameModel } from 'common'
 
 import { AllAvatarUserSharedComponent } from 'src/app/shared/user/avatar/all/component/all.avatar.user.shared.component'
 
+import { EventVoteUserSharedModel } from 'src/app/shared/user/vote/event/model/event.vote.user.shared.model'
+
 /**
- * @classdesc Model de placement des avatars en cercle dans une partie
+ * Modèle du placement d'un joueur dans une partie
  */
 export class PlaceCircleAvatarPlayViewModel {
   private _x: number = 0
@@ -12,9 +14,9 @@ export class PlaceCircleAvatarPlayViewModel {
   private _index: number = 0
 
   /**
-   * @param _player Un joueur
-   * @param _renderer Permet d'implémenter un rendu personnalisé
-   * @param _componentRef Référence d'une liste d'avatars
+   * @param _player Le joueur associé
+   * @param _renderer Le moteur de rendu d'Angular
+   * @param _componentRef Le composant de l'avatar de l'utilisateur
    */
   public constructor(
     private _player: PlayerGameModel,
@@ -23,14 +25,16 @@ export class PlaceCircleAvatarPlayViewModel {
   ) { }
 
   /**
-   * @returns Revois un index
+   * Revoie son z-index associé au composant de l'avatar
+   * @returns Le z-index
    */
   public get index(): number {
     return this._index
   }
 
   /**
-   * Assigne un index
+   * Modifie le z-index du composant de l'avatar
+   * @param value La nouvelle valeur
    */
   public set index(value: number) {
     this._index = value
@@ -113,15 +117,19 @@ export class PlaceCircleAvatarPlayViewModel {
    */
   public static create(
     player: PlayerGameModel,
-    voteEventEmitter: EventEmitter<VotePlayerGameModel>,
+    voteEvent: EventVoteUserSharedModel,
     renderer: Renderer2, changeDetectorRef: ChangeDetectorRef,
     viewContainerRef: ViewContainerRef
   ): PlaceCircleAvatarPlayViewModel {
     const componentRef: ComponentRef<AllAvatarUserSharedComponent> = viewContainerRef.createComponent(AllAvatarUserSharedComponent)
 
-    componentRef.instance.user = player.user
     componentRef.instance.username = player.user.username
-    componentRef.instance.eventPlayerVote = voteEventEmitter
+    componentRef.instance.player = player
+    
+    componentRef.instance.reduced = true
+    componentRef.instance.detailed = true
+    
+    componentRef.instance.voteEvent = voteEvent
 
     changeDetectorRef.detectChanges()
 

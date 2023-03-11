@@ -19,12 +19,11 @@
 .container .avatar {
   grid-area: a;
   display: flex;
-  width: property.get('size', 'chat', 'icon');
   aspect-ratio: 1 / 1;
   justify-content: center;
 }
 
-.container p {
+.container .text {
   grid-area: b;
   border-top-left-radius: property.get('borderRadius', 'regular');
   border-bottom-left-radius: property.get('borderRadius', 'regular');
@@ -36,6 +35,6 @@
   }
 }
 
-.container.self p {
+.container.self .text {
   border-radius: property.get('borderRadius', 'rounded');
 }

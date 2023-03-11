@@ -6,8 +6,9 @@ import { PlayerGameModel } from '../../../../player/model/player.game.model'
 import { CardGameModel } from '../../../../card/model/card.game.model'
 import { FactoryCardGameModel } from '../../../../card/factory/model/factory.card.game.model'
 import { StateGameModel } from '../../../../state/model/state.game.model'
-
 import { ChatGameModelDocument } from '../../../../chat/model/chat.game.model'
+import { FactoryItemLoopGameModel } from '../../factory/model/factory.item.loop.game.model'
+import { ItemLoopGameModel } from '../../model/item.loop.game.model'
 
 import { ConfigBehaviorItemLoopGameInterface } from '../config/interface/config.behavior.item.loop.game.interface'
 import { SetupDistributionGameInterface } from '../../../../distribution/setup/interface/setup.distribution.game.interface'
@@ -48,17 +49,17 @@ export abstract class BehaviorItemLoopGameModel implements
         this._players = value
     }
 
-    public abstract validCondition(context: ContextGameModel): boolean
-    public abstract doAtBeginning(context: ContextGameModel): void
-    public abstract doAtEnd(context: ContextGameModel): void
+    public abstract validCondition(context: ContextGameModel): Promise<boolean>
+    public abstract doAtBeginning(context: ContextGameModel): Promise<void>
+    public abstract doAtEnd(context: ContextGameModel): Promise<void>
 
-    entryPoint(context: ContextGameModel): void {
+    async entryPoint(context: ContextGameModel): Promise<void> {
         LogUtil.logger(TypeLogEnum.GAME).info(`${this.config.type} behavior entrypoint triggered`)
 
-        let childContext1: ContextGameModel = ContextGameModel.buildContext(context)
+        const childContext1: ContextGameModel = ContextGameModel.buildContext(context)
 
         childContext1.res.subscribeOne((result: ResultSetGameType) => {
-            let childContext2: ContextGameModel = ContextGameModel.buildContext(context, result)
+            const childContext2: ContextGameModel = ContextGameModel.buildContext(context, result)
 
             childContext2.res.subscribeOne((result: ResultSetGameType) => {
                 LogUtil.logger(TypeLogEnum.GAME).info(`${this.config.type} behavior ending`)
@@ -66,12 +67,12 @@ export abstract class BehaviorItemLoopGameModel implements
                 context.next(result)
             })
 
-            setTimeout(() => {
-                this.doAtEnd(childContext2)
+            setTimeout(async () => {
+                await this.doAtEnd(childContext2)
             }, this.config.timer * 1000)
         })
 
-        this.doAtBeginning(childContext1)
+        await this.doAtBeginning(childContext1)
     }
 
     hasCard(value: CardGameModel): boolean {
@@ -98,11 +99,14 @@ export abstract class BehaviorItemLoopGameModel implements
         return this.players
     }
 
+    getAlivePlayer(): Array<PlayerGameModel> {
+        return this.players.filter((player: PlayerGameModel) => !player.isDead)
+    }
+
     setup(): void {
         this.players.splice(0, this.players.length)
 
         for (const card of FactoryCardGameModel.instance.getList(this.config.cardTypeList)) this.players.push(...card.getPlayer())
-        for (const player of this.players) player.addBehavior(this.config.type)
     }
 
     getChatType(): Array<TypeChatGameEnum> {
@@ -125,6 +129,20 @@ export abstract class BehaviorItemLoopGameModel implements
         }
 
         return null
+    }
+
+    public static getBehaviorOfPlayer(player: PlayerGameModel): Array<BehaviorItemLoopGameModel> {
+        const result: Array<BehaviorItemLoopGameModel> = new Array
+
+        const factory: FactoryItemLoopGameModel = FactoryItemLoopGameModel.instance
+
+        const itemList: Array<ItemLoopGameModel> = factory.getAll()
+
+        for (const item of itemList) {
+            result.push(...item.getPlayerBehavior(player))
+        }
+
+        return result
     }
 
     public checkChatAvailable(state: StateGameModel): boolean {

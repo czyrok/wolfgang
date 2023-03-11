@@ -1,19 +1,17 @@
 import { Namespace, Socket } from 'socket.io'
 import { instanceToPlain } from 'class-transformer'
 import { ConnectedSocket, EmitOnSuccess, OnMessage, SocketController } from 'ts-socket.io-controller'
-import { GameModel } from 'common'
+import { DocumentType } from '@typegoose/typegoose'
+import { Request } from 'express'
+import { GameModel, UserModel, NotFoundUserError } from 'common'
 
 import { GetConnectionRegisteryModel } from '../../../registery/connection/get/model/get.connection.registery.model'
 import { CreateConnectionRegisteryModel } from '../../../registery/connection/create/model/create.connection.registery.model'
-import { Request } from 'express'
-import { DocumentType } from '@typegoose/typegoose'
-import { UserModel } from 'common'
-import { NotFoundUserError } from 'common'
 
 @SocketController({
     namespace: '/game/currently',
     init: (io: Namespace) => {
-        GetConnectionRegisteryModel.instance.getLink.subscribe((games: Array<GameModel>) => {
+        GetConnectionRegisteryModel.instance.getLink.on((games: Array<GameModel>) => {
             io.emit('list', instanceToPlain(games))
         })
     }

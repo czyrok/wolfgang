@@ -29,14 +29,23 @@ export class NavMainViewComponent {
   }
 
   /**
-   * @returns Renvois vrai si l'utilisateur est connecté et faux sinon
+   * Permet de savoir si l'utilisateur connecté est un administrateur
+   * @returns Vrai si l'utilisateur l'est et faux sinon
+   */
+  getIsAdmin(): boolean {
+    return this.authSharedService.scopeAccess.indexOf('admin') > -1
+  }
+
+  /**
+   * Permet de savoir si l'utilisateur est connecté
+   * @returns Vrai si l'utilisateur l'est et faux sinon
    */
   getIsAuth(): boolean {
     return this.authSharedService.isAuth
   }
 
   /**
-   * Permet de déconnecter l'utilisateur et de le rediriger
+   * Permet de déconnecter l'utilisateur et de le rediriger à l'accueil
    */
   async logoutCallback(): Promise<void> {
     await this.authSharedService.logOut()

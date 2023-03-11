@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, AfterViewInit, ViewChild, ViewContainerRef, TemplateRef } from '@angular/core'
+import { Component, Input, EventEmitter, AfterViewInit, ViewChild, ViewContainerRef, TemplateRef, ElementRef } from '@angular/core'
 import { EventMessageChatGameModel, UserMessageChatGameModel } from 'common'
 
 @Component({
@@ -46,7 +46,10 @@ export class ChatSharedComponent implements AfterViewInit {
       })
   }
 
+  @ViewChild('height') elementRefHeight!: ElementRef<HTMLElement>
+
   @ViewChild('target', { read: ViewContainerRef }) viewContainerRefTarget!: ViewContainerRef
+
   @ViewChild('playerMessageTemplate', { read: TemplateRef }) playerMessageTemplateRef!: TemplateRef<any>
   @ViewChild('eventMessageTemplate', { read: TemplateRef }) eventMessageTemplateRef!: TemplateRef<any>
 

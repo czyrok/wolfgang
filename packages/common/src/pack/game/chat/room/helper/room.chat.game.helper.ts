@@ -1,21 +1,20 @@
-import { Namespace } from 'socket.io'
-import { TypeLogEnum } from '../../../../log/type/enum/type.log.enum'
-import { LogUtil } from '../../../../log/util/log.util'
-
 import { BehaviorItemLoopGameModel } from '../../../loop/item/behavior/model/behavior.item.loop.game.model'
-import { IteratorLoopGameModel } from '../../../loop/iterator/model/iterator.loop.game.model'
+import { FactoryItemLoopGameModel } from '../../../loop/item/factory/model/factory.item.loop.game.model'
+import { ItemLoopGameModel } from '../../../loop/item/model/item.loop.game.model'
 import { PlayerGameModel } from '../../../player/model/player.game.model'
 
 import { TypeChatGameEnum } from '../../type/enum/type.chat.game.enum'
 
 export class RoomChatGameHelper {
     public static setRoom(player: PlayerGameModel) {
-        const loopIte: IteratorLoopGameModel = new IteratorLoopGameModel
-
         const behaviorList: Array<BehaviorItemLoopGameModel> = new Array,
             chatTypeList: Array<TypeChatGameEnum> = new Array
 
-        for (const item of loopIte) {
+        const factory: FactoryItemLoopGameModel = FactoryItemLoopGameModel.instance
+
+        const itemList: Array<ItemLoopGameModel> = factory.getAll()
+
+        for (const item of itemList) {
             behaviorList.push(...item.getPlayerBehavior(player))
         }
 
@@ -26,6 +25,10 @@ export class RoomChatGameHelper {
         for (const socket of player.socketsList) {
             for (const chatType of chatTypeList) {
                 if (!socket.rooms.has(chatType)) socket.join(chatType)
+            }
+
+            for (const behavior of behaviorList) {
+                if (!socket.rooms.has(behavior.config.type)) socket.join(behavior.config.type)
             }
         }
     }

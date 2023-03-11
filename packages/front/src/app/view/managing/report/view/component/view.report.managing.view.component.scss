@@ -9,7 +9,6 @@ section .box {
 }
 
 section .box .grid {
-    height: 100%;
     display: grid;
     grid-template-areas:
         'a c'
@@ -22,15 +21,49 @@ section .box .grid {
 
 section .box .grid .area-a {
     display: flex;
-    align-items: center;
-    column-gap: 20px;
+    row-gap: property.get('borderLimit', 'big');
     grid-area: a;
+    flex-direction: column;
+}
+
+section .box .grid .area-a .details {
+    display: flex;
+    justify-content: space-between;
+    column-gap: property.get('borderLimit', 'big');
+}
+
+section .box .grid .area-a .details .area {
+    display: flex;
+    column-gap: property.get('borderLimit', 'big');
+}
+
+section .box .grid .area-a .concerned-users {
+    display: flex;
+    flex-direction: column;
+    row-gap: property.get('borderLimit', 'big');
 }
 
 section .box .grid .area-b {
     grid-area: b;
+    display: flex;
+    flex-direction: column;
+    row-gap: property.get('borderLimit', 'regular');
 }
 
 section .box .grid .area-c {
     grid-area: c;
+    display: flex;
+    justify-content: center;
+}
+
+@media (max-width: 1050px) {
+    section .box .grid {
+        display: flex;
+        flex-direction: column;
+    }
+
+    section .box .grid .area-a .details {
+        flex-direction: column;
+        row-gap: property.get('borderLimit', 'big');
+    }
 }

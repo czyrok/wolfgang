@@ -29,18 +29,22 @@ export class VotePlayerGameModel {
         this._type = type
     }
 
+    @Expose()
     public get votingPlayer(): PlayerGameModel {
         return this._votingPlayer
     }
 
+    @Expose()
     public get votedPlayer(): PlayerGameModel {
         return this._votedPlayer
     }
 
+    @Expose()
     public get message(): string {
         return this._message
     }
 
+    @Expose()
     public get type(): TypeVotePlayerGameEnum {
         return this._type
     }

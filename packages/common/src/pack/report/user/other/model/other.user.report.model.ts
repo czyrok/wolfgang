@@ -12,9 +12,10 @@ export class OtherUserReportModel extends UserReportModel implements OtherUserRe
     reason!: string
 
     public constructor(reason: string,
-        type: TypeReportEnum
+        type: TypeReportEnum,
+        gameId: string
     ) {
-        super(type)
+        super(type, gameId)
         this.reason = reason
     }
 }

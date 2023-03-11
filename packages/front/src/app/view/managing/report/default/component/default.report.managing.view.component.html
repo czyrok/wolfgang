@@ -5,19 +5,12 @@
 <ng-template #contentTemplate>
   <ng-template #contentTemplateLine let-report="report">
     <div class="field">
-      <app-shared-alert-text icofont="flag" text="{{ report?.type }}"></app-shared-alert-text>
+      <app-shared-alert-text icofont="flag" text="{{ getReportName(report?.type) }}" [type]="getReportTextAlertType(report?.type)"></app-shared-alert-text>
+
+      <app-shared-alert-text *ngIf="isBasicUserReport(report)" icofont="flag" text="{{ getUserReportName(report?.reportType) }}" [type]="getUserReportTextAlertType(report?.reportType)"></app-shared-alert-text>
     </div>
 
-    <div class="field" *ngIf="isBasicUserReport(report)">
-      <app-shared-alert-text icofont="flag" text="{{ report?.reportType }}"></app-shared-alert-text>
-    </div>
-
-    <div class="field" *ngIf="isBasicUserReport(report) || isOtherUserReport(report)">
-      <app-shared-label text="{{ report?.thumbsUpCount }}" icofont="thumbs-up"></app-shared-label>
-      <app-shared-label text="{{ report?.thumbsDownCount }}" icofont="thumbs-down"></app-shared-label>
-    </div>
-
-    <div class="field">
+    <div class="field time">
       <p data-css-text data-css-color data-css-font>{{ getDate(report) }}</p>
     </div>
   </ng-template>

@@ -5,9 +5,6 @@
     </ng-container>
     <app-shared-interactive-button link="/game/currently" text="Jouer ?" [accent]="true"
       [important]="true"></app-shared-interactive-button>
-
-      <app-shared-interactive-button text="test" [accent]="true"
-      [important]="true" (clickEvent)="callbackReportBug()"></app-shared-interactive-button>
   </ng-template>
 
   <ng-template #contentTemplate>
@@ -24,4 +21,4 @@
     [list]="false"></app-view-page-scroll>
 </main>
 
-<app-shared-report-modal [openingSignal]="reportOpeningSignal"></app-shared-report-modal>
+

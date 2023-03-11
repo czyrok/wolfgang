@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core'
 import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router'
-import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/display.alert.shared.service'
+
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
+import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/display.alert.shared.service'
 
 @Injectable()
 export class ViewCardsProposalMainViewGuard implements CanActivate {
@@ -18,7 +19,7 @@ export class ViewCardsProposalMainViewGuard implements CanActivate {
         
         if (!cardProposalId) return this.router.parseUrl('/game/cards-proposal')
 
-        const check: boolean = await this.socketSharedService.check<string>('/game/cards-proposal', 'check', cardProposalId)
+        const check: boolean = await this.socketSharedService.check<undefined>('/game/cards-proposal/view/' + cardProposalId, 'check', undefined)
 
         if (!check) {
             this.displayAlertSharedService.emitWarning('Cette proposition de carte n\'existe pas')

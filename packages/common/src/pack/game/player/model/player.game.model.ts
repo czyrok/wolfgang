@@ -1,15 +1,14 @@
 import { Exclude, Expose, instanceToPlain } from 'class-transformer'
 import { Socket } from 'socket.io'
+import { DocumentType } from '@typegoose/typegoose'
 
-import { LogUtil } from '../../../log/util/log.util'
+import { NotFoundUserError } from '../../../user/error/not-found.user.error'
 
-import { FactoryBehaviorItemLoopGameModel } from '../../loop/item/behavior/factory/model/factory.behavior.item.loop.game.model'
 import { BehaviorItemLoopGameModel } from '../../loop/item/behavior/model/behavior.item.loop.game.model'
 import { StateGameModel } from '../../state/model/state.game.model'
-import { UserModel } from '../../../user/model/user.model'
+import { UserModel, UserModelDocument } from '../../../user/model/user.model'
 import { CardGameModel } from '../../card/model/card.game.model'
 
-import { TypeLogEnum } from '../../../log/type/enum/type.log.enum'
 import { TypeGroupTransformEnum } from '../../../transform/group/type/enum/type.group.transform.enum'
 import { TypeChatGameEnum } from '../../chat/type/enum/type.chat.game.enum'
 import { TypeBehaviorItemLoopGameEnum } from '../../loop/item/behavior/type/enum/type.behavior.item.loop.game.enum'
@@ -42,9 +41,6 @@ export class PlayerGameModel {
 
     @Expose({ groups: [TypeGroupTransformEnum.SELF] })
     private _card!: CardGameModel
-
-    @Expose()
-    private _behaviorList: Array<TypeBehaviorItemLoopGameEnum> = new Array
 
     public constructor(user: UserModel) {
         this._user = user
@@ -122,14 +118,8 @@ export class PlayerGameModel {
         return this._card
     }
 
-    public get behaviorList(): Array<TypeBehaviorItemLoopGameEnum> {
-        return this._behaviorList
-    }
-
     public getAvailableChatType(state: StateGameModel, priorityChatType?: TypeChatGameEnum): TypeChatGameEnum | null | boolean {
-        const factory: FactoryBehaviorItemLoopGameModel = FactoryBehaviorItemLoopGameModel.instance
-
-        const behaviorList: Array<BehaviorItemLoopGameModel> = factory.getList(this.behaviorList)
+        const behaviorList: Array<BehaviorItemLoopGameModel> = BehaviorItemLoopGameModel.getBehaviorOfPlayer(this)
 
         if (priorityChatType) {
             for (const behavior of behaviorList) {
@@ -146,10 +136,9 @@ export class PlayerGameModel {
     }
 
     public getAllChat(): Array<TypeChatGameEnum> {
-        const factory: FactoryBehaviorItemLoopGameModel = FactoryBehaviorItemLoopGameModel.instance
+        const chatTypeList: Array<TypeChatGameEnum> = new Array
 
-        const chatTypeList: Array<TypeChatGameEnum> = new Array,
-            behaviorList: Array<BehaviorItemLoopGameModel> = factory.getList(this.behaviorList)
+        const behaviorList: Array<BehaviorItemLoopGameModel> = BehaviorItemLoopGameModel.getBehaviorOfPlayer(this)
 
         for (const behavior of behaviorList) {
             if (behavior.config.chat) chatTypeList.push(behavior.config.chat)
@@ -162,33 +151,75 @@ export class PlayerGameModel {
         this.activityDate = new Date
     }
 
-    public hasBehavior(behavior: TypeBehaviorItemLoopGameEnum): boolean {
-        const index: number = this.behaviorList.indexOf(behavior)
+    public hisTurn(currentBehaviorTypes: Array<TypeBehaviorItemLoopGameEnum>): TypeBehaviorItemLoopGameEnum | undefined {
+        for (const behaviorType of currentBehaviorTypes) {
+            for (const behavior of BehaviorItemLoopGameModel.getBehaviorOfPlayer(this)) {
+                if (behavior.config.type === behaviorType) return behaviorType
+            }
+        }
 
-        return index > 0 ? true : false
+        return undefined
     }
 
-    public addBehavior(behavior: TypeBehaviorItemLoopGameEnum): void {
-        const index: number = this.behaviorList.indexOf(behavior)
+    public async end(): Promise<void> {
+        const user: DocumentType<UserModel> | null = await UserModelDocument.findById(this.user._id).exec()
 
-        if (index < 0) this.behaviorList.push(behavior)
+        if (!user) throw new NotFoundUserError
+
+        user.gamePointCount += this.gamePointAccumulated
+
+        if (this.gamePointAccumulated > 0) this.emit<undefined>('winGamePoints', undefined)
+
+        this.gamePointAccumulated = 0
+
+        await user.save()
+        //await user.updateOne({ gamePointCount: user.gamePointCount }).exec()
+    }
+
+    public async winngEnd(): Promise<void> {
+        const user: DocumentType<UserModel> | null = await UserModelDocument.findById(this.user._id).exec()
+
+        if (!user) throw new NotFoundUserError
+
+        user.winnedGameCount += 1
+
+        if (user.winnedGameCount % 5 == 0) {
+            user.level += 1
+            
+            this.emit<undefined>('winLevel', undefined)
+        }
+
+        await user.save()
+        //await user.updateOne({ gamePointCount: user.gamePointCount }).exec()
     }
 
     public notifyUpdate(): void {
-        let obj: any = undefined
+        let plainObject: any = undefined
 
         try {
-            obj = instanceToPlain(this, { groups: [TypeGroupTransformEnum.SELF] })
+            plainObject = instanceToPlain(this, { groups: [TypeGroupTransformEnum.SELF] })
+        } catch (_error: any) { }
 
-            LogUtil.logger(TypeLogEnum.GAME).warn('cet objettttt', obj)
-        } catch (error: any) {
-            LogUtil.logger(TypeLogEnum.GAME).error('cet objettttt11', error)
-        }
-
-        if (!obj) return
+        if (!plainObject) return
 
         for (const socket of this.socketsList) {
-            socket.emit('playerState', obj)
+            socket.emit('playerState', plainObject)
+        }
+    }
+
+    public emit<T>(event: string, object: T): void {
+        if (object) {
+            let plainObject: any = undefined
+
+            try {
+                plainObject = instanceToPlain(object)
+            } catch (_error: any) { }
+
+            if (!plainObject) return
+        }
+
+        for (const socket of this.socketsList) {
+            socket.emit(event)
         }
     }
 }

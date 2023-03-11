@@ -1,6 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, Renderer2, ViewChild, ViewContainerRef } from '@angular/core'
-import { StateGameModel, VotePlayerGameModel } from 'common'
+import { StageStateGameEnum, StateGameModel } from 'common'
 
+import { EventVoteUserSharedModel } from 'src/app/shared/user/vote/event/model/event.vote.user.shared.model'
 import { CircleAvatarPlayViewModel } from '../model/circle.avatar.play.view.model'
 
 @Component({
@@ -29,13 +30,13 @@ export class CircleAvatarPlayViewComponent implements AfterViewInit {
    * Met en place l'affichage en cercle après l'initialisation de la vue
    */
   ngAfterViewInit(): void {
-    this.avatarsCircle = new CircleAvatarPlayViewModel(this.eventPlayerVote, this.renderer, this.changeDetectorRef, this.targetRef, this.boxContainerRef)
+    this.avatarsCircle = new CircleAvatarPlayViewModel(this.voteEvent, this.renderer, this.changeDetectorRef, this.targetRef, this.boxContainerRef)
 
-    if (this.gameStateEvent !== undefined) this.gameStateEvent.subscribe((data: StateGameModel) => {
-      if (data.isStarted && this.first) {
+    if (this.gameStateEvent !== undefined) this.gameStateEvent.subscribe((state: StateGameModel) => {
+      if (state.stage !== StageStateGameEnum.AWAITING) {
         this.avatarsCircle.removeAll()
 
-        this.avatarsCircle.setPlayers(data.players)
+        this.avatarsCircle.setPlayers(state.players)
 
         this.avatarsCircle.update()
         this.avatarsCircle.update()
@@ -43,10 +44,10 @@ export class CircleAvatarPlayViewComponent implements AfterViewInit {
         this.first = false
       }
 
-      if (!data.isStarted) {
+      if (state.stage === StageStateGameEnum.AWAITING) {
         this.avatarsCircle.removeAll()
 
-        this.avatarsCircle.setPlayers(data.players)
+        this.avatarsCircle.setPlayers(state.players)
 
         this.avatarsCircle.update()
         this.avatarsCircle.update()
@@ -54,7 +55,7 @@ export class CircleAvatarPlayViewComponent implements AfterViewInit {
     })
   }
 
-  @Input() eventPlayerVote!: EventEmitter<VotePlayerGameModel>
+  @Input() voteEvent!: EventVoteUserSharedModel
   @Input() gameStateEvent!: EventEmitter<StateGameModel>
 
   @ViewChild('target', { read: ViewContainerRef }) targetRef!: ViewContainerRef

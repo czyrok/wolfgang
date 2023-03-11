@@ -2,18 +2,13 @@ import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { ReactiveFormsModule } from '@angular/forms'
 
+import { ModalSharedModule } from '../modal/modal.shared.module'
+import { ButtonInteractiveSharedModule } from '../interactive/button/button.interactive.shared.module'
 
 import { ModalReportSharedComponent } from './modal/component/modal.report.shared.component'
-
 import { BugModalReportSharedComponent } from './modal/bug/component/bug.modal.report.shared.component'
-
-
-import { ModalSharedModule } from '../modal/modal.shared.module'
-import { ButtonInteractiveSharedModule } from '../interactive/button/button.interactive.shared.component'
 import { UserModalReportSharedComponent } from './modal/user/component/user.modal.report.shared.component'
 import { OtherUserModalReportSharedComponent } from './modal/user/other/component/other.user.modal.report.shared.component'
-
-
 
 @NgModule({
   imports: [
@@ -21,17 +16,18 @@ import { OtherUserModalReportSharedComponent } from './modal/user/other/componen
     ReactiveFormsModule,
     ModalSharedModule,
     ButtonInteractiveSharedModule
-  ], declarations: [
+  ],
+  declarations: [
     ModalReportSharedComponent,
     BugModalReportSharedComponent,
     UserModalReportSharedComponent,
     OtherUserModalReportSharedComponent
-  ], exports: [
+  ],
+  exports: [
     ModalReportSharedComponent,
     BugModalReportSharedComponent,
     UserModalReportSharedComponent,
     OtherUserModalReportSharedComponent
   ]
 })
-
 export class ReportSharedModule { }

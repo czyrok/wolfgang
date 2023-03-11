@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { CardsProposalUserModel, ReceiverLinkSocketModel, SenderLinkSocketModel } from 'common'
+import { CardsProposalUserModel, LinkNamespaceSocketModel } from 'common'
 
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
 
@@ -26,17 +26,16 @@ export class DefaultCardsProposalMainViewComponent implements OnInit {
    * Permet d'initialiser la liste des propositions de carte avec les propositions existantes
    */
   async ngOnInit(): Promise<void> {
-    const cardsProposalLink: ReceiverLinkSocketModel<Array<CardsProposalUserModel>> = await this.socketSharedService.registerReceiver<Array<CardsProposalUserModel>>('/game/cards-proposal', 'list')
+    const cardsProposalLink: LinkNamespaceSocketModel<void, Array<CardsProposalUserModel>>
+      = await this.socketSharedService.buildLink<void, Array<CardsProposalUserModel>>('/game/cards-proposal', 'list')
 
-    cardsProposalLink.subscribe((data: Array<CardsProposalUserModel>) => {
+    cardsProposalLink.on((data: Array<CardsProposalUserModel>) => {
+      cardsProposalLink.destroy()
+
       this.listCardsProposal = data
-
-      cardsProposalLink.unsubscribe()
     })
 
-    const triggerLink: SenderLinkSocketModel<void> = await this.socketSharedService.registerSender<void>('/game/cards-proposal', 'list')
-
-    triggerLink.emit()
+    cardsProposalLink.emit()
   }
 
   /**
