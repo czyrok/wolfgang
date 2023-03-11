@@ -38,7 +38,7 @@ export class OtherUserModalReportSharedComponent {
 
       this.modalSharedService.close()
 
-      this.form.get('description')?.setValue('')
+      this.form.reset()
 
       this.modalSharedService.open({
         title: 'Signalement de joueur',

@@ -32,7 +32,7 @@ export class BugModalReportSharedComponent {
     this.openingSignalSub = this.openingSignal.subscribe(() => {
       this.modalSharedService.close()
 
-      this.form.get('description')?.setValue('')
+      this.form.reset()
 
       this.modalSharedService.open({
         title: 'Signalement d\'un bug',

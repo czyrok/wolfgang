@@ -201,3 +201,11 @@
     @include definition.definePropertyDisabled() {
     }
 }
+
+@include element.createElement('error') {
+    @include element.defineContent() {
+        font-size: property.get('fontSize', 'comment');
+        font-family: property.get('font', 'regular');
+        color: color.get(alert, red, a);
+    }
+}

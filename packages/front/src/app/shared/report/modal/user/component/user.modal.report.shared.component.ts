@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core'
-import { FormArray, FormControl, FormGroup, UntypedFormGroup } from '@angular/forms'
+import { FormArray, FormControl, FormGroup, UntypedFormGroup, Validators, ValidatorFn, AbstractControl } from '@angular/forms'
 import { Subject, Subscription } from 'rxjs'
 import { BasicUserReportModel, PlayerGameModel, LinkNamespaceSocketModel, StateGameModel, TypeReportEnum, TypeUserReportEnum } from 'common'
 
@@ -20,6 +20,8 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
 
   players: Array<PlayerGameModel> = new Array
 
+  reportUserOpeningSignal: Subject<Array<string>> = new Subject
+
   constructor(
     private socketSharedService: SocketSharedService,
     private gameSharedService: GameSharedService,
@@ -29,7 +31,7 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      players: new FormArray([])
+      players: new FormArray([], [Validators.required, this.requireCheckboxesToBeCheckedValidator()])
     })
 
     this.updateFormPlayerList()
@@ -45,6 +47,8 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
     this.openingSignalSub = this.openingSignal.subscribe(() => {
       this.modalSharedService.close()
 
+      this.form.reset()
+
       this.modalSharedService.open({
         title: 'Signalement de joueur',
         template: this.chooseUserReportTemplateRef
@@ -52,10 +56,24 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
     })
   }
 
-  reportUserOpeningSignal: Subject<Array<string>> = new Subject
+  requireCheckboxesToBeCheckedValidator(minCheckedRequired = 1): ValidatorFn {
+    return function validate(formGroup: AbstractControl) {
+      let checkedCount: number = 0;
 
-  callbackOtherReportUser() {
-    this.reportUserOpeningSignal.next(this.getSelectedUsers())
+      if (formGroup instanceof FormArray) {
+        for (const control of formGroup.value) {
+          if (control.checked) checkedCount++;
+        }
+
+        if (checkedCount < minCheckedRequired) {
+          return {
+            requireOneCheckboxToBeChecked: true
+          }
+        }
+      }
+
+      return null
+    }
   }
 
   updateFormPlayerList(): void {
@@ -69,44 +87,85 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
     })
   }
 
-  async callbackNegativeTacticsReport(): Promise<void> {
+  negativeTacticsUserReportButtonCallback(): void {
     if (!this.gameSharedService.currentGameId) return
+    if (!this.form.valid) return
 
     const reportUser: BasicUserReportModel = new BasicUserReportModel(TypeUserReportEnum.NEGATIVE_TACTICS, TypeReportEnum.BASIC_USER, this.gameSharedService.currentGameId)
 
     this.sendReport(reportUser)
   }
 
-  async callbackInapropriateWordsReport(): Promise<void> {
+  inapropriateWordsUserReportButtonCallback(): void {
     if (!this.gameSharedService.currentGameId) return
+    if (!this.form.valid) return
 
     const reportUser: BasicUserReportModel = new BasicUserReportModel(TypeUserReportEnum.INAPROPRIATE_WORDS, TypeReportEnum.BASIC_USER, this.gameSharedService.currentGameId)
 
     this.sendReport(reportUser)
   }
 
-  async callbackFloodReport(): Promise<void> {
+  floodUserReportButtonCallback(): void {
     if (!this.gameSharedService.currentGameId) return
+    if (!this.form.valid) return
 
     const reportUser: BasicUserReportModel = new BasicUserReportModel(TypeUserReportEnum.FLOOD, TypeReportEnum.BASIC_USER, this.gameSharedService.currentGameId)
 
     this.sendReport(reportUser)
   }
 
-  async callbackAdvertisingReport(): Promise<void> {
+  advertisingUserReportButtonCallback(): void {
     if (!this.gameSharedService.currentGameId) return
+    if (!this.form.valid) return
 
     const reportUser: BasicUserReportModel = new BasicUserReportModel(TypeUserReportEnum.ADVERTISING, TypeReportEnum.BASIC_USER, this.gameSharedService.currentGameId)
 
     this.sendReport(reportUser)
   }
 
-  async callbackLinkReport(): Promise<void> {
+  linkUserReportButtonCallback(): void {
     if (!this.gameSharedService.currentGameId) return
+    if (!this.form.valid) return
 
     const reportUser: BasicUserReportModel = new BasicUserReportModel(TypeUserReportEnum.LINK, TypeReportEnum.BASIC_USER, this.gameSharedService.currentGameId)
 
     this.sendReport(reportUser)
+  }
+
+  otherUserReportButtonCallback() {
+    if (!this.form.valid) return
+
+    this.reportUserOpeningSignal.next(this.getSelectedUsers())
+  }
+
+  closeModalButtonCallback(): void {
+    this.modalSharedService.close()
+  }
+
+  async sendReport(reportUser: BasicUserReportModel): Promise<void> {
+    const selectedUsersId: Array<string> = this.getSelectedUsers()
+
+    reportUser.concernedUsers = selectedUsersId
+
+    const addLink: LinkNamespaceSocketModel<BasicUserReportModel, void> = await this.socketSharedService.buildLink('/report', 'add')
+
+    addLink.on(() => {
+      addLink.destroy()
+
+      this.displayAlertSharedService.emitSuccess('Votre signalement a bien été enregistré')
+
+      this.modalSharedService.close()
+    })
+
+    addLink.onFail((error: any) => {
+      addLink.destroy()
+
+      this.displayAlertSharedService.emitDanger(error)
+
+      this.modalSharedService.close()
+    })
+
+    addLink.emit(reportUser)
   }
 
   getSelectedUsers(): Array<string> {
@@ -126,38 +185,8 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
     return selectedUsersId
   }
 
-  async sendReport(reportUser: BasicUserReportModel): Promise<void> {
-    const selectedUsersId: Array<string> = this.getSelectedUsers()
-
-    reportUser.concernedUsers = selectedUsersId
-
-    const addLink: LinkNamespaceSocketModel<BasicUserReportModel, void> = await this.socketSharedService.buildLink('/report', 'add')
-
-    addLink.on(() => {
-      addLink.destroy()
-
-      this.displayAlertSharedService.emitSuccess('Votre signalement a bien été enregistré')
-
-      this.modalSharedService.close()
-    })
-
-    addLink.onFail((error: any) => {
-      addLink.destroy()
-
-      this.displayAlertSharedService.emitDanger(error)
-
-      this.modalSharedService.close()
-    })
-
-    addLink.emit(reportUser)
-  }
-
   getPlayersList(): Array<PlayerGameModel> | undefined {
     return this.players
-  }
-
-  closeModalCallback(): void {
-    this.modalSharedService.close()
   }
 
   @Input() openingSignal!: Subject<void>

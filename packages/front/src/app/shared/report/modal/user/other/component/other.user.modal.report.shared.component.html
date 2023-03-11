@@ -3,10 +3,25 @@
     <div class="field">
       <label for="description" data-css-h3 data-css-font data-css-color>Description</label>
 
-      <div>
-        <textarea id="description" name="description" rows="5" cols="30" placeholder="Saisissez la description du bug"
-          formControlName="description" data-css-textarea data-css-border-radius="regular"></textarea>
-      </div>
+      <textarea id="description" name="description" rows="5" cols="30" placeholder="Saisissez la description du bug"
+        formControlName="description" data-css-textarea data-css-border-radius="regular"></textarea>
+    </div>
+
+    <div class="field column error">
+      <p *ngIf="form.get('description')?.invalid && form.get('description')?.hasError('required')" data-css-error>
+        <i class="icofont-close-circled"></i>
+        Le champs est obligatoire
+      </p>
+      <p *ngIf="form.get('description')?.invalid && form.get('description')?.hasError('minlength')" data-css-error>
+        <i class="icofont-close-circled"></i>
+        La taille de la description doit être de minimum {{
+        this.form.get('description')?.errors?.['minlength']?.requiredLength }} caractères
+      </p>
+      <p *ngIf="form.get('description')?.invalid && form.get('description')?.hasError('maxlength')" data-css-error>
+        <i class="icofont-close-circled"></i>
+        La taille de la description doit être de maximum {{
+        this.form.get('description')?.errors?.['maxlength']?.requiredLength }} caractères
+      </p>
     </div>
 
     <div class="field column">
@@ -14,7 +29,7 @@
         [accent]="true">
       </app-shared-interactive-button>
 
-      <app-shared-interactive-button text="Annuler" (clickEvent)="closeReport()">
+      <app-shared-interactive-button text="Annuler" [important]="true" (clickEvent)="closeReport()">
       </app-shared-interactive-button>
     </div>
   </form>

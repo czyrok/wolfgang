@@ -12,6 +12,17 @@
       </div>
     </div>
 
+    <div class="field column error">
+      <p *ngIf="form.get('username')?.invalid && form.get('username')?.hasError('required')" data-css-error>
+        <i class="icofont-close-circled"></i>
+        Le champs est obligatoire
+      </p>
+      <p *ngIf="form.get('username')?.invalid && form.get('username')?.hasError('minlength')" data-css-error>
+        <i class="icofont-close-circled"></i>
+        La taille du pseudo doit être de minimum {{
+        this.form.get('username')?.errors?.['minlength']?.requiredLength }} caractères
+      </p>
+    </div>
 
     <div class="field">
       <label for="email" data-css-h2 data-css-font data-css-color>Adresse email</label>
@@ -25,11 +36,23 @@
       </div>
     </div>
 
+    <div class="field column error">
+      <p *ngIf="form.get('email')?.invalid && form.get('email')?.hasError('required')" data-css-error>
+        <i class="icofont-close-circled"></i>
+        Le champs est obligatoire
+      </p>
+      <p *ngIf="form.get('email')?.invalid && form.get('email')?.errors?.['email']" data-css-error>
+        <i class="icofont-close-circled"></i>
+        L'adresse e-mail doit être valide
+      </p>
+    </div>
+
     <div class="field">
       <label for="password" data-css-h2 data-css-font data-css-color>Mot de passe</label>
 
       <div data-css-text-bar data-css-border-radius="rounded">
-        <input id="password" type="password" placeholder="Saisissez votre mot de passe" data-css-input formControlName="password">
+        <input id="password" type="password" placeholder="Saisissez votre mot de passe" data-css-input
+          formControlName="password">
         <div class="line" data-css-underline>
           <div data-css-underline></div>
         </div>
@@ -37,14 +60,22 @@
       </div>
     </div>
 
+    <div class="field column error">
+      <p *ngIf="form.get('password')?.invalid && form.get('password')?.hasError('required')" data-css-error>
+        <i class="icofont-close-circled"></i>
+        Le champs est obligatoire
+      </p>
+    </div>
+
     <div class="field column">
-      <button type="submit" data-css-important data-css-accent data-css-button data-css-event data-css-border-radius="rounded">
+      <button type="submit" data-css-important data-css-accent data-css-button data-css-event
+        data-css-border-radius="rounded">
         <div data-css-inter>
           S'inscrire
         </div>
       </button>
 
-      <app-shared-interactive-button link="../log-in" text="Se connecter">
+      <app-shared-interactive-button link="../log-in" [important]="true" text="Se connecter">
       </app-shared-interactive-button>
     </div>
   </form>
