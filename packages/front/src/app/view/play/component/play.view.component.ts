@@ -74,19 +74,13 @@ export class PlayViewComponent implements AfterViewInit, OnDestroy {
 
     if (!test) return
 
-    console.log('???')
-
     const playerStateLink: LinkNamespaceSocketModel<void, PlayerGameModel>
       = await this.gameSharedService.buildBaseLink<void, PlayerGameModel>('playerState')
 
     playerStateLink.on((player: PlayerGameModel) => {
       if (player) this.player = player
 
-      console.log('???2', this.state, this.state?.stage !== StageStateGameEnum.AWAITING, !this.start)
-
       if (player && !this.start) {
-        console.log('???3', player)
-
         if (player.card.config.type === TypeCardGameEnum.GREY_WEREWOLF) {
           this.cardAlert = this.alertSharedService.emitWarning('Votre rôle est loup-garou', undefined, false)
         } else {
