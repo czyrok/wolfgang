@@ -6,6 +6,9 @@ import { TabListInteractiveSharedModel } from '../model/tab.list.interactive.sha
   templateUrl: './tab.list.interactive.shared.component.html',
   styleUrls: ['./tab.list.interactive.shared.component.scss']
 })
+/**
+ * @classdesc Gère les listes de tableaux interactifs
+ */
 export class TabListInteractiveSharedComponent {
   @Input() tab!: TabListInteractiveSharedModel;
 

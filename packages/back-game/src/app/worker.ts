@@ -59,7 +59,7 @@ async function run(): Promise<void> {
 
     game.creationCode = process.env['CREATION_CODE'] as string
 
-    LogUtil.logger(TypeLogEnum.APP).info(`Initialized game: "{ id: "${game.gameId}", creationCode: "${game.creationCode}" }"`)
+    LogUtil.logger(TypeLogEnum.APP).info(`Initialized game: "{ gameId: "${game.gameId}", creationCode: "${game.creationCode}" }"`)
 }
 
 run().catch((error: Error) => {

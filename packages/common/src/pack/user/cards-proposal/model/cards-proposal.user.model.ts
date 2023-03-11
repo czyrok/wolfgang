@@ -1,4 +1,4 @@
-import { DocumentType, Ref, prop, getModelForClass } from '@typegoose/typegoose'
+import { Ref, prop, getModelForClass } from '@typegoose/typegoose'
 import { Exclude, Expose } from 'class-transformer'
 
 import { DocumentModel } from '../../../model/document.model'

@@ -1,5 +1,5 @@
-import { Component, Input, HostListener, AfterViewInit } from '@angular/core'
-import { PlayerGameModel, VoteFormControllerModel, CosmeticModel, ReceiverLinkSocketModel, SenderLinkSocketModel, TypeAlertEnum, TypeCosmeticEnum } from 'common'
+import { Component, Input, HostListener, OnChanges, SimpleChanges, AfterViewInit } from '@angular/core'
+import { PlayerGameModel, VoteFormControllerModel, CosmeticModel, TypeAlertEnum, TypeCosmeticEnum, LinkNamespaceSocketModel } from 'common'
 
 import { AuthSharedService } from 'src/app/shared/auth/service/auth.shared.service'
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
@@ -11,7 +11,11 @@ import { EventVoteUserSharedModel } from '../../../vote/event/model/event.vote.u
   templateUrl: './all.avatar.user.shared.component.html',
   styleUrls: ['./all.avatar.user.shared.component.scss']
 })
-export class AllAvatarUserSharedComponent implements AfterViewInit {
+/**
+ * Gère l'avatar de l'utilisateur
+ * @implements OnChanges, AfterViewInit
+ */
+export class AllAvatarUserSharedComponent implements OnChanges, AfterViewInit {
   deathTextAlertType: TypeAlertEnum = TypeAlertEnum.WARNING
 
   voteTextAlertType: TypeAlertEnum = TypeAlertEnum.DANGER
@@ -19,18 +23,36 @@ export class AllAvatarUserSharedComponent implements AfterViewInit {
 
   cosmeticsList!: Array<CosmeticModel>
 
+  /**
+   * @param authSharedService Service d'authentification
+   * @param socketSharedService Service de sockets
+   */
   constructor(
     private authSharedService: AuthSharedService,
     private socketSharedService: SocketSharedService
   ) { }
 
+  /**
+   * Permet de déclencher le chargement de l'avatar de l'utilisateur ainsi que le système de vote
+   */
   async ngAfterViewInit(): Promise<void> {
-    await this.loadCosmetics()
-
-    this.loadSubVoteEvent()
+    await this.loadCosmetics(this.username)
+    await this.loadSubVoteEvent()
   }
 
-  loadSubVoteEvent(): void {
+  /**
+   * Permet de déclencher le chargement de l'avatar de l'utilisateur ainsi que le système de vote lors d'un changement de valeur en entrée
+   * @param changes La nouvelle valeur en entrée
+   */
+  async ngOnChanges(changes: SimpleChanges): Promise<void> {
+    await this.loadCosmetics(changes['username'].currentValue)
+    await this.loadSubVoteEvent()
+  }
+
+  /**
+   * Permet de charger le système de vote
+   */
+  async loadSubVoteEvent(): Promise<void> {
     if (!this.voteEvent) return
 
     this.voteEvent.playerVotingEvent.subscribe((vote: VoteFormControllerModel) => {
@@ -52,17 +74,25 @@ export class AllAvatarUserSharedComponent implements AfterViewInit {
     })
   }
 
-  async loadCosmetics(): Promise<void> {
-    const cosmeticLinkReceiver: ReceiverLinkSocketModel<Array<CosmeticModel>> = await this.socketSharedService.registerReceiver<Array<CosmeticModel>>('/game/profile', 'skin'),
-      cosmeticLinkSender: SenderLinkSocketModel<string> = await this.socketSharedService.registerSender<string>('/game/profile', 'skin')
+  /**
+   * Permet de charger l'avatar de l'utilisateur
+   */
+  async loadCosmetics(username: string): Promise<void> {
+    const cosmeticLink: LinkNamespaceSocketModel<void, Array<CosmeticModel>> = await this.socketSharedService.buildLink<void, Array<CosmeticModel>>('/game/profile/' + username, 'skin')
 
-    cosmeticLinkReceiver.subscribe((data: Array<CosmeticModel>) => {
+    cosmeticLink.on((data: Array<CosmeticModel>) => {
+      cosmeticLink.destroy()
+
       this.cosmeticsList = data
     })
 
-    cosmeticLinkSender.emit(this.username)
+    cosmeticLink.emit()
   }
 
+  /**
+   * Permet de savoir le joueur est voté par le joueur connecté
+   * @returns Vrai si c'est le cas, faux sinon
+   */
   isVotedBySelf(): boolean {
     for (const username of this.playerVotingList) {
       if (username === this.authSharedService.username) return true
@@ -71,22 +101,42 @@ export class AllAvatarUserSharedComponent implements AfterViewInit {
     return false
   }
 
+  /**
+   * Renvoie le cosmétique de type "chapeau" parmis l'avatar ou la surchage de celui-ci
+   * @returns Un cosmétique de type "chapeau"
+   */
   getHat(): CosmeticModel | undefined {
     return this.hatOverride || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.HAT)[0]
   }
 
+  /**
+   * Renvoie le cosmétique de type "tête" parmis l'avatar ou la surchage de celui-ci
+   * @returns Un cosmétique de type "tête"
+   */
   getHead(): CosmeticModel | undefined {
     return this.headOverride || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.HEAD)[0]
   }
 
+  /**
+   * Renvoie le cosmétique de type "haut" parmis l'avatar ou la surchage de celui-ci
+   * @returns Un cosmétique de type "haut"
+   */
   getTop(): CosmeticModel | undefined {
     return this.topOverride || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.TOP)[0]
   }
 
+  /**
+   * Renvoie le cosmétique de type "bas" parmis l'avatar ou la surchage de celui-ci
+   * @returns Un cosmétique de type "bas"
+   */
   getPants(): CosmeticModel | undefined {
     return this.pantsOverride || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.PANTS)[0]
   }
 
+  /**
+   * Renvoie le cosmétique de type "chaussures" parmis l'avatar ou la surchage de celui-ci
+   * @returns Un cosmétique de type "chaussures"
+   */
   getShoes(): CosmeticModel | undefined {
     return this.shoesOverride || this.cosmeticsList?.filter((cosmetic: CosmeticModel) => cosmetic.type === TypeCosmeticEnum.SHOES)[0]
   }
@@ -108,7 +158,7 @@ export class AllAvatarUserSharedComponent implements AfterViewInit {
   @Input() voteEvent!: EventVoteUserSharedModel
 
   @HostListener('click') click(): void {
-    if (this.authSharedService.username && this.voteEvent.avatarSelectEvent && this.voteEvent.avatarUnselectEvent) {
+    if (this.authSharedService.username && this.voteEvent?.avatarSelectEvent && this.voteEvent?.avatarUnselectEvent) {
       if (this.playerVotingList.indexOf(this.authSharedService.username) === -1) {
         this.voteEvent.avatarSelectEvent.emit(this.username)
       } else {

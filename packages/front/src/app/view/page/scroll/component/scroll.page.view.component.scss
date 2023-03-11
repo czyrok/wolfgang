@@ -20,7 +20,7 @@
   width: 100%;
   box-sizing: border-box;
   backdrop-filter: blur(property.get('blur', 'regular'));
-  z-index: 1;
+  z-index: 2;
 }
 
 .wrapper .container-1.ghost {

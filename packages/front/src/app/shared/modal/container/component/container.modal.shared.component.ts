@@ -11,20 +11,28 @@ import { ModalSharedInterface } from '../../interface/modal.shared.interface'
   templateUrl: './container.modal.shared.component.html',
   styleUrls: ['./container.modal.shared.component.scss']
 })
+/**
+ * @classdesc Gère les composants de boite modale
+ */
 export class ContainerModalSharedComponent implements AfterViewInit {
   display: boolean = false
 
+  /**
+   * @param changeDetectorRef Détecte les changements de references
+   * @param modalSharedService Service de boite modale
+   */
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private modalSharedService: ModalSharedService
   ) { }
 
+  /**
+   * Permet d'initialiser une boite modale
+   */
   ngAfterViewInit(): void {
     this.modalSharedService.modalClosingEvent.subscribe(() => {
       this.display = false
     })
-
-    console.log('sl')
 
     this.modalSharedService.modalOpeningEvent.subscribe((modal: ModalSharedInterface) => {
       let component: ComponentRef<ElementModalSharedComponent> = this.targetRef.createComponent(ElementModalSharedComponent)

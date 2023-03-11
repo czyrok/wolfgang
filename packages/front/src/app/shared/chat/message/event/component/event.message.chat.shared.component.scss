@@ -11,28 +11,74 @@
   column-gap: property.get('borderLimit', 'regular');
 }
 
-.container span {
+.container .icon {
   display: flex;
   font-size: property.get('fontSize', 'chat', 'icon');
   width: property.get('size', 'chat', 'icon');
   justify-content: center;
   align-items: center;
   border-radius: 50%;
+}
 
+.container[type='SuccessAlertType'] .icon {
   @include theme.themeHandler(true, 'alert') {
-    background-color: theme.get('inform', 'icon');
-    color: theme.get('color');
+      background-color: theme.get('success', 'icon');
+      color: theme.get('color');
   }
 }
 
-.container p {
+.container[type='InformAlertType'] .icon {
+  @include theme.themeHandler(true, 'alert') {
+      background-color: theme.get('inform', 'icon');
+      color: theme.get('color');
+  }
+}
+
+.container[type='WarningAlertType'] .icon {
+  @include theme.themeHandler(true, 'alert') {
+      background-color: theme.get('warning', 'icon');
+      color: theme.get('color');
+  }
+}
+
+.container[type='DangerAlertType'] .icon {
+  @include theme.themeHandler(true, 'alert') {
+      background-color: theme.get('danger', 'icon');
+      color: theme.get('color');
+  }
+}
+
+.container .text {
   border-top-left-radius: property.get('borderRadius', 'regular');
   border-bottom-left-radius: property.get('borderRadius', 'regular');
   padding: property.get('borderLimit', 'verySmall');
   height: fit-content;
+}
 
+.container[type='SuccessAlertType'] .text {
   @include theme.themeHandler(true, 'alert') {
-    background-color: theme.get('inform', 'background');
-    color: theme.get('color');
+      background-color: theme.get('success', 'background');
+      color: theme.get('color');
+  }
+}
+
+.container[type='InformAlertType'] .text {
+  @include theme.themeHandler(true, 'alert') {
+      background-color: theme.get('inform', 'background');
+      color: theme.get('color');
+  }
+}
+
+.container[type='WarningAlertType'] .text {
+  @include theme.themeHandler(true, 'alert') {
+      background-color: theme.get('warning', 'background');
+      color: theme.get('color');
+  }
+}
+
+.container[type='DangerAlertType'] .text {
+  @include theme.themeHandler(true, 'alert') {
+      background-color: theme.get('danger', 'background');
+      color: theme.get('color');
   }
 }

@@ -1,22 +1,18 @@
 import { Exclude, Expose, instanceToPlain } from 'class-transformer'
 import { Socket } from 'socket.io'
+import { DocumentType } from '@typegoose/typegoose'
 
-import { LogUtil } from '../../../log/util/log.util'
+import { NotFoundUserError } from '../../../user/error/not-found.user.error'
 
-import { FactoryBehaviorItemLoopGameModel } from '../../loop/item/behavior/factory/model/factory.behavior.item.loop.game.model'
 import { BehaviorItemLoopGameModel } from '../../loop/item/behavior/model/behavior.item.loop.game.model'
 import { StateGameModel } from '../../state/model/state.game.model'
 import { UserModel, UserModelDocument } from '../../../user/model/user.model'
 import { CardGameModel } from '../../card/model/card.game.model'
 
-import { TypeLogEnum } from '../../../log/type/enum/type.log.enum'
 import { TypeGroupTransformEnum } from '../../../transform/group/type/enum/type.group.transform.enum'
 import { TypeChatGameEnum } from '../../chat/type/enum/type.chat.game.enum'
 import { TypeBehaviorItemLoopGameEnum } from '../../loop/item/behavior/type/enum/type.behavior.item.loop.game.enum'
 import { CampPlayerGameEnum } from '../camp/enum/camp.player.game.enum'
-import { GameModel } from '../../model/game.model'
-import { DocumentType } from '@typegoose/typegoose'
-import { NotFoundUserError } from '../../../user/error/not-found.user.error'
 
 @Exclude()
 export class PlayerGameModel {
@@ -172,24 +168,58 @@ export class PlayerGameModel {
 
         user.gamePointCount += this.gamePointAccumulated
 
+        if (this.gamePointAccumulated > 0) this.emit<undefined>('winGamePoints', undefined)
+
         this.gamePointAccumulated = 0
 
-        await user.updateOne({ gamePointCount: user.gamePointCount }).exec()
+        await user.save()
+        //await user.updateOne({ gamePointCount: user.gamePointCount }).exec()
+    }
+
+    public async winngEnd(): Promise<void> {
+        const user: DocumentType<UserModel> | null = await UserModelDocument.findById(this.user._id).exec()
+
+        if (!user) throw new NotFoundUserError
+
+        user.winnedGameCount += 1
+
+        if (user.winnedGameCount % 5 == 0) {
+            user.level += 1
+            
+            this.emit<undefined>('winLevel', undefined)
+        }
+
+        await user.save()
+        //await user.updateOne({ gamePointCount: user.gamePointCount }).exec()
     }
 
     public notifyUpdate(): void {
-        let obj: any = undefined
+        let plainObject: any = undefined
 
         try {
-            obj = instanceToPlain(this, { groups: [TypeGroupTransformEnum.SELF] })
-        } catch (_error: any) {
+            plainObject = instanceToPlain(this, { groups: [TypeGroupTransformEnum.SELF] })
+        } catch (_error: any) { }
 
-        }
-
-        if (!obj) return
+        if (!plainObject) return
 
         for (const socket of this.socketsList) {
-            socket.emit('playerState', obj)
+            socket.emit('playerState', plainObject)
+        }
+    }
+
+    public emit<T>(event: string, object: T): void {
+        if (object) {
+            let plainObject: any = undefined
+
+            try {
+                plainObject = instanceToPlain(object)
+            } catch (_error: any) { }
+
+            if (!plainObject) return
+        }
+
+        for (const socket of this.socketsList) {
+            socket.emit(event)
         }
     }
 }

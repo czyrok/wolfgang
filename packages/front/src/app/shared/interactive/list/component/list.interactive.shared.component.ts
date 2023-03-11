@@ -6,6 +6,9 @@ import { ListInteractiveSharedModel } from '../model/list.interactive.shared.mod
   templateUrl: './list.interactive.shared.component.html',
   styleUrls: ['./list.interactive.shared.component.scss']
 })
+/**
+ * Correspond au composant associé au modèle d'une liste intéractive
+ */
 export class ListInteractiveSharedComponent {
   @Input() list!: ListInteractiveSharedModel;
 }

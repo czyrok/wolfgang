@@ -11,19 +11,29 @@ import { DisplayAlertSharedInterface } from '../../interface/display.alert.share
   templateUrl: './container.display.alert.shared.component.html',
   styleUrls: ['./container.display.alert.shared.component.scss']
 })
+/**
+ * @implements AfterViewInit
+ */
 export class ContainerDisplayAlertComponent implements AfterViewInit {
+  /**
+   *
+   * @param changeDetectorRef
+   * @param displayAlertSharedService
+   */
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private displayAlertSharedService: DisplayAlertSharedService
   ) { }
-
+/**
+ *
+ */
   ngAfterViewInit(): void {
     this.displayAlertSharedService.alertEvent.subscribe((alert: DisplayAlertSharedInterface) => {
       let component: ComponentRef<ElementDisplayAlertSharedComponent> = this.targetRef.createComponent(ElementDisplayAlertSharedComponent)
 
       component.instance.alert = alert
       component.instance.componentRef = component
-      
+
       alert.componentRef = component
 
       this.changeDetectorRef.detectChanges()

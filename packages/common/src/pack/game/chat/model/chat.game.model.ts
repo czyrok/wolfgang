@@ -11,6 +11,7 @@ import { ChatGameInterface } from '../interface/chat.game.interface'
 import { TypeChatGameEnum } from '../type/enum/type.chat.game.enum'
 import { TypeModeChatGameEnum } from '../mode/type/enum/type.mode.chat.game.enum'
 import { TypeMessageChatGameEnum } from '../message/type/enum/type.message.chat.game.enum'
+import { TypeAlertEnum } from '../../../alert/type/enum/type.alert.enum'
 
 export class ChatGameModel extends DocumentModel implements ChatGameInterface {
     @prop({ required: true })
@@ -66,23 +67,24 @@ export class ChatGameModel extends DocumentModel implements ChatGameInterface {
 
         message.user = user
 
-        message.save()
+        await message.save()
 
         this.messages.push(message)
 
-        this.save()
+        await this.save()
 
         return message
     }
 
-    public async sendEventMessage(this: DocumentType<ChatGameModel>, text: string, imageUrl: string): Promise<DocumentType<EventMessageChatGameModel>> {
-        const message: DocumentType<EventMessageChatGameModel> = new EventMessageChatGameModelDocument(new EventMessageChatGameModel(TypeMessageChatGameEnum.EVENT, text, imageUrl))
+    public async sendEventMessage(this: DocumentType<ChatGameModel>, text: string, imageUrl: string, alertType: TypeAlertEnum): Promise<DocumentType<EventMessageChatGameModel>> {
+        const message: DocumentType<EventMessageChatGameModel>
+            = new EventMessageChatGameModelDocument(new EventMessageChatGameModel(TypeMessageChatGameEnum.EVENT, text, imageUrl, alertType))
 
-        message.save()
+        await message.save()
 
         this.messages.push(message)
 
-        this.save()
+        await this.save()
 
         return message
     }

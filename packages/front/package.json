@@ -22,7 +22,7 @@
     "ngx-cookie": "^6.0.1",
     "ngx-cookie-service": "^14.0.1",
     "rxjs": "~7.4.0",
-    "socket.io-client": "~4.5.4",
+    "socket.io-client": "~4.6.1",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },
@@ -40,5 +40,10 @@
     "karma-jasmine-html-reporter": "~1.7.0",
     "scss-toolkit": "github:czyrok/scss-toolkit#main",
     "typescript": "~4.8.4"
+  },
+  "typedoc": {
+    "entryPoint": "./src",
+    "displayName": "Front package",
+    "tsconfig": "./tsconfig.json"
   }
 }

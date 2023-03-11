@@ -5,11 +5,6 @@
 @use '../../lib/definition';
 
 @include element.createElement('text-bar') {
-    @include element.setAttrAccentContent() {
-        font-family: property.get('font', 'important') !important;
-        font-weight: bold;
-    }
-
     @include definition.setAttrBorderRadius() {
     }
 
@@ -73,11 +68,6 @@
     }
 
     @include element.defineAttrCondition('type', 'text', 'password', 'email') {
-        @include element.setAttrAccentContent() {
-            font-family: property.get('font', 'important') !important;
-            font-weight: bold;
-        }
-
         @include element.defineContent() {
             padding: property.get('borderLimit', 'verySmall');
             width: 100%;
@@ -161,11 +151,6 @@
 }
 
 @include element.createElement('select') {
-    @include element.setAttrAccentContent() {
-        font-family: property.get('font', 'important') !important;
-        font-weight: bold;
-    }
-
     @include definition.setAttrBorderRadius() {
     }
 
@@ -214,5 +199,13 @@
     }
 
     @include definition.definePropertyDisabled() {
+    }
+}
+
+@include element.createElement('error') {
+    @include element.defineContent() {
+        font-size: property.get('fontSize', 'comment');
+        font-family: property.get('font', 'regular');
+        color: color.get(alert, red, a);
     }
 }

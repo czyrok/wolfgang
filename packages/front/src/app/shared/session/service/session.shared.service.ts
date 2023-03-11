@@ -9,13 +9,26 @@ import { DisplayAlertSharedService } from '../../alert/display/service/display.a
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * @classdesc Gère les services des sessions
+ */
 export class SessionSharedService {
+
+  /**
+   * @param httpClient Lien du client HTTP
+   * @param cookieService Service de gestion des cookies
+   * @param displayAlertSharedService Service d'affichage d'une allerte
+   */
     public constructor(
         private httpClient: HttpClient,
         private cookieService: CookieService,
         private displayAlertSharedService: DisplayAlertSharedService
     ) { }
 
+    /**
+     * Permet d'actualiser une session
+     * @returns une promesse de la requette HTTP
+     */
     public refreshSession(): Promise<void> {
         return new Promise((resolve: (value: void) => void) => {
             if (!this.cookieService.check(environment.SESSION_COOKIE_NAME)) {
@@ -26,11 +39,11 @@ export class SessionSharedService {
                         next: () => {
                             resolve()
                         },
-                        error: (error: Error) => {
+ /*                        error: (error: Error) => {
                             resolve()
 
                             this.displayAlertSharedService.emitDanger(error.message)
-                        }
+                        } */
                     }
                 )
             }

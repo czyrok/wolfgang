@@ -1,23 +1,56 @@
 <ng-template #userReportTemplate>
-  <div class="box center">
-    <app-shared-interactive-button text="Anti-jeu" (clickEvent)="callbackNegativeTacticsReport()">
-    </app-shared-interactive-button>
+  <form class="box center" [formGroup]="form">
+    <div class="field">
+      <label data-css-h3 data-css-font data-css-color>Joueur à sélectionner</label>
 
-    <app-shared-interactive-button text="Langage inapproprié" (clickEvent)="callbackInapropriateWordsReport()">
-    </app-shared-interactive-button>
+      <ul formArrayName="players">
+        <li [formGroupName]="i" *ngFor="let player of getPlayersList(); let i = index">
+          <input id="{{ 'player-' + i }}" type="checkbox" formControlName="checked" />
+          <label for="{{ 'player-' + i }}" data-css-text data-css-font data-css-color>{{ player.user.username
+            }}</label>
+        </li>
+      </ul>
+    </div>
 
-    <app-shared-interactive-button text="Spam" (clickEvent)="callbackFloodReport()">
-    </app-shared-interactive-button>
+    <div class="field column error">
+      <p *ngIf="form.get('players')?.invalid && form.get('players')?.hasError('required')" data-css-error>
+        <i class="icofont-close-circled"></i>
+        Le champs est obligatoire
+      </p>
+      <p *ngIf="form.get('players')?.invalid && form.get('players')?.errors?.['requireOneCheckboxToBeChecked']"
+        data-css-error>
+        <i class="icofont-close-circled"></i>
+        Vous devez sélectionner au moins 1 utilisateur
+      </p>
+    </div>
 
-    <app-shared-interactive-button text="Publicité" (clickEvent)="callbackAdvertisingReport()">
-    </app-shared-interactive-button>
+    <div class="field column">
+      <label data-css-h3 data-css-font data-css-color>Type de signalement</label>
 
-    <app-shared-interactive-button text="Partage de liens" (clickEvent)="callbackLinkReport()">
-    </app-shared-interactive-button>
+      <app-shared-interactive-button text="Anti-jeu" (clickEvent)="negativeTacticsUserReportButtonCallback()">
+      </app-shared-interactive-button>
 
-    <app-shared-interactive-button text="Autre" (clickEvent)="callbackOtherReportUser()">
-    </app-shared-interactive-button>
-  </div>
+      <app-shared-interactive-button text="Langage inapproprié" (clickEvent)="inapropriateWordsUserReportButtonCallback()">
+      </app-shared-interactive-button>
+
+      <app-shared-interactive-button text="Spam" (clickEvent)="floodUserReportButtonCallback()">
+      </app-shared-interactive-button>
+
+      <app-shared-interactive-button text="Publicité" (clickEvent)="advertisingUserReportButtonCallback()">
+      </app-shared-interactive-button>
+
+      <app-shared-interactive-button text="Partage de liens" (clickEvent)="linkUserReportButtonCallback()">
+      </app-shared-interactive-button>
+
+      <app-shared-interactive-button text="Autre" (clickEvent)="otherUserReportButtonCallback()">
+      </app-shared-interactive-button>
+    </div>
+
+    <div class="field">
+      <app-shared-interactive-button text="Annuler" [important]="true" (clickEvent)="closeModalButtonCallback()">
+      </app-shared-interactive-button>
+    </div>
+  </form>
 </ng-template>
 
 <app-shared-report-modal-user-other [openingSignal]="reportUserOpeningSignal"></app-shared-report-modal-user-other>

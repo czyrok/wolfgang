@@ -15,12 +15,18 @@ section {
     height: 100%;
     display: grid;
     grid-template-areas:
-        'a a'
-        'b c';
+        'a'
+        'b';
     grid-template-rows: minmax(0px, 1fr) auto;
     justify-items: center;
     row-gap: property.get('borderLimit', 'big');
     column-gap: property.get('borderLimit', 'big');
+}
+
+.wrapper .grid.show-game-points {
+    grid-template-areas:
+        'a a'
+        'b c';
 }
 
 .wrapper .grid .area-a {
@@ -36,7 +42,7 @@ section {
 }
 
 @media (max-width: 600px) {
-    .wrapper .grid {
+    .wrapper .grid.show-game-points {
         grid-template-areas:
             'a'
             'b'

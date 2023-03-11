@@ -11,10 +11,10 @@ import { TypeBehaviorItemLoopGameEnum } from '../../../type/enum/type.behavior.i
 import { TypeModeChatGameEnum } from '../../../../../../chat/mode/type/enum/type.mode.chat.game.enum'
 import { ProcessContextGameEnum } from '../../../../../../context/process/enum/process.context.game.enum'
 
-import { ResultSetGameType } from '../../../../../../set/result/type/result.set.game.type'
-import { LogUtil } from '../../../../../../../log/util/log.util'
-import { TypeLogEnum } from '../../../../../../../log/type/enum/type.log.enum'
 import { TypeCardGameEnum } from '../../../../../../card/type/enum/type.card.game.enum'
+import { TypeAlertEnum } from '../../../../../../../alert/type/enum/type.alert.enum'
+
+import { ResultSetGameType } from '../../../../../../set/result/type/result.set.game.type'
 
 @InitFactoryRegistering()
 export class DeathImplementationBehaviorItemLoopGameModel extends BehaviorItemLoopGameModel {
@@ -55,11 +55,11 @@ export class DeathImplementationBehaviorItemLoopGameModel extends BehaviorItemLo
         if (!players) throw new Error
 
         if (players.length > 1) {
-            await chatManager.sendEventMessage(`Plusieurs personnes sont mortes`, 'skull-danger')
+            await chatManager.sendEventMessage(`Plusieurs personnes sont mortes`, 'skull-danger', TypeAlertEnum.WARNING)
         } else if (players.length > 0) {
-            await chatManager.sendEventMessage(`Une personne est morte`, 'skull-danger')
+            await chatManager.sendEventMessage(`Une personne est morte`, 'skull-danger', TypeAlertEnum.WARNING)
         } else {
-            await chatManager.sendEventMessage(`Personne n'est mort`, 'skull-danger')
+            await chatManager.sendEventMessage(`Personne n'est mort`, 'skull-danger', TypeAlertEnum.WARNING)
         }
 
         for (const player of players) {
@@ -76,7 +76,7 @@ export class DeathImplementationBehaviorItemLoopGameModel extends BehaviorItemLo
                     break
             }
 
-            await chatManager.sendEventMessage(`${player.user.username} est mort ! Son rôle était ${cardName}`, 'skull-danger')
+            await chatManager.sendEventMessage(`${player.user.username} est mort ! Son rôle était ${cardName}`, 'skull-danger', TypeAlertEnum.DANGER)
 
             this.players.push(player)
         }
