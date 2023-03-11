@@ -23,8 +23,6 @@ export class GetConnectionRegisteryModel {
 
             this.getLink.data = new Array
         })
-
-        this.connection.connect()
     }
 
     public static get instance(): GetConnectionRegisteryModel {

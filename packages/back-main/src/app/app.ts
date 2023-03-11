@@ -15,6 +15,7 @@ import { ReportController } from './report/controller/report.controller'
 import { SkinCustomizationProfileGameController } from './game/profile/skin-customization/controller/skin-customization.profile.game.controller'
 import { GameController } from './game/controller/game.controller'
 import { PlayController } from './play/controller/play.controller'
+import { ViewReportManagingController } from './managing/report/view/controller/view.report.managing.controller'
 
 async function run(): Promise<void> {
     LogUtil.config = LogHelper.getConfig(
@@ -56,7 +57,8 @@ async function run(): Promise<void> {
             ReportManagingController,
             ReportController,
             GameController,
-            PlayController
+            PlayController,
+            ViewReportManagingController
         ],
         middlewares: [
             SessionIoMiddleware,

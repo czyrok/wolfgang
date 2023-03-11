@@ -1,4 +1,4 @@
-import { ConnectedSocket, EmitOnFail, EmitOnSuccess, MessageBody, OnMessage, SkipEmitOnEmptyResult, SocketController } from 'ts-socket.io-controller'
+import { ConnectedSocket, EmitOnFail, EmitOnSuccess, MessageBody, OnMessage, SocketController } from 'ts-socket.io-controller'
 import { DocumentType } from '@typegoose/typegoose'
 import { LeanDocument, Types } from 'mongoose'
 import { SkinUserModelDocument, CosmeticModelDocument, SkinUserModel, NotEnoughGamePointUserError, UserModel, NotFoundUserError, PurchaseCosmeticModelDocument, CosmeticModel, PurchaseCosmeticModel, SeparatedCosmeticsListFormControllerModel, NotFoundSkinUserError, NotFoundCosmeticError } from 'common'
@@ -13,7 +13,6 @@ export class SkinCustomizationProfileGameController {
     @OnMessage()
     @EmitOnSuccess()
     @EmitOnFail()
-    @SkipEmitOnEmptyResult()
     async cosmetics(@ConnectedSocket() socket: Socket) {
         const req: Request = socket.request as Request,
             user: DocumentType<UserModel> | undefined = req.session.user

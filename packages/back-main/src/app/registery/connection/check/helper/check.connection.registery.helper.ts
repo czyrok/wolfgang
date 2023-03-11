@@ -13,8 +13,6 @@ export class CheckConnectionRegisteryHelper {
                 resolve(test)
             })
 
-            handler.connect()
-
             checkLink.emit(gameId)
         })
     }
