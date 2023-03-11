@@ -5,6 +5,10 @@ import { ElementDisplayAlertSharedComponent } from '../element/component/element
 
 import { ButtonListDisplayAlertSharedInterface } from '../button-list/interface/button-list.display.alert.shared.interface'
 
+/**
+ * Interface d'affichage des alertes
+ * @interface DisplayAlertSharedInterface
+ */
 export interface DisplayAlertSharedInterface {
     componentRef?: ComponentRef<ElementDisplayAlertSharedComponent>
     type: TypeAlertEnum

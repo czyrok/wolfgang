@@ -9,6 +9,9 @@ import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared
   templateUrl: './view.report.managing.view.component.html',
   styleUrls: ['./view.report.managing.view.component.scss']
 })
+/**
+ * Component qui gère la vue d'un signalement
+ */
 export class ViewReportManagingViewComponent implements OnInit, AfterViewInit {
   user!: UserModel
 
@@ -21,12 +24,20 @@ export class ViewReportManagingViewComponent implements OnInit, AfterViewInit {
   playerMessageEvent: EventEmitter<UserMessageChatGameModel> = new EventEmitter
   eventMessageEvent: EventEmitter<EventMessageChatGameModel> = new EventEmitter
 
+  /**
+   * @param router Correspond router d'angular
+   * @param activatedRoute Correspond à la route actuelle
+   * @param socketSharedService Service qui permet d'utiliser des sockets
+   */
   constructor(
-    private activatedRoute: ActivatedRoute,
-    private socketSharedService: SocketSharedService,
     private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private socketSharedService: SocketSharedService
   ) { }
 
+  /**
+   * Récupère les informations du signalement pour pouvoir les afficher dans la page
+   */
   async ngOnInit(): Promise<void> {
     const id: string | null = this.activatedRoute.snapshot.paramMap.get('report_id')
 
@@ -90,12 +101,20 @@ export class ViewReportManagingViewComponent implements OnInit, AfterViewInit {
     getChatLink.emit(id)
   }
 
+  /**
+   * Permet de récupérer la date locale du signalement
+   * @param report Le signalement
+   * @returns La date
+   */
   getDate(report: ReportModel): string {
     const date: Date = new Date(report.releaseDate)
 
     return date.toLocaleDateString() + ' ' + date.toLocaleTimeString()
   }
 
+  /**
+   * Permet de supprimer le signalement
+   */
   async cancel(): Promise<void> {
     const id: string | null = this.activatedRoute.snapshot.paramMap.get('report_id')
 
@@ -108,6 +127,9 @@ export class ViewReportManagingViewComponent implements OnInit, AfterViewInit {
     this.router.navigateByUrl('/managing/report')
   }
 
+  /**
+   * Permet de punir les utilisateurs concernés par le signalement
+   */
   async update(): Promise<void> {
     const id: string | null = this.activatedRoute.snapshot.paramMap.get('report_id')
 
@@ -120,6 +142,11 @@ export class ViewReportManagingViewComponent implements OnInit, AfterViewInit {
     this.router.navigateByUrl('/managing/report')
   }
 
+  /**
+   * Permet de récupérer le nom du signalement en fonction de son type
+   * @param report Le type de signalement
+   * @returns Le nom du signalement
+   */
   getReportName(type: TypeReportEnum): string {
     switch (type) {
       case TypeReportEnum.BUG:
@@ -131,6 +158,11 @@ export class ViewReportManagingViewComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * Permet de récupérer le type d'alerte du nom du signalement en fonction de son type
+   * @param report Le type de signalement
+   * @returns Le type d'alerte
+   */
   getReportTextAlertType(type: TypeReportEnum): TypeAlertEnum {
     switch (type) {
       case TypeReportEnum.BUG:
@@ -142,6 +174,11 @@ export class ViewReportManagingViewComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * Permet de récupérer le nom du signalement en fonction du type de signalement utilisateur
+   * @param report Le type de signalement utilisateur
+   * @returns Le nom du signalement
+   */
   getUserReportName(type: TypeUserReportEnum): string {
     switch (type) {
       case TypeUserReportEnum.ADVERTISING:
@@ -157,6 +194,11 @@ export class ViewReportManagingViewComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * Permet de récupérer le type d'alerte du nom du signalement en fonction du type de signalement utilisateur
+   * @param report Le type de signalement utilisateur
+   * @returns Le type d'alerte
+   */
   getUserReportTextAlertType(type: TypeUserReportEnum): TypeAlertEnum {
     switch (type) {
       case TypeUserReportEnum.ADVERTISING:

@@ -8,13 +8,22 @@ import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared
   templateUrl: './default.report.managing.view.component.html',
   styleUrls: ['./default.report.managing.view.component.scss']
 })
+/**
+ * @classdesc Component qui gère la liste des signalements qui n'ont pas encore été validé ou refusé par un administarteur
+ */
 export class DefaultReportManagingViewComponent implements OnInit {
   reportList!: Array<ReportModel>
-
+/**
+ * 
+ * @param socketSharedService Service qui permet d'utiliser des sockets
+ */
   constructor(
     private socketSharedService: SocketSharedService
   ) { }
 
+  /**
+   * Récupère la liste des signalements qui n'ont pas été validé ou refusé par un administrateur
+   */
   async ngOnInit(): Promise<void> {
     const listLink: LinkNamespaceSocketModel<void, Array<ReportModel>>
       = await this.socketSharedService.buildLink<void, Array<ReportModel>>('/managing/report', 'list')
@@ -28,21 +37,41 @@ export class DefaultReportManagingViewComponent implements OnInit {
     listLink.emit()
   }
 
+  /**
+   * Renvoie la date locale à laquelle le signalement a été fait
+   * @param report Le signalement
+   * @returns La date
+   */
   getDate(report: ReportModel): string {
     const date: Date = new Date(report.releaseDate)
     return date.toLocaleDateString() + ' ' + date.toLocaleTimeString()
   }
 
+  /**
+   * Permet de savoir si c'est un signalement d'utilisateur classique
+   * @param report Le signalement
+   * @returns Vrai si c'est le cas, faux sinon
+   */
   isBasicUserReport(report: ReportModel): boolean {
     if (report.type === TypeReportEnum.BASIC_USER) return true
     return false
   }
 
+  /**
+   * Permet de savoir si c'est un signalement d'utilisateur pas classique
+   * @param report Le signalement
+   * @returns Vrai si c'est le cas, faux sinon
+   */
   isOtherUserReport(report: ReportModel): boolean {
     if (report.type === TypeReportEnum.OTHER_USER) return true
     return false
   }
 
+  /**
+   * Permet de récupérer le nom du signalement en fonction de son type
+   * @param report Le type de signalement
+   * @returns Le nom du signalement
+   */
   getReportName(type: TypeReportEnum): string {
     switch (type) {
       case TypeReportEnum.BUG:
@@ -54,6 +83,11 @@ export class DefaultReportManagingViewComponent implements OnInit {
     }
   }
 
+  /**
+   * Permet de récupérer le type d'alerte du nom du signalement en fonction de son type
+   * @param report Le type de signalement
+   * @returns Le type d'alerte
+   */
   getReportTextAlertType(type: TypeReportEnum): TypeAlertEnum {
     switch (type) {
       case TypeReportEnum.BUG:
@@ -65,6 +99,11 @@ export class DefaultReportManagingViewComponent implements OnInit {
     }
   }
 
+  /**
+   * Permet de récupérer le nom du signalement en fonction du type de signalement utilisateur
+   * @param report Le type de signalement utilisateur
+   * @returns Le nom du signalement
+   */
   getUserReportName(type: TypeUserReportEnum): string {
     switch (type) {
       case TypeUserReportEnum.ADVERTISING:
@@ -80,6 +119,11 @@ export class DefaultReportManagingViewComponent implements OnInit {
     }
   }
 
+  /**
+   * Permet de récupérer le type d'alerte du nom du signalement en fonction du type de signalement utilisateur
+   * @param report Le type de signalement utilisateur
+   * @returns Le type d'alerte
+   */
   getUserReportTextAlertType(type: TypeUserReportEnum): TypeAlertEnum {
     switch (type) {
       case TypeUserReportEnum.ADVERTISING:

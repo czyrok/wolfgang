@@ -13,6 +13,9 @@ import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/
   templateUrl: './other.user.modal.report.shared.component.html',
   styleUrls: ['./other.user.modal.report.shared.component.scss']
 })
+/**
+ * @classdesc Gère les boites modales de signalements détaillés d'un utilisateur
+ */
 export class OtherUserModalReportSharedComponent {
   form: UntypedFormGroup
 
@@ -20,6 +23,10 @@ export class OtherUserModalReportSharedComponent {
 
   openingSignalSub!: Subscription
 
+  /**
+   * @param formBuilder Constructeur de formulaires
+   * @param modalSharedService Service de boite modale
+   */
   constructor(
     private formBuilder: UntypedFormBuilder,
     private socketSharedService: SocketSharedService,
@@ -32,6 +39,9 @@ export class OtherUserModalReportSharedComponent {
     })
   }
 
+   /**
+   * Effectue la souscription du signal d'ouverture d'un formulaire de signalement détaillé d'un utilisateur
+   */
   ngAfterViewInit(): void {
     this.openingSignalSub = this.openingSignal.subscribe((selectedUsersId: Array<string>) => {
       this.selectedUsersId = selectedUsersId
@@ -47,10 +57,16 @@ export class OtherUserModalReportSharedComponent {
     })
   }
 
+  /**
+   * Ferme le service de boite modale de signalement détaillé d'un utilisateur
+   */
   closeReport(): void{
     this.modalSharedService.close()
   }
 
+  /**
+   * Crée un modèle de signalement détaillé d'un utilisateur avec la description donné dans le formulaire
+   */
   async callbackUserForm(): Promise<void> {
     if (this.form.valid) {
       if(!this.gameSharedService.gameId) throw new Error

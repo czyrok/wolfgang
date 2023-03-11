@@ -10,29 +10,51 @@ import { SocketSharedService } from '../../socket/service/socket.shared.service'
 @Injectable({
   providedIn: 'root'
 })
+/**
+ * @classdesc Gère l'authentification de l'utilisateur
+ */
 export class AuthSharedService {
   private _isAuth: boolean = false
   private _username: string | undefined = undefined
   private _scopeAccess: Array<string> = new Array
 
+  /**
+   * @param cookieService
+   * @param sessionSharedService
+   * @param socketSharedService
+   */
   public constructor(
     private cookieService: CookieService,
     private sessionSharedService: SessionSharedService,
     private socketSharedService: SocketSharedService
   ) { }
 
+  /**
+   * Modifie l'état de l'authentification
+   * @param value Valeur à assigner
+   */
   private set isAuth(value: boolean) {
     this._isAuth = value
   }
 
+  /**
+   * @returns Renvois vraie si l'utilisateur est connecté faux sinon
+   */
   public get isAuth(): boolean {
     return this._isAuth
   }
 
+  /**
+   * Modifie le nom de l'utilisateur
+   * @param value Valeur à assigner
+   */
   private set username(value: string | undefined) {
     this._username = value
   }
 
+  /**
+   * @returns Renvois le nom de l'utilisateur
+   */
   public get username(): string | undefined {
     return this._username
   }
@@ -45,6 +67,10 @@ export class AuthSharedService {
     return this._scopeAccess
   }
 
+  /**
+   *
+   * @param token
+   */
   public async setToken(token: string): Promise<void> {
     // #achan secure
     this.cookieService.set(environment.JWT_COOKIE_NAME, token, environment.JWT_COOKIE_DURATION / 60 / 60 / 24, '/', undefined, false, 'Lax')
@@ -55,6 +81,9 @@ export class AuthSharedService {
     await this.testAuth()
   }
 
+  /**
+   *
+   */
   public async testAuth(): Promise<void> {
     if (!this.cookieService.check(environment.JWT_COOKIE_NAME)) return
 
@@ -64,6 +93,10 @@ export class AuthSharedService {
     await this.doAuth()
   }
 
+  /**
+   *
+   * @returns
+   */
   private async doAuth(): Promise<void> {
     const testLink: LinkNamespaceSocketModel<void, string> = await this.socketSharedService.buildLink<void, string>('/auth', 'test')
 
@@ -86,6 +119,10 @@ export class AuthSharedService {
     })
   }
 
+  /**
+   *
+   * @returns
+   */
   public async logOut(): Promise<void> {
     const logOutLink: LinkNamespaceSocketModel<void, void> = await this.socketSharedService.buildLink('/auth', 'logOut')
 
@@ -108,6 +145,10 @@ export class AuthSharedService {
     })
   }
 
+  /**
+   * Définis l'utilisateur comme connecté
+   * @param username Nom de l'utilisateur qui doit être connecté
+   */
   private async connect(username: string): Promise<void> {
     this.isAuth = true
     this.username = username
@@ -127,6 +168,9 @@ export class AuthSharedService {
     })
   }
 
+  /**
+   * Définis l'utilisateur comme déconnecté
+   */
   private disconnect(): void {
     this.isAuth = false
     this.username = undefined

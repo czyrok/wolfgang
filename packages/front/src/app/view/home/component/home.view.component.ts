@@ -5,6 +5,9 @@ import { Component } from '@angular/core'
   templateUrl: './home.view.component.html',
   styleUrls: ['./home.view.component.scss']
 })
+/**
+ * @classdesc Composant de la vue home
+ */
 export class HomeViewComponent {
 
 }

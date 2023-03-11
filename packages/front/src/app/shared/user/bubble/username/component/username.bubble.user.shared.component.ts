@@ -7,6 +7,9 @@ import { AuthSharedService } from 'src/app/shared/auth/service/auth.shared.servi
   templateUrl: './username.bubble.user.shared.component.html',
   styleUrls: ['./username.bubble.user.shared.component.scss']
 })
+/**
+ * Gère les composants de bulles d'affichage d'un utilisateur
+ */
 export class UsernameBubbleUserSharedComponent {
   constructor(
     private authSharedService: AuthSharedService

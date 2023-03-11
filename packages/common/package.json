@@ -35,5 +35,10 @@
     "@types/jsonwebtoken": "^9.0.1",
     "@types/uuid": "^9.0.0",
     "typescript": "~4.8.4"
+  },
+  "typedoc": {
+    "entryPoint": "./src/index.ts",
+    "displayName": "Common package",
+    "tsconfig": "./tsconfig.json"
   }
 }

@@ -8,6 +8,9 @@
     "front",
     "back"
   ],
+  "scripts": {
+    "generateDoc": "typedoc"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/czyrok/wolfgang.git"
@@ -23,5 +26,8 @@
     "packages/back-registery",
     "packages/back-game",
     "packages/common"
-  ]
+  ],
+  "devDependencies": {
+    "typedoc": "^0.23.25"
+  }
 }

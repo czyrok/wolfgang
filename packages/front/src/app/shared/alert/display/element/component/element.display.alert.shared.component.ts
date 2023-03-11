@@ -10,6 +10,9 @@ import { DisplayAlertSharedInterface } from '../../interface/display.alert.share
 export class ElementDisplayAlertSharedComponent {
   timeOut!: ReturnType<typeof setTimeout> | undefined
 
+ /**
+ *
+ */
   ngAfterViewInit(): void {
     if (this.alert && this.alert.timer) this.timeOut = setTimeout(_ => {
       this.timeOut = undefined
@@ -18,6 +21,9 @@ export class ElementDisplayAlertSharedComponent {
     }, 10e3)
   }
 
+/**
+ *
+ */
   click(): void {
     if (this.timeOut !== undefined) clearTimeout(this.timeOut)
 

@@ -16,6 +16,10 @@ import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/
   templateUrl: './skin-customization.profile.main.view.component.html',
   styleUrls: ['./skin-customization.profile.main.view.component.scss']
 })
+/**
+ * @classdesc Composant de la vue de customisation du skin
+ * @implements OnInit
+ */
 export class SkinCustomizationProfileMainViewComponent implements OnInit {
   user!: UserModel
 
@@ -26,6 +30,12 @@ export class SkinCustomizationProfileMainViewComponent implements OnInit {
 
   username!: string
 
+  /**
+   * @param router Service qui permet de naviguer entre les vues et de manipuler les URLs.
+   * @param activatedRoute Permet d'accéder aux informations sur un itinéraire associé à un composant chargé dans un outlet
+   * @param eventSocketLink Service qui permet d'utiliser des sockets
+   * @param authSharedService Service d'authentification des utilisateurs
+   */
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -38,6 +48,9 @@ export class SkinCustomizationProfileMainViewComponent implements OnInit {
     if (username) this.username = username
   }
 
+  /**
+   * Initialise le skin de l'utilisateur
+   */
   async ngOnInit(): Promise<void> {
     if (this.authSharedService.username !== undefined) {
       this.list.clickedItemEvent.subscribe(() => {
@@ -50,10 +63,16 @@ export class SkinCustomizationProfileMainViewComponent implements OnInit {
     }
   }
 
+  /**
+   * @returns Renvois le nom de l'utilisateur
+   */
   getUsername(): string | undefined {
     return this.authSharedService.username
   }
 
+  /**
+   * Permet de modifier le skin de l'utilisateur en fonction des éléments de customisation sélectionné
+   */
   updateSkinAmount(): void {
     let res: number = 0
 
@@ -82,6 +101,10 @@ export class SkinCustomizationProfileMainViewComponent implements OnInit {
     this.amount = res
   }
 
+  /**
+   * Définie l'utilisateur qui modifie son skin
+   * @param username Nom de l'utilisateur
+   */
   async setUser(username: string): Promise<void> {
     const viewLink: LinkNamespaceSocketModel<void, UserModel> = await this.socketSharedService.buildLink<void, UserModel>('/game/profile/' + username, 'view')
 
@@ -94,6 +117,9 @@ export class SkinCustomizationProfileMainViewComponent implements OnInit {
     viewLink.emit()
   }
 
+  /**
+   * Définie les éléments de custumisation et leurs types
+   */
   async setCosmeticsList(): Promise<void> {
     const cosmeticsLink: LinkNamespaceSocketModel<void, SeparatedCosmeticsListFormControllerModel>
       = await this.socketSharedService.buildLink<void, SeparatedCosmeticsListFormControllerModel>('/game/profile/' + this.username + '/skin-customization', 'cosmetics')
@@ -111,6 +137,11 @@ export class SkinCustomizationProfileMainViewComponent implements OnInit {
     cosmeticsLink.emit()
   }
 
+  /**
+   * Permet de séparer les éléments en fonction de leurs types
+   * @param cosmetics Liste des diférents élément de customisation
+   * @param type Type des élément de customisation
+   */
   configureList(cosmetics: SeparatedCosmeticsListFormControllerModel, type: TypeCosmeticEnum): void {
     const tab = new TabDetailedListInteractiveSharedModel()
 
@@ -144,6 +175,11 @@ export class SkinCustomizationProfileMainViewComponent implements OnInit {
     this.list.addTab(tab)
   }
 
+  /**
+   * Permet de configurer la sous-table d'éléments de cosmétiques
+   * @param subTab Sous-table d'éléments de cosmétiques
+   * @param list Liste de cosmétiques
+   */
   configureSubTab(subTab: SubTabTabDetailedListInteractiveSharedModel, list: Array<CosmeticModel>): void {
     for (const cosmetic of list) {
       subTab.addItem(new ItemSubTabTabDetailedListInteractiveSharedModel<CosmeticModel>()
@@ -157,6 +193,9 @@ export class SkinCustomizationProfileMainViewComponent implements OnInit {
     }
   }
 
+  /**
+   * Permet de gérer l'événement d'achat des cosmétiques sélectionné
+   */
   async purchaseButtonCallback(): Promise<void> {
     const purchaseLink: LinkNamespaceSocketModel<Array<CosmeticModel>, void>
       = await this.socketSharedService.buildLink('/game/profile/' + this.username + '/skin-customization', 'purchase')

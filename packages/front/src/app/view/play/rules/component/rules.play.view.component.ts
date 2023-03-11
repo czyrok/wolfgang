@@ -8,9 +8,15 @@ import { TabListInteractiveSharedModel } from 'src/app/shared/interactive/list/t
   templateUrl: './rules.play.view.component.html',
   styleUrls: ['./rules.play.view.component.scss']
 })
+/**
+ * @classdesc Composant de la vue des règles dans une partie
+ */
 export class RulesPlayViewComponent implements OnInit {
   list!: ListInteractiveSharedModel
 
+  /**
+   * Initialise les règles de la partie
+   */
   ngOnInit(): void {
     this.list = new ListInteractiveSharedModel()
       .addTab(new TabListInteractiveSharedModel()

@@ -13,6 +13,9 @@ import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/
   templateUrl: './user.modal.report.shared.component.html',
   styleUrls: ['./user.modal.report.shared.component.scss']
 })
+/**
+ * Gère les boites modales de signalements d'un utilisateur
+ */
 export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
   form!: UntypedFormGroup
 
@@ -22,6 +25,9 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
 
   reportUserOpeningSignal: Subject<Array<string>> = new Subject
 
+  /**
+   * @param modalSharedService Service de boite modale
+   */
   constructor(
     private socketSharedService: SocketSharedService,
     private gameSharedService: GameSharedService,
@@ -43,6 +49,9 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
     })
   }
 
+  /**
+   * Effectue la souscription du signal d'ouverture de la boite modale
+   */
   ngAfterViewInit(): void {
     this.openingSignalSub = this.openingSignal.subscribe(() => {
       this.modalSharedService.close()
@@ -76,6 +85,9 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * Met à jour la liste des joueurs dans le formulaire
+   */
   updateFormPlayerList(): void {
     const playersFormArray: FormArray = this.form.get('players') as FormArray
 
@@ -86,7 +98,10 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
       }))
     })
   }
-
+  
+  /**
+   * Crée le modèle du signalement pour anti-jeu avec les données du formulaire
+   */
   negativeTacticsUserReportButtonCallback(): void {
     if (!this.gameSharedService.currentGameId) return
     if (!this.form.valid) return
@@ -95,7 +110,10 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
 
     this.sendReport(reportUser)
   }
-
+  
+  /**
+   * Crée le modèle du signalement pour mots inappropriés avec les données du formulaire
+   */
   inapropriateWordsUserReportButtonCallback(): void {
     if (!this.gameSharedService.currentGameId) return
     if (!this.form.valid) return
@@ -105,6 +123,9 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
     this.sendReport(reportUser)
   }
 
+  /**
+   * Crée le modèle du signalement pour spam avec les données du formulaire
+   */
   floodUserReportButtonCallback(): void {
     if (!this.gameSharedService.currentGameId) return
     if (!this.form.valid) return
@@ -114,6 +135,9 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
     this.sendReport(reportUser)
   }
 
+  /**
+   * Crée le modèle du signalement pour publicité avec les données du formulaire
+   */
   advertisingUserReportButtonCallback(): void {
     if (!this.gameSharedService.currentGameId) return
     if (!this.form.valid) return
@@ -123,6 +147,9 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
     this.sendReport(reportUser)
   }
 
+  /**
+   * Crée le modèle du signalement pour mention de liens avec les données du formulaire
+   */
   linkUserReportButtonCallback(): void {
     if (!this.gameSharedService.currentGameId) return
     if (!this.form.valid) return
@@ -132,16 +159,25 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
     this.sendReport(reportUser)
   }
 
+  /**
+   * Ouvrir la boite modale pour renseigner un signalement d'un autre type en envoyant les données du formulaire
+   */
   otherUserReportButtonCallback() {
     if (!this.form.valid) return
 
     this.reportUserOpeningSignal.next(this.getSelectedUsers())
   }
 
+  /**
+   * Ferme la boite modale
+   */
   closeModalButtonCallback(): void {
     this.modalSharedService.close()
   }
 
+  /**
+   * Ajoute les données du formulaire au signalement et envoie le signalement
+   */
   async sendReport(reportUser: BasicUserReportModel): Promise<void> {
     const selectedUsersId: Array<string> = this.getSelectedUsers()
 
@@ -168,8 +204,12 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
     addLink.emit(reportUser)
   }
 
+  /**
+   * Permet de récupérer les utilisateurs sélectionnés du formulaire
+   * @returns La liste des pseudos des utilisateurs sélectionnés
+   */
   getSelectedUsers(): Array<string> {
-    const selectedUsersId: Array<string> = new Array
+    const selectedUsersUsername: Array<string> = new Array
 
     const playersFormArray: FormArray = this.form.get('players') as FormArray
 
@@ -179,12 +219,16 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
 
       if (!player || !checked) continue
 
-      if (checked) selectedUsersId.push(player.user.username)
+      if (checked) selectedUsersUsername.push(player.user.username)
     }
 
     return selectedUsersId
   }
 
+  /**
+   * Permet de récupérer la liste des joueurs dans la partie
+   * @returns La liste des joueurs
+   */
   getPlayersList(): Array<PlayerGameModel> | undefined {
     return this.players
   }

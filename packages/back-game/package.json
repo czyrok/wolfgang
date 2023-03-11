@@ -21,5 +21,10 @@
     "@typegoose/typegoose": "^10.0.0",
     "@types/express": "^4.17.14",
     "typescript": "~4.8.4"
+  },
+  "typedoc": {
+    "entryPoint": "src/app/worker.ts",
+    "displayName": "Back-game package",
+    "tsconfig": "./tsconfig.json"
   }
 }

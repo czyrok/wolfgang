@@ -9,6 +9,10 @@ import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared
   templateUrl: './view.cards-proposal.main.view.component.html',
   styleUrls: ['./view.cards-proposal.main.view.component.scss']
 })
+/**
+ * @classdesc Composant de la vue d'une proposition de carte
+ * @implements OnInit
+ */
 export class ViewCardsProposalMainViewComponent implements OnInit {
   cardProposalId: string | null = null
   cardProposal!: CardsProposalUserModel
@@ -16,11 +20,18 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
   user!: UserModel
   userVoteCardProposal!: VoteCardsProposalUserModel
 
+  /**
+   * @param socketSharedService Service qui permet d'utiliser des sockets
+   * @param activatedRoute Permet d'accéder aux informations sur un itinéraire associé à un composant chargé dans un outlet
+   */
   constructor(
     private socketSharedService: SocketSharedService,
     private activatedRoute: ActivatedRoute
   ) { }
 
+  /**
+   * Permet de déclencher le chargement de la proposition de carte
+   */
   async ngOnInit(): Promise<void> {
     const id: string | null = this.activatedRoute.snapshot.paramMap.get('card_proposal_id')
 
@@ -32,6 +43,9 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
     this.setUser()
   }
 
+  /**
+   * Permet d'actualiser une proposition de carte
+   */
   async updateCardProposal(): Promise<void> {
     if (!this.cardProposalId) return
 
@@ -47,6 +61,9 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
     cardProposalLink.emit()
   }
 
+  /**
+   * Permet à l'utilisateur de voter ou de dévoter le pouce en l'air de la proposition de carte
+   */
   async callbackThumbsDownCount(): Promise<void> {
     if (!this.cardProposalId) return
 
@@ -64,6 +81,9 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
     voteDownCardProposalLink.emit()
   }
 
+  /**
+   * Permet à l'utilisateur de voter ou de dévoter le pouce en bas de la proposition de carte
+   */
   async callbackThumbsUpCount(): Promise<void> {
     if (!this.cardProposalId) return
 
@@ -81,6 +101,9 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
     voteUpCardProposalLink.emit()
   }
 
+  /**
+   * Permet de charger l'utilisateur qui a fait la proposition de carte
+   */
   async setUser(): Promise<void> {
     if (!this.cardProposalId) return
 
@@ -96,6 +119,9 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
     userLink.emit()
   }
 
+  /**
+   * Permet d'intialiser le vote d'une proposition de carte
+   */
   async setDefaultTypeUserVoteCardProposal(): Promise<void> {
     if (!this.cardProposalId) return
 
@@ -111,6 +137,10 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
     voteUpCardProposalLink.emit()
   }
 
+  /**
+   * Renvoie le type de vote effectuer par l'utilisateur connecté
+   * @returns Le type
+   */
   getUserVoteType(): string {
     let typeVote!: string
 
@@ -127,6 +157,10 @@ export class ViewCardsProposalMainViewComponent implements OnInit {
     return typeVote
   }
 
+  /**
+   * Renvoie la date locale de la proposition de carte
+   * @returns La date
+   */
   getDate(): string {
     const date: Date = new Date(this.cardProposal?.releaseDate)
 

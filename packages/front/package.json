@@ -40,5 +40,10 @@
     "karma-jasmine-html-reporter": "~1.7.0",
     "scss-toolkit": "github:czyrok/scss-toolkit#main",
     "typescript": "~4.8.4"
+  },
+  "typedoc": {
+    "entryPoint": "./src",
+    "displayName": "Front package",
+    "tsconfig": "./tsconfig.json"
   }
 }

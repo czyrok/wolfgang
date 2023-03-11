@@ -17,6 +17,10 @@ import { Subscription } from 'rxjs'
   templateUrl: './play.view.component.html',
   styleUrls: ['./play.view.component.scss']
 })
+/**
+ * @classdesc Composant de la vue d'une partie
+ * @implements AfterViewInit, OnDestroy
+ */
 export class PlayViewComponent implements AfterViewInit, OnDestroy {
   displayChat: boolean = true
 
@@ -42,6 +46,12 @@ export class PlayViewComponent implements AfterViewInit, OnDestroy {
 
   reportOpeningSignal: Subject<void> = new Subject
 
+  /**
+   * @param router Correspond au routeur d'Angular
+   * @param authSharedService Service d'authentification
+   * @param gameSharedService Service qui le lien avec une partie
+   * @param alertSharedService Service qui permet d'afficher une alerte
+   */
   constructor(
     private router: Router,
     private authSharedService: AuthSharedService,
