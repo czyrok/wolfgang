@@ -207,6 +207,7 @@ export class GameSharedService implements BuildManagerSocketInterface, Alternati
         await this.sessionSharedService.refreshSession()
 
         return this.socketNamespace.buildBaseLink(event)
+    } 
 
     /**
      * Vérifie si l'utilisateur est dans une partie ou non
@@ -295,7 +296,7 @@ export class GameSharedService implements BuildManagerSocketInterface, Alternati
 
         const joinLink: LinkNamespaceSocketModel<void, boolean> = await this.buildBaseLink('join')
 
-        return new Promise((resolve: (value: boolean) => void) => {
+        return new Promise((resolve: (value: boolean) => void, reject: (error: any) => void) => {
             joinLink.on((test: boolean) => {
                 joinLink.destroy()
 
@@ -305,6 +306,14 @@ export class GameSharedService implements BuildManagerSocketInterface, Alternati
                 }
 
                 resolve(test)
+            })
+
+            joinLink.onFail((error: any) => {
+                joinLink.destroy()
+
+                this.displayAlertSharedService.emitDanger(error)
+
+                reject(error)
             })
 
             joinLink.emit()

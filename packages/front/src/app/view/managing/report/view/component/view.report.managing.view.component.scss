@@ -17,6 +17,7 @@ section .box .grid {
     grid-template-rows: auto 1fr;
     row-gap: property.get('borderLimit', 'big');
     column-gap: property.get('borderLimit', 'big');
+    height: 100%;
 }
 
 section .box .grid .area-a {
@@ -24,17 +25,23 @@ section .box .grid .area-a {
     row-gap: property.get('borderLimit', 'big');
     grid-area: a;
     flex-direction: column;
+    position: sticky;
+    top: 0;
 }
 
 section .box .grid .area-a .details {
     display: flex;
     justify-content: space-between;
     column-gap: property.get('borderLimit', 'big');
+    row-gap: property.get('borderLimit', 'big');
+    flex-wrap: wrap;
 }
 
 section .box .grid .area-a .details .area {
     display: flex;
     column-gap: property.get('borderLimit', 'big');
+    row-gap: property.get('borderLimit', 'big');
+    flex-wrap: wrap;
 }
 
 section .box .grid .area-a .concerned-users {
@@ -54,6 +61,12 @@ section .box .grid .area-c {
     grid-area: c;
     display: flex;
     justify-content: center;
+    height: 100%;
+    position: relative;
+}
+
+section .box .grid .area-c .chat-wrapper {
+    width: property.get('size', 'aside');
 }
 
 @media (max-width: 1050px) {
@@ -62,8 +75,9 @@ section .box .grid .area-c {
         flex-direction: column;
     }
 
-    section .box .grid .area-a .details {
-        flex-direction: column;
-        row-gap: property.get('borderLimit', 'big');
+    section .box .grid .area-c .chat-wrapper {
+        width: 80%;
+        position: absolute;
+        min-height: 60vh;
     }
 }
