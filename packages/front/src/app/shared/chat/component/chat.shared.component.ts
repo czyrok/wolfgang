@@ -54,6 +54,9 @@ export class ChatSharedComponent implements AfterViewInit {
   @ViewChild('eventMessageTemplate', { read: TemplateRef }) eventMessageTemplateRef!: TemplateRef<any>
 
   @Input() title!: string
+  @Input() aside: boolean = true
+  @Input() maxHeight: boolean = true
+  @Input() absolute: boolean = true
 
   @Input() playerMessageEvent!: EventEmitter<UserMessageChatGameModel>
   @Input() eventMessageEvent!: EventEmitter<EventMessageChatGameModel>

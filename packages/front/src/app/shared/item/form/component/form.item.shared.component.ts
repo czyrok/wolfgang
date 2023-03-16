@@ -13,4 +13,7 @@ export class FormItemSharedComponent {
   @Input() contentTemplate!: TemplateRef<any>
 
   @Input() aside: boolean = false
+  @Input() maxWidth: boolean = false
+  @Input() maxHeight: boolean = true
+  @Input() absolute: boolean = true
 }

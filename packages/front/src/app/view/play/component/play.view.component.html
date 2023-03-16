@@ -10,15 +10,18 @@
       </div>
 
       <div>
-        <app-shared-interactive-button icofont="flag" text="Signaler" (clickEvent)="reportCallback()"></app-shared-interactive-button>
+        <app-shared-interactive-button icofont="flag" text="Signaler"
+          (clickEvent)="reportCallback()"></app-shared-interactive-button>
         <!-- <app-shared-interactive-button icofont="chat" [active]="displayChat"
           (clickEvent)="changeDisplayChatButtonCallback()" [important]="true"></app-shared-interactive-button> -->
       </div>
     </div>
 
-    <div class="chat-container">
-      <app-shared-chat *ngIf="displayChat" [eventMessageEvent]="eventMessageEvent"
-        [playerMessageEvent]="playerMessageEvent"></app-shared-chat>
+    <div class="right-container">
+      <div class="chat">
+        <app-shared-chat *ngIf="displayChat" [eventMessageEvent]="eventMessageEvent"
+          [playerMessageEvent]="playerMessageEvent"></app-shared-chat>
+      </div>
 
       <app-view-play-rules *ngIf="!displayChat"></app-view-play-rules>
 

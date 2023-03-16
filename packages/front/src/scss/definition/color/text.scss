@@ -7,7 +7,7 @@
     @include element.createSubsection('color') {
         @include element.setAttrAccentContent() {
             @include theme.themeHandler(true, 'accent', 'title') {
-                border-bottom: property.get('size', 'outline') solid theme.get('outline');
+                border-bottom: property.get('size', 'outline', 'regular') solid theme.get('outline');
             }
         }
 
@@ -39,7 +39,7 @@
     @include element.createSubsection('color') {
         @include element.setAttrAccentContent() {
             @include theme.themeHandler(true, 'accent', 'title') {
-                border-bottom: property.get('size', 'outline') solid theme.get('outline');
+                border-bottom: property.get('size', 'outline', 'regular') solid theme.get('outline');
             }
         }
 
@@ -71,7 +71,7 @@
     @include element.createSubsection('color') {
         @include element.setAttrAccentContent() {
             @include theme.themeHandler(true, 'accent', 'title') {
-                border-bottom: property.get('size', 'outline') solid theme.get('outline');
+                border-bottom: property.get('size', 'outline', 'regular') solid theme.get('outline');
             }
         }
 

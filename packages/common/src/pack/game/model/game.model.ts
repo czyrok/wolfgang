@@ -21,6 +21,7 @@ import { ManagerChatGameModel } from '../chat/manager/model/manager.chat.game.mo
 
 import { TypeLogEnum } from '../../log/type/enum/type.log.enum'
 import { StageStateGameEnum } from '../state/stage/enum/stage.state.game.enum'
+import { UserHelper } from '../../user/helper/user.helper'
 
 @Exclude()
 export class GameModel extends DocumentModel {

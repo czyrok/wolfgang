@@ -28,11 +28,16 @@ section {
     column-gap: property.get('borderLimit', 'big');
 }
 
-.wrapper .chat-container {
+.wrapper .right-container {
     grid-area: b;
     display: grid;
     grid-template-areas: "a"
         "b";
     grid-template-rows: minmax(0, 1fr) min-content;
     row-gap: property.get('borderLimit', 'big');
+}
+
+.wrapper .right-container .chat {
+    position: relative;
+    width: property.get('size', 'aside');
 }

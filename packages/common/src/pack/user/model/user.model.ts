@@ -2,12 +2,14 @@ import { DocumentType, Ref, prop, getModelForClass } from '@typegoose/typegoose'
 import { Exclude, Expose } from 'class-transformer'
 import { HmacSHA512 } from 'crypto-js'
 
+import { EnvUtil } from '../../env/util/env.util'
+
 import { DocumentModel } from '../../model/document.model'
 import { ScopeModel } from '../../scope/model/scope.model'
 import { SkinUserModel } from '../skin/model/skin.user.model'
 
 import { UserInterface } from '../interface/user.interface'
-import { EnvUtil } from '../../env/util/env.util'
+
 import { VarEnvEnum } from '../../env/var/enum/var.env.enum'
 
 @Exclude()

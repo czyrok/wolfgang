@@ -1,5 +1,5 @@
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
-import { Component } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { CardsProposalFormControllerModel, LinkNamespaceSocketModel } from 'common'
 
@@ -14,8 +14,8 @@ import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/
 /**
  * @classdesc Composant de la vue d'un ajout de proposition de carte
  */
-export class AddCardsProposalMainViewComponent {
-  form: UntypedFormGroup
+export class AddCardsProposalMainViewComponent implements OnInit {
+  form!: UntypedFormGroup
 
   /**
    * @param router Service qui permet de naviguer entre les vues et de manipuler les URLs
@@ -27,7 +27,9 @@ export class AddCardsProposalMainViewComponent {
     private formBuilder: UntypedFormBuilder,
     private socketSharedService: SocketSharedService,
     private displayAlertSharedService: DisplayAlertSharedService
-  ) {
+  ) { }
+
+  ngOnInit(): void {
     this.form = this.formBuilder.group({
       title: [null, [Validators.required, Validators.minLength(4), Validators.maxLength(100)]],
       description: [null, [Validators.required, Validators.minLength(10), Validators.maxLength(2000)]]
@@ -44,6 +46,8 @@ export class AddCardsProposalMainViewComponent {
 
       cardsProposalLink.on(() => {
         cardsProposalLink.destroy()
+
+        this.displayAlertSharedService.emitSuccess('Votre proposition a bien été enregistrée')
 
         this.router.navigateByUrl('/game/cards-proposal')
       })

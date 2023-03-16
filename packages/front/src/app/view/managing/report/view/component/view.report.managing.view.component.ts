@@ -1,8 +1,9 @@
-import { AfterViewInit, Component, EventEmitter, OnInit } from '@angular/core'
+import { Component, EventEmitter, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ReportModel, UserModel, OtherUserReportModel, TypeReportEnum, BugReportModel, BasicUserReportModel, LinkNamespaceSocketModel, MessageChatGameModel, TypeMessageChatGameEnum, UserMessageChatGameModel, EventMessageChatGameModel, TypeUserReportEnum, TypeAlertEnum } from 'common'
 
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
+import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/display.alert.shared.service'
 
 @Component({
   selector: 'app-view-managing-report-view',
@@ -12,7 +13,7 @@ import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared
 /**
  * Component qui gère la vue d'un signalement
  */
-export class ViewReportManagingViewComponent implements OnInit, AfterViewInit {
+export class ViewReportManagingViewComponent implements OnInit {
   user!: UserModel
 
   bugReport?: BugReportModel
@@ -32,19 +33,25 @@ export class ViewReportManagingViewComponent implements OnInit, AfterViewInit {
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private socketSharedService: SocketSharedService
+    private socketSharedService: SocketSharedService,
+    private displayAlertSharedService: DisplayAlertSharedService
   ) { }
 
   /**
    * Récupère les informations du signalement pour pouvoir les afficher dans la page
    */
   async ngOnInit(): Promise<void> {
-    const id: string | null = this.activatedRoute.snapshot.paramMap.get('report_id')
+    const reportId: string | null = this.activatedRoute.snapshot.paramMap.get('report_id')
 
-    if (!id) return
+    if (!reportId) return
 
-    const viewLink: LinkNamespaceSocketModel<string, ReportModel>
-      = await this.socketSharedService.buildLink<string, ReportModel>('/managing/report', 'view')
+    await this.loadView(reportId)
+    await this.loadChatEvent(reportId)
+  }
+
+  async loadView(reportId: string): Promise<void> {
+    const viewLink: LinkNamespaceSocketModel<void, ReportModel>
+      = await this.socketSharedService.buildLink<void, ReportModel>('/managing/report/view/' + reportId, 'view')
 
     viewLink.on((data: ReportModel) => {
       viewLink.destroy()
@@ -67,19 +74,17 @@ export class ViewReportManagingViewComponent implements OnInit, AfterViewInit {
       }
     })
 
-    viewLink.emit(id)
+    viewLink.onFail((error: any) => {
+      viewLink.destroy()
+
+      this.displayAlertSharedService.emitDanger(error)
+    })
+
+    viewLink.emit()
   }
 
-  async ngAfterViewInit(): Promise<void> {
-    await this.loadChatEvent()
-  }
-
-  async loadChatEvent(): Promise<void> {
-    const id: string | null = this.activatedRoute.snapshot.paramMap.get('report_id')
-
-    if (!id) return
-
-    const getChatLink: LinkNamespaceSocketModel<string, Array<MessageChatGameModel>> = await this.socketSharedService.buildLink('/managing/report', 'getChat')
+  async loadChatEvent(reportId: string): Promise<void> {
+    const getChatLink: LinkNamespaceSocketModel<void, Array<MessageChatGameModel>> = await this.socketSharedService.buildLink('/managing/report/view/' + reportId, 'getChat')
 
     getChatLink.on((messages: Array<MessageChatGameModel>) => {
       getChatLink.destroy()
@@ -98,7 +103,59 @@ export class ViewReportManagingViewComponent implements OnInit, AfterViewInit {
       }
     })
 
-    getChatLink.emit(id)
+    getChatLink.onFail(() => {
+      getChatLink.destroy()
+    })
+
+    getChatLink.emit()
+  }
+
+  async deleteButtonCallback(): Promise<void> {
+    const reportId: string | null = this.activatedRoute.snapshot.paramMap.get('report_id')
+
+    if (!reportId) return
+
+    const deleteLink: LinkNamespaceSocketModel<void, void> = await this.socketSharedService.buildLink('/managing/report/view/' + reportId, 'delete')
+
+    deleteLink.on(() => {
+      deleteLink.destroy()
+
+      this.displayAlertSharedService.emitSuccess('Le signalement a bien été supprimé')
+    })
+
+    deleteLink.onFail((error: any) => {
+      deleteLink.destroy()
+
+      this.displayAlertSharedService.emitDanger(error)
+    })
+
+    deleteLink.emit()
+
+    this.router.navigateByUrl('/managing/report')
+  }
+
+  async punishButtonCallback(): Promise<void> {
+    const reportId: string | null = this.activatedRoute.snapshot.paramMap.get('report_id')
+
+    if (!reportId) return
+
+    const punishLink: LinkNamespaceSocketModel<void, void> = await this.socketSharedService.buildLink('/managing/report/view/' + reportId, 'punish')
+
+    punishLink.on(() => {
+      punishLink.destroy()
+
+      this.displayAlertSharedService.emitSuccess('Les joueurs ont bien été punis')
+    })
+
+    punishLink.onFail((error: any) => {
+      punishLink.destroy()
+
+      this.displayAlertSharedService.emitDanger(error)
+    })
+
+    punishLink.emit()
+
+    this.router.navigateByUrl('/managing/report')
   }
 
   /**

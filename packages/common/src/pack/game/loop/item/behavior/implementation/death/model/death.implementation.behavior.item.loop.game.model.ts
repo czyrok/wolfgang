@@ -34,6 +34,13 @@ export class DeathImplementationBehaviorItemLoopGameModel extends BehaviorItemLo
         if (context.previousResult && context.previousResult[TypeProcessBehaviorItemLoopGameEnum.KILL]) {
             return true
         } else {
+            const chatManager: ManagerChatGameModel | undefined = context[ProcessContextGameEnum.CHAT_MANAGER]
+
+            // #achan faire l'erreur 
+            if (!chatManager) throw new Error
+
+            await chatManager.sendEventMessage(`Personne n'est mort`, 'skull-danger', TypeAlertEnum.WARNING)
+
             return false
         }
     }

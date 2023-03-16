@@ -3,7 +3,7 @@ import { instanceToPlain } from 'class-transformer'
 import { Request } from 'express'
 import { Namespace, Socket } from 'socket.io'
 import { ConnectedSocket, EmitOnFail, EmitOnSuccess, MessageBody, OnDisconnect, OnMessage, SkipEmitOnEmptyResult, SocketController } from 'ts-socket.io-controller'
-import { TypeGroupTransformEnum, NotAllowedToVotePlayerGameError, NotAllowedToVoteHimPlayerGameError, NotHisTurnPlayerGameError, AlreadyInGameUserError, ChatGameModel, ChatGameModelDocument, EventMessageChatGameModelDocument, GameModel, InitializationGameError, MessageChatFormControllerModel, MessageChatGameModel, NotAllowedToSendMessagePlayerGameError, NotFoundChatGameError, NotFoundInGamePlayerGameError, NotFoundUserError, PlayerGameModel, TypeChatGameEnum, TypeMessageChatGameEnum, TypeVotePlayerGameEnum, UserMessageChatGameModel, UserMessageChatGameModelDocument, UserModel, UserModelDocument, VoteFormControllerModel, VotePlayerGameModel, TypeBehaviorItemLoopGameEnum, EmptyMessageChatGameError } from 'common'
+import { UserHelper, TooManyTimesReportedUserError, TypeGroupTransformEnum, NotAllowedToVotePlayerGameError, NotAllowedToVoteHimPlayerGameError, NotHisTurnPlayerGameError, AlreadyInGameUserError, ChatGameModel, ChatGameModelDocument, EventMessageChatGameModelDocument, GameModel, InitializationGameError, MessageChatFormControllerModel, MessageChatGameModel, NotAllowedToSendMessagePlayerGameError, NotFoundChatGameError, NotFoundInGamePlayerGameError, NotFoundUserError, PlayerGameModel, TypeChatGameEnum, TypeMessageChatGameEnum, TypeVotePlayerGameEnum, UserMessageChatGameModel, UserMessageChatGameModelDocument, UserModel, UserModelDocument, VoteFormControllerModel, VotePlayerGameModel, TypeBehaviorItemLoopGameEnum, EmptyMessageChatGameError } from 'common'
 
 @SocketController({
     namespace: `/game/${GameModel.instance.gameId}`,
@@ -44,6 +44,7 @@ export class GameController {
     }
 
     @OnMessage()
+    @EmitOnFail()
     @EmitOnSuccess()
     async join(@ConnectedSocket() socket: Socket) {
         const req: Request = socket.request as Request,
@@ -57,6 +58,8 @@ export class GameController {
         if (!gameId) throw new InitializationGameError
 
         if (userDoc.currentGameId && gameId !== userDoc.currentGameId) throw new AlreadyInGameUserError
+
+        if (!(await UserHelper.canJoinOrCreateGame(userDoc))) throw new TooManyTimesReportedUserError
 
         if (userDoc.currentGameId !== gameId) {
             await userDoc.updateOne({
