@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core'
 import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router'
-import { ReceiverLinkSocketModel } from 'common'
-import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/display.alert.shared.service'
 
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
+import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/display.alert.shared.service'
 
 @Injectable()
 export class ViewReportManagingViewGuard implements CanActivate {
@@ -20,7 +19,7 @@ export class ViewReportManagingViewGuard implements CanActivate {
 
         if (!reportId) return this.router.parseUrl('/managing/report')
 
-        const check: boolean = await this.socketSharedService.check<string>('/managing/report', 'check', reportId)
+        const check: boolean = await this.socketSharedService.check<undefined>('/managing/report/view/' + reportId, 'check', undefined)
 
         if (!check) {
             this.displayAlertSharedService.emitWarning('Ce signalement n\'existe pas')

@@ -10,6 +10,6 @@
     border-radius: 50%;
 
     @include theme.themeHandler(false, 'containerElement2', 'item') {
-        border: property.get('size', 'outline') solid theme.get('background');
+        border: property.get('size', 'outline', 'regular') solid theme.get('background');
     }
 }

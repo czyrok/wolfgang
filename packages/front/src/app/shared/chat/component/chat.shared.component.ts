@@ -6,7 +6,14 @@ import { EventMessageChatGameModel, UserMessageChatGameModel } from 'common'
   templateUrl: './chat.shared.component.html',
   styleUrls: ['./chat.shared.component.scss']
 })
+/**
+ * @classdesc Gère le chat
+ * @implements AfterViewInit
+ */
 export class ChatSharedComponent implements AfterViewInit {
+  /**
+   * S'abonne au différent type de message
+   */
   ngAfterViewInit(): void {
     if (this.playerMessageEvent) this.playerMessageEvent.subscribe((message: UserMessageChatGameModel) => {
       this.addPlayerMessage(message)
@@ -17,6 +24,10 @@ export class ChatSharedComponent implements AfterViewInit {
     })
   }
 
+  /**
+   * Ajoute le message d'un utilisateur dans le chat
+   * @param message Message envoyé par un utilisateur
+   */
   addPlayerMessage(message: UserMessageChatGameModel): void {
     if (this.viewContainerRefTarget && this.playerMessageTemplateRef)
       this.viewContainerRefTarget.createEmbeddedView(this.playerMessageTemplateRef, {
@@ -24,6 +35,10 @@ export class ChatSharedComponent implements AfterViewInit {
       })
   }
 
+  /**
+   * Ajoute le message d'un evenement dans le chat
+   * @param message Message d'un évenement
+   */
   addEventMessage(message: EventMessageChatGameModel): void {
     if (this.viewContainerRefTarget && this.eventMessageTemplateRef)
       this.viewContainerRefTarget.createEmbeddedView(this.eventMessageTemplateRef, {
@@ -39,6 +54,9 @@ export class ChatSharedComponent implements AfterViewInit {
   @ViewChild('eventMessageTemplate', { read: TemplateRef }) eventMessageTemplateRef!: TemplateRef<any>
 
   @Input() title!: string
+  @Input() aside: boolean = true
+  @Input() maxHeight: boolean = true
+  @Input() absolute: boolean = true
 
   @Input() playerMessageEvent!: EventEmitter<UserMessageChatGameModel>
   @Input() eventMessageEvent!: EventEmitter<EventMessageChatGameModel>

@@ -21,6 +21,7 @@ import { CampPlayerGameHelper } from '../../player/camp/helper/camp.player.game.
 import { PlayerGameModel } from '../../player/model/player.game.model'
 import { StageStateGameEnum } from '../../state/stage/enum/stage.state.game.enum'
 import { TypeCardGameEnum } from '../../card/type/enum/type.card.game.enum'
+import { TypeAlertEnum } from '../../../alert/type/enum/type.alert.enum'
 
 @Exclude()
 export class ExecutorGameModel {
@@ -54,7 +55,7 @@ export class ExecutorGameModel {
                 player.notifyUpdate()
             }
 
-            game.chatManager.sendEventMessage('La partie va commencer !', 'stopwatch')
+            game.chatManager.sendEventMessage('La partie va commencer !', 'stopwatch', TypeAlertEnum.INFORM)
         }, 1e3)
 
         setTimeout(async () => {
@@ -114,18 +115,22 @@ export class ExecutorGameModel {
         game.state.stage = StageStateGameEnum.FINISHED
         game.state.notifyUpdate()
 
-        await game.chatManager.sendEventMessage('La partie est terminée !', 'ui-power')
+        await game.chatManager.sendEventMessage('La partie est terminée !', 'ui-power', TypeAlertEnum.INFORM)
 
         let winningPlayerMessage: string = ''
 
         const winningPlayers: Array<PlayerGameModel> = game.state.getAlivePlayer()
 
         for (let i = 0; i < winningPlayers.length; i++) {
-            winningPlayers[i].gamePointAccumulated += 5
+            const player: PlayerGameModel = winningPlayers[i]
+
+            player.gamePointAccumulated += 5
+
+            await player.winngEnd()
 
             let cardName: string = ''
 
-            switch (winningPlayers[i].card.config.type) {
+            switch (player.card.config.type) {
                 case TypeCardGameEnum.GREY_WEREWOLF:
                     cardName = 'loug-garou'
                     break
@@ -134,13 +139,13 @@ export class ExecutorGameModel {
                     break
             }
 
-            winningPlayerMessage += `${winningPlayers[i].user.username} (${cardName})`
+            winningPlayerMessage += `${player.user.username} (${cardName})`
 
             if (i < winningPlayers.length - 2) winningPlayerMessage += ', '
             if (i === winningPlayers.length - 2) winningPlayerMessage += ' et '
         }
 
-        await game.chatManager.sendEventMessage(`Bravo à ${winningPlayerMessage} !`, 'crown-king')
+        await game.chatManager.sendEventMessage(`Bravo à ${winningPlayerMessage} !`, 'crown-king', TypeAlertEnum.SUCCESS)
 
         const allPlayers: Array<PlayerGameModel> = game.state.players
 
@@ -154,7 +159,9 @@ export class ExecutorGameModel {
             game.state.stage = StageStateGameEnum.KILLED
             game.state.notifyUpdate()
 
-            kill(pid)
+            setTimeout(() => {
+                kill(pid)
+            }, 1e3)
         }, 15e3)
     }
 }

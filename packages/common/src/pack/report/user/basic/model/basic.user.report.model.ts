@@ -2,8 +2,10 @@ import { Exclude, Expose } from 'class-transformer'
 import { prop, getModelForClass } from '@typegoose/typegoose'
 
 import { UserReportModel } from '../../model/user.report.model'
-import { TypeUserReportEnum } from '../../type/enum/type.user.report.enum'
+
 import { BasicUserReportInterface } from '../interface/basic.user.report.interface'
+
+import { TypeUserReportEnum } from '../../type/enum/type.user.report.enum'
 import { TypeReportEnum } from '../../../type/enum/type.report.enum'
 
 @Exclude()

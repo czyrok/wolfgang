@@ -9,9 +9,36 @@
   grid-template-areas: 'a b';
   grid-template-columns: auto 1fr;
   column-gap: property.get('borderLimit', 'regular');
+  padding: property.get('borderLimit', 'regular');
+  border-top-left-radius: property.get('borderRadius', 'regular');
+  border-bottom-left-radius: property.get('borderRadius', 'regular');
 }
 
-.container span {
+.container[type='SuccessAlertType'] {
+  @include theme.themeHandler(true, 'alert') {
+    background-color: theme.get('success', 'background')
+  }
+}
+
+.container[type='InformAlertType'] {
+  @include theme.themeHandler(true, 'alert') {
+    background-color: theme.get('inform', 'background');
+  }
+}
+
+.container[type='WarningAlertType'] {
+  @include theme.themeHandler(true, 'alert') {
+    background-color: theme.get('warning', 'background');
+  }
+}
+
+.container[type='DangerAlertType'] {
+  @include theme.themeHandler(true, 'alert') {
+    background-color: theme.get('danger', 'background');
+  }
+}
+
+.container .icon {
   display: flex;
   font-size: property.get('fontSize', 'chat', 'icon');
   width: property.get('size', 'chat', 'icon');
@@ -20,19 +47,38 @@
   border-radius: 50%;
 
   @include theme.themeHandler(true, 'alert') {
-    background-color: theme.get('inform', 'icon');
     color: theme.get('color');
   }
 }
 
-.container p {
+.container[type='SuccessAlertType'] .icon {
+  @include theme.themeHandler(true, 'alert') {
+    background-color: theme.get('success', 'icon')
+  }
+}
+
+.container[type='InformAlertType'] .icon {
+  @include theme.themeHandler(true, 'alert') {
+    background-color: theme.get('inform', 'icon');
+  }
+}
+
+.container[type='WarningAlertType'] .icon {
+  @include theme.themeHandler(true, 'alert') {
+    background-color: theme.get('warning', 'icon');
+  }
+}
+
+.container[type='DangerAlertType'] .icon {
+  @include theme.themeHandler(true, 'alert') {
+    background-color: theme.get('danger', 'icon');
+  }
+}
+
+.container .text {
   border-top-left-radius: property.get('borderRadius', 'regular');
   border-bottom-left-radius: property.get('borderRadius', 'regular');
   padding: property.get('borderLimit', 'verySmall');
   height: fit-content;
-
-  @include theme.themeHandler(true, 'alert') {
-    background-color: theme.get('inform', 'background');
-    color: theme.get('color');
-  }
 }
+

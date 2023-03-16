@@ -19,7 +19,7 @@ import { ViewComponent } from './component/view.component'
                     { path: '', loadChildren: () => import('./home/home.view.module').then(m => m.HomeViewModule) },
                     { path: 'game', loadChildren: () => import('./main/main.view.module').then(m => m.MainViewModule), canActivate: [AuthSharedGuard] },
                     { path: 'managing', loadChildren: () => import('./managing/managing.view.module').then(m => m.ManagingViewModule), canActivate: [AuthSharedGuard, AdminAuthSharedGuard] },
-                    { path: 'play', loadChildren: () => import('./play/play.view.module').then(m => m.PlayViewModule), canActivate: [AuthSharedGuard, PlayViewGuard] }
+                    { path: 'play', loadChildren: () => import('./play/play.view.module').then(m => m.PlayViewModule), canActivate: [AuthSharedGuard, PlayViewGuard], runGuardsAndResolvers: 'always' }
                 ]
             },
             { path: '**', redirectTo: '', pathMatch: 'full' },

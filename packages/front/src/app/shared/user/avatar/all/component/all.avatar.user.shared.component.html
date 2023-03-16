@@ -15,27 +15,27 @@
 
   <div class="img" appSharedUserAvatarAll [active]="!reduced">
     <div class="skin-hat skin">
-      <img class="img-cosmetic" src="asset/img/cosmetics/{{ getHat()?.imageUrl }}.png"
+      <img *ngIf="getHat()" class="img-cosmetic" src="asset/img/cosmetics/{{ getHat()?.imageUrl }}.png"
         alt="{{ getHat()?.translateName }}">
     </div>
 
     <div class="skin-head skin">
-      <img class="img-cosmetic" src="asset/img/cosmetics/{{ getHead()?.imageUrl }}.png"
+      <img *ngIf="getHead()" class="img-cosmetic" src="asset/img/cosmetics/{{ getHead()?.imageUrl }}.png"
         alt="{{ getHead()?.translateName }}">
     </div>
 
     <div class="skin-top skin">
-      <img class="img-cosmetic" src="asset/img/cosmetics/{{ getTop()?.imageUrl }}.png"
+      <img *ngIf="getTop()" class="img-cosmetic" src="asset/img/cosmetics/{{ getTop()?.imageUrl }}.png"
         alt="{{ getTop()?.translateName }}">
     </div>
 
     <div class="skin-pants skin">
-      <img class="img-cosmetic" src="asset/img/cosmetics/{{ getPants()?.imageUrl }}.png"
+      <img *ngIf="getPants()" class="img-cosmetic" src="asset/img/cosmetics/{{ getPants()?.imageUrl }}.png"
         alt="{{ getPants()?.translateName }}">
     </div>
 
     <div class="skin-shoes skin">
-      <img class="img-cosmetic" src="asset/img/cosmetics/{{ getShoes()?.imageUrl }}.png"
+      <img *ngIf="getShoes()" class="img-cosmetic" src="asset/img/cosmetics/{{ getShoes()?.imageUrl }}.png"
         alt="{{ getShoes()?.translateName }}">
     </div>
   </div>

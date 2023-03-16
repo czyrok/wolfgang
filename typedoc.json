@@ -1,0 +1,7 @@
+{
+    "name": "Wolfgang",
+    "entryPointStrategy": "packages",
+    "entryPoints": [
+        "packages/back-game"
+    ]
+}

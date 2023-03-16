@@ -200,8 +200,6 @@ function buildObject(property: PropertyDependencyBuildInterface): string {
 
     if (property.stage > 0) separator = ':'
 
-    console.log(property.name)
-
     if (property.name.indexOf('.') > -1) {
         const [parent, ...children]: Array<string> = property.name.split('.')
 
