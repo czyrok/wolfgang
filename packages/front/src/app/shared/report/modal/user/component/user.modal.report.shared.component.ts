@@ -65,6 +65,11 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
     })
   }
 
+  /**
+   * Permet de créer une fonction validation pour vérifier le nombre de case à cocher cochées
+   * @param minCheckedRequired Le nombre minimum de cases à cocher cochées
+   * @returns Fonction de validation
+   */
   requireCheckboxesToBeCheckedValidator(minCheckedRequired = 1): ValidatorFn {
     return function validate(formGroup: AbstractControl) {
       let checkedCount: number = 0;
@@ -91,14 +96,15 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
   updateFormPlayerList(): void {
     const playersFormArray: FormArray = this.form.get('players') as FormArray
 
-    this.players.forEach(player => {
+    playersFormArray.clear()
+
+    for (const player of this.players) {
       playersFormArray.push(new FormGroup({
-        model: new FormControl(player),
         checked: new FormControl(false)
       }))
-    })
+    }
   }
-  
+
   /**
    * Crée le modèle du signalement pour anti-jeu avec les données du formulaire
    */
@@ -110,7 +116,7 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
 
     this.sendReport(reportUser)
   }
-  
+
   /**
    * Crée le modèle du signalement pour mots inappropriés avec les données du formulaire
    */
@@ -179,9 +185,11 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
    * Ajoute les données du formulaire au signalement et envoie le signalement
    */
   async sendReport(reportUser: BasicUserReportModel): Promise<void> {
-    const selectedUsersId: Array<string> = this.getSelectedUsers()
+    const selectedUsersUsername: Array<string> = this.getSelectedUsers()
 
-    reportUser.concernedUsers = selectedUsersId
+    reportUser.concernedUsers = selectedUsersUsername
+
+    console.log(selectedUsersUsername)
 
     const addLink: LinkNamespaceSocketModel<BasicUserReportModel, void> = await this.socketSharedService.buildLink('/report', 'add')
 
@@ -213,16 +221,16 @@ export class UserModalReportSharedComponent implements OnInit, AfterViewInit {
 
     const playersFormArray: FormArray = this.form.get('players') as FormArray
 
-    for (const value of playersFormArray.value) {
-      const player: PlayerGameModel = value.model,
-        checked: boolean = value.checked
+    for (let i = 0; i < playersFormArray.value.length; i++) {
+      const player: PlayerGameModel = this.players[i],
+        checked: boolean = playersFormArray.value[i]?.checked
 
       if (!player || !checked) continue
 
       if (checked) selectedUsersUsername.push(player.user.username)
     }
 
-    return selectedUsersId
+    return selectedUsersUsername
   }
 
   /**

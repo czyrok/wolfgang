@@ -4,6 +4,7 @@ import { TypeAlertEnum, GameModel, LinkNamespaceSocketModel } from 'common'
 
 import { GameSharedService } from 'src/app/shared/game/service/game.shared.service'
 import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared.service'
+import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/display.alert.shared.service'
 
 @Component({
   selector: 'app-view-main-games',
@@ -25,11 +26,13 @@ export class GamesMainViewComponent implements OnInit, OnDestroy {
    * @param router Service qui permet de naviguer entre les vues et de manipuler les URLs.
    * @param socketSharedService Service qui permet d'utiliser des sockets
    * @param gameSharedService Service regroupant les informations d'une partie
+   * @param displayAlertSharedService Service permettant d'afficher des alertes
    */
   constructor(
     private router: Router,
     private socketSharedService: SocketSharedService,
-    private gameSharedService: GameSharedService
+    private gameSharedService: GameSharedService,
+    private displayAlertSharedService: DisplayAlertSharedService
   ) { }
 
   /**
@@ -73,10 +76,16 @@ export class GamesMainViewComponent implements OnInit, OnDestroy {
       createLink.destroy()
 
       this.buttonProcess = false
-      
+
       if (!gameId) return
-      
+
       this.router.navigateByUrl(`/play/${gameId}`)
+    })
+
+    createLink.onFail((error: any) => {
+      createLink.destroy()
+
+      this.displayAlertSharedService.emitDanger(error)
     })
 
     createLink.emit()
@@ -96,7 +105,7 @@ export class GamesMainViewComponent implements OnInit, OnDestroy {
 
     const game: GameModel = this.games[0]
 
-    if (!game) return
+    if (!game) return this.createGameButtonCallback()
 
     this.router.navigateByUrl(`/play/` + game.gameId)
   }

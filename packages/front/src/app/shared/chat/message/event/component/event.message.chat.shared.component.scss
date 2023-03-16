@@ -9,6 +9,33 @@
   grid-template-areas: 'a b';
   grid-template-columns: auto 1fr;
   column-gap: property.get('borderLimit', 'regular');
+  padding: property.get('borderLimit', 'regular');
+  border-top-left-radius: property.get('borderRadius', 'regular');
+  border-bottom-left-radius: property.get('borderRadius', 'regular');
+}
+
+.container[type='SuccessAlertType'] {
+  @include theme.themeHandler(true, 'alert') {
+    background-color: theme.get('success', 'background')
+  }
+}
+
+.container[type='InformAlertType'] {
+  @include theme.themeHandler(true, 'alert') {
+    background-color: theme.get('inform', 'background');
+  }
+}
+
+.container[type='WarningAlertType'] {
+  @include theme.themeHandler(true, 'alert') {
+    background-color: theme.get('warning', 'background');
+  }
+}
+
+.container[type='DangerAlertType'] {
+  @include theme.themeHandler(true, 'alert') {
+    background-color: theme.get('danger', 'background');
+  }
 }
 
 .container .icon {
@@ -18,33 +45,33 @@
   justify-content: center;
   align-items: center;
   border-radius: 50%;
+
+  @include theme.themeHandler(true, 'alert') {
+    color: theme.get('color');
+  }
 }
 
 .container[type='SuccessAlertType'] .icon {
   @include theme.themeHandler(true, 'alert') {
-      background-color: theme.get('success', 'icon');
-      color: theme.get('color');
+    background-color: theme.get('success', 'icon')
   }
 }
 
 .container[type='InformAlertType'] .icon {
   @include theme.themeHandler(true, 'alert') {
-      background-color: theme.get('inform', 'icon');
-      color: theme.get('color');
+    background-color: theme.get('inform', 'icon');
   }
 }
 
 .container[type='WarningAlertType'] .icon {
   @include theme.themeHandler(true, 'alert') {
-      background-color: theme.get('warning', 'icon');
-      color: theme.get('color');
+    background-color: theme.get('warning', 'icon');
   }
 }
 
 .container[type='DangerAlertType'] .icon {
   @include theme.themeHandler(true, 'alert') {
-      background-color: theme.get('danger', 'icon');
-      color: theme.get('color');
+    background-color: theme.get('danger', 'icon');
   }
 }
 
@@ -55,30 +82,3 @@
   height: fit-content;
 }
 
-.container[type='SuccessAlertType'] .text {
-  @include theme.themeHandler(true, 'alert') {
-      background-color: theme.get('success', 'background');
-      color: theme.get('color');
-  }
-}
-
-.container[type='InformAlertType'] .text {
-  @include theme.themeHandler(true, 'alert') {
-      background-color: theme.get('inform', 'background');
-      color: theme.get('color');
-  }
-}
-
-.container[type='WarningAlertType'] .text {
-  @include theme.themeHandler(true, 'alert') {
-      background-color: theme.get('warning', 'background');
-      color: theme.get('color');
-  }
-}
-
-.container[type='DangerAlertType'] .text {
-  @include theme.themeHandler(true, 'alert') {
-      background-color: theme.get('danger', 'background');
-      color: theme.get('color');
-  }
-}

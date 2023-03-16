@@ -19,7 +19,7 @@ export class ViewReportManagingViewGuard implements CanActivate {
 
         if (!reportId) return this.router.parseUrl('/managing/report')
 
-        const check: boolean = await this.socketSharedService.check<string>('/managing/report', 'check', reportId)
+        const check: boolean = await this.socketSharedService.check<undefined>('/managing/report/view/' + reportId, 'check', undefined)
 
         if (!check) {
             this.displayAlertSharedService.emitWarning('Ce signalement n\'existe pas')

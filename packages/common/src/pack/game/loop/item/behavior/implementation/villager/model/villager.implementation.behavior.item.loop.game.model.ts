@@ -60,16 +60,15 @@ export class VillagerImplementationBehaviorItemLoopGameModel extends BehaviorIte
 
         const player: PlayerGameModel | null = voteStorage.mostVotedOfPlayersGroup(this.getPlayer())
 
-        const result: ResultSetGameModel = new ResultSetGameModel
-
+        
         if (player) {
+            const result: ResultSetGameModel = new ResultSetGameModel
+
             result[TypeProcessBehaviorItemLoopGameEnum.KILL] = [player]
 
             context.next(result)
         } else {
-            result[TypeProcessBehaviorItemLoopGameEnum.KILL] = []
-
-            context.next(result)
+            context.next()
         }
     }
 }

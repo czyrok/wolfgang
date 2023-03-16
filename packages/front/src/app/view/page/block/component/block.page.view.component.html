@@ -1,17 +1,12 @@
 <div class="wrapper">
-  <ng-template #container1 let-class="class">
-    <div class="{{ class }} container-1">
-      <h1 data-css-h1 data-css-font data-css-color data-css-accent>{{ title }}</h1>
+  <div class="true container-1">
+    <h1 data-css-h1 data-css-font data-css-color data-css-accent>{{ title }}</h1>
 
-      <div class="button">
-        <ng-container *ngTemplateOutlet="buttonTemplate">
-        </ng-container>
-      </div>
+    <div class="button">
+      <ng-container *ngTemplateOutlet="buttonTemplate">
+      </ng-container>
     </div>
-  </ng-template>
-
-  <ng-container *ngTemplateOutlet="container1;context:{class: 'true'}">
-  </ng-container>
+  </div>
 
   <div class="container-2">
     <ng-container *ngTemplateOutlet="contentTemplate">

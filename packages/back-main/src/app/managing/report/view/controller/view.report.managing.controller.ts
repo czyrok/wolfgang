@@ -54,6 +54,7 @@ export class ViewReportManagingController {
             const user: DocumentType<UserModel> | null = await UserModelDocument.findById(oneUser).exec()
 
             if (user === null) throw new NotFoundUserError
+            
             usersList.push(user)
         }
 

@@ -87,7 +87,7 @@ export class RegisteryController {
         if (!found && game.state.stage !== StageStateGameEnum.KILLED) instance.games.push(game)
 
         if (game.state.stage !== StageStateGameEnum.KILLED)
-            LogUtil.logger(TypeLogEnum.REGISTERY).trace(`Game "{ gameId: "${game.gameId}",  creationCode: "${game.creationCode}" }" updated`)
+            LogUtil.logger(TypeLogEnum.REGISTERY).info(`Game "{ gameId: "${game.gameId}",  creationCode: "${game.creationCode}" }" updated`)
 
         return ListGamesInstanceGameHelper.getAll()
     }

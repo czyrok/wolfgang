@@ -12,6 +12,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: property.get('zIndex', 'modal');
+    backdrop-filter: blur(property.get('blur', 'regular'));
 }
 
 .container:not(.display) {
