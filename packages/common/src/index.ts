@@ -90,6 +90,7 @@ export * from './pack/game/loop/item/one/model/one.item.loop.game.model'
 export * from './pack/game/loop/item/strategy/entry-point/interface/entry-point.strategy.item.loop.game.interface'
 export * from './pack/game/loop/item/strategy/interface/strategy.item.loop.game.interface'
 export * from './pack/game/loop/item/type/enum/type.item.loop.game.enum'
+export * from './pack/game/loop/iterator/model/iterator.loop.game.model.spec'
 export * from './pack/game/loop/iterator/model/iterator.loop.game.model'
 export * from './pack/game/model/game.model'
 export * from './pack/game/player/camp/enum/camp.player.game.enum'
@@ -195,3 +196,5 @@ export * from './pack/user/token/error/not-found.token.user.error'
 export * from './pack/user/token/interface/token.user.interface'
 export * from './pack/user/token/model/token.user.model'
 // @endindex
+
+export default true

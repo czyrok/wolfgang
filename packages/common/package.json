@@ -8,7 +8,8 @@
     "cleanLog": "rm -rf ./trace",
     "startBuildScript": "node --unhandled-rejections=strict ./dist/build/script/build.script.js",
     "build": "npm run cleanDist && tsc && npm run startBuildScript",
-    "buildW": "tsc && npm run startBuildScript"
+    "buildW": "tsc && npm run startBuildScript",
+    "test": "tsc && jasmine --config=jasmine.json"
   },
   "dependencies": {
     "class-transformer": "^0.5.1",
@@ -34,6 +35,7 @@
     "@types/express-session": "^1.17.5",
     "@types/jsonwebtoken": "^9.0.1",
     "@types/uuid": "^9.0.0",
+    "jasmine": "^4.6.0",
     "typescript": "~4.8.4"
   },
   "typedoc": {

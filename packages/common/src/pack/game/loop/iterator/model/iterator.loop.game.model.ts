@@ -8,9 +8,16 @@ import { TypeItemLoopGameEnum } from '../../item/type/enum/type.item.loop.game.e
 
 export class IteratorLoopGameModel implements IteratorChainedListInterface<ItemLoopGameModel> {
     private _defaultType: TypeItemLoopGameEnum = TypeItemLoopGameEnum.DEFAULT
-    
+
     private _nextIndexCurrent: number = 1
     private _current: ItemLoopGameModel = FactoryItemLoopGameModel.instance.get(this.defaultType)
+
+    private _turnCount: number = 0
+    private _hasStarted: boolean = false
+
+    public constructor(
+        private _maxTurnCount: number = 1
+    ) { }
 
     private set current(value: ItemLoopGameModel) {
         this._current = value
@@ -28,12 +35,34 @@ export class IteratorLoopGameModel implements IteratorChainedListInterface<ItemL
         return this._nextIndexCurrent
     }
 
+    private set turnCount(value: number) {
+        this._turnCount = value
+    }
+
+    public get turnCount(): number {
+        return this._turnCount
+    }
+
+    private set hasStarted(value: boolean) {
+        this._hasStarted = value
+    }
+
+    private get hasStarted(): boolean {
+        return this._hasStarted
+    }
+
+    private get maxTurnCount(): number {
+        return this._maxTurnCount
+    }
+
     *[Symbol.iterator](): IterableIterator<ItemLoopGameModel> {
-        let first: boolean = true
+        this.turnCount = 0
+        this.hasStarted = false
 
         while (true) {
-            if (!first && this.nextIndexCurrent == 1 && this.current.config.type == this.defaultType) break
-            first = false
+            if (this.turnCount >= this.maxTurnCount) break
+
+            this.checkTurn()
 
             yield this.current
 
@@ -52,5 +81,12 @@ export class IteratorLoopGameModel implements IteratorChainedListInterface<ItemL
         this.current = this.current.nextItem
 
         return this.current
+    }
+
+    private checkTurn(): void {
+        if (this.hasStarted && this.nextIndexCurrent == 1 && this.current.config.type == this.defaultType)
+            this.turnCount++
+
+        this.hasStarted = true
     }
 }
