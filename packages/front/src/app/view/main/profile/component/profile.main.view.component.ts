@@ -6,7 +6,7 @@ import { Component } from '@angular/core'
   styleUrls: ['./profile.main.view.component.scss']
 })
 /**
- * @classdesc Composant de la vue du profil
+ * Composant de la vue du profil
  */
 export class ProfileMainViewComponent {
 

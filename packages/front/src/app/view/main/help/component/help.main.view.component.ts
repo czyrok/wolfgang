@@ -13,7 +13,7 @@ import cardsConfig from '../../../../../cards/config/cards.config.json'
   styleUrls: ['./help.main.view.component.scss']
 })
 /**
- * @classdesc Composant de la vue de la page d'aide
+ * Composant de la vue de la page d'aide
  */
 export class HelpMainViewComponent {
   list: DetailedListInteractiveSharedModel = new DetailedListInteractiveSharedModel

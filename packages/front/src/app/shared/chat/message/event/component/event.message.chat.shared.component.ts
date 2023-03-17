@@ -7,7 +7,7 @@ import { TypeAlertEnum } from 'common'
   styleUrls: ['./event.message.chat.shared.component.scss']
 })
 /**
- * @classdesc Gère les messages d'événement
+ * Gère les messages d'événement
  */
 export class EventMessageChatSharedComponent {
   @Input() text!: string

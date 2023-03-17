@@ -2,7 +2,7 @@ import { Subject } from 'rxjs'
 import { ItemSubTabTabDetailedListInteractiveSharedModel } from '../item/model/item.sub-tab.tab.detailed.list.interactive.shared.model'
 
 /**
- * @classdesc Gère les models des sous-tables des tableaux de listes interactives détaillées
+ * Gère les models des sous-tables des tableaux de listes interactives détaillées
  */
 export class SubTabTabDetailedListInteractiveSharedModel {
   private _title: string = ''

@@ -9,7 +9,7 @@ import { TabListInteractiveSharedModel } from 'src/app/shared/interactive/list/t
   styleUrls: ['./rules.play.view.component.scss']
 })
 /**
- * @classdesc Composant de la vue des règles dans une partie
+ * Composant de la vue des règles dans une partie
  */
 export class RulesPlayViewComponent implements OnInit {
   list!: ListInteractiveSharedModel

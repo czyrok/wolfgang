@@ -6,7 +6,7 @@ import { Component } from '@angular/core'
   styleUrls: ['./cards-proposal.main.view.component.scss']
 })
 /**
- * @classdesc Composant de la vue des propositions de cartes
+ * Composant de la vue des propositions de cartes
  */
 export class CardsProposalMainViewComponent {
 

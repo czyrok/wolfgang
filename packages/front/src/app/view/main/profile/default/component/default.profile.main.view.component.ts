@@ -11,7 +11,7 @@ import { AuthSharedService } from '../../../../../shared/auth/service/auth.share
   styleUrls: ['./default.profile.main.view.component.scss']
 })
 /**
- * @classdesc Composant par défault de la vue du profil
+ * Composant par défault de la vue du profil
  */
 export class DefaultProfileMainViewComponent implements OnInit {
   username!: string

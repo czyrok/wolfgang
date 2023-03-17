@@ -9,13 +9,13 @@ import { TypeAlertEnum } from 'common'
     providedIn: 'root'
 })
 /**
- *@classdesc Gère l'affichage des alertes
+ *Gère l'affichage des alertes
  */
 export class DisplayAlertSharedService {
     private _alertEvent: EventEmitter<DisplayAlertSharedInterface> = new EventEmitter
 
     /**
-     * @returns alertEvent
+     * @returns alertEvent L'évènement d'une nouvelle alerte
      */
     public get alertEvent(): EventEmitter<DisplayAlertSharedInterface> {
         return this._alertEvent

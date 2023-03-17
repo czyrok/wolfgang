@@ -9,7 +9,7 @@ import { AuthSharedService } from 'src/app/shared/auth/service/auth.shared.servi
   styleUrls: ['./player.message.chat.shared.component.scss']
 })
 /**
- * @classdesc Gère les messages des joueurs
+ * Gère les messages des joueurs
  * @implements AfterViewInit
  */
 export class PlayerMessageChatSharedComponent implements AfterViewInit {

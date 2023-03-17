@@ -12,7 +12,7 @@ import { ModalSharedInterface } from '../../interface/modal.shared.interface'
   styleUrls: ['./container.modal.shared.component.scss']
 })
 /**
- * @classdesc Gère les composants de boite modale
+ * Gère les composants de boite modale
  */
 export class ContainerModalSharedComponent implements AfterViewInit {
   display: boolean = false

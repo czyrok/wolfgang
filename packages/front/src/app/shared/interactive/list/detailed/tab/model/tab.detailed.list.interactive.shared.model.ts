@@ -5,7 +5,7 @@ import { ItemSubTabTabDetailedListInteractiveSharedModel } from '../sub-tab/item
 import { SubTabTabDetailedListInteractiveSharedModel } from '../sub-tab/model/sub-tab.tab.detailed.list.interactive.shared.model'
 
 /**
- * @classdesc Gère les models des tableaux de listes interactives détaillées
+ * Gère les models des tableaux de listes interactives détaillées
  */
 export class TabDetailedListInteractiveSharedModel {
   private _title: string = ''

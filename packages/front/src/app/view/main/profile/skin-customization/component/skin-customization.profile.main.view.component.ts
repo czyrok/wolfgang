@@ -17,7 +17,7 @@ import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/
   styleUrls: ['./skin-customization.profile.main.view.component.scss']
 })
 /**
- * @classdesc Composant de la vue de customisation du skin
+ * Composant de la vue de customisation du skin
  * @implements OnInit
  */
 export class SkinCustomizationProfileMainViewComponent implements OnInit {

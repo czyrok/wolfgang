@@ -6,7 +6,7 @@ import { Component, Input, TemplateRef } from '@angular/core'
   styleUrls: ['./scroll.page.view.component.scss']
 })
 /**
- * @classdesc Composant pour le scrol de la vue d'une page
+ * Composant pour le scrol de la vue d'une page
  */
 export class ScrollPageViewComponent {
   @Input() title!: string

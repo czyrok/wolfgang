@@ -7,7 +7,7 @@ import { TypeAlertEnum } from 'common'
   styleUrls: ['./text.alert.shared.component.scss']
 })
 /**
- * @classdesc Gère le texte d'une alertecde type information
+ * Gère le texte d'une alertecde type information
  */
 export class TextAlertSharedComponent {
   @Input() icofont: string = 'info'

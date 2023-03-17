@@ -9,7 +9,7 @@ import { ModalSharedService } from 'src/app/shared/modal/service/modal.shared.se
   styleUrls: ['./modal.report.shared.component.scss']
 })
 /**
- * @classdesc Gère les boites modales de signalements
+ * Gère les boites modales de signalements
  */
 export class ModalReportSharedComponent implements AfterViewInit {
   openingSignalSub!: Subscription

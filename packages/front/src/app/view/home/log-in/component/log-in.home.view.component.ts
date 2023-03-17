@@ -13,7 +13,7 @@ import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/
   styleUrls: ['./log-in.home.view.component.scss']
 })
 /**
- * @classdesc Composant de la vue de connexion
+ * Composant de la vue de connexion
  */
 export class LogInHomeViewComponent {
   form: UntypedFormGroup

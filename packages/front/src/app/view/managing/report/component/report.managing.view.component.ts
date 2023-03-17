@@ -6,7 +6,7 @@ import { Component } from '@angular/core'
   styleUrls: ['./report.managing.view.component.scss']
 })
 /**
- * @classdesc Component
+ * Component
  */
 export class ReportManagingViewComponent {
 

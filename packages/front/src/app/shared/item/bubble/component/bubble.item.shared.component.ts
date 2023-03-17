@@ -6,7 +6,7 @@ import { Component, Input, TemplateRef } from '@angular/core'
   styleUrls: ['./bubble.item.shared.component.scss']
 })
 /**
- * @classdesc Gère les composants bulles
+ * Gère les composants bulles
  */
 export class BubbleItemSharedComponent {
   @Input() contentTemplate!: TemplateRef<any>

@@ -7,7 +7,7 @@ import { DetailedListInteractiveSharedModel } from '../model/detailed.list.inter
   styleUrls: ['./detailed.list.interactive.shared.component.scss']
 })
 /**
- * @classdesc Gère les listes interactives détaillées
+ * Gère les listes interactives détaillées
  */
 export class DetailedListInteractiveSharedComponent {
   changeTab(title: string): void {

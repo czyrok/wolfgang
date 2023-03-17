@@ -1,5 +1,5 @@
 /**
- * @classdesc Gère les model des tableaux de listes d'items
+ * Gère les model des tableaux de listes d'items
  */
 export class ItemTabListInteractiveSharedModel {
   private _name: string = ''

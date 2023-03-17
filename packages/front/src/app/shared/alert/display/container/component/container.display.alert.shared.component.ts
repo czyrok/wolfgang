@@ -12,21 +12,21 @@ import { DisplayAlertSharedInterface } from '../../interface/display.alert.share
   styleUrls: ['./container.display.alert.shared.component.scss']
 })
 /**
+ * Composant correspond à la boite qui contiendra les alertes créées
  * @implements AfterViewInit
  */
 export class ContainerDisplayAlertComponent implements AfterViewInit {
   /**
-   *
-   * @param changeDetectorRef
-   * @param displayAlertSharedService
+   * @param changeDetectorRef Service de détection de changement d'Angular
+   * @param displayAlertSharedService Service d'affichage des alertes
    */
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private displayAlertSharedService: DisplayAlertSharedService
   ) { }
-/**
- *
- */
+  /**
+   * Souscription à l'évènement des alertes pour créer le composant de l'alerte correspondant
+   */
   ngAfterViewInit(): void {
     this.displayAlertSharedService.alertEvent.subscribe((alert: DisplayAlertSharedInterface) => {
       let component: ComponentRef<ElementDisplayAlertSharedComponent> = this.targetRef.createComponent(ElementDisplayAlertSharedComponent)
