@@ -1,13 +1,25 @@
 import { PlayerGameModel } from '../../../model/player.game.model'
 import { VotePlayerGameModel } from '../../model/vote.player.game.model'
 
+/**
+ * Classe qui gère les votes
+ */
 export class StorageVotePlayerGameModel {
     private _votesList: Array<VotePlayerGameModel> = new Array
 
+    /**
+     * Renvoie la liste des votes
+     * @returns Renvoie la liste des votes
+     */
     public get votesList(): Array<VotePlayerGameModel> {
         return this._votesList
     }
 
+    /**
+     * Fonction qui renvoie true si le vote a été retiré, false sinon
+     * @param player Joueur voté
+     * @returns Renvoie true si le vote a été retiré, false sinon
+     */
     public removeVoteOfPlayer(player: PlayerGameModel): boolean {
         for (let i = 0; i < this.votesList.length; i++) {
             if (this.votesList[i].votingPlayer.user._id === player.user._id) {
@@ -20,6 +32,11 @@ export class StorageVotePlayerGameModel {
         return false
     }
 
+    /**
+     * Focntion qui ajoute un vote et renvoie true si le joueur a déjà été voté, false sinon
+     * @param newVote Vote
+     * @returns Renvoie true si le joueur a déjà été voté, false sinon
+     */
     public toVote(newVote: VotePlayerGameModel): boolean {
         const hasVotedBefore: boolean = this.removeVoteOfPlayer(newVote.votingPlayer)
 
@@ -28,6 +45,11 @@ export class StorageVotePlayerGameModel {
         return hasVotedBefore
     }
 
+    /**
+     * Focntion qui renvoie le joueur le plus voté de la liste des joueurs passé en paramètre 
+     * @param players Liste des joueurs votés
+     * @returns Renvoie le joueur le plus voté de la liste des joueurs passé en paramètre
+     */
     public mostVotedOfPlayersGroup(players: Array<PlayerGameModel>): PlayerGameModel | null {
         const votedPlayers: Array<[PlayerGameModel, number]> = new Array
 
@@ -64,6 +86,9 @@ export class StorageVotePlayerGameModel {
         return mostVotedPlayer
     }
 
+    /**
+     * Focntion qui vide la liste des joueurs votés
+     */
     public reset(): void {
         this.votesList.splice(0, this.votesList.length)
     }

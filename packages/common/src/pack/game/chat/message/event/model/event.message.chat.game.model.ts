@@ -8,6 +8,9 @@ import { EventMessageChatGameInterface } from '../interface/event.message.chat.g
 import { TypeMessageChatGameEnum } from '../../type/enum/type.message.chat.game.enum'
 import { TypeAlertEnum } from '../../../../../alert/type/enum/type.alert.enum'
 
+/**
+ * Classe qui créer des messages d'événements
+ */
 @Exclude()
 export class EventMessageChatGameModel extends MessageChatGameModel implements EventMessageChatGameInterface {
     @Expose()
@@ -18,6 +21,13 @@ export class EventMessageChatGameModel extends MessageChatGameModel implements E
     @prop({ required: true })
     alertType!: TypeAlertEnum
 
+    /**
+     * Constructeur
+     * @param type Type du message
+     * @param text Contenue du message
+     * @param imageUrl Nom de l'image
+     * @param alertType Type de l'alerte
+     */
     public constructor(type: TypeMessageChatGameEnum, text: string, imageUrl: string, alertType: TypeAlertEnum) {
         super(type, text)
 

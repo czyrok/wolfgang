@@ -1,12 +1,16 @@
-import { LogUtil } from '../../../../log/util/log.util'
-
 import { IteratorHierarchyBehaviorItemLoopGameModel } from '../../../loop/item/behavior/hierarchy/iterator/model/iterator.hierarchy.behavior.item.loop.game.model'
 import { StateGameModel } from '../../../state/model/state.game.model'
 
-import { TypeLogEnum } from '../../../../log/type/enum/type.log.enum'
 import { CampPlayerGameEnum } from '../enum/camp.player.game.enum'
 
+/**
+ * Classe qui permet de manipuler les camps des joueurs
+ */
 export class CampPlayerGameHelper {
+    /**
+     * Fonction qui remet tous les camps des joueurs à "UNDEFINED"
+     * @param state Statue de la partie
+     */
     public static resetPlayerCamp(state: StateGameModel): void {
         for (const player of state.players) {
             player.camp = CampPlayerGameEnum.UNDEFINED
@@ -14,6 +18,9 @@ export class CampPlayerGameHelper {
     }
 
     public static setCampToPlayer(): void {
+        /**
+         * Fonction qui met un camp aux joeurs
+         */
         const ite: IteratorHierarchyBehaviorItemLoopGameModel = new IteratorHierarchyBehaviorItemLoopGameModel
 
         for (const behavior of ite) {
@@ -23,6 +30,11 @@ export class CampPlayerGameHelper {
         }
     }
 
+    /**
+     * Fonction qui renvoie le nombre de camps de la partie
+     * @param state Statue de la partie
+     * @returns Renvoie le nombre de camps dans la partie
+     */
     public static getAlivePlayerCampCount(state: StateGameModel): number {
         const campList: Array<CampPlayerGameEnum> = new Array
 
