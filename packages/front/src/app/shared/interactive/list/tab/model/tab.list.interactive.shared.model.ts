@@ -1,7 +1,7 @@
 import { ItemTabListInteractiveSharedModel } from "../item/model/item.tab.list.interactive.shared.model"
 
 /**
- * @classdesc Gère les listes de tableaux
+ * Gère les listes de tableaux
  */
 export class TabListInteractiveSharedModel {
   private _title: string = ''

@@ -6,7 +6,7 @@ import { Component } from '@angular/core'
   styleUrls: ['./view.component.scss']
 })
 /**
- * @classdesc Composant d'une vue
+ * Composant d'une vue
  */
 export class ViewComponent {
 

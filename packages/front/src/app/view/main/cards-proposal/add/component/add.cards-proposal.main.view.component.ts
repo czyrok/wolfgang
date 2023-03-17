@@ -12,7 +12,7 @@ import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/
   styleUrls: ['./add.cards-proposal.main.view.component.scss']
 })
 /**
- * @classdesc Composant de la vue d'un ajout de proposition de carte
+ * Composant de la vue d'un ajout de proposition de carte
  */
 export class AddCardsProposalMainViewComponent implements OnInit {
   form!: UntypedFormGroup

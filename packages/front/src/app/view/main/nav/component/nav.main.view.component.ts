@@ -9,7 +9,7 @@ import { AuthSharedService } from 'src/app/shared/auth/service/auth.shared.servi
   styleUrls: ['./nav.main.view.component.scss']
 })
 /**
- * @classdesc Composant de vue de la bar de navigation
+ * Composant de vue de la bar de navigation
  */
 export class NavMainViewComponent {
   /**

@@ -7,7 +7,7 @@ import { ModalSharedInterface } from '../interface/modal.shared.interface'
     providedIn: 'root'
 })
 /**
- * @classdesc Gère le service des des boites modales
+ * Gère le service des des boites modales
  */
 export class ModalSharedService {
     private oneOpened: boolean = false

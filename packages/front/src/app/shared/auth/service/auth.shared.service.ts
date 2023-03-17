@@ -11,7 +11,7 @@ import { SocketSharedService } from '../../socket/service/socket.shared.service'
   providedIn: 'root'
 })
 /**
- * @classdesc Gère l'authentification de l'utilisateur
+ * Gère l'authentification de l'utilisateur
  */
 export class AuthSharedService {
   private _isAuth: boolean = false
@@ -19,9 +19,9 @@ export class AuthSharedService {
   private _scopeAccess: Array<string> = new Array
 
   /**
-   * @param cookieService
-   * @param sessionSharedService
-   * @param socketSharedService
+   * @param cookieService Service permettant de gérer les cookies
+   * @param sessionSharedService Service permettant de gérer la session
+   * @param socketSharedService Service permettant de gérer les sockets
    */
   public constructor(
     private cookieService: CookieService,
@@ -38,14 +38,15 @@ export class AuthSharedService {
   }
 
   /**
-   * @returns Renvois vraie si l'utilisateur est connecté faux sinon
+   * Permet de savoir si l'utilisateur est connecté ou non
+   * @returns Vrai s'il l'est sinon faux
    */
   public get isAuth(): boolean {
     return this._isAuth
   }
 
   /**
-   * Modifie le nom de l'utilisateur
+   * Assigne le nom de l'utilisateur connecté
    * @param value Valeur à assigner
    */
   private set username(value: string | undefined) {
@@ -53,23 +54,32 @@ export class AuthSharedService {
   }
 
   /**
-   * @returns Renvois le nom de l'utilisateur
+   * Renvoie le pseudo de l'utilisateur connecté
+   * @returns Le pseudo
    */
   public get username(): string | undefined {
     return this._username
   }
 
+  /**
+   * Définit les accès de l'utilisateur connecté
+   * @param value La liste des accès
+   */
   private set scopeAccess(value: Array<string>) {
     this._scopeAccess = value
   }
 
+  /**
+   * Renvoie la liste des accès de l'utilisateur connecté
+   * @returns La liste des accès
+   */
   public get scopeAccess(): Array<string> {
     return this._scopeAccess
   }
 
   /**
-   *
-   * @param token
+   * Assigne le jeton d'authentification de l'utilisateur connecté
+   * @param token Le jeton d'authentification
    */
   public async setToken(token: string): Promise<void> {
     // #achan secure
@@ -82,7 +92,7 @@ export class AuthSharedService {
   }
 
   /**
-   *
+   * Étape intermédiaire avant de vérifier si le jeton de l'utilisateur est toujours valide
    */
   public async testAuth(): Promise<void> {
     if (!this.cookieService.check(environment.JWT_COOKIE_NAME)) return
@@ -94,8 +104,7 @@ export class AuthSharedService {
   }
 
   /**
-   *
-   * @returns
+   * Fais la vérification du jeton d'authentification de l'utilisateur
    */
   private async doAuth(): Promise<void> {
     const testLink: LinkNamespaceSocketModel<void, string> = await this.socketSharedService.buildLink<void, string>('/auth', 'test')
@@ -120,8 +129,7 @@ export class AuthSharedService {
   }
 
   /**
-   *
-   * @returns
+   * Déclenche la déconnexion de l'utilisateur
    */
   public async logOut(): Promise<void> {
     const logOutLink: LinkNamespaceSocketModel<void, void> = await this.socketSharedService.buildLink('/auth', 'logOut')
@@ -146,8 +154,8 @@ export class AuthSharedService {
   }
 
   /**
-   * Définis l'utilisateur comme connecté
-   * @param username Nom de l'utilisateur qui doit être connecté
+   * Déclenche la connexion de l'utilisateur
+   * @param username Pseudo de l'utilisateur
    */
   private async connect(username: string): Promise<void> {
     this.isAuth = true
@@ -169,7 +177,7 @@ export class AuthSharedService {
   }
 
   /**
-   * Définis l'utilisateur comme déconnecté
+   * Réinitialise les variables associées à l'utilisateur
    */
   private disconnect(): void {
     this.isAuth = false

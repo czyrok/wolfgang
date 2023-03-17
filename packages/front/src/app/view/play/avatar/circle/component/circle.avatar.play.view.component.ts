@@ -10,7 +10,7 @@ import { CircleAvatarPlayViewModel } from '../model/circle.avatar.play.view.mode
   styleUrls: ['./circle.avatar.play.view.component.scss']
 })
 /**
- * @classdesc Composant permettant l'fichage des avatars en cercle l'or d'une partie
+ * Composant permettant l'fichage des avatars en cercle l'or d'une partie
  */
 export class CircleAvatarPlayViewComponent implements AfterViewInit {
   avatarsCircle!: CircleAvatarPlayViewModel

@@ -8,7 +8,7 @@ import { TabDetailedListInteractiveSharedModel } from '../model/tab.detailed.lis
   styleUrls: ['./tab.detailed.list.interactive.shared.component.scss']
 })
 /**
- * @classdesc Gère les tableaux de listes interactives détaillées
+ * Gère les tableaux de listes interactives détaillées
  */
 export class TabDetailedListInteractiveSharedComponent {
   @Input() tab!: TabDetailedListInteractiveSharedModel;

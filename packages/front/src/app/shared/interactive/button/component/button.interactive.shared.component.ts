@@ -6,7 +6,7 @@ import { Component, HostListener, Input, Output, EventEmitter } from '@angular/c
   styleUrls: ['./button.interactive.shared.component.scss']
 })
 /**
- * @classdesc Gère les boutons interactifs
+ * Gère les boutons interactifs
  */
 export class ButtonInteractiveSharedComponent {
   @Input() link!: string

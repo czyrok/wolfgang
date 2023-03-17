@@ -8,7 +8,7 @@ import { ItemTabListInteractiveSharedModel } from '../model/item.tab.list.intera
 })
 
 /**
- * @classdesc Gère les tableaux de listes d'items
+ * Gère les tableaux de listes d'items
  */
 export class ItemTabListInteractiveSharedComponent {
   @Input() item!: ItemTabListInteractiveSharedModel;

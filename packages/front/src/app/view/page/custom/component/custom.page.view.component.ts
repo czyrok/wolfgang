@@ -6,7 +6,7 @@ import { Component, Input, TemplateRef } from '@angular/core'
   styleUrls: ['./custom.page.view.component.scss']
 })
 /**
- * @classdesc Composant de customisation d'une page
+ * Composant de customisation d'une page
  */
 export class CustomPageViewComponent {
   @Input() contentTemplate!: TemplateRef<any>

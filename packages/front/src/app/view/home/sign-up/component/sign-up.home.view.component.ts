@@ -13,7 +13,7 @@ import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/
   styleUrls: ['./sign-up.home.view.component.scss']
 })
 /**
- * @classdesc Composant de la vue de d'inscription
+ * Composant de la vue de d'inscription
  */
 export class SignUpHomeViewComponent {
   form: UntypedFormGroup

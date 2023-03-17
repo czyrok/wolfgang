@@ -7,7 +7,7 @@ import { EventMessageChatGameModel, UserMessageChatGameModel } from 'common'
   styleUrls: ['./chat.shared.component.scss']
 })
 /**
- * @classdesc Gère le chat
+ * Gère le chat
  * @implements AfterViewInit
  */
 export class ChatSharedComponent implements AfterViewInit {

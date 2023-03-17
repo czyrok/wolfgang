@@ -1,7 +1,7 @@
 import { Subject } from "rxjs"
 
 /**
- * @classdesc Gère les mdels d'items de sous-tables des tableaux de listes interactives détaillées
+ * Gère les mdels d'items de sous-tables des tableaux de listes interactives détaillées
  */
 export class ItemSubTabTabDetailedListInteractiveSharedModel<T> {
   private _name: string = ''

@@ -14,7 +14,7 @@ import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/
   styleUrls: ['./other.user.modal.report.shared.component.scss']
 })
 /**
- * @classdesc Gère les boites modales de signalements détaillés d'un utilisateur
+ * Gère les boites modales de signalements détaillés d'un utilisateur
  */
 export class OtherUserModalReportSharedComponent {
   form: UntypedFormGroup

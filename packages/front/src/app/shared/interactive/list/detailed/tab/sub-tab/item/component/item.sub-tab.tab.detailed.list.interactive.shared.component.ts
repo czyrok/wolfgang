@@ -8,7 +8,7 @@ import { ItemSubTabTabDetailedListInteractiveSharedModel } from '../model/item.s
   styleUrls: ['./item.sub-tab.tab.detailed.list.interactive.shared.component.scss']
 })
 /**
- * @classdesc Gère les items de sous-tables des tableaux de listes interactives détaillées
+ * Gère les items de sous-tables des tableaux de listes interactives détaillées
  */
 export class ItemSubTabTabDetailedListInteractiveSharedComponent {
   @Input() item!: ItemSubTabTabDetailedListInteractiveSharedModel<any>

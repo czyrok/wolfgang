@@ -9,7 +9,7 @@ import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared
   styleUrls: ['./default.report.managing.view.component.scss']
 })
 /**
- * @classdesc Component qui gère la liste des signalements qui n'ont pas encore été validé ou refusé par un administarteur
+ * Component qui gère la liste des signalements qui n'ont pas encore été validé ou refusé par un administarteur
  */
 export class DefaultReportManagingViewComponent implements OnInit {
   reportList!: Array<ReportModel>

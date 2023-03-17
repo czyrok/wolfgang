@@ -7,7 +7,7 @@ import { Component, Input, TemplateRef } from '@angular/core'
 })
 
 /**
- * @classdesc Component qui sert de template pour les formulaires
+ * Component qui sert de template pour les formulaires
  */
 export class FormPageViewComponent {
   @Input() title!: string
