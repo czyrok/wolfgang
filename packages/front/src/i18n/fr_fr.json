@@ -1,0 +1,136 @@
+{
+  "title":{
+    "app":"Wolfgang",
+    "modal": {
+      "bug": "Signalement d'un bug"
+    },
+    "page": {
+      "help":"Aide"
+    },
+
+    "bugReport":"Signalement d'un bug",
+    "reportChoice":"Choix du signalement",
+    "reportType":"Type de signalement",
+    "playerReport":"Signalement de joueur",
+    "cardProposal":"Proposer une carte",
+    "listCardProposal":"Liste des cartes proposées",
+    "proposal":"Proposition",
+    "gameList":"Liste des parties",
+    "help":"Aide",
+    "nice":"Gentil",
+    "bad":"Mechant",
+    "other":"Autre",
+    "defaultCard":"Carte de base",
+    "playerCard":"Carte de joueurs",
+    "profil":"Profil",
+    "skinCustomization":"Personnalisation du skin",
+    "hat":"Chapeau",
+    "head":"Tête",
+    "top":"Haut",
+    "pants":"Pantalon",
+    "shoes":"Chaussures",
+    "owned":"Possédé",
+    "notOwned":"Non possédé",
+    "reportList":"Liste des signalements",
+    "chatTranscript":"Retranscription du chat",
+    "report":"Signalement",
+    "ruels":"Règles"
+
+  },
+  "error":{
+    "inGame":"Vous êtes déjà dans une partie",
+    "notFoundCardProposal":"Cette proposition de carte n'existe pas",
+    "notFoundUser":"Cet utilisateur n'existe pas",
+    "notFoundReport":"Ce signalement n'existe pas",
+    "canNotJoinGame":"Vous ne pouvez pas rejoindre cette partie"
+  },
+  "text":{
+    "requiredFields":"Le champs est obligatoire",
+    "playerSelection":"Joueur à sélectionner",
+    "level":"Niveau",
+    "point":"points",
+    "username":"Pseudo",
+    "password":"Mot de passe",
+    "email":"Adresse email",
+    "tiltle":"Titre",
+    "description":"Description",
+    "numberPlayer":"Nombre de joueurs",
+    "balancing":"Équilibrage",
+    "options":"Options",
+    "randomCard":"Cartes aléatoires",
+    "privateGame":"Partie privée",
+    "cardInGame":"Cartes en jeu"
+  },
+  "button":{
+    "join":"Rejoindre",
+    "report":"Signaler",
+    "cancel":"Annuler",
+    "validate":"Valider",
+    "bug":"Bug",
+    "user":"Utilisateur",
+    "antiGame":"Anti-jeu",
+    "InappropriateLanguage":"Langage inapproprié",
+    "spam":"Spam",
+    "Advertising":"Publicité",
+    "SharingLinks":"Partage de liens",
+    "other":"Autre",
+    "play":"Jouer ?",
+    "singIn":"S'inscrire",
+    "login":"Se connecter",
+    "connection":"Connexion",
+    "submit":"Proposer",
+    "cardProposal":"Proposer une carte",
+    "createGame":"Créer une partie",
+    "joinGame":"Rejoindre une partie",
+    "customSkin":"Personnaliser le skin",
+    "delete":"Supprimer",
+    "sanction":"Sanctionner"
+  },
+  "form":{
+    "placeholder": {
+
+    },
+    "validator": {
+
+    },
+    "label": {
+
+    },
+
+
+    "bugDescription":"Saisissez la description du bug",
+    "reportDesc":"Saisissez votre signalement",
+    "username":"Saisissez votre pseudo",
+    "password":"Saisissez votre mot de passe",
+    "email":"Saisissez votre e-mail",
+    "title":"Saisissez le titre",
+    "cardDesc":"Saisissez la description de votre carte",
+    "enterMessage":"Saisissez un message"
+  },
+  "alert":{
+    "registeredReportValidation":"Votre signalement a bien été enregistré",
+    "requiredField":"Le champs est obligatoire",
+    "minumumDescSize":"La taille de la description doit être de minimum",
+    "char":"caractères",
+    "maximumDescSize":"La taille de la description doit être de maximum",
+    "selectOneUser":"Vous devez sélectionner au moins 1 utilisateur",
+    "minimumUsernameSize":"La taille du pseudo doit être de minimum",
+    "emailValidation":"L'adresse e-mail doit être valide",
+    "minimumTitleSize":"La taille du titre doit être de minimum",
+    "maximumTitleSize":"La taille du titre doit être de maximum",
+    "registeredCardProposal":"Votre proposition a bien été enregistrée",
+    "reportDelteConfirm":"Le signalement a bien été supprimé",
+    "playerSanction":"Les joueurs ont bien été punis",
+    "roleWerewolf":"Votre rôle est loup-garou",
+    "roleVillager":"Votre rôle est villageois",
+    "earnPoints":"Vous avez gagné 5 points de jeu",
+    "levelUp":"Vous êtes monté d'un niveau, félicitation !",
+    "deleteGame":"La partie a été supprimée"
+  },
+  "cardName":{
+    "greyWerewolf":"Loup garou gris",
+    "villagers":"Villageois",
+    "detective":"Détective",
+    "fool":"Le fou"
+  }
+}
