@@ -2,9 +2,9 @@
   "name": "back-registery",
   "version": "1.0.0",
   "scripts": {
-    "cleanDist": "rm -rf ./dist",
-    "cleanLog": "rm -rf ./log",
-    "start": "tsc && node --unhandled-rejections=strict ./dist/app.js",
+    "clean-dist": "rm -rf ./dist",
+    "clean-log": "rm -rf ./log",
+    "start": "tsc && NODE_ENV=DEV node --unhandled-rejections=strict ./dist/app.js",
     "prod": "tsc && NODE_ENV=PROD node --unhandled-rejections=strict ./dist/app.js"
   },
   "dependencies": {

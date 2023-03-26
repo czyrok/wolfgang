@@ -1,0 +1,68 @@
+version: '3.7'
+
+services:
+  database:
+    container_name: database
+    image: mongo:5.0
+    environment:
+      - MONGO_INITDB_DATABASE=wolfgang
+      - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${DB_PW}
+    ports:
+      - ${DB_PORT}:27017
+    volumes:
+      - ~/wolfgang_data/:/data/db
+    networks:
+      wolfgang-net:
+        aliases:
+          - database.wolfgang-net
+  front:
+    container_name: front
+    build: 
+      context: .
+      dockerfile: packages/front/src/docker/DockerFile.front
+    ports:
+      - 80:80
+  back-main:
+    container_name: back-main
+    build: 
+      context: .
+      dockerfile: packages/back-main/src/docker/DockerFile.back-main
+    ports:
+      - ${MAIN_PORT}:${MAIN_PORT}
+    networks:
+      wolfgang-net:
+        aliases:
+          - back-main.wolfgang-net
+  back-game:
+    container_name: back-game
+    build: 
+      context: .
+      dockerfile: packages/back-game/src/docker/DockerFile.back-game
+    ports:
+      - ${GAME_PORT}:${GAME_PORT}
+    networks:
+      wolfgang-net:
+        aliases:
+          - back-game.wolfgang-net
+  back-registery:
+    container_name: back-registery
+    build: 
+      context: .
+      dockerfile: packages/back-registery/src/docker/DockerFile.back-registery
+    ports:
+      - ${REGISTERY_PORT}:${REGISTERY_PORT}
+    networks:
+      wolfgang-net:
+        aliases:
+          - back-registery.wolfgang-net
+
+networks:
+  wolfgang-net:
+    driver: bridge
+    name: wolfgang-net
+    ipam:
+      driver: default
+      config:
+        - subnet: '192.168.0.0/16'
+          gateway: '192.168.0.1'

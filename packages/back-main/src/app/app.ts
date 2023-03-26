@@ -27,7 +27,7 @@ async function run(): Promise<void> {
     LogUtil.logger(TypeLogEnum.APP).trace('App started')
 
     await connect(`mongodb://${EnvUtil.get(VarEnvEnum.DB_URL)}:${EnvUtil.get(VarEnvEnum.DB_PORT)}/wolfgang`, {
-        authSource: EnvUtil.get(VarEnvEnum.DB_USER),
+        authSource: 'admin',
         user: EnvUtil.get(VarEnvEnum.DB_USER),
         pass: EnvUtil.get(VarEnvEnum.DB_PW)
     })

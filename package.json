@@ -15,7 +15,15 @@
   "scripts": {
     "generateDoc": "typedoc",
 
-    "docker": "docker compose --env-file .prod.env up --detach",
+    "deployment_dev": "npm run docker_dev && npm run init_dev",
+    "deployment_prod": "npm run docker_prod && npm run init_prod",
+    "docker_dev": "docker compose --project-name wolfgang --env-file .dev.env --file dev.docker-compose.yml up --detach",
+    "docker_prod": "docker compose --project-name wolfgang --env-file .prod.env --file prod.docker-compose.yml up --detach",
+    "init_dev": "src/init/init.sh DEV",
+    "init_prod": "src/init/init.sh PROD",
+
+
+
 
     "database_docker_dev": "docker compose --file src/docker/database.docker-compose.yml --env-file .env.dev up --detach",
     "database_docker_prod": "docker compose --file src/docker/database.docker-compose.yml --env-file .env.prod up --detach",
