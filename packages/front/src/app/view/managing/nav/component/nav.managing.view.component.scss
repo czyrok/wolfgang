@@ -1,0 +1,44 @@
+@use '../../../../app.scss';
+
+@use '../../../../../scss/lib/property';
+
+@use 'scss-toolkit/src/mixin/theme';
+
+nav {
+    display: grid;
+    grid-template-areas:
+        'a'
+        'b'
+        'c';
+    grid-template-rows: auto 1fr;
+    height: 100%;
+    justify-content: center;
+    justify-items: center;
+    padding-top: property.get('borderLimit', 'regular');
+    padding-bottom: property.get('borderLimit', 'regular');
+    box-sizing: border-box;
+
+    @include theme.themeHandler(false, 'nav') {
+        background-color: theme.get('background');
+    }
+}
+
+nav .logo {
+    width: property.get('size', 'nav', 'logo');
+    aspect-ratio: 1 / 1;
+    background-color: yellow;
+    background-image: url('../../../../../asset/img/logo.jpg');
+    background-size: cover;
+}
+
+nav ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+nav ul li {
+    margin-top: property.get('borderLimit', 'regular');
+    margin-bottom: property.get('borderLimit', 'regular');
+}
