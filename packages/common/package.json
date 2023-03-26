@@ -4,11 +4,11 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "cleanDist": "rm -rf ./dist",
-    "cleanLog": "rm -rf ./trace",
-    "startBuildScript": "node --unhandled-rejections=strict ./dist/build/script/build.script.js",
-    "build": "npm run cleanDist && tsc && npm run startBuildScript",
-    "buildW": "tsc && npm run startBuildScript",
+    "clean-dist": "rm -rf ./dist",
+    "clean-log": "rm -rf ./trace",
+    "launch-build-script": "node --unhandled-rejections=strict ./dist/build/script/build.script.js",
+    "build": "npm run clean-dist && tsc && npm run launch-build-script",
+    "build-w": "tsc && npm run launch-build-script",
     "test": "tsc && jasmine --config=jasmine.json"
   },
   "dependencies": {
