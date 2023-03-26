@@ -20,7 +20,7 @@ export class EnvUtil {
 
     public static get(variable: VarEnvEnum): string {
         if (!this.isConfigured) {
-            config({ path: process.cwd() + '/../../.env' })
+            config({ path: process.cwd() + '/../../' + (process.env.NODE_ENV === 'PROD' ? '.prod.env' : '.dev.env') })
 
             LogUtil.logger(TypeLogEnum.APP).trace(`Env variables recovered`)
         }

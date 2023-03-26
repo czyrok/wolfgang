@@ -12,6 +12,7 @@
     "test": "tsc && jasmine --config=jasmine.json"
   },
   "dependencies": {
+    "@types/jasmine": "^4.3.1",
     "class-transformer": "^0.5.1",
     "cookie": "^0.5.0",
     "cors": "^2.8.5",

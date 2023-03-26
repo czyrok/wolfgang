@@ -8,17 +8,31 @@
     "front",
     "back"
   ],
-  "scripts": {
-    "generateDoc": "typedoc"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/czyrok/wolfgang.git"
   },
   "scripts": {
-    "createDatabaseDockerContainer": "cd ./src/docker/database && docker-compose up -d",
-    "buildFrontDockerImage": "docker image build ./ -t front -f ./src/docker/front/Dockerfile",
-    "createFrontDockerContainer": "nohup docker run --publish 80:80 front"
+    "generateDoc": "typedoc",
+
+    "docker": "docker compose --env-file .prod.env up --detach",
+
+    "database_docker_dev": "docker compose --file src/docker/database.docker-compose.yml --env-file .env.dev up --detach",
+    "database_docker_prod": "docker compose --file src/docker/database.docker-compose.yml --env-file .env.prod up --detach",
+
+
+    "createDockerNetwork": "docker network create --driver=bridge --subnet=192.168.0.0/16 --gateway=192.168.0.1 wolfgang-net",
+
+    "buildAndRunDatabaseDockerContainer": "cd ./src/docker/database && docker compose --env-file ../../../.env.prod up --detach",
+    "buildAndRunDatabaseDockerContainerDEV": "cd ./src/docker/database && docker compose --env-file ../../../.env.dev up --detach",
+
+    "buildAndRunDatabaseDockerContainer2": "cd ./src/docker/back-main && docker compose --env-file ../../../.env.prod up --detach",
+
+    "buildFrontDockerImage": "docker image build ./ --tag front --file ./src/docker/front/Dockerfile",
+    "runFrontDockerContainer": "docker run --detach --name front --publish 80:80 front",
+
+    "buildMainDockerImage": "docker image build ./ --tag wolfgang_back-main --file ./src/docker/back-main/back-main.Dockerfile",
+    "runMainDockerContainer": "docker run --detach --name wolfgang_back-main --publish 5500:5500 --network wolfgang-net --network-alias=back-main.wolfgang.net wolfgang_back-main"
   },
   "workspaces": [
     "packages/front",

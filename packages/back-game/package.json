@@ -4,7 +4,8 @@
   "scripts": {
     "cleanDist": "rm -rf ./dist",
     "cleanLog": "rm -rf ./log",
-    "start": "tsc && node --unhandled-rejections=strict ./dist/app.js"
+    "start": "tsc && node --unhandled-rejections=strict ./dist/app.js",
+    "prod": "tsc && NODE_ENV=PROD node --unhandled-rejections=strict ./dist/app.js"
   },
   "dependencies": {
     "class-transformer": "^0.5.1",

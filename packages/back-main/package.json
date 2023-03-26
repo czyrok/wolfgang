@@ -2,9 +2,11 @@
   "name": "back-main",
   "version": "1.0.0",
   "scripts": {
-    "cleanDist": "rm -rf ./dist",
-    "cleanLog": "rm -rf ./log",
-    "start": "tsc && node --unhandled-rejections=strict ./dist/app.js"
+    "clean-dist": "rm -rf ./dist",
+    "clean-log": "rm -rf ./log",
+    "start": "tsc && node --unhandled-rejections=strict ./dist/app.js",
+    "prod": "tsc && NODE_ENV=PROD node --unhandled-rejections=strict ./dist/app.js",
+    "docker": "docker compose --file src/docker/back-main.docker-compose.yml --env-file ../../.env.prod up --detach"
   },
   "dependencies": {
     "class-transformer": "^0.5.1",

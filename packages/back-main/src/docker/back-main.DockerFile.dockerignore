@@ -1,0 +1,8 @@
+**/node_modules
+**/dist
+**/trace
+**/.git
+
+**/back-registery
+**/back-game
+**/front

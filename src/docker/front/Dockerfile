@@ -6,23 +6,22 @@ WORKDIR /app
 COPY . .
 
 # Installing dependences
-# RUN npm install
+RUN npm install
 
 # Executing common build script
-# /!\ script de build pas fixé
-# RUN npm run build -w common
+RUN npm run build -w common
 
 # Executing front build script
 RUN npm run build --prod -w front
 
 # Stage 2
-FROM nginx:alpine
-
-# Copying app files into nginx
-COPY --from=node /app/packages/front/dist/front /usr/share/nginx/html
+FROM nginx:latest
 
 # Copying configuration file into nginx
-# COPY /nginx.conf  /etc/nginx/conf.d/default.conf
+COPY --from=node /app/src/docker/front/nginx.conf  /etc/nginx/conf.d/default.conf
 
-# Exposing 80 port
+# Copying app files into nginx
+COPY --from=node /app/packages/front/dist/front /app
+
+# Exposing port
 EXPOSE 80
