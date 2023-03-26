@@ -13,13 +13,14 @@
     "url": "https://github.com/czyrok/wolfgang.git"
   },
   "scripts": {
-    "generate-doc": "typedoc",
+    "start-prod": "docker start database && docker start front && docker start back-main && docker start back-game && docker start back-registery",
     "deployment-dev": "npm run docker-dev && npm run init-dev",
-    "deployment-prod": "npm run docker-prod && npm run init-prod",
-    "docker-dev": "docker compose --project-name wolfgang --env-file .dev.env --file dev.docker-compose.yml up --detach",
-    "docker-prod": "docker compose --project-name wolfgang --env-file .prod.env --file prod.docker-compose.yml up --detach",
+    "deployment-prod": "npm run docker-prod && npm run init-prod && npm run start-prod",
+    "docker-dev": "docker compose --project-name wolfgang --env-file .dev.env --file dev.docker-compose.yml up --detach --no-start",
+    "docker-prod": "docker compose --project-name wolfgang --env-file .prod.env --file prod.docker-compose.yml up --detach --no-start",
     "init-dev": "chmod u+x src/init/init.sh && src/init/init.sh DEV",
-    "init-prod": "chmod u+x src/init/init.sh && src/init/init.sh PROD"
+    "init-prod": "chmod u+x src/init/init.sh && src/init/init.sh PROD",
+    "generate-doc": "typedoc"
   },
   "workspaces": [
     "packages/front",
