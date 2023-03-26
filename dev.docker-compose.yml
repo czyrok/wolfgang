@@ -11,4 +11,4 @@ services:
     ports:
       - ${DB_PORT}:27017
     volumes:
-      - ~/wolfgang_data/:/data/db
+      - ~/wolfgang-data/:/data/db

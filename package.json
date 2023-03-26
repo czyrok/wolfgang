@@ -18,8 +18,8 @@
     "deployment-prod": "npm run docker-prod && npm run init-prod && npm run start-prod",
     "docker-dev": "docker compose --project-name wolfgang --env-file .dev.env --file dev.docker-compose.yml up --detach --no-start",
     "docker-prod": "docker compose --project-name wolfgang --env-file .prod.env --file prod.docker-compose.yml up --detach --no-start",
-    "init-dev": "chmod u+x src/init/init.sh && src/init/init.sh DEV",
-    "init-prod": "chmod u+x src/init/init.sh && src/init/init.sh PROD",
+    "init-dev": "npm install && chmod u+x src/init/init.sh && src/init/init.sh DEV",
+    "init-prod": "npm install && chmod u+x src/init/init.sh && src/init/init.sh PROD",
     "generate-doc": "typedoc"
   },
   "workspaces": [
