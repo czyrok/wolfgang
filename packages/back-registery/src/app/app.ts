@@ -24,6 +24,8 @@ async function run() {
         middlewares: [],
         useClassTransformer: true
     })
+
+    LogUtil.logger(TypeLogEnum.APP).trace('Socket engine initialized')
 }
 
 run().catch((error: Error) => {

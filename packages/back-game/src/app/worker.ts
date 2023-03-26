@@ -51,7 +51,7 @@ async function run(): Promise<void> {
         if (process.send) process.send(instanceToPlain(game))
     })
 
-    process.on('message', (msg) => {
+    process.on('message', (msg: any) => {
         if (msg.cmd === 'getGameData') {
             if (process.send) process.send(instanceToPlain(game))
         }
