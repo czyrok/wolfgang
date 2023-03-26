@@ -13,34 +13,13 @@
     "url": "https://github.com/czyrok/wolfgang.git"
   },
   "scripts": {
-    "generateDoc": "typedoc",
-
-    "deployment_dev": "npm run docker_dev && npm run init_dev",
-    "deployment_prod": "npm run docker_prod && npm run init_prod",
-    "docker_dev": "docker compose --project-name wolfgang --env-file .dev.env --file dev.docker-compose.yml up --detach",
-    "docker_prod": "docker compose --project-name wolfgang --env-file .prod.env --file prod.docker-compose.yml up --detach",
-    "init_dev": "src/init/init.sh DEV",
-    "init_prod": "src/init/init.sh PROD",
-
-
-
-
-    "database_docker_dev": "docker compose --file src/docker/database.docker-compose.yml --env-file .env.dev up --detach",
-    "database_docker_prod": "docker compose --file src/docker/database.docker-compose.yml --env-file .env.prod up --detach",
-
-
-    "createDockerNetwork": "docker network create --driver=bridge --subnet=192.168.0.0/16 --gateway=192.168.0.1 wolfgang-net",
-
-    "buildAndRunDatabaseDockerContainer": "cd ./src/docker/database && docker compose --env-file ../../../.env.prod up --detach",
-    "buildAndRunDatabaseDockerContainerDEV": "cd ./src/docker/database && docker compose --env-file ../../../.env.dev up --detach",
-
-    "buildAndRunDatabaseDockerContainer2": "cd ./src/docker/back-main && docker compose --env-file ../../../.env.prod up --detach",
-
-    "buildFrontDockerImage": "docker image build ./ --tag front --file ./src/docker/front/Dockerfile",
-    "runFrontDockerContainer": "docker run --detach --name front --publish 80:80 front",
-
-    "buildMainDockerImage": "docker image build ./ --tag wolfgang_back-main --file ./src/docker/back-main/back-main.Dockerfile",
-    "runMainDockerContainer": "docker run --detach --name wolfgang_back-main --publish 5500:5500 --network wolfgang-net --network-alias=back-main.wolfgang.net wolfgang_back-main"
+    "generate-doc": "typedoc",
+    "deployment-dev": "npm run docker-dev && npm run init-dev",
+    "deployment-prod": "npm run docker-prod && npm run init-prod",
+    "docker-dev": "docker compose --project-name wolfgang --env-file .dev.env --file dev.docker-compose.yml up --detach",
+    "docker-prod": "docker compose --project-name wolfgang --env-file .prod.env --file prod.docker-compose.yml up --detach",
+    "init-dev": "src/init/init.sh DEV",
+    "init-prod": "src/init/init.sh PROD"
   },
   "workspaces": [
     "packages/front",
