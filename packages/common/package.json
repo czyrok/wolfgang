@@ -12,6 +12,7 @@
     "test": "tsc && jasmine --config=jasmine.json"
   },
   "dependencies": {
+    "@typegoose/typegoose": "~10.0.0",
     "@types/jasmine": "^4.3.1",
     "class-transformer": "^0.5.1",
     "cookie": "^0.5.0",
@@ -31,7 +32,6 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@typegoose/typegoose": "~10.0.0",
     "@types/crypto-js": "^4.1.1",
     "@types/express-session": "^1.17.5",
     "@types/jsonwebtoken": "^9.0.1",

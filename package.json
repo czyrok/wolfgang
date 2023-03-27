@@ -20,7 +20,7 @@
     "docker-dev": "docker compose --project-name wolfgang --env-file .dev.env --file dev.docker-compose.yml up --detach --no-start",
     "docker-prod": "docker compose --project-name wolfgang --env-file .prod.env --file prod.docker-compose.yml up --detach --no-start",
     "init-dev": "npm install && npm run build -w common && chmod u+x src/init/init.sh && src/init/init.sh DEV",
-    "init-prod": "npm install --omit=dev && npm run build -w common && chmod u+x src/init/init.sh && src/init/init.sh PROD",
+    "init-prod": "npm install && npm run build -w common && chmod u+x src/init/init.sh && src/init/init.sh PROD",
     "generate-doc": "typedoc"
   },
   "workspaces": [
@@ -30,7 +30,7 @@
     "packages/back-game",
     "packages/common"
   ],
-  "devDependencies": {
+  "dependencies": {
     "typedoc": "^0.23.25"
   }
 }
