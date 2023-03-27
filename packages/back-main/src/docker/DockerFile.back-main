@@ -6,7 +6,7 @@ WORKDIR /app
 COPY . .
 
 # Installing dependences
-RUN npm install
+RUN npm install --omit=dev
 
 # Executing common build script
 RUN npm run build -w common
