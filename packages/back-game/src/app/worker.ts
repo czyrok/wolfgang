@@ -3,7 +3,7 @@ import { connect } from 'mongoose'
 import { Server } from 'socket.io'
 import { instanceToPlain } from 'class-transformer'
 import { SocketIoController } from 'ts-socket.io-controller'
-import { LogUtil, LogHelper, TypeLogEnum, EnvUtil, VarEnvEnum, GameModel, ScopeIoMiddleware, SessionIoMiddleware } from 'common'
+import { ConfigAppHelper, LogUtil, LogHelper, TypeLogEnum, EnvUtil, VarEnvEnum, GameModel, ScopeIoMiddleware, SessionIoMiddleware } from 'common'
 
 import { GameController } from './game/controller/game.controller'
 
@@ -25,12 +25,14 @@ async function run(): Promise<void> {
 
     LogUtil.logger(TypeLogEnum.APP).trace('Database connection initialized')
 
-    const server: http.Server = http.createServer()
-    const io = new Server(server)
-
-    server.listen(EnvUtil.get(VarEnvEnum.GAME_PORT))
-
-    LogUtil.logger(TypeLogEnum.APP).info(`HTTP server listen on port ${EnvUtil.get(VarEnvEnum.GAME_PORT)}`)
+    const io: Server = ConfigAppHelper.setup({
+        port: parseInt(EnvUtil.get(VarEnvEnum.GAME_PORT)),
+        cors: {
+            origin: `${EnvUtil.get(VarEnvEnum.PROTOCOL)}://${EnvUtil.get(VarEnvEnum.CORS_WEBSITE_URL)}:${EnvUtil.get(VarEnvEnum.CORS_WEBSITE_PORT)}`,
+            credentials: true
+        },
+        session: true
+    })
 
     SocketIoController.useSocketIoServer(io, {
         controllers: [
