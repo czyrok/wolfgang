@@ -81,4 +81,8 @@
   padding: property.get('borderLimit', 'verySmall');
   height: fit-content;
   white-space: break-spaces;
+
+  @include theme.themeHandler(true, 'alert') {
+    color: theme.get('color');
+  }
 }
