@@ -1,0 +1,47 @@
+{
+  "name": "common",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "clean-dist": "rm -rf ./dist",
+    "clean-log": "rm -rf ./trace",
+    "launch-build-script": "node --unhandled-rejections=strict ./dist/build/script/build.script.js",
+    "build": "npm run clean-dist && tsc && npm run launch-build-script",
+    "build-w": "tsc && npm run launch-build-script",
+    "test": "tsc && jasmine --config=jasmine.json"
+  },
+  "dependencies": {
+    "@typegoose/typegoose": "~10.0.0",
+    "@types/jasmine": "^4.3.1",
+    "class-transformer": "^0.5.1",
+    "cookie": "^0.5.0",
+    "cors": "^2.8.5",
+    "crypto-js": "^4.1.1",
+    "crypto-random": "^2.0.1",
+    "dotenv": "^16.0.3",
+    "express": "~4.18.2",
+    "express-session": "^1.17.3",
+    "jsonwebtoken": "^9.0.0",
+    "log4js": "^6.7.1",
+    "mongoose": "~6.8.0",
+    "rxjs": "^7.8.0",
+    "socket.io": "~4.6.1",
+    "socket.io-client": "~4.6.1",
+    "ts-socket.io-controller": "^1.0.7",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/crypto-js": "^4.1.1",
+    "@types/express-session": "^1.17.5",
+    "@types/jsonwebtoken": "^9.0.1",
+    "@types/uuid": "^9.0.0",
+    "jasmine": "^4.6.0",
+    "typescript": "~4.8.4"
+  },
+  "typedoc": {
+    "entryPoint": "./src/index.ts",
+    "displayName": "Common package",
+    "tsconfig": "./tsconfig.json"
+  }
+}

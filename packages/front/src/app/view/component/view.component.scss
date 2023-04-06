@@ -1,0 +1,37 @@
+@use '../../app.scss';
+
+@use '../../../scss/lib/property';
+
+@use 'scss-toolkit/src/mixin/theme';
+
+.container {
+    @include theme.themeHandler(false, 'page', 'background') {
+        background: url('../../../asset/' + theme.get('img')) repeat-x;
+        background-position: top;
+        background-size: auto 450px;
+        background-position-y: -90px;
+        background-color: theme.get('color');
+    }
+}
+
+.container,
+::ng-deep .container:has(.router-wrapper) {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    overflow: hidden;
+}
+
+.container .router-wrapper,
+::ng-deep .container .router-wrapper {
+    height: 100%;
+    overflow: hidden;
+}
+
+.container ::ng-deep main {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}

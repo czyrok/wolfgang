@@ -1,0 +1,49 @@
+<ng-template #contentTemplate>
+  <div class="wrapper">
+    <div class="button-container">
+      <div class="left">
+        <app-shared-interactive-button icofont="close" link="/game/currently"
+          [important]="true"></app-shared-interactive-button>
+
+        <app-shared-label *ngIf="chrono < 0 ? false : true" text="{{chrono}}" icofont="stopwatch" [accent]="true"
+          [important]="true"></app-shared-label>
+      </div>
+
+      <div>
+        <app-shared-interactive-button icofont="flag" text="Signaler"
+          (clickEvent)="reportCallback()"></app-shared-interactive-button>
+        <!-- <app-shared-interactive-button icofont="chat" [active]="displayChat"
+          (clickEvent)="changeDisplayChatButtonCallback()" [important]="true"></app-shared-interactive-button> -->
+      </div>
+    </div>
+
+    <div class="right-container">
+      <div class="chat">
+        <app-shared-chat *ngIf="displayChat" [eventMessageEvent]="eventMessageEvent"
+          [playerMessageEvent]="playerMessageEvent"></app-shared-chat>
+      </div>
+
+      <app-view-play-rules *ngIf="!displayChat"></app-view-play-rules>
+
+      <div data-css-text-bar data-css-border-radius="rounded">
+        <input type="text" placeholder="Saisissez un message" data-css-input [(ngModel)]="message"
+          (keyup)="sendMessage($event)">
+        <div class="line" data-css-underline>
+          <div data-css-underline></div>
+        </div>
+        <span class="icofont-paper-plane" data-css-icofont></span>
+      </div>
+    </div>
+
+    <div>
+      <app-view-play-avatar-circle [voteEvent]="voteEvent"
+        [gameStateEvent]="gameStateEvent"></app-view-play-avatar-circle>
+    </div>
+  </div>
+</ng-template>
+
+<section>
+  <app-view-page-custom [contentTemplate]="contentTemplate"></app-view-page-custom>
+</section>
+
+<app-shared-report-modal [openingSignal]="reportOpeningSignal"></app-shared-report-modal>

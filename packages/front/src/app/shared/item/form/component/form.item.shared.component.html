@@ -1,0 +1,9 @@
+<div class="container {{ aside ? 'aside' : '' }} {{ maxWidth ? 'max-width' : '' }} {{ maxHeight ? 'max-height' : '' }} {{ absolute ? 'absolute' : '' }} {{ titleTemplate !== undefined ? 'title': '' }}">
+  <div *ngIf="titleTemplate !== undefined" class="title-wrapper">
+    <ng-container *ngTemplateOutlet="titleTemplate">
+    </ng-container>
+  </div>
+
+  <ng-container *ngTemplateOutlet="contentTemplate">
+  </ng-container>
+</div>

@@ -1,0 +1,28 @@
+@use 'color';
+@use 'property';
+
+@use 'scss-toolkit/src/function/util';
+@use 'scss-toolkit/src/mixin/element';
+
+@mixin setAttrBorderRadius() {
+    @include element.setAttrBorderRadius(
+        (
+            'name': 'regular',
+            'value': property.get('borderRadius', 'regular'),
+            'diff': 3px
+        ),
+        (
+            'name': 'rounded',
+            'value': property.get('borderRadius', 'rounded'),
+            'diff': 3px
+        )
+    ) {
+        @content;
+    }
+}
+
+@mixin definePropertyDisabled() {
+    @include element.definePropertyDisabled(property.get(opacity, disabledItem)) {
+        @content;
+    }
+}

@@ -1,0 +1,19 @@
+<ng-template #chooseReportTemplate>
+  <div class="box center">
+    <div class="field column">
+      <app-shared-interactive-button text="Bug" (clickEvent)="callbackReportBug()">
+      </app-shared-interactive-button>
+
+      <app-shared-interactive-button text="Utilisateur" (clickEvent)="callbackReportUser()">
+      </app-shared-interactive-button>
+    </div>
+
+    <div class="field">
+      <app-shared-interactive-button text="Annuler" [important]="true" (clickEvent)="closeModalCallback()">
+      </app-shared-interactive-button>
+    </div>
+  </div>
+</ng-template>
+
+<app-shared-report-modal-bug [openingSignal]="reportBugOpeningSignal"></app-shared-report-modal-bug>
+<app-shared-report-modal-user [openingSignal]="reportUserOpeningSignal"></app-shared-report-modal-user>

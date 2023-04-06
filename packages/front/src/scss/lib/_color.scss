@@ -1,0 +1,55 @@
+@use 'sass:color';
+
+@use 'scss-toolkit/src/function/util';
+
+$_map: (
+    base: (
+        00: #000000,
+        //10: #222426,
+        10: #131415,
+        //20: #4a4c4e,
+        20: #222426,
+        //30: #76787a,
+        30: #39393B,
+
+        35: #CBD0D3,
+        //40: #a5a7a9,
+        40: #D2D8DC,
+        50: #efefef,
+        60: #ffffff
+    ),
+    accent: (
+        orange: (
+            dark: #904500,
+            medium: #c67100,
+            light: #fea03d
+        ),
+        blue: (
+            dark: #253356,
+            medium: #515c83,
+            light: #7f89b3
+        )
+    ),
+    alert: (
+        green: (
+            a: #3EAF28,
+            b: #4FE34F
+        ),
+        blue: (
+            a: #0265b2,
+            b: #2a93e4
+        ),
+        yellow: (
+            a: #c1970a,
+            b: #eac546
+        ),
+        red: (
+            a: #B62D2D,
+            b: #EB4040
+        )
+    )
+);
+
+@function get($args...) {
+    @return util.get($_map, $args...);
+}

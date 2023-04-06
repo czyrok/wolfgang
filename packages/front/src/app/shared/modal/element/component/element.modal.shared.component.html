@@ -1,0 +1,12 @@
+<ng-template #titleTemplate>
+  <div class="top">
+    <div class="title-wrapper">
+      <h2 data-css-h2 data-css-font data-css-color data-css-dark data-css-accent>{{ modal.title }}</h2>
+    </div>
+
+    <app-shared-interactive-button icofont="close" (clickEvent)="closeButtonCallback()"></app-shared-interactive-button>
+  </div>
+</ng-template>
+
+<app-shared-item-form [titleTemplate]="titleTemplate" [contentTemplate]="modal.template" [aside]="true"
+  [maxWidth]="true" [absolute]="false"></app-shared-item-form>

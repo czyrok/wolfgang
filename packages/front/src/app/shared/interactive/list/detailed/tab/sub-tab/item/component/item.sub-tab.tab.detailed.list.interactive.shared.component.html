@@ -1,0 +1,8 @@
+<div class="container {{ item.imgURL === undefined ? 'text-only' : ''}} {{ isIconOnly ? 'icon-only' : ''}}"
+  [attr.data-css-show-after]="item.count > -1 ? 'true' : null" [attr.data-count]="item.count" data-css-button
+  data-css-event data-css-border-radius="regular">
+  <div data-css-inter>
+    <img *ngIf="item.imgURL !== undefined" src="{{ item.imgURL }}" alt="" data-css-square>
+    <p *ngIf="!isIconOnly">{{ item.name }}</p>
+  </div>
+</div>

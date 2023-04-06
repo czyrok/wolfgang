@@ -1,0 +1,52 @@
+@use '../../../../app.scss';
+
+@use '../../../../../scss/lib/property';
+
+@use 'scss-toolkit/src/mixin/theme';
+
+.wrapper {
+  display: grid;
+  height: 100%;
+  flex-direction: column;
+  grid-template-areas:
+    'a'
+    'b';
+  grid-template-rows: auto 1fr;
+  row-gap: property.get('borderLimit', 'big');
+}
+
+.wrapper .container-1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: property.get('borderLimit', 'big');
+  width: 100%;
+  box-sizing: border-box;
+  backdrop-filter: blur(property.get('blur', 'regular'));
+  column-gap: property.get('borderLimit', 'big');
+  row-gap: property.get('borderLimit', 'big');
+}
+
+.wrapper .container-1.ghost {
+  margin-bottom: -100%;
+}
+
+.wrapper .container-1 .button {
+  display: flex;
+  align-items: center;
+  column-gap: property.get('borderLimit', 'big');
+}
+
+.wrapper .container-2 {
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: property.get('borderLimit', 'regular');
+}
+
+@media (max-width: 700px) {
+  .wrapper .container-1 {
+    flex-direction: column;
+  }
+}

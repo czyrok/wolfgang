@@ -1,0 +1,95 @@
+@use 'scss-toolkit/src/mixin/element';
+@use 'scss-toolkit/src/mixin/theme';
+
+@include element.createElement('text-bar') {
+    @include theme.themeHandler(true, 'accent', 'sideElement') {
+        @include element.setAttrAccentContent() {
+            background-color: theme.get('background', 'regular') !important;
+        }
+    }
+
+    @include theme.themeHandler(true, 'sideElement') {
+        @include element.defineContent() {
+            background-color: theme.get('background', 'regular');
+        }
+    }
+}
+
+@include element.createElement('input') {
+    @include element.defineAttrCondition('type', 'text', 'password', 'email') {
+        @include theme.themeHandler(true, 'accent', 'sideElement') {
+            @include element.setAttrAccentContent() {
+                background-color: theme.get('background', 'regular') !important;
+                color: theme.get('font', 'active') !important;
+
+                @include element.defineProperty('::placeholder') {
+                    color: theme.get('font', 'regular') !important;
+                }
+
+                @include element.createTag('underline', '+') {
+                    @include element.defineContent() {
+                        background-color: theme.get('background', 'regular') !important;
+                    }
+
+                    @include element.createTag('underline', ' ') {
+                        @include element.defineContent() {
+                            background-color: theme.get('background', 'active') !important;
+                        }
+                    }
+                }
+            }
+        }
+
+        @include theme.themeHandler(true, 'sideElement') {
+            @include element.defineContent() {
+                background-color: theme.get('background', 'regular');
+                color: theme.get('font', 'active');
+            }
+
+            @include element.defineProperty('::placeholder') {
+                color: theme.get('font', 'regular');
+            }
+
+            @include element.createTag('underline', '+') {
+                @include element.defineContent() {
+                    background-color: theme.get('background', 'regular');
+                }
+
+                @include element.createTag('underline', ' ') {
+                    @include element.defineContent() {
+                        background-color: theme.get('background', 'active');
+                    }
+                }
+            }
+        }
+    }
+}
+
+@include element.createElement('select') {
+    @include theme.themeHandler(true, 'accent', 'sideElement') {
+        @include element.setAttrAccentContent() {
+            background-color: theme.get('background', 'regular') !important;
+            color: theme.get('font', 'regular') !important;
+        }
+    }
+
+    @include element.defineContent() {
+        @include theme.themeHandler(true, 'sideElement') {
+            background-color: theme.get('background', 'regular');
+            color: theme.get('font', 'regular');
+        }
+    }
+}
+
+@include element.createElement('textarea') {
+    @include theme.themeHandler(true, 'sideElement') {
+        @include element.defineContent() {
+            background-color: theme.get('background', 'regular');
+            color: theme.get('font', 'active');
+        }
+
+        @include element.defineProperty('::placeholder') {
+            color: theme.get('font', 'regular');
+        }
+    }
+}

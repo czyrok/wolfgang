@@ -1,0 +1,43 @@
+@use '../../../../scss/lib/property';
+
+section {
+    height: 100%;
+}
+
+.wrapper {
+    display: grid;
+    grid-template-areas: "a b"
+        "c b";
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto 1fr;
+    row-gap: property.get('borderLimit', 'big');
+    column-gap: property.get('borderLimit', 'big');
+    height: 100%;
+}
+
+.wrapper .button-container {
+    display: grid;
+    grid-template-areas: "a b";
+    grid-template-columns: 1fr auto;
+    align-items: center;
+}
+
+.wrapper .button-container .left {
+    display: flex;
+    align-items: center;
+    column-gap: property.get('borderLimit', 'big');
+}
+
+.wrapper .right-container {
+    grid-area: b;
+    display: grid;
+    grid-template-areas: "a"
+        "b";
+    grid-template-rows: minmax(0, 1fr) min-content;
+    row-gap: property.get('borderLimit', 'big');
+}
+
+.wrapper .right-container .chat {
+    position: relative;
+    width: property.get('size', 'aside');
+}

@@ -1,0 +1,11 @@
+.top {
+    display: grid;
+    grid-template-areas: 'a b';
+    grid-template-columns: 1fr auto;
+    width: 100%;
+}
+
+.top .title-wrapper {
+    display: flex;
+    justify-content: center;
+}

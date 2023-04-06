@@ -1,0 +1,126 @@
+@use 'scss-toolkit/src/mixin/element';
+@use 'scss-toolkit/src/mixin/theme';
+
+@use '../../lib/property';
+
+@include element.createElement('h1') {
+    @include element.createSubsection('color') {
+        @include element.setAttrAccentContent() {
+            @include theme.themeHandler(true, 'accent', 'title') {
+                border-bottom: property.get('size', 'outline', 'regular') solid theme.get('outline');
+            }
+        }
+
+        @include element.defineContent() {
+            @include theme.themeHandler(false, 'text', 'title') {
+                color: theme.get('h1');
+            }
+        }
+
+        @include element.createSubsection('light') {
+            @include element.defineContent() {
+                @include theme.themeHandler(true, 'text', 'light', 'title') {
+                    color: theme.get('h1');
+                }
+            }
+        }
+
+        @include element.createSubsection('dark') {
+            @include element.defineContent() {
+                @include theme.themeHandler(true, 'text', 'dark', 'title') {
+                    color: theme.get('h1');
+                }
+            }
+        }
+    }
+}
+
+@include element.createElement('h2') {
+    @include element.createSubsection('color') {
+        @include element.setAttrAccentContent() {
+            @include theme.themeHandler(true, 'accent', 'title') {
+                border-bottom: property.get('size', 'outline', 'regular') solid theme.get('outline');
+            }
+        }
+
+        @include element.defineContent() {
+            @include theme.themeHandler(false, 'text', 'title') {
+                color: theme.get('h2');
+            }
+        }
+
+        @include element.createSubsection('light') {
+            @include element.defineContent() {
+                @include theme.themeHandler(true, 'text', 'light', 'title') {
+                    color: theme.get('h2');
+                }
+            }
+        }
+
+        @include element.createSubsection('dark') {
+            @include element.defineContent() {
+                @include theme.themeHandler(true, 'text', 'dark', 'title') {
+                    color: theme.get('h2');
+                }
+            }
+        }
+    }
+}
+
+@include element.createElement('h3') {
+    @include element.createSubsection('color') {
+        @include element.setAttrAccentContent() {
+            @include theme.themeHandler(true, 'accent', 'title') {
+                border-bottom: property.get('size', 'outline', 'regular') solid theme.get('outline');
+            }
+        }
+
+        @include element.defineContent() {
+            @include theme.themeHandler(false, 'text', 'title') {
+                color: theme.get('h3');
+            }
+        }
+
+        @include element.createSubsection('light') {
+            @include element.defineContent() {
+                @include theme.themeHandler(true, 'text', 'light', 'title') {
+                    color: theme.get('h3');
+                }
+            }
+        }
+
+        @include element.createSubsection('dark') {
+            @include element.defineContent() {
+                @include theme.themeHandler(true, 'text', 'dark', 'title') {
+                    color: theme.get('h3');
+                }
+            }
+        }
+    }
+}
+
+@include element.createElement('text') {
+    @include element.createSubsection('color') {
+        @include element.defineContent() {
+            @include theme.themeHandler(false, 'text') {
+                color: theme.get('regular');
+            }
+        }
+
+        @include element.createSubsection('light') {
+            @include element.defineContent() {
+                @include theme.themeHandler(true, 'text', 'light') {
+                    color: theme.get('regular');
+                }
+            }
+        }
+
+        @include element.createSubsection('dark') {
+            @include element.defineContent() {
+                @include theme.themeHandler(true, 'text', 'dark') {
+                    color: theme.get('regular');
+                }
+            }
+        }
+    }
+}

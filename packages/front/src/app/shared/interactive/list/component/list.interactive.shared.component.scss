@@ -1,0 +1,12 @@
+@use '../../../../../scss/lib/property';
+
+.container {
+  width: 100%;
+  height: 100%;
+  border-radius: property.get('borderRadius', 'regular');
+  box-sizing: border-box;
+}
+
+.container .tab:not(:first-child) {
+  margin-top: property.get('borderLimit', 'regular');
+}

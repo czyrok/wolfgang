@@ -27,11 +27,16 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "src/favicon.ico",
-              "src/assets"
+              "src/asset"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "./node_modules"
+              ]
+            },
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/asset/icofont/icofont.min.css"
             ],
             "scripts": []
           },
@@ -41,7 +46,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumError": "2mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -95,11 +100,16 @@
             "karmaConfig": "karma.conf.js",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "src/favicon.ico",
-              "src/assets"
+              "src/asset"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "./node_modules"
+              ]
+            },
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/asset/icofont/icofont.min.css"
             ],
             "scripts": []
           }
@@ -107,5 +117,7 @@
       }
     }
   },
-  "defaultProject": "front"
+  "cli": {
+    "analytics": false
+  }
 }

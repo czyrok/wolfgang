@@ -1,0 +1,27 @@
+<ng-template #buttonTemplate>
+
+</ng-template>
+
+<ng-template #contentTemplate>
+  <ng-template #contentTemplateLine let-report="report">
+    <div class="field">
+      <app-shared-alert-text icofont="flag" text="{{ getReportName(report?.type) }}" [type]="getReportTextAlertType(report?.type)"></app-shared-alert-text>
+
+      <app-shared-alert-text *ngIf="isBasicUserReport(report)" icofont="flag" text="{{ getUserReportName(report?.reportType) }}" [type]="getUserReportTextAlertType(report?.reportType)"></app-shared-alert-text>
+    </div>
+
+    <div class="field time">
+      <p data-css-text data-css-color data-css-font>{{ getDate(report) }}</p>
+    </div>
+  </ng-template>
+
+  <ng-container *ngFor="let report of reportList">
+    <app-shared-item-line link="./view/{{ report._id.toString() }}" [contentTemplate]="contentTemplateLine"
+      [context]="{report: report}"></app-shared-item-line>
+  </ng-container>
+</ng-template>
+
+<section>
+  <app-view-page-scroll title="Liste des signalements" [buttonTemplate]="buttonTemplate"
+    [contentTemplate]="contentTemplate"></app-view-page-scroll>
+</section>

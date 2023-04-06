@@ -1,0 +1,39 @@
+<section>
+  <ng-template #buttonTemplate>
+    <app-shared-interactive-button text="Créer une partie" [important]="true" (clickEvent)="createGameButtonCallback()">
+    </app-shared-interactive-button>
+    <app-shared-interactive-button text="Rejoindre une partie" [accent]="true" [important]="true" (clickEvent)="joinGameButtonCallback()">
+    </app-shared-interactive-button>
+  </ng-template>
+
+  <ng-template #contentTemplate>
+    <ng-template #contentTemplateLine let-game="game">
+      <div class="field" *ngIf="game.state.players[0]">
+        <app-shared-user-avatar-head [username]="game.state.players[0].user.username"></app-shared-user-avatar-head>
+
+        <p data-css-text data-css-color data-css-font>{{ game.state.players[0].user.username }}</p>
+      </div>
+
+      <div class="field">
+        <div class="roles"></div>
+      </div>
+
+      <div class="field">
+        <div class="time">
+          <app-shared-alert-text icofont="clock-time" [text]="getDurationText(game)"
+            [type]="getDurationTextAlertType(game)"></app-shared-alert-text>
+        </div>
+
+        <app-shared-label [text]="game.state.players.length + '/' + game.state.rules.playerCountMax"></app-shared-label>
+      </div>
+    </ng-template>
+
+    <ng-container *ngFor="let game of games">
+      <app-shared-item-line link="/play/{{ game.gameId }}" [contentTemplate]="contentTemplateLine"
+        [context]="{game: game}"></app-shared-item-line>
+    </ng-container>
+  </ng-template>
+
+  <app-view-page-scroll title="Liste des parties" [buttonTemplate]="buttonTemplate"
+    [contentTemplate]="contentTemplate"></app-view-page-scroll>
+</section>

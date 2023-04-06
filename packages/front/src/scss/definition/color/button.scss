@@ -1,0 +1,76 @@
+@use 'scss-toolkit/src/mixin/element';
+@use 'scss-toolkit/src/mixin/theme';
+
+@include element.createElement('button') {
+    @include theme.themeHandler(true, 'accent', 'sideElement') {
+        @include element.setAttrAccentContent() {
+            background-color: theme.get('background', 'regular') !important;
+
+            @include element.definePropertyHover() {
+                background-color: theme.get('background', 'active') !important;
+            }
+
+            @include element.definePropertyActive() {
+                @include element.createSubsection('show-after=true') {
+                    @include element.defineProperty('::after') {
+                        color: theme.get('font', 'regular');
+                    }
+                }
+            }
+    
+            @include element.createSubsection('show-after=true') {
+                @include element.defineProperty('::after') {
+                    color: theme.get('font', 'regular');
+                    background-color: theme.get('background', 'active');
+                }
+            }
+        }
+    }
+
+    @include theme.themeHandler(true, 'sideElement') {
+        @include element.defineContent() {
+            background-color: theme.get('background', 'regular');
+        }
+
+        @include element.definePropertyHover() {
+            background-color: theme.get('background', 'active');
+        }
+
+        @include element.definePropertyActive() {
+            @include element.createSubsection('show-after=true') {
+                @include element.defineProperty('::after') {
+                    color: theme.get('font', 'regular');
+                }
+            }
+        }
+
+        @include element.createSubsection('show-after=true') {
+            @include element.defineProperty('::after') {
+                color: theme.get('font', 'regular');
+                background-color: theme.get('background', 'active');
+            }
+        }
+    }
+
+    @include element.createTag('inter', ' ') {
+        @include theme.themeHandler(true, 'accent', 'sideElement') {
+            @include element.setAttrAccentContent() {
+                color: theme.get('font', 'regular') !important;
+
+                @include element.definePropertyActive() {
+                    color: theme.get('font', 'active') !important;
+                }
+            }
+        }
+
+        @include theme.themeHandler(true, 'sideElement') {
+            @include element.defineContent() {
+                color: theme.get('font', 'regular');
+            }
+
+            @include element.definePropertyActive() {
+                color: theme.get('font', 'active');
+            }
+        }
+    }
+}

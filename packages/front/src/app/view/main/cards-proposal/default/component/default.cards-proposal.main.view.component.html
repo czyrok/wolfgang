@@ -1,0 +1,31 @@
+<ng-template #buttonTemplate>
+  <app-shared-interactive-button text="Proposer une carte" link="./add" [accent]="true" [important]="true">
+  </app-shared-interactive-button>
+</ng-template>
+
+<ng-template #contentTemplate>
+  <ng-template #contentTemplateLine let-cardProposal="cardProposal">
+    <div class="field">
+      <h2 data-css-h2 data-css-color data-css-font>{{ cardProposal.title }}</h2>
+    </div>
+
+    <div class="field date">
+      <p data-css-text data-css-color data-css-font>{{ getDate(cardProposal.releaseDate) }}</p>
+    </div>
+
+    <div class="field thumbs">
+      <app-shared-label [text]="cardProposal.thumbsUpCount" icofont="thumbs-up"></app-shared-label>
+      <app-shared-label [text]="cardProposal.thumbsDownCount" icofont="thumbs-down"></app-shared-label>
+    </div>
+  </ng-template>
+
+  <ng-container *ngFor="let cardProposal of listCardsProposal">
+    <app-shared-item-line link="./view/{{ cardProposal._id }}" [contentTemplate]="contentTemplateLine"
+      [context]="{cardProposal: cardProposal}"></app-shared-item-line>
+  </ng-container>
+</ng-template>
+
+<section>
+  <app-view-page-scroll title="Liste des cartes proposées" [buttonTemplate]="buttonTemplate"
+    [contentTemplate]="contentTemplate"></app-view-page-scroll>
+</section>

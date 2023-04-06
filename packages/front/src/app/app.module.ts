@@ -1,18 +1,30 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core'
+import { BrowserModule } from '@angular/platform-browser'
+import { RouterModule } from '@angular/router'
+import { CookieService } from 'ngx-cookie-service'
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import { SharedModule } from './shared/shared.module'
+
+import { AppComponent } from './component/app.component'
+import { HttpClientModule } from '@angular/common/http'
 
 @NgModule({
+  imports: [
+    BrowserModule,
+    RouterModule.forRoot([
+      { path: '', loadChildren: () => import('./view/view.module').then(m => m.ViewModule) }
+    ]),
+    HttpClientModule,
+    SharedModule
+  ],
   declarations: [
     AppComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
+  providers: [
+    CookieService
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [
+    AppComponent
+  ]
 })
 export class AppModule { }

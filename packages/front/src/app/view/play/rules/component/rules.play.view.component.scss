@@ -1,0 +1,27 @@
+@use '../../../../app.scss';
+
+@use '../../../../../scss/lib/property';
+
+@use 'scss-toolkit/src/mixin/theme';
+
+.balance {
+  display: flex;
+  height: property.get('size', 'balance');
+  overflow: hidden;
+  border-radius: property.get('borderRadius', 'rounded');
+
+  @include theme.themeHandler(true, 'force') {
+    background-color: theme.get('blue');
+  }
+}
+
+.balance .left {
+  @include theme.themeHandler(true, 'force') {
+    background-color: theme.get('red');
+  }
+}
+
+.button-list {
+  display: flex;
+  column-gap: property.get('borderLimit', 'regular');
+}

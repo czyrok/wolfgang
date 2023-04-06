@@ -1,24 +1,30 @@
-# compiled output
-/dist
-/tmp
-/out-tsc
+# Compiled output
+dist
+tmp
+out-tsc
+
+# Logs
+trace
+
+# Documentation
+docs
 
 # Only exists if Bazel was run
-/bazel-out
+bazel-out
 
-# dependencies
-/node_modules
+# Dependencies
+node_modules
 
-# profiling files
+# Profiling files
 chrome-profiler-events*.json
 
 # IDEs and editors
-/.idea
+.idea
 .project
 .classpath
 .c9/
 *.launch
-.settings/
+.settings
 *.sublime-workspace
 
 # IDE - VSCode
@@ -29,17 +35,21 @@ chrome-profiler-events*.json
 !.vscode/extensions.json
 .history/*
 
-# misc
-/.angular/cache
-/.sass-cache
-/connect.lock
-/coverage
-/libpeerconnection.log
+# Misc
+.angular
+.angular/cache
+.sass-cache
+connect.lock
+coverage
+libpeerconnection.log
 npm-debug.log
 yarn-error.log
 testem.log
-/typings
+typings
 
-# System Files
+# System files
 .DS_Store
 Thumbs.db
+
+# Other
+package-lock.json

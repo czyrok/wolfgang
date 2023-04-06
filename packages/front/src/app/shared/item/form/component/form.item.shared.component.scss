@@ -1,0 +1,98 @@
+@use '../../../../app.scss';
+
+@use '../../../../../scss/lib/property';
+
+@use 'scss-toolkit/src/mixin/theme';
+
+.container {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    width: 100%;
+    height: 100%;
+    border-radius: property.get('borderRadius', 'rounded');
+    overflow: hidden;
+    box-shadow: property.get('shadow', 'box', 'lite');
+
+    @include theme.themeHandler(false, 'containerElement2') {
+        background-color: theme.get('background');
+    }
+}
+
+.container.aside {
+    width: property.get('size', 'aside');
+}
+
+.container.max-width {
+    max-width: 100vw;
+}
+
+.container.max-height {
+    max-height: 100vh;
+}
+
+.container.absolute {
+    position: absolute;
+}
+
+.container.title .title-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: property.get('borderLimit', 'regular');
+    border-bottom-left-radius: property.get('borderRadius', 'rounded');
+    border-bottom-right-radius: property.get('borderRadius', 'rounded');
+    margin-bottom: -1 * property.get('borderRadius', 'rounded');
+    z-index: 1;
+    overflow-x: auto;
+    overflow-y: hidden;
+    position: relative;
+
+    @include theme.themeHandler(false, 'containerElement2', 'top') {
+        background-color: theme.get('background');
+    }
+}
+
+.container ::ng-deep > .box {
+    display: flex;
+    flex-direction: column;
+    padding: property.get('borderLimit', 'regular');
+    box-sizing: border-box;
+    row-gap: property.get('borderLimit', 'big');
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.container ::ng-deep > .box.center {
+    align-items: center;
+}
+
+.container.title ::ng-deep > .box {
+    padding-top: property.get('borderLimit', 'regular') + property.get('borderRadius', 'rounded');
+}
+
+.container ::ng-deep > .box > .field {
+    display: flex;
+    flex-direction: column;
+}
+
+.container ::ng-deep > .box > .field.error {
+    margin-top: -1 * property.get('borderLimit', 'big');
+}
+
+.container ::ng-deep > .box > .field.column {
+    row-gap: property.get('borderLimit', 'regular');
+    align-items: center;
+}
+
+.container ::ng-deep > .box .fix.left {
+    margin-left: -1 * property.get('borderLimit', 'regular');
+    width: calc(100% + property.get('borderLimit', 'regular'));
+}
+
+.container ::ng-deep > .box .fix.right {
+    width: calc(100% + property.get('borderLimit', 'regular'));
+}
+
+.container ::ng-deep > .box .fix.left.right {
+    margin-left: -1 * property.get('borderLimit', 'regular');
+    width: calc(100% + property.get('borderLimit', 'regular') * 2);
+}

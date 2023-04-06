@@ -1,0 +1,30 @@
+<section>
+  <ng-template #buttonTemplate>
+    <!-- <div data-css-border-radius="rounded" data-css-text-bar data-css-important data-css-accent>
+      <input type="text" placeholder="Rechercher une carte" data-css-input data-css-important data-css-accent>
+      <div data-css-underline>
+        <div data-css-underline></div>
+      </div>
+      <span class="icofont-search-2" data-css-icofont></span>
+    </div> -->
+  </ng-template>
+
+  <ng-template #contentTemplate>
+    <div class="box">
+      <div class="grid">
+        <div class="area-a">
+          <app-shared-interactive-list-detailed [list]="list"></app-shared-interactive-list-detailed>
+        </div>
+
+        <div class="area-b">
+          <p class="text" data-css-text data-css-font data-css-color>
+            {{ desc }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <app-view-page-scroll title="Aide" [buttonTemplate]="buttonTemplate"
+    [contentTemplate]="contentTemplate" [list]="false"></app-view-page-scroll>
+</section>

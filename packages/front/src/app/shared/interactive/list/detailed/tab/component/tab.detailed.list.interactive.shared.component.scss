@@ -1,0 +1,19 @@
+@use '../../../../../../app.scss';
+
+@use '../../../../../../../scss/lib/property';
+
+@use '~scss-toolkit/src/mixin/theme';
+
+.container {
+  display: grid;
+  row-gap: property.get('borderLimit', 'big');
+}
+
+.container .tab {
+  border-radius: property.get('borderRadius', 'rounded');
+  padding: property.get('borderLimit', 'regular');
+
+  @include theme.themeHandler(false, 'containerElement2', 'item') {
+    background-color: theme.get('background');
+  }
+}

@@ -1,1 +1,83 @@
-/* You can add global styles to this file, and also import other style files */
+@use 'scss/lib/property';
+
+@forward 'scss/definition/default.scss';
+
+@forward 'scss/definition/color/button';
+@forward 'scss/definition/property/button';
+@forward 'scss/definition/color/form';
+@forward 'scss/definition/property/form';
+@forward 'scss/definition/color/label';
+@forward 'scss/definition/property/label';
+@forward 'scss/definition/color/text';
+@forward 'scss/definition/property/text';
+@forward 'scss/definition/property/misc';
+
+@font-face {
+    font-family: 'playfair-display';
+    src: url('./asset/font/playfair-display/playfair-display-variable-font-weight.ttf');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'rubik';
+    src: url('./asset/font/rubik/rubik-variable-font-weight.ttf');
+    font-display: swap;
+}
+
+*:has(*) {
+    transition-duration: property.get('transition', 'regular');
+    transition-property: background-color, color;
+}
+
+:not(*) *:not(:has(*)) {
+    transition-duration: property.get('transition', 'regular');
+    transition-property: background-color, color;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+body {
+    font-family: property.get('font', 'regular');
+    font-size: property.get('fontSize', 'regular');
+}
+
+ul {
+    padding: 0;
+    list-style-type: none;
+}
+
+button,
+select {
+    padding: 0;
+    border: none;
+    outline-style: none;
+    background-color: transparent;
+    margin: 0;
+}
+
+input,
+textarea {
+    margin: 0;
+    padding: 0;
+    outline-style: none;
+    border: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+ul,
+p {
+    margin: 0;
+    font-weight: inherit;
+}

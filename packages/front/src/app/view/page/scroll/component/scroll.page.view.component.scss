@@ -1,0 +1,64 @@
+@use '../../../../../scss/lib/property';
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 100vh;
+}
+
+.wrapper .container-1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: property.get('borderLimit', 'big');
+  column-gap: property.get('borderLimit', 'big');
+  row-gap: property.get('borderLimit', 'big');
+}
+
+.wrapper .container-1.true {
+  top: 0;
+  position: sticky;
+  width: 100%;
+  box-sizing: border-box;
+  backdrop-filter: blur(property.get('blur', 'regular'));
+  z-index: 2;
+}
+
+.wrapper .container-1.ghost {
+  opacity: 0;
+}
+
+.wrapper .container-1 .button {
+  display: flex;
+  align-items: center;
+  column-gap: property.get('borderLimit', 'big');
+  row-gap: property.get('borderLimit', 'big');
+}
+
+.wrapper .container-2 {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  margin-top: property.get('borderLimit', 'big');
+  row-gap: property.get('borderLimit', 'big');
+  height: 100%;
+}
+
+.wrapper .container-2.padding ::ng-deep > .box {
+  padding: property.get('borderLimit', 'regular');
+}
+
+@media (max-width: 700px) {
+  .wrapper .container-1 {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 800px) {
+  .wrapper .container-1 .button {
+    flex-direction: column;
+  }
+}

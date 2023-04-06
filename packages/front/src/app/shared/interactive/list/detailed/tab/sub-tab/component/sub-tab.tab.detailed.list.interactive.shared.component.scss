@@ -1,0 +1,12 @@
+@use '../../../../../../../../scss/lib/property';
+
+.container:not(.icon-only) .items {
+  display: flex;
+  flex-direction: column;
+  row-gap: property.get('borderLimit', 'small');
+}
+
+.container.icon-only .items {
+  display: flex;
+  column-gap: property.get('borderLimit', 'small');
+}

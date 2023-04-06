@@ -1,0 +1,21 @@
+<div class="container {{ alert.detailed ? 'detailed' : '' }}" [attr.type]="alert.type" data-css-text data-css-font>
+  <span class="icon icofont-{{ icofont }}" data-css-square></span>
+
+  <p class="text" data-css-text data-css-font>{{ alert.text }}</p>
+
+  <span *ngIf="!alert.buttonList" class="close icofont-close" (click)="click()" data-css-square></span>
+
+  <div class="button-container" *ngIf="alert.buttonList">
+    <button class="button" *ngFor="let button of alert.buttonList">
+      <p class="text" (click)="button.callback()" data-css-text data-css-font>{{ button.text }}</p>
+    </button>
+  </div>
+
+  <!-- <div class="c100 p53">
+    <div class="slice">
+      <div class="bar"></div>
+      <div class="fill"></div>
+    </div>
+    <span class="close icofont-close" (click)="click()" data-css-square></span>
+  </div> -->
+</div>

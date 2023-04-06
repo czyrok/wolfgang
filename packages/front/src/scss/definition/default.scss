@@ -1,0 +1,166 @@
+@use '../lib/color';
+
+@use 'scss-toolkit/src/mixin/theme' with (
+    $_map: (
+        'same': (
+            'accent': (
+                'sideElement': (
+                    'background': (
+                        'regular': color.get(accent, orange, medium),
+                        'active': color.get(accent, orange, light)
+                    ),
+                    'font': (
+                        'regular': color.get(base, 10),
+                        'active': color.get(base, 50)
+                    )
+                ),
+                'title': (
+                    'outline': color.get(accent, orange, medium)
+                )
+            ),
+            'force': (
+                'red': color.get(alert, red, a),
+                'blue': color.get(alert, blue, a)
+            ),
+            'alert': (
+                'color': color.get(base, 10),
+                'success': (
+                    'background': color.get(alert, green, b),
+                    'icon': color.get(alert, green, a)
+                ),
+                'inform': (
+                    'background': color.get(alert, blue, b),
+                    'icon': color.get(alert, blue, a)
+                ),
+                'warning': (
+                    'background': color.get(alert, yellow, b),
+                    'icon': color.get(alert, yellow, a)
+                ),
+                'danger': (
+                    'background': color.get(alert, red, b),
+                    'icon': color.get(alert, red, a)
+                )
+            ),
+            'sideElement': (
+                'background': (
+                    'regular': color.get(accent, blue, medium),
+                    'active': color.get(accent, blue, light)
+                ),
+                'font': (
+                    'regular': color.get(base, 10),
+                    'active': color.get(base, 50)
+                )
+            ),
+            'page': (
+                'nav': (
+                    'background': color.get(base, 10)
+                )
+            ),
+            'containerElement': (
+                'top': (
+                    'background': color.get(base, 10)
+                ),
+                'item': (
+                    'background': color.get(base, 40),
+                    'color': color.get(base, 10)
+                )
+            ),
+            'text': (
+                'light': (
+                    'title': (
+                        'h1': color.get(base, 00),
+                        'h2': color.get(base, 10),
+                        'h3': color.get(base, 20)
+                    ),
+                    'regular': color.get(base, 30)
+                ),
+                'dark': (
+                    'title': (
+                        'h1': color.get(base, 60),
+                        'h2': color.get(base, 50),
+                        'h3': color.get(base, 40)
+                    ),
+                    'regular': color.get(base, 35)
+                )
+            )
+        ),
+        'light': (
+            'page': (
+                'background': (
+                    'img': 'img/background/light2.svg',
+                    'color': color.get(base, 60)
+                )
+            ),
+            'text': (
+                'title': (
+                    'h1': color.get(base, 00),
+                    'h2': color.get(base, 10),
+                    'h3': color.get(base, 20)
+                ),
+                'regular': color.get(base, 30)
+            ),
+            'containerElement': (
+                'background': color.get(base, 50),
+                'item': (
+                    'hover': (
+                        'background': color.get(base, 50)
+                    ),
+                    'background': color.get(base, 40),
+                    'color': color.get(base, 10)
+                )
+            ),
+            'containerElement2': (
+                'top': (
+                    'background': color.get(base, 10)
+                ),
+                'hover': color.get(base, 10),
+                'background': color.get(base, 50),
+                'item': (
+                    'background': color.get(base, 40)
+                )
+            ),
+            'nav': (
+                'background': color.get(base, 10)
+            )
+        ),
+        'dark': (
+            'page': (
+                'background': (
+                    'img': 'img/background/dark2.svg',
+                    'color': color.get(base, 10)
+                )
+            ),
+            'text': (
+                'title': (
+                    'h1': color.get(base, 60),
+                    'h2': color.get(base, 50),
+                    'h3': color.get(base, 40)
+                ),
+                'regular': color.get(base, 35)
+            ),
+            'containerElement': (
+                'background': color.get(base, 00),
+                'item': (
+                    'hover': (
+                        'background': color.get(base, 10)
+                    ),
+                    'background': color.get(base, 20),
+                    'color': color.get(base, 50)
+                )
+            ),
+            'containerElement2': (
+                'top': (
+                    'background': color.get(base, 00)
+                ),
+                'hover': color.get(base, 00),
+                'background': color.get(base, 20),
+                'item': (
+                    'background': color.get(base, 30)
+                )
+            ),
+            'nav': (
+                'background': color.get(base, 00)
+            )
+        )
+    )
+);

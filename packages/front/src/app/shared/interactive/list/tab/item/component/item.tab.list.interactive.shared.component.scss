@@ -1,0 +1,32 @@
+@use '../../../../../../app.scss';
+
+@use '../../../../../../../scss/lib/property';
+
+@use 'scss-toolkit/src/mixin/theme';
+
+.container {
+  display: grid;
+  grid-template-areas: 'a b';
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  position: sticky;
+}
+
+.container.text-only {
+  grid-template-areas: 'a';
+  grid-template-columns: 1fr;
+}
+
+.container.icon-only {
+  grid-template-areas: 'a';
+  grid-template-columns: auto;
+}
+
+.container img {
+  width: property.get('size', 'img', 'item');
+  justify-content: center;
+}
+
+.container::after {
+  content: attr(data-count);
+}

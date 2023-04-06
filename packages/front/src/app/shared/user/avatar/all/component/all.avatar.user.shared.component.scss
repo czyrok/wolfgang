@@ -1,0 +1,55 @@
+@use '../../../../../../scss/lib/property';
+
+.container {
+  display: grid;
+  justify-items: center;
+  grid-template-rows: auto 1fr;
+  row-gap: property.get('borderLimit', 'small');
+}
+
+.container:not(.reduced) {
+  height: 100%;
+}
+
+.container .img {
+  height: 100%;
+  overflow: hidden;
+  justify-items: center;
+}
+
+.container.reduced .img {
+  width: property.get('size', 'avatar', 'width');
+  height: property.get('size', 'avatar', 'height');
+}
+
+.container .img .skin {
+  width: 100%;
+  height: 0;
+  overflow: visible;
+  position: relative;
+}
+
+.container .img .skin-hat {
+  z-index: 5;
+}
+
+.container .img .skin-head {
+  z-index: 1;
+}
+
+.container .img .skin-top {
+  z-index: 4;
+}
+
+.container .img .skin-pants {
+  z-index: 3;
+}
+
+.container .img .skin-shoes {
+  z-index: 2;
+}
+
+.container .img .skin .img-cosmetic {
+  width: 100%;
+  display: flex;
+}

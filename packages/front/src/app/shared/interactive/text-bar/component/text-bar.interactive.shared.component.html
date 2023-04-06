@@ -1,0 +1,8 @@
+<div class="container" [attr.data-css-important]="important ? true : null" [attr.data-css-accent]="accent ? true : null"
+  data-css-label data-css-border-radius="rounded">
+  <input id="{{ id }}" type="{{ type }}" [(ngModel)]="filter" data-css-input [placeholder]="placeholder">
+  <div class="line" data-css-underline>
+    <div data-css-underline></div>
+  </div>
+  <span class="icofont-{{ icofont }}"></span>
+</div>

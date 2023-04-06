@@ -1,0 +1,16 @@
+@use '../../../app.scss';
+
+@use '../../../../scss/lib/property';
+
+@use 'scss-toolkit/src/mixin/theme';
+
+.container {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-areas: 'a b';
+    grid-template-columns: property.get('size', 'nav', 'self') auto;
+}
+
+.container ::ng-deep main {
+    width: calc(100% - property.get('size', 'nav', 'self'));
+}

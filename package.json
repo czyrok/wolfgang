@@ -12,7 +12,25 @@
     "type": "git",
     "url": "https://github.com/czyrok/wolfgang.git"
   },
+  "scripts": {
+    "start-dev": "docker start database",
+    "start-prod": "docker start database && docker start front && docker start back-main && docker start back-game && docker start back-registery",
+    "deployment-dev": "npm run docker-dev && npm run start-dev && npm run init-dev",
+    "deployment-prod": "npm run docker-prod && npm run start-prod && npm run init-prod",
+    "docker-dev": "docker compose --project-name wolfgang --env-file .dev.env --file dev.docker-compose.yml up --detach --no-start",
+    "docker-prod": "docker compose --project-name wolfgang --env-file .prod.env --file prod.docker-compose.yml up --detach --no-start",
+    "init-dev": "npm install && npm run build -w common && chmod u+x src/init/init.sh && src/init/init.sh DEV",
+    "init-prod": "npm install && npm run build -w common && chmod u+x src/init/init.sh && src/init/init.sh PROD",
+    "generate-doc": "typedoc"
+  },
   "workspaces": [
-    "packages/front"
-  ]
+    "packages/front",
+    "packages/back-main",
+    "packages/back-registery",
+    "packages/back-game",
+    "packages/common"
+  ],
+  "devDependencies": {
+    "typedoc": "^0.23.28"
+  }
 }

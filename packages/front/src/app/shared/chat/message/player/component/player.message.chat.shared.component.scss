@@ -1,0 +1,41 @@
+@use '../../../../../app.scss';
+
+@use '../../../../../../scss/lib/property';
+
+@use 'scss-toolkit/src/mixin/theme';
+
+.container {
+  display: grid;
+  grid-template-areas: 'a b';
+  grid-template-columns: auto 1fr;
+  column-gap: property.get('borderLimit', 'regular');
+}
+
+.container.self {
+  grid-template-areas: 'b a';
+  grid-template-columns: 1fr auto;
+}
+
+.container .avatar {
+  grid-area: a;
+  display: flex;
+  aspect-ratio: 1 / 1;
+  justify-content: center;
+}
+
+.container .text {
+  grid-area: b;
+  border-top-left-radius: property.get('borderRadius', 'regular');
+  border-bottom-left-radius: property.get('borderRadius', 'regular');
+  padding: property.get('borderLimit', 'verySmall');
+  height: fit-content;
+  white-space: break-spaces;
+
+  @include theme.themeHandler(false, 'containerElement2', 'item') {
+    background-color: theme.get('background');
+  }
+}
+
+.container.self .text {
+  border-radius: property.get('borderRadius', 'regular');
+}

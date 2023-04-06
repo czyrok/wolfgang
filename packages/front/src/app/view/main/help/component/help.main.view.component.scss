@@ -1,0 +1,45 @@
+@use '../../../../app.scss';
+
+@use '../../../../../scss/lib/property';
+
+@use 'scss-toolkit/src/mixin/theme';
+
+section {
+  height: 100%;
+}
+
+section .box {
+  height: 100%;
+}
+
+section .box .grid {
+  display: grid;
+  grid-template-areas: 'a b';
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 100%;
+  row-gap: property.get('borderLimit', 'big');
+  column-gap: property.get('borderLimit', 'big');
+  height: 100%;
+}
+
+section .box .grid .area-a {
+  grid-area: a;
+}
+
+section .box .grid .area-b {
+  grid-area: b;
+}
+
+section .box .grid .area-b .text {
+  text-align: justify;
+}
+
+@media (max-width: 750px) {
+  section .box .grid {
+    grid-template-areas:
+      'a'
+      'b';
+    grid-template-columns: 100%;
+    grid-template-rows: 1fr 1fr;
+  }
+}

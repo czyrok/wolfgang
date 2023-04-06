@@ -1,0 +1,211 @@
+@use 'scss-toolkit/src/mixin/element';
+
+@use '../../lib/property';
+@use '../../lib/color';
+@use '../../lib/definition';
+
+@include element.createElement('text-bar') {
+    @include definition.setAttrBorderRadius() {
+    }
+
+    @include element.defineContent() {
+        display: inline-grid;
+        grid-template-areas:
+            'a b'
+            'c c';
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        overflow: hidden;
+        font-size: property.get('fontSize', 'sideElement', 'text');
+        white-space: nowrap;
+        font-family: property.get('font', 'regular');
+        padding: property.get('borderLimit', 'small') + property.get('borderLimit', 'verySmall');
+    }
+
+    @include definition.definePropertyDisabled() {
+    }
+
+    @include element.createTag('input', ' ') {
+        @include element.defineContent() {
+            grid-area: a;
+            margin-left: property.get('borderLimit', 'small');
+        }
+    }
+
+    @include element.createTag('underline', ' ') {
+        @include element.defineContent() {
+            grid-area: c;
+        }
+    }
+
+    @include element.createTag('icofont', ' ') {
+        @include element.defineContent() {
+            grid-area: b;
+            font-size: property.get('fontSize', 'sideElement', 'icofont');
+        }
+    }
+
+    @include element.createSubsection('important') {
+        @include element.defineContent() {
+            font-size: property.get('fontSize', 'sideElement', 'important', 'text');
+        }
+
+        @include element.createTag('icofont', ' ') {
+            @include element.defineContent() {
+                font-size: property.get('fontSize', 'sideElement', 'important', 'icofont');
+            }
+        }
+    }
+}
+
+@include element.createElement('input') {
+    @include element.defineContent() {
+        font-size: property.get('fontSize', 'sideElement', 'text');
+        white-space: nowrap;
+    }
+
+    @include definition.definePropertyDisabled() {
+    }
+
+    @include element.defineAttrCondition('type', 'text', 'password', 'email') {
+        @include element.defineContent() {
+            padding: property.get('borderLimit', 'verySmall');
+            width: 100%;
+            font-family: property.get('font', 'regular');
+        }
+
+        @include element.defineWithBefore('.ng-submitted') {
+            @include element.defineProperty('.ng-invalid') {
+                @include element.createTag('underline', '+') {
+                    @include element.defineContent() {
+                        height: property.get('size', 'input', 'underline');
+                    }
+
+                    @include element.createTag('underline', ' ') {
+                        @include element.defineContent() {
+                            transform: scaleX(1);
+                        }
+                    }
+                }
+            }
+        }
+
+        @include element.defineProperty('.ng-invalid') {
+            @include element.createTag('underline', '+') {
+                @include element.createTag('underline', ' ') {
+                    @include element.defineContent() {
+                        background-color: color.get(alert, red, a) !important;
+                    }
+                }
+            }
+        }
+
+        @include element.definePropertyFocus {
+            @include element.createTag('underline', '+') {
+                @include element.defineContent() {
+                    height: property.get('size', 'input', 'underline');
+                }
+
+                @include element.createTag('underline', ' ') {
+                    @include element.defineContent() {
+                        transform: scaleX(1);
+                    }
+                }
+            }
+        }
+
+        @include element.defineProperty('::placeholder') {
+            opacity: property.get('opacity', 'placeholder');
+        }
+
+        @include element.createSubsection('important') {
+            @include element.defineContent() {
+                font-size: property.get('fontSize', 'sideElement', 'important', 'text');
+            }
+        }
+
+        @include element.createTag('underline', '+') {
+            @include element.defineContent() {
+                display: block;
+                position: relative;
+                width: 100%;
+                height: 0;
+                transition: property.get('transition', 'short');
+                transition-property: height;
+                overflow: hidden;
+            }
+
+            @include element.createTag('underline', ' ') {
+                @include element.defineContent() {
+                    display: block;
+                    position: relative;
+                    width: 100%;
+                    height: property.get('size', 'input', 'underline');
+                    transform: scaleX(0);
+                    transition: property.get('transition', 'long');
+                    transition-property: transform;
+                }
+            }
+        }
+    }
+}
+
+@include element.createElement('select') {
+    @include definition.setAttrBorderRadius() {
+    }
+
+    @include element.defineContent() {
+        font-size: property.get('fontSize', 'sideElement', 'text');
+        padding: property.get('borderLimit', 'verySmall');
+        font-family: property.get('font', 'regular');
+        appearance: menulist-button;
+    }
+
+    @include definition.definePropertyDisabled() {
+    }
+}
+
+@include element.createElement('textarea') {
+    @include definition.setAttrBorderRadius() {
+    }
+
+    @include element.defineContent() {
+        resize: none;
+        font-size: property.get('fontSize', 'sideElement', 'text');
+        padding: property.get('borderLimit', 'verySmall');
+        font-family: property.get('font', 'regular');
+        transition: property.get('transition', 'short');
+        transition-property: border;
+    }
+
+    @include element.defineWithBefore('.ng-submitted') {
+        @include element.defineProperty('.ng-invalid') {
+            @include element.defineContent() {
+                border: property.get('size', 'input', 'underline') solid color.get(alert, red, a);
+            }
+        }
+    }
+
+    @include element.definePropertyFocus {
+        @include element.defineProperty('.ng-invalid') {
+            @include element.defineContent() {
+                border: property.get('size', 'input', 'underline') solid color.get(alert, red, a);
+            }
+        }
+    }
+
+    @include element.defineProperty('::placeholder') {
+        opacity: property.get('opacity', 'placeholder');
+    }
+
+    @include definition.definePropertyDisabled() {
+    }
+}
+
+@include element.createElement('error') {
+    @include element.defineContent() {
+        font-size: property.get('fontSize', 'comment');
+        font-family: property.get('font', 'regular');
+        color: color.get(alert, red, a);
+    }
+}

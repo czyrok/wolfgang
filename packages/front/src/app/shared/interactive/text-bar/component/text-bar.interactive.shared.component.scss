@@ -1,0 +1,23 @@
+@use '../../../../../scss/lib/property';
+
+/* .container {
+  display: inline-grid;
+  grid-template-areas: "a b"
+  "c c";
+  align-items: center;
+  overflow: hidden;
+}
+
+.container input {
+  grid-area: a;
+  margin-left: property.get('borderLimit', 'small');
+}
+
+.container .line {
+  grid-area: c;
+}
+
+.container span {
+  grid-area: b;
+  margin: property.get('borderLimit', 'small');
+} */

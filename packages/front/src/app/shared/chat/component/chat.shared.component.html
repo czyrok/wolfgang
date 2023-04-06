@@ -1,0 +1,25 @@
+<ng-template #titleTemplate>
+  <h2 data-css-h2 data-css-font data-css-color data-css-dark data-css-accent>{{ title }}</h2>
+</ng-template>
+
+<ng-template #contentTemplate>
+  <div class="box" #scrollTarget [scrollTop]="scrollTarget.scrollHeight">
+    <div #target></div>
+
+    <ng-template #playerMessageTemplate let-message="message">
+      <div class="message">
+        <app-shared-chat-message-player [user]="message.user" [text]="message.text"></app-shared-chat-message-player>
+      </div>
+    </ng-template>
+
+    <ng-template #eventMessageTemplate let-message="message">
+      <div class="message">
+        <app-shared-chat-message-event [text]="message.text"
+          [imageUrl]="message.imageUrl" [type]="message.alertType"></app-shared-chat-message-event>
+      </div>
+    </ng-template>
+  </div>
+</ng-template>
+
+<app-shared-item-form [titleTemplate]="title !== undefined ? titleTemplate : undefined"
+  [contentTemplate]="contentTemplate" [aside]="aside" [maxHeight]="maxHeight"></app-shared-item-form>

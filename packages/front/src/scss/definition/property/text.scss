@@ -1,0 +1,42 @@
+@use 'scss-toolkit/src/mixin/element';
+
+@use '../../lib/property';
+
+@include element.createElement('text') {
+    @include element.createSubsection('font') {
+        @include element.defineContent() {
+            font-family: property.get('font', 'regular') !important;
+            font-size: property.get('fontSize', 'regular');
+        }
+    }
+}
+
+@include element.createElement('h1') {
+    @include element.createSubsection('font') {
+        @include element.defineContent() {
+            font-family: property.get('font', 'important') !important;
+            font-size: property.get('fontSize', 'title', 'h1');
+            font-weight: bold;
+        }
+    }
+}
+
+@include element.createElement('h2') {
+    @include element.createSubsection('font') {
+        @include element.defineContent() {
+            font-family: property.get('font', 'important') !important;
+            font-size: property.get('fontSize', 'title', 'h2');
+            font-weight: bold;
+        }
+    }
+}
+
+@include element.createElement('h3') {
+    @include element.createSubsection('font') {
+        @include element.defineContent() {
+            font-family: property.get('font', 'important') !important;
+            font-size: property.get('fontSize', 'title', 'h3');
+            font-weight: bold;
+        }
+    }
+}

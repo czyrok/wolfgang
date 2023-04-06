@@ -1,0 +1,63 @@
+<ng-template #formTemplate>
+  <form class="box center" [formGroup]="form" (ngSubmit)="onSubmitForm()">
+    <div class="field">
+      <label for="username" data-css-h2 data-css-font data-css-color>Pseudo</label>
+
+      <div data-css-text-bar data-css-border-radius="rounded">
+        <input id="username" type="text" placeholder="Saisissez votre pseudo" data-css-input formControlName="username">
+        <div class="line" data-css-underline>
+          <div data-css-underline></div>
+        </div>
+        <span class="icofont-user" data-css-icofont></span>
+      </div>
+    </div>
+
+    <div class="field column error">
+      <p *ngIf="form.get('username')?.invalid && form.get('username')?.hasError('required')" data-css-error>
+        <i class="icofont-close-circled"></i>
+        Le champs est obligatoire
+      </p>
+      <p *ngIf="form.get('username')?.invalid && form.get('username')?.hasError('minlength')" data-css-error>
+        <i class="icofont-close-circled"></i>
+        La taille du pseudo doit être de minimum {{
+        this.form.get('username')?.errors?.['minlength']?.requiredLength }} caractères
+      </p>
+    </div>
+
+    <div class="field">
+      <label for="password" data-css-h2 data-css-font data-css-color>Mot de passe</label>
+
+      <div data-css-text-bar data-css-border-radius="rounded">
+        <input id="password" type="password" placeholder="Saisissez votre mot de passe" data-css-input
+          formControlName="password">
+        <div class="line" data-css-underline>
+          <div data-css-underline></div>
+        </div>
+        <span class="icofont-ui-password" data-css-icofont></span>
+      </div>
+    </div>
+
+    <div class="field column error">
+      <p *ngIf="form.get('password')?.invalid && form.get('password')?.hasError('required')" data-css-error>
+        <i class="icofont-close-circled"></i>
+        Le champs est obligatoire
+      </p>
+    </div>
+
+    <div class="field column">
+      <button type="submit" data-css-important data-css-accent data-css-button data-css-event
+        data-css-border-radius="rounded">
+        <div data-css-inter>
+          Se connecter
+        </div>
+      </button>
+
+      <app-shared-interactive-button link="../sign-up" [important]="true" text="S'inscrire">
+      </app-shared-interactive-button>
+    </div>
+  </form>
+</ng-template>
+
+<main>
+  <app-view-page-form title="Connexion" [formTemplate]="formTemplate"></app-view-page-form>
+</main>
