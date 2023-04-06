@@ -1,8 +1,0 @@
-{
-    "name": "Back-game package",
-    "entryPointStrategy": "expand",
-    "entryPoints": [
-        "src"
-    ],
-    "tsconfig": "./tsconfig.json"
-}

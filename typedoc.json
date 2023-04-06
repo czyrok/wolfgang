@@ -2,6 +2,10 @@
     "name": "Wolfgang",
     "entryPointStrategy": "packages",
     "entryPoints": [
+        "packages/common",
+        "packages/front",
+        "packages/back-main",
+        "packages/back-registery",
         "packages/back-game"
     ]
 }
