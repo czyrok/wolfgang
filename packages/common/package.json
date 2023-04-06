@@ -4,13 +4,16 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "cleanDist": "rm -rf ./dist",
-    "cleanLog": "rm -rf ./trace",
-    "startBuildScript": "node --unhandled-rejections=strict ./dist/build/script/build.script.js",
-    "build": "npm run cleanDist && tsc && npm run startBuildScript",
-    "buildW": "tsc && npm run startBuildScript"
+    "clean-dist": "rm -rf ./dist",
+    "clean-log": "rm -rf ./trace",
+    "launch-build-script": "node --unhandled-rejections=strict ./dist/build/script/build.script.js",
+    "build": "npm run clean-dist && tsc && npm run launch-build-script",
+    "build-w": "tsc && npm run launch-build-script",
+    "test": "tsc && jasmine --config=jasmine.json"
   },
   "dependencies": {
+    "@typegoose/typegoose": "~10.0.0",
+    "@types/jasmine": "^4.3.1",
     "class-transformer": "^0.5.1",
     "cookie": "^0.5.0",
     "cors": "^2.8.5",
@@ -29,11 +32,11 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@typegoose/typegoose": "~10.0.0",
     "@types/crypto-js": "^4.1.1",
     "@types/express-session": "^1.17.5",
     "@types/jsonwebtoken": "^9.0.1",
     "@types/uuid": "^9.0.0",
+    "jasmine": "^4.6.0",
     "typescript": "~4.8.4"
   },
   "typedoc": {

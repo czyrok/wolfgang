@@ -195,3 +195,5 @@ export * from './pack/user/token/error/not-found.token.user.error'
 export * from './pack/user/token/interface/token.user.interface'
 export * from './pack/user/token/model/token.user.model'
 // @endindex
+
+export default true

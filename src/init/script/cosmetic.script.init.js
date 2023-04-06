@@ -1,3 +1,4 @@
+const dotenv = require('dotenv')
 const mongoose = require('mongoose')
 const common = require('common')
 
@@ -6,10 +7,12 @@ async function insertCosmetic(translateName, gamePointPrice, imageUrl, type) {
 }
 
 async function run() {
-    await mongoose.connect('mongodb://localhost:60017/wolfgang', {
+    dotenv.config({ path: process.cwd() + '/' + (process.env.NODE_ENV === 'PROD' ? '.prod.env' : '.dev.env') })
+
+    await mongoose.connect(`mongodb://localhost:${process.env.DB_PORT}/wolfgang`, {
         authSource: 'admin',
-        user: 'admin',
-        pass: 'pass'
+        user: process.env.DB_USER,
+        pass: process.env.DB_PW
     })
     
     await insertCosmetic('Chapeau 1', 20, 'hat_1', common.TypeCosmeticEnum.HAT)
@@ -31,4 +34,6 @@ async function run() {
     await insertCosmetic('Chaussures 3', 50, 'shoes_3', common.TypeCosmeticEnum.SHOES)
 }
 
-run()
+run().then(() => {
+    process.exit()
+})

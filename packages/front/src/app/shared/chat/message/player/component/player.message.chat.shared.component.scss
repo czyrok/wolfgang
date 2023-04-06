@@ -29,6 +29,7 @@
   border-bottom-left-radius: property.get('borderRadius', 'regular');
   padding: property.get('borderLimit', 'verySmall');
   height: fit-content;
+  white-space: break-spaces;
 
   @include theme.themeHandler(false, 'containerElement2', 'item') {
     background-color: theme.get('background');
@@ -36,5 +37,5 @@
 }
 
 .container.self .text {
-  border-radius: property.get('borderRadius', 'rounded');
+  border-radius: property.get('borderRadius', 'regular');
 }

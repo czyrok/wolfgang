@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+  database:
+    container_name: database
+    image: mongo:5.0
+    environment:
+      - MONGO_INITDB_DATABASE=wolfgang
+      - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${DB_PW}
+    ports:
+      - ${DB_PORT}:27017
+    volumes:
+      - ~/wolfgang-data/:/data/db
