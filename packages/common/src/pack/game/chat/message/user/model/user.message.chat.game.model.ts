@@ -8,6 +8,9 @@ import { UserMessageChatGameInterface } from '../interface/user.message.chat.gam
 
 import { TypeMessageChatGameEnum } from '../../type/enum/type.message.chat.game.enum'
 
+/**
+ * Classe qui créer un message d'un utilisateur d'un chat d'une partie
+ */
 @Exclude()
 export class UserMessageChatGameModel extends MessageChatGameModel implements UserMessageChatGameInterface {
     @Expose()
@@ -18,6 +21,11 @@ export class UserMessageChatGameModel extends MessageChatGameModel implements Us
     @prop({ required: true, ref: () => UserModel })
     user!: Ref<UserModel>
 
+    /**
+     * Constructeur
+     * @param type Type du message
+     * @param text Contenue du message
+     */
     public constructor(type: TypeMessageChatGameEnum,text: string) {
         super(type, text)
     }

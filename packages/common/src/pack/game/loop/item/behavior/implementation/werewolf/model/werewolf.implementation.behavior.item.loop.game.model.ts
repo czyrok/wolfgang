@@ -21,7 +21,7 @@ export class WerewolfImplementationBehaviorItemLoopGameModel extends BehaviorIte
     public constructor() {
         super({
             type: TypeBehaviorItemLoopGameEnum.WEREWOLF,
-            timer: 20,
+            timer: 50,
             cardTypeList: [
                 TypeCardGameEnum.GREY_WEREWOLF
             ],

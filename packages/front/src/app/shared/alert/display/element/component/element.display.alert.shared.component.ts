@@ -7,12 +7,15 @@ import { DisplayAlertSharedInterface } from '../../interface/display.alert.share
   templateUrl: './element.display.alert.shared.component.html',
   styleUrls: ['./element.display.alert.shared.component.scss']
 })
+/**
+ * Composant représentant une alerte
+ */
 export class ElementDisplayAlertSharedComponent {
   timeOut!: ReturnType<typeof setTimeout> | undefined
 
- /**
- *
- */
+  /**
+  * Mise en place du minuteur de l'alerte
+  */
   ngAfterViewInit(): void {
     if (this.alert && this.alert.timer) this.timeOut = setTimeout(_ => {
       this.timeOut = undefined
@@ -21,9 +24,9 @@ export class ElementDisplayAlertSharedComponent {
     }, 10e3)
   }
 
-/**
- *
- */
+  /**
+   *  Méthode déclenchée au clique sur la croix de l'alerte pour fermer l'alerte
+   */
   click(): void {
     if (this.timeOut !== undefined) clearTimeout(this.timeOut)
 

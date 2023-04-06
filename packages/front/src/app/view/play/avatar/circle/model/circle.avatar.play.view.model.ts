@@ -5,7 +5,7 @@ import { EventVoteUserSharedModel } from 'src/app/shared/user/vote/event/model/e
 import { PlaceCircleAvatarPlayViewModel } from '../place/model/place.circle.avatar.play.view.model'
 
 /**
- * @classdesc Model de l'fichage des avatars en cercle l'or d'une partie
+ * Model de l'fichage des avatars en cercle l'or d'une partie
  */
 export class CircleAvatarPlayViewModel {
   private _placesList: Array<PlaceCircleAvatarPlayViewModel> = new Array()

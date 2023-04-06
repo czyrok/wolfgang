@@ -15,8 +15,8 @@ import { DisplayAlertSharedInterface } from '../../alert/display/interface/displ
     providedIn: 'root'
 })
 /**
- * @classdesc Service qui gère les parties
- * @implements HandlerLinkSocketInterface
+ * Service qui gère les parties
+ * @implements BuildManagerSocketInterface, AlternativeBuildManagerSocketInterface
  */
 export class GameSharedService implements BuildManagerSocketInterface, AlternativeBuildManagerSocketInterface {
     private _socketManager?: ManagerSocketModel
@@ -36,8 +36,8 @@ export class GameSharedService implements BuildManagerSocketInterface, Alternati
     /**
      * @param router Permet de rediriger
      * @param displayAlertSharedService Permet d'afficher des alertes
-     * @param sessionSharedService La session de l'utilisateur
-     * @param socketSharedService Service de socket
+     * @param sessionSharedService Service qui gère la session de l'utilisateur
+     * @param socketSharedService Service qui gère les sockets
      */
     public constructor(
         private router: Router,

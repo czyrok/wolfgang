@@ -37,4 +37,4 @@ export class TokenUserModel extends DocumentModel implements TokenUserInterface 
   }
 }
 
-export const TokenUserModelDocument = getModelForClass(TokenUserModel, /* { customName: 'collection', automaticName: true } */)
+export const TokenUserModelDocument = getModelForClass(TokenUserModel, { schemaOptions: { collection: 'token_user' } })

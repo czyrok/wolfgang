@@ -13,7 +13,7 @@ import { DisplayAlertSharedService } from 'src/app/shared/alert/display/service/
   styleUrls: ['./bug.modal.report.shared.component.scss']
 })
 /**
- * @classdesc Gère la boite modale de signalement des bugs
+ * Gère la boite modale de signalement des bugs
  */
 export class BugModalReportSharedComponent {
   form: UntypedFormGroup

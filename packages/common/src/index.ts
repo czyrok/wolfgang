@@ -1,5 +1,5 @@
 // Behavior must be loaded before loop item
-// @index(['./**/*.ts', '!./build/**/*.ts'], f => `export * from '${f.path}'`)
+// @index(['./**/*.ts', '!./build/**/*.ts', '!./**/*.spec.ts'], f => `export * from '${f.path}'`)
 export * from './override/express-session.override'
 export * from './pack/alert/type/enum/type.alert.enum'
 export * from './pack/app/config/helper/config.app.helper'

@@ -15,15 +15,32 @@ import { ChatGameModel, ChatGameModelDocument } from "../../model/chat.game.mode
 import { TypeChatGameEnum } from "../../type/enum/type.chat.game.enum"
 import { TypeAlertEnum } from "../../../../alert/type/enum/type.alert.enum"
 
+/**
+ * Classe qui permet de manager le chat d'une partie
+ */
 export class ManagerChatGameModel {
+    /**
+     * Constructeur
+     * @param _game Partie où figure le chat
+     */
     public constructor(
         private _game: GameModel
     ) { }
 
+    /**
+     * @returns Renvoie la partie où figure le chat
+     */
     private get game(): GameModel {
         return this._game
     }
 
+    /**
+     * 
+     * @param player Joueur qui envoie le message
+     * @param text Contenue du message
+     * @param priorityChatType Type du chat
+     * @returns Renvoie true si le message a bien été envoyé, false sinon
+     */
     public async sendPlayerMessage(player: PlayerGameModel, text: string, priorityChatType?: TypeChatGameEnum): Promise<boolean> {
         const chatType: TypeChatGameEnum | null | boolean = player.getAvailableChatType(this.game.state, priorityChatType)
 
@@ -49,6 +66,13 @@ export class ManagerChatGameModel {
         return true
     }
 
+    /**
+     * 
+     * @param text Contenue du message
+     * @param imageUrl Nom de l'image
+     * @param alertType Type de l'alerte
+     * @param chatType Type du message
+     */
     public async sendEventMessage(text: string, imageUrl: string, alertType: TypeAlertEnum, chatType: TypeChatGameEnum = TypeChatGameEnum.ALIVE): Promise<void> {
         const chat: DocumentType<ChatGameModel> | null = await ChatGameModelDocument.getChat(this.game.gameId, chatType)
 

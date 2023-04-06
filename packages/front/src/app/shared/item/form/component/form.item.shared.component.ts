@@ -6,7 +6,7 @@ import { Component, Input, TemplateRef } from '@angular/core'
   styleUrls: ['./form.item.shared.component.scss']
 })
 /**
- * @classdesc Gère les composants de formulaire
+ * Gère les composants de formulaire
  */
 export class FormItemSharedComponent {
   @Input() titleTemplate: TemplateRef<any> | undefined

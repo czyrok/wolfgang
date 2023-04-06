@@ -6,6 +6,7 @@ import { SharedModule } from 'src/app/shared/shared.module'
 import { PageViewModule } from '../page/page.view.module'
 
 import { ManagingViewComponent } from './component/managing.view.component'
+import { NavManagingViewComponent } from './nav/component/nav.managing.view.component'
 
 @NgModule({
     imports: [
@@ -22,7 +23,8 @@ import { ManagingViewComponent } from './component/managing.view.component'
         PageViewModule
     ],
     declarations: [
-      ManagingViewComponent
+      ManagingViewComponent,
+      NavManagingViewComponent
     ],
 })
 

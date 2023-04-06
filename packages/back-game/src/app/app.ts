@@ -1,4 +1,5 @@
-import { setupMaster, fork, isMaster, workers } from 'cluster'
+import * as cluster from 'cluster'
+const { setupMaster, fork, isMaster, workers } = cluster as unknown as cluster.Cluster
 import { join, dirname } from 'path'
 import { instanceToPlain, plainToInstance } from 'class-transformer'
 import { EnvUtil, VarEnvEnum, LogUtil, LogHelper, TypeLogEnum, GameModel, ManagerSocketModel, LinkNamespaceSocketModel, NamespaceSocketModel } from 'common'

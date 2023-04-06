@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core'
   styleUrls: ['./label.shared.component.scss']
 })
 /**
- * @classdesc Gère les composants labels
+ * Gère les composants labels
  */
 export class LabelSharedComponent {
   @Input() text!: string

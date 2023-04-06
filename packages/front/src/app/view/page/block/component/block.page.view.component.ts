@@ -6,7 +6,7 @@ import { Component, Input, TemplateRef } from '@angular/core'
   styleUrls: ['./block.page.view.component.scss']
 })
 /**
- * @classdesc Composant block de la vue d'une page
+ * Composant block de la vue d'une page
  */
 export class BlockPageViewComponent {
   @Input() title!: string

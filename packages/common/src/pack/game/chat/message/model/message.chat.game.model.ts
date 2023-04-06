@@ -6,6 +6,9 @@ import { DocumentModel } from '../../../../model/document.model'
 import { MessageChatGameInterface } from '../interface/message.chat.game.interface'
 import { TypeMessageChatGameEnum } from '../type/enum/type.message.chat.game.enum'
 
+/**
+ * Classe qui créer le message d'un chat
+ */
 @Exclude()
 export class MessageChatGameModel extends DocumentModel implements MessageChatGameInterface {
     @Expose()
@@ -20,6 +23,11 @@ export class MessageChatGameModel extends DocumentModel implements MessageChatGa
     @prop({ required: true })
     releaseDate!: Date
 
+    /**
+     * Constructeur
+     * @param type Type du message
+     * @param text Contenue du message
+     */
     public constructor(type: TypeMessageChatGameEnum, text: string) {
         super()
 

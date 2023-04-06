@@ -99,9 +99,9 @@ export class GamesMainViewComponent implements OnInit, OnDestroy {
 
     await this.gameSharedService.checkStatus()
 
-    if (this.gameSharedService.inGame) return
-
     this.buttonProcess = true
+
+    if (this.gameSharedService.inGame) return
 
     const game: GameModel = this.games[0]
 

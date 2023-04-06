@@ -10,7 +10,7 @@ import { SocketSharedService } from 'src/app/shared/socket/service/socket.shared
   styleUrls: ['./view.cards-proposal.main.view.component.scss']
 })
 /**
- * @classdesc Composant de la vue d'une proposition de carte
+ * Composant de la vue d'une proposition de carte
  * @implements OnInit
  */
 export class ViewCardsProposalMainViewComponent implements OnInit {

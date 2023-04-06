@@ -10,7 +10,7 @@ import { AuthSharedService } from 'src/app/shared/auth/service/auth.shared.servi
   styleUrls: ['./profile.line.user.shared.component.scss']
 })
 /**
- * @classdesc Gère le composant du profile, en ligne, d'un utilisateur
+ * Gère le composant du profile, en ligne, d'un utilisateur
  */
 export class ProfileLineUserSharedComponent {
   user!: UserModel

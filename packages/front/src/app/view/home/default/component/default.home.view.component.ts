@@ -8,7 +8,7 @@ import { AuthSharedService } from '../../../../shared/auth/service/auth.shared.s
   styleUrls: ['./default.home.view.component.scss']
 })
 /**
- * @classdesc Composant de la vue home par défaut
+ * Composant de la vue home par défaut
  */
 export class DefaultHomeViewComponent {
   /**

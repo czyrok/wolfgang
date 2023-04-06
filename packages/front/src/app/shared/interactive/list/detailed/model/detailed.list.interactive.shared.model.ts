@@ -5,7 +5,7 @@ import { TabDetailedListInteractiveSharedModel } from '../tab/model/tab.detailed
 import { ItemSubTabTabDetailedListInteractiveSharedModel } from '../tab/sub-tab/item/model/item.sub-tab.tab.detailed.list.interactive.shared.model'
 
 /**
- * @classdesc Gère les models des listes interactives détaillées
+ * Gère les models des listes interactives détaillées
  */
 export class DetailedListInteractiveSharedModel {
     private _tabList: Array<TabDetailedListInteractiveSharedModel> = new Array

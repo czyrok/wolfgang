@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core'
   styleUrls: ['./point.label.user.shared.component.scss']
 })
 /**
- * @classdesc Gère le composant label des points d'un utilisateur
+ * Gère le composant label des points d'un utilisateur
  */
 export class PointLabelUserSharedComponent {
   @Input() pointCount?:number

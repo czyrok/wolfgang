@@ -10,7 +10,7 @@ import { ModalSharedService } from '../../service/modal.shared.service'
   styleUrls: ['./element.modal.shared.component.scss']
 })
 /**
- * @classdesc Gère les composants des élements de boite modale
+ * Gère les composants des élements de boite modale
  */
 export class ElementModalSharedComponent implements AfterViewInit, OnDestroy {
   closingEventSub!: Subscription

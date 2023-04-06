@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./main.view.component.scss']
 })
 /**
- * @classdesc omposant de la vue principale
+ * omposant de la vue principale
  */
 export class MainViewComponent {
 

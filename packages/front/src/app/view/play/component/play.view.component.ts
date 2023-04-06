@@ -18,7 +18,7 @@ import { Subscription } from 'rxjs'
   styleUrls: ['./play.view.component.scss']
 })
 /**
- * @classdesc Composant de la vue d'une partie
+ * Composant de la vue d'une partie
  * @implements AfterViewInit, OnDestroy
  */
 export class PlayViewComponent implements AfterViewInit, OnDestroy {

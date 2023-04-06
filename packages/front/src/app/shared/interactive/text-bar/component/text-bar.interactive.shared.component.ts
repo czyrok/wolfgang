@@ -6,7 +6,7 @@ import { Component, EventEmitter, Output, Input } from '@angular/core'
   styleUrls: ['./text-bar.interactive.shared.component.scss']
 })
 /**
- * @classdesc Gère les bars de texte
+ * Gère les bars de texte
  */
 export class TextBarInteractiveSharedComponent {
   _filter = ''

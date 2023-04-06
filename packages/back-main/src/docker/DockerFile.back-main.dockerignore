@@ -1,0 +1,10 @@
+**/node_modules
+**/dist
+**/trace
+**/.git
+**/package-lock.json
+**/.angular
+
+**/front
+**/back-game
+**/back-registery

@@ -8,7 +8,7 @@ import { AuthSharedService } from '../service/auth.shared.service'
 })
 
 /**
- * @classdesc Gère l'accès des pages selon l'authentification
+ * Gère l'accès des pages selon l'authentification
  * @implements CanActivate
  */
 export class AuthSharedGuard implements CanActivate {

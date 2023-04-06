@@ -16,10 +16,26 @@ export class ConfigAppHelper {
             server: http.Server = http.createServer(app),
             io = new Server(server, {
                 transports: ['websocket'],
-                cors: options.cors
+                cors: options.cors /* {
+                    origin: '*',
+                    credentials: true
+                } */
             })
 
-        app.use(cors(options.cors))
+        app.use(cors(options.cors /* {
+            origin: true,
+            credentials: true
+        } */))
+
+        /* app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+            res.set('Cache-Control', 'no-store')
+
+            next()
+        }) */
+
+        /* io.engine.on("initial_headers", (headers: any, req: any) => {
+            headers['Cache-Control'] = 'no-store'
+        }) */
 
         if (options.session) {
             app.use(SessionConfigAppUtil.sessionMiddleware)

@@ -1,0 +1,18 @@
+# Stage 1
+FROM node:18.14.2 as node
+WORKDIR /app
+
+# Copying files into app
+COPY . .
+
+# Installing dependences
+RUN npm install
+
+# Executing common build script
+RUN npm run build -w common
+
+# Exposing port
+EXPOSE ${MAIN_PORT}
+
+# Setting launch command
+CMD [ "npm", "run", "prod", "-w", "back-main" ]

@@ -10,7 +10,7 @@ import { DisplayAlertSharedService } from '../../alert/display/service/display.a
     providedIn: 'root'
 })
 /**
- * @classdesc Gère les services des sessions
+ * Gère les services des sessions
  */
 export class SessionSharedService {
 
