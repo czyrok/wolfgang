@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DefaultHomeMainViewComponent } from './default.home.main.view.component';
+import { DefaultHomeViewComponent } from './default.home.view.component';
 
-describe('DefaultHomeMainViewComponent', () => {
-  let component: DefaultHomeMainViewComponent;
-  let fixture: ComponentFixture<DefaultHomeMainViewComponent>;
+describe('DefaultHomeViewComponent', () => {
+  let component: DefaultHomeViewComponent;
+  let fixture: ComponentFixture<DefaultHomeViewComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DefaultHomeMainViewComponent ]
+      declarations: [ DefaultHomeViewComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DefaultHomeMainViewComponent);
+    fixture = TestBed.createComponent(DefaultHomeViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
