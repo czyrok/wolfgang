@@ -1,5 +1,3 @@
-version: '3.7'
-
 services:
   database:
     container_name: database
@@ -12,57 +10,40 @@ services:
       - ${DB_PORT}:27017
     volumes:
       - ~/wolfgang-data/:/data/db
-    networks:
-      wolfgang-net:
-        aliases:
-          - database.wolfgang-net
   front:
     container_name: front
-    build: 
+    build:
       context: .
       dockerfile: packages/front/src/docker/DockerFile.front
     ports:
       - 80:80
+    depends_on:
+      - back-main
+      - back-game
   back-main:
     container_name: back-main
-    build: 
+    build:
       context: .
       dockerfile: packages/back-main/src/docker/DockerFile.back-main
     ports:
       - ${MAIN_PORT}:${MAIN_PORT}
-    networks:
-      wolfgang-net:
-        aliases:
-          - back-main.wolfgang-net
+    depends_on:
+      - back-registery
+      - database
   back-game:
     container_name: back-game
-    build: 
+    build:
       context: .
       dockerfile: packages/back-game/src/docker/DockerFile.back-game
     ports:
       - ${GAME_PORT}:${GAME_PORT}
-    networks:
-      wolfgang-net:
-        aliases:
-          - back-game.wolfgang-net
+    depends_on:
+      - back-registery
+      - database
   back-registery:
     container_name: back-registery
-    build: 
+    build:
       context: .
       dockerfile: packages/back-registery/src/docker/DockerFile.back-registery
     ports:
       - ${REGISTERY_PORT}:${REGISTERY_PORT}
-    networks:
-      wolfgang-net:
-        aliases:
-          - back-registery.wolfgang-net
-
-networks:
-  wolfgang-net:
-    driver: bridge
-    name: wolfgang-net
-    ipam:
-      driver: default
-      config:
-        - subnet: '192.168.0.0/16'
-          gateway: '192.168.0.1'

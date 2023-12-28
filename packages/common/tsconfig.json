@@ -1,20 +1,18 @@
 {
-    "include": [
-        "src/**/*.ts",
-        "src/**/*.spec.ts",
-    ],
-    "compilerOptions": {
-        "target": "es2016",
-        "module": "commonjs",
-        "outDir": "./dist",
-        "strict": true,
-        "declaration": true,
-        "esModuleInterop": true,
-        "inlineSourceMap": true,
-        "resolveJsonModule": true,
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
-        "moduleResolution": "node",
-        "allowSyntheticDefaultImports": true
-    }
+  "include": ["src/**/*.ts", "src/**/*.spec.ts"],
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "strict": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "inlineSourceMap": true,
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true
+  }
 }
