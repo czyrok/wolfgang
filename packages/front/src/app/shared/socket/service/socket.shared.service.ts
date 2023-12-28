@@ -1,37 +1,50 @@
-import { Injectable } from '@angular/core'
-import { LinkNamespaceSocketModel, ManagerSocketModel, BuildManagerSocketInterface, AlternativeBuildManagerSocketInterface, NamespaceSocketModel } from 'common'
+import { Injectable } from '@angular/core';
+import {
+  LinkNamespaceSocketModel,
+  ManagerSocketModel,
+  BuildManagerSocketInterface,
+  AlternativeBuildManagerSocketInterface,
+  NamespaceSocketModel,
+} from 'common';
 
-import { environment } from 'src/environments/environment'
+import { environment } from 'src/environments/environment';
 
-import { SessionSharedService } from '../../session/service/session.shared.service'
+import { SessionSharedService } from '../../session/service/session.shared.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 /**
  * Service qui gère les sockets
  */
-export class SocketSharedService implements BuildManagerSocketInterface, AlternativeBuildManagerSocketInterface {
-  private _socketManager: ManagerSocketModel = new ManagerSocketModel(environment.MAIN_URL, environment.MAIN_PORT)
+export class SocketSharedService
+  implements
+    BuildManagerSocketInterface,
+    AlternativeBuildManagerSocketInterface
+{
+  private _socketManager: ManagerSocketModel = new ManagerSocketModel(
+    environment.MAIN_URL
+  );
 
   /**
    * @param sessionSharedService Service qui gère la session de l'utilisateur
    */
-  public constructor(
-    private sessionSharedService: SessionSharedService
-  ) {
-    this.socketManager.socketIoManager.reconnection(true)
+  public constructor(private sessionSharedService: SessionSharedService) {
+    this.socketManager.socketIoManager.opts.path =
+      environment.MAIN_PATH_SOCKET_IO;
+
+    this.socketManager.socketIoManager.reconnection(true);
 
     this.sessionSharedService.refreshSession().then(() => {
-      this.socketManager.connect()
-    })
+      this.socketManager.connect();
+    });
   }
 
   /**
    * Renvoie le gestionnaire de socket
    */
   public get socketManager(): ManagerSocketModel {
-    return this._socketManager
+    return this._socketManager;
   }
 
   /**
@@ -41,24 +54,29 @@ export class SocketSharedService implements BuildManagerSocketInterface, Alterna
    * @param object L'objet envoyé à la socket
    * @returns Vrai si la vérification est bonne, faux sinon
    */
-  public async check<T>(namespace: string, event: string, object: T): Promise<boolean> {
-    const checkLink: LinkNamespaceSocketModel<T, boolean> = await this.buildLink(namespace, event)
+  public async check<T>(
+    namespace: string,
+    event: string,
+    object: T
+  ): Promise<boolean> {
+    const checkLink: LinkNamespaceSocketModel<T, boolean> =
+      await this.buildLink(namespace, event);
 
     return new Promise((resolve: (value: boolean) => void) => {
       checkLink.on((test: boolean) => {
-        checkLink.destroy()
+        checkLink.destroy();
 
-        resolve(test)
-      })
+        resolve(test);
+      });
 
       checkLink.onFail(() => {
-        checkLink.destroy()
+        checkLink.destroy();
 
-        resolve(false)
-      })
+        resolve(false);
+      });
 
-      checkLink.emit(object)
-    })
+      checkLink.emit(object);
+    });
   }
 
   /**
@@ -67,9 +85,9 @@ export class SocketSharedService implements BuildManagerSocketInterface, Alterna
    * @returns Le modèle contenant la socket avec l'espace de nom
    */
   async buildNamespace(namespaceName: string): Promise<NamespaceSocketModel> {
-    await this.sessionSharedService.refreshSession()
+    await this.sessionSharedService.refreshSession();
 
-    return this.socketManager.buildNamespace(namespaceName)
+    return this.socketManager.buildNamespace(namespaceName);
   }
 
   /**
@@ -78,10 +96,13 @@ export class SocketSharedService implements BuildManagerSocketInterface, Alterna
    * @param event Nom de l'évènement
    * @returns Le modèle contenant la socket associée à l'évènement de l'espace de nom
    */
-  async buildLink<S, R, E = any>(namespaceName: string, event: string): Promise<LinkNamespaceSocketModel<S, R, E>> {
-    await this.sessionSharedService.refreshSession()
+  async buildLink<S, R, E = any>(
+    namespaceName: string,
+    event: string
+  ): Promise<LinkNamespaceSocketModel<S, R, E>> {
+    await this.sessionSharedService.refreshSession();
 
-    return this.socketManager.buildLink<S, R, E>(namespaceName, event)
+    return this.socketManager.buildLink<S, R, E>(namespaceName, event);
   }
 
   /**
@@ -89,9 +110,11 @@ export class SocketSharedService implements BuildManagerSocketInterface, Alterna
    * @param event Nom de l'évènement
    * @returns Le modèle contenant la socket associée à l'évènement
    */
-  async buildBaseLink<S, R, E = any>(event: string): Promise<LinkNamespaceSocketModel<S, R, E>> {
-    await this.sessionSharedService.refreshSession()
+  async buildBaseLink<S, R, E = any>(
+    event: string
+  ): Promise<LinkNamespaceSocketModel<S, R, E>> {
+    await this.sessionSharedService.refreshSession();
 
-    return this.socketManager.buildBaseLink(event)
+    return this.socketManager.buildBaseLink(event);
   }
 }

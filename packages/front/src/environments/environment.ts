@@ -5,13 +5,13 @@
 export const environment = {
   production: false,
   PROTOCOL: 'http',
-  MAIN_URL: 'localhost',
-  MAIN_PORT: 5500,
-  GAME_URL: 'localhost',
-  GAME_PORT: 5501,
+  MAIN_URL: 'localhost:5500',
+  MAIN_PATH_SOCKET_IO: '/socket.io',
+  GAME_URL: 'localhost:5501',
+  GAME_PATH_SOCKET_IO: '/socket.io',
   SESSION_COOKIE_NAME: 'sid',
   JWT_COOKIE_NAME: 'token',
-  JWT_COOKIE_DURATION: 518400
+  JWT_COOKIE_DURATION: 518400,
 };
 
 /*
